@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DesignFlow — Трекер проектов</title>
 
-<!-- Фавикон с молнией -->
 <link rel="icon" type="image/svg+xml"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' ry='6' fill='%230d1117'/%3E%3Cpath d='M11 2 L5 14 H10 L9 22 L19 8 H13 L14 2 Z' fill='%23facc15'/%3E%3C/svg%3E">
 
@@ -554,7 +553,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
                     </div>
                     <div class="progress-bg"><div class="progress-fill" id="p-bar"></div></div>
                 </div>
-
+                
                 <div class="stats-grid">
                     <div class="stat-box">
                         <div class="stat-label">
@@ -563,7 +562,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
                         </div>
                         <div class="stat-val text-green mono" id="val-fact">0 ₽</div>
                     </div>
-                    
                     <div class="stat-box">
                         <div class="stat-label">
                             Получено (Чистыми, Active)
@@ -571,7 +569,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
                         </div>
                         <div class="stat-val text-blue mono" id="val-fact-active">0 ₽</div>
                     </div>
-
                     <div class="stat-box">
                         <div class="stat-label">
                             План (Остаток)
@@ -584,233 +581,210 @@ input[type="date"]::-webkit-calendar-picker-indicator {
                             Прогноз итога (Факт + План)
                             <div class="tooltip-wrap"><div class="info-icon">?</div><div class="tooltip-text">Сколько вы заработаете чистыми, если закроете все текущие проекты (исключая потенциал).</div></div>
                         </div>
-                        <div class="stat-val mono" id="val-total" style="color:var(--accent)">0 ₽</div>
+                        <div class="stat-val mono" id="val-total" style="color:var(--text)">0 ₽</div>
                     </div>
-                </div>
-
-                <div class="chart-con">
-                    <canvas id="lineChart"></canvas>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-head">
-                    <div class="tooltip-wrap">
-                        Эффективность
-                        <div class="info-icon">?</div>
-                        <div class="tooltip-text">Визуализация соотношения уже полученной чистой прибыли и оставшегося потенциала текущих проектов.</div>
-                    </div>
+                    <span>Распределение проектов</span>
                 </div>
-                
                 <div class="doughnut-con">
-                    <canvas id="pieChart"></canvas>
+                    <canvas id="doughnutChart"></canvas>
                 </div>
-                
-                <div style="margin-top:20px; border-top:1px solid var(--border); padding-top:20px;">
-                    <div style="font-size:14px;color:var(--muted);margin-bottom:15px;font-weight:600">Сравнение по месяцам</div>
-                    <div style="height:150px;width:100%">
-                        <canvas id="barChart"></canvas>
-                    </div>
-                </div>
-                
-                <div style="margin-top:20px; font-size:13px; color:var(--muted); line-height:1.5;">
-                    До рекорда (<span id="rec-val" class="text-gold">0 ₽</span>) осталось: <br>
-                    <b id="to-record" style="color:#fff;font-size:16px">0 ₽</b>
+                <div class="bottom-record">
+                    <div class="bottom-record-label">Личный рекорд (Факт Чистыми)</div>
+                    <div class="bottom-record-val" id="bottom-rec-val">0 ₽</div>
                 </div>
             </div>
-        </div> 
-        
-        <div class="stats-light" style="display:none; width: 100%;">
+        </div>
+
+        <div class="stats-light" style="display:none">
             <div class="card">
                 <div class="card-head">
                     <span id="light-stats-title">Потенциал заказов</span>
+                    <div class="tooltip-wrap">
+                        <span class="text-gold" id="val-light-secondary">0 ₽</span>
+                        <div class="info-icon">?</div>
+                        <div class="tooltip-text" id="val-light-secondary-tooltip"></div>
+                    </div>
                 </div>
+                
                 <div class="stats-grid">
                     <div class="stat-box">
-                        <div class="stat-label">
-                            <span id="val-light-main-label">Общая сумма</span>
-                            <div class="tooltip-wrap"><div class="info-icon">?</div><div class="tooltip-text" id="val-light-main-tooltip">Сумма всех проектов.</div></div>
+                        <div class="stat-label" id="val-light-main-label">
+                            Общая сумма
+                            <div class="tooltip-wrap"><div class="info-icon">?</div><div class="tooltip-text" id="val-light-main-tooltip">Сумма всех потенциальных, ожидающих или приостановленных проектов (брутто).</div></div>
                         </div>
-                        <div class="stat-val text-purple mono" id="val-light-main">0 ₽</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label">
-                            <span id="val-light-secondary-label">Чистыми</span>
-                            <div class="tooltip-wrap"><div class="info-icon">?</div><div class="tooltip-text" id="val-light-secondary-tooltip">Сумма после вычета налогов.</div></div>
-                        </div>
-                        <div class="stat-val text-gold mono" id="val-light-secondary">0 ₽</div>
+                        <div class="stat-val text-gold mono" id="val-light-main">0 ₽</div>
                     </div>
                 </div>
             </div>
         </div>
-      </div> </div> 
+        
+        <div class="card" style="margin-top:20px; display:none;" id="chart-bar-wrap">
+            <div class="card-head">
+                <span>Чистая прибыль за 6 месяцев</span>
+            </div>
+            <div class="chart-con">
+                <canvas id="barChart"></canvas>
+            </div>
+        </div>
+      </div>
       
-      <div class="bottom-record">
-          <div class="bottom-record-label">🏆 Рекордный заработок за месяц</div>
-          <div class="bottom-record-val" id="bottom-rec-val">0 ₽</div>
+      <div class="footer-mot" onclick="newQuote()">
+          <span class="mot-emoji">⭐</span>
+          <div class="mot-text" id="quote-text">...</div>
+          <div class="mot-sub">Нажми, чтобы получить новую мотивацию!</div>
       </div>
-
-
-  
-  <footer style="text-align:center; margin-top:50px; padding-top:20px; border-top:1px solid var(--border);">
-      <div style="font-size:14px; color:var(--muted);">
-          DesignFlow Tracker by 
-          <a href="https://t.me/r_zhegulyaev" target="_blank" style="color:var(--accent); text-decoration:none; font-weight:600;">Zhegulyaev</a>
-      </div>
-  </footer>
-
+      
 </div>
 
 <div class="modal" id="addProjectModal">
-    <div class="modal-content">
-        <span class="close-modal-x" onclick="closeAddModal()">×</span>
-        <h2 style="margin-bottom:20px">Добавить новый проект</h2>
-        <div class="inp-group">
-            <label>Название проекта</label>
-            <input type="text" id="add-proj-name" placeholder="Логотип для кофейни">
-        </div>
-        <div class="inp-group">
-            <label>Имя клиента</label>
-            <input type="text" id="add-proj-client" placeholder="Иван Иванов">
-        </div>
-
-<div class="inp-group">
-    <label for="add-proj-start">Дата Старта</label>
-    <input type="date" id="add-proj-start"> 
-</div>
-
-        <div class="inp-group">
-            <label>Сумма (₽)</label>
-            <input type="number" id="add-proj-price" placeholder="15000">
-        </div>
-        
-        <div class="inp-group" id="add-proj-dl-group">
-         <label for="add-proj-dl">Дедлайн</label>
-<div class="date-input-wrapper">
-    <input type="date" id="add-proj-dl" required> 
-   
-</div>
-         
-        </div>
-
-        <div class="inp-group">
-            <label>Куда добавить?</label>
-            <select id="add-proj-type">
-                <option value="active">В работу</option>
-                <option value="potential">Потенциал</option>
-                <option value="waiting">Ожидает</option>
-            </select>
-        </div>
-        
-        <button class="save-stg" onclick="saveNewProject()">Добавить проект</button>
+  <div class="modal-content">
+    <span class="close-modal-x" onclick="closeAddModal()">×</span>
+    <h3 style="margin-bottom:10px">Добавить новый проект</h3>
+    <div class="inp-group">
+      <label>Название проекта</label>
+      <input type="text" id="add-proj-name" placeholder="Логотип для кофейни">
     </div>
+    <div class="inp-group">
+      <label>Имя клиента</label>
+      <input type="text" id="add-proj-client" placeholder="Иван Иванов">
+    </div>
+    <div class="inp-group">
+      <label for="add-proj-start">Дата Старта</label>
+      <input type="date" id="add-proj-start">
+    </div>
+    <div class="inp-group">
+      <label>Сумма (₽)</label>
+      <input type="number" id="add-proj-price" placeholder="15000">
+    </div>
+    <div class="inp-group" id="add-proj-dl-group">
+      <label for="add-proj-dl">Дедлайн</label>
+      <div class="date-input-wrapper">
+        <input type="date" id="add-proj-dl" required>
+      </div>
+    </div>
+    <div class="inp-group">
+      <label>Куда добавить?</label>
+      <select id="add-proj-type">
+        <option value="active">В работу</option>
+        <option value="potential">Потенциал</option>
+        <option value="waiting">Ожидает</option>
+      </select>
+    </div>
+    <button class="save-stg" onclick="saveNewProject()">Добавить проект</button>
+  </div>
 </div>
-
 
 <div class="modal" id="linkModal">
-    <div class="modal-content">
-        <span class="close-modal-x" onclick="closeLinkModal()">×</span>
-        <h3 style="margin-bottom:10px">Вставить ссылку на клиента</h3>
-        <p style="color:var(--muted); font-size: 14px; margin-bottom: 15px;">
-          Ссылка на чат с клиентом (VK, Telegram и т.п.), чтобы быстро найти переписку.
-        </p>
-        <div class="inp-group">
-            <input type="url" id="link-input" placeholder="https://t.me/client_id">
-        </div>
-        <button class="save-stg" id="saveLinkBtn">Сохранить ссылку</button>
+  <div class="modal-content">
+    <span class="close-modal-x" onclick="closeLinkModal()">×</span>
+    <h3 style="margin-bottom:10px">Вставить ссылку на клиента</h3>
+    <p style="color:var(--muted); font-size: 14px; margin-bottom: 15px;"> Ссылка на чат с клиентом (VK, Telegram и т.п.), чтобы быстро найти переписку. </p>
+    <div class="inp-group">
+      <input type="url" id="link-input" placeholder="https://t.me/client_id">
     </div>
+    <button class="save-stg" id="saveLinkBtn">Сохранить ссылку</button>
+  </div>
 </div>
 
 <div class="modal" id="dateModal">
-    <div class="modal-content date-modal-content">
-        <span class="close-modal-x" onclick="closeDateModal()">×</span>
-        <h3 style="margin-bottom: 0;" id="date-modal-title">Выберите дату</h3>
-        <p style="color:var(--muted); font-size: 14px; margin-top: -10px;">
-            Установите дату и точное время.
-        </p>
-        <div class="date-time-inputs">
-            <input type="date" id="date-input-val">
-            <input type="time" id="time-input-val">
-        </div>
-<button class="save-stg" id="saveDateBtn" onclick="saveDate()">Сохранить дату и время</button>
+  <div class="modal-content date-modal-content">
+    <span class="close-modal-x" onclick="closeDateModal()">×</span>
+    <h3 id="date-modal-title" style="margin-bottom:15px">Выбрать дату</h3>
+    <div class="inp-group">
+      <label>Дата</label>
+      <input type="date" id="date-input-date" required>
     </div>
-</div>
-
-<div class="modal" id="settingsModal">
-    <div class="modal-content">
-        <span class="close-modal-x" onclick="closeSettings()">×</span>
-        <h2 style="margin-bottom:20px">Настройки целей</h2>
-        <div class="inp-group">
-            <label>Цель на месяц (₽) <span style="font-size:12px; color:var(--accent)" id="stg-month-info"></span></label>
-            <input type="number" id="stg-goal" placeholder="250000">
-        </div>
-        <div class="inp-group">
-            <label>Ваш Рекорд (₽)</label>
-            <input type="number" id="stg-rec" placeholder="387000">
-        </div>
-        <button class="save-stg" onclick="saveSettings()">Сохранить настройки</button>
+    <div class="inp-group">
+      <label>Время (опционально)</label>
+      <input type="time" id="date-input-time">
     </div>
+    <button class="save-stg" id="saveDateBtn" onclick="saveDate()">Сохранить дату</button>
+  </div>
 </div>
 
 <div class="modal" id="deleteConfirmModal">
-    <div class="modal-content">
-        <span class="close-modal-x" onclick="closeDeleteConfirmModal()">×</span>
-        <h3 style="color:var(--red); margin-bottom:10px;">Подтверждение удаления</h3>
-        <p style="color:var(--text); margin-bottom: 20px;">
-            Вы уверены, что хотите удалить этот проект? 
-            Это действие необратимо.
-        </p>
-        <div class="delete-modal-btns">
-            <button onclick="closeDeleteConfirmModal()">Отмена</button>
-            <button class="confirm-del-btn" id="finalDeleteBtn">Удалить</button>
-        </div>
+  <div class="modal-content" style="width:350px;">
+    <h3 style="margin-bottom:10px">Подтверждение удаления</h3>
+    <p style="color:var(--muted); font-size: 15px; margin-bottom: 5px;">
+        Вы уверены, что хотите удалить проект:
+    </p>
+    <p id="delete-proj-name" style="font-weight:600; font-size:16px; color:var(--red);"></p>
+    <div class="delete-modal-btns">
+        <button onclick="closeDeleteConfirmModal()">Отмена</button>
+        <button class="confirm-del-btn" id="confirmDeleteBtn" onclick="confirmDelete()">Удалить навсегда</button>
     </div>
+  </div>
 </div>
 
+<div class="modal" id="settingsModal">
+  <div class="modal-content" style="width:350px;">
+    <span class="close-modal-x" onclick="closeSettings()">×</span>
+    <h3 style="margin-bottom:10px">Настройки целей</h3>
+    
+    <div class="inp-group">
+        <label>Личный рекорд (Чистыми, ₽)</label>
+        <input type="number" id="settings-record" placeholder="300000">
+    </div>
+
+    <div class="inp-group">
+        <label for="settings-goal">Цель на текущий месяц (Чистыми, ₽)</label>
+        <input type="number" id="settings-goal" placeholder="250000">
+    </div>
+    
+    <button class="save-stg" onclick="saveSettings()">Сохранить настройки</button>
+  </div>
+</div>
 
 <script>
-const K = 'grok_design_v4'; 
-const now = new Date();
-const today = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
-let currentMonth = today.slice(0,7); 
-
-let DATA = {
-    settings: { record: 387000 }, 
-    monthlyGoals: { [currentMonth.slice(0,7)]: 250000 }, 
-    active: [],  
-    archive: [],
-    paused: [],
-    waiting: [], 
-    potential: [], 
-    statsCache: {}
+const K = 'design_flow_tracker_v3';
+let DATA = {};
+let SORT_STATE = {
+    active: {key: 'dl', direction: 'asc', dataType: 'date'},
+    archive: {key: 'date', direction: 'desc', dataType: 'date'},
+    potential: {key: 'p', direction: 'desc', dataType: 'number'},
+    waiting: {key: 'dl', direction: 'asc', dataType: 'date'},
+    paused: {key: 'dl', direction: 'asc', dataType: 'date'},
 };
-
-let SORT_STATE = { 
-    active: { key: 'dl', direction: 'asc', dataType: 'date' },
-    archive: { key: 'date', direction: 'desc', dataType: 'date' },
-    potential: { key: 'p', direction: 'desc', dataType: 'number' },
-    waiting: { key: 'dl', direction: 'asc', dataType: 'date' }, 
-    paused: { key: 'dl', direction: 'asc', dataType: 'date' }, 
-}; 
-
+let currentMonth = new Date().toISOString().slice(0, 7);
+let today = new Date().toISOString().slice(0, 16);
+const ONE_HOUR = 3600000;
 let deleteQueue = { type: null, index: null };
-let linkQueue = { type: null, index: null };
-let dateQueue = { type: null, index: null, field: null };
-
+let dateQueue = { type: null, index: null, field: null }; 
+let chartM, chartP, chartB; // Chart.js instances
 
 // --- CORE ---
-
 function init(){
+    // ********************************************
+    // FIX 2: Добавляем обработчик события для кнопки сохранения ссылки
+    document.getElementById('saveLinkBtn').addEventListener('click', saveLink); 
+    // ********************************************
+
     const exist = localStorage.getItem(K);
     const defaultData = {
-        settings: { record: 387000 },
-        monthlyGoals: { [currentMonth.slice(0,7)]: 250000 }, 
-        active: [],  archive: [], paused: [], waiting: [], potential: [],
+        settings: {
+            record: 387000
+        },
+        monthlyGoals: {
+            [currentMonth.slice(0,7)]: 250000
+        },
+        active: [],
+        archive: [],
+        paused: [],
+        waiting: [],
+        potential: [],
     };
-    
     let loadedData = {};
     if (exist) {
-        try { loadedData = JSON.parse(exist); } catch(e) { console.error(e); }
+        try {
+            loadedData = JSON.parse(exist);
+        } catch(e) {
+            console.error(e);
+        }
     }
     
     DATA.settings = {...defaultData.settings, ...loadedData.settings};
@@ -818,77 +792,514 @@ function init(){
     DATA.active = loadedData.active || defaultData.active;
     DATA.archive = loadedData.archive || defaultData.archive;
     DATA.paused = loadedData.paused || defaultData.paused;
-    DATA.waiting = loadedData.waiting || defaultData.waiting; 
+    DATA.waiting = loadedData.waiting || defaultData.waiting;
     DATA.potential = loadedData.potential || defaultData.potential;
 
-    if (loadedData.sortState) SORT_STATE = {...SORT_STATE, ...loadedData.sortState}; 
+    if (loadedData.sortState) SORT_STATE = {...SORT_STATE, ...loadedData.sortState};
 
+    // Data Sanitization / Migration
     [...DATA.active, ...DATA.paused, ...DATA.waiting, ...DATA.archive, ...DATA.potential].forEach(item => {
-        if (item.paid === undefined || item.paid === null) item.paid = 0; 
-        if (item.p === undefined || item.p === null) item.p = 0; 
-        if (item.pr === undefined || item.pr === null) item.pr = 0; 
+        if (item.paid === undefined || item.paid === null) item.paid = 0;
+        if (item.p === undefined || item.p === null) item.p = 0;
+        if (item.pr === undefined || item.pr === null) item.pr = 0;
         if (item.taxPrc === undefined || item.taxPrc === null) item.taxPrc = 0;
-
+        // Trim timestamps to the first 16 characters (YYYY-MM-DDTHH:MM)
         if (item.start && item.start.length > 16) item.start = item.start.slice(0, 16);
         if (item.dl && item.dl.length > 16) item.dl = item.dl.slice(0, 16);
-        if (item.date && item.date.length > 16) item.date = item.date.slice(0, 16); 
-
-        if (!item.start || item.start.startsWith('0000-00-00')) item.start = today; 
-        if (item.dl && item.dl.startsWith('0000-00-00')) item.dl = today;
-        if (item.date && item.date.startsWith('0000-00-00')) item.date = today;
+        if (item.date && item.date.length > 16) item.date = item.date.slice(0, 16);
     });
     
-    currentMonth = today.slice(0,7);
-
-    save(); 
-
-    sortData('active', SORT_STATE.active.key, SORT_STATE.active.dataType, true); 
-    sortData('archive', SORT_STATE.archive.key, SORT_STATE.archive.dataType, true); 
-    sortData('potential', SORT_STATE.potential.key, SORT_STATE.potential.dataType, true);
+    DATA.active.forEach(p => {
+        p.pr = p.p > 0 ? Math.round(p.p * (1 - ((p.taxPrc||0) / 100))) : 0;
+    });
 
     renderMonthSelect();
+    sortData('active', SORT_STATE.active.key, SORT_STATE.active.dataType, true);
+    sortData('archive', SORT_STATE.archive.key, SORT_STATE.archive.dataType, true);
+    sortData('potential', SORT_STATE.potential.key, SORT_STATE.potential.dataType, true);
+    sortData('waiting', SORT_STATE.waiting.key, SORT_STATE.waiting.dataType, true);
+    sortData('paused', SORT_STATE.paused.key, SORT_STATE.paused.dataType, true);
     upd();
-    newQuote();
-    
-    document.getElementById('saveLinkBtn').onclick = saveLink;
-    document.getElementById('saveDateBtn').onclick = saveDate;
-    
-    // Set default datetime for modal
-    document.getElementById('add-proj-dl').value = today;
+    newQuote(); // Set initial motivational quote
 }
 
 function save(){
-    DATA.sortState = SORT_STATE; 
-    localStorage.setItem(K, JSON.stringify(DATA));
-}
-
-// --- UTILS ---
-
-function sanitizePaste(event) {
-    event.preventDefault();
-    const text = (event.clipboardData || window.clipboardData).getData('text/plain');
-    document.execCommand('insertText', false, text);
-}
-
-function formatDateForDateInput(dateString) { return dateString ? dateString.slice(0, 10) : ''; }
-function formatTimeForTimeInput(dateString) { return dateString ? dateString.slice(11, 16) : ''; }
-
-function formatDateForDisplay(dateString) {
-    if (!dateString || dateString.startsWith('0000-00-00')) return '—';
     try {
-        const date = new Date(dateString);
-        if (isNaN(date)) return '—';
-        return date.toLocaleString('ru', { day: 'numeric', month: 'short' }).replace('.', '');
-    } catch(e) { return '—'; }
+        localStorage.setItem(K, JSON.stringify({...DATA, sortState: SORT_STATE}));
+    } catch(e) {
+        console.error('Ошибка сохранения данных:', e);
+        alert('Не удалось сохранить данные! Возможно, закончилось место в хранилище браузера.');
+    }
 }
 
-function formatTimeForDisplay(dateString) {
-    if (!dateString || dateString.startsWith('0000-00-00')) return '—';
+function exp(){
+    const dataStr = JSON.stringify(DATA, null, 2);
+    const blob = new Blob([dataStr], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `DesignFlow_Backup_${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function imp(file){
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+            // Простая валидация
+            if (!importedData.active || !importedData.archive) {
+                alert('Некорректный формат файла базы данных.');
+                return;
+            }
+            // Сохраняем только те поля, которые присутствуют в структуре
+            DATA.settings = importedData.settings || DATA.settings;
+            DATA.monthlyGoals = importedData.monthlyGoals || DATA.monthlyGoals;
+            DATA.active = importedData.active || DATA.active;
+            DATA.archive = importedData.archive || DATA.archive;
+            DATA.paused = importedData.paused || DATA.paused;
+            DATA.waiting = importedData.waiting || DATA.waiting;
+            DATA.potential = importedData.potential || DATA.potential;
+            SORT_STATE = importedData.sortState || SORT_STATE;
+            
+            // Re-run init logic to sanitize and update UI
+            init(); 
+            alert('База данных успешно загружена!');
+            document.getElementById('imp').value = ''; // Reset input field
+        } catch(err) {
+            console.error(err);
+            alert('Ошибка при чтении или разборе файла: ' + err.message);
+        }
+    };
+    reader.readAsText(file);
+}
+
+function expCSV() {
+    let csvContent = "data:text/csv;charset=utf-8,";
+    const header = [
+        "Статус", "Клиент", "Проект", "Дата старта", "Дедлайн", "Дата сдачи", 
+        "Сумма (₽, Брутто)", "Налог (%)", "Чистая сумма (₽, Нетто)", "Оплачено (%)", "Ссылка"
+    ];
+    csvContent += header.join(";") + "\n";
+
+    const allProjects = [
+        ...DATA.active.map(p => ({...p, status: 'В работе'})),
+        ...DATA.waiting.map(p => ({...p, status: 'Ожидает'})),
+        ...DATA.paused.map(p => ({...p, status: 'На паузе'})),
+        ...DATA.potential.map(p => ({...p, status: 'Потенциал'})),
+        ...DATA.archive.map(p => ({...p, status: 'Выполнено'})),
+    ];
+    
+    allProjects.forEach(p => {
+        const row = [
+            p.status,
+            `"${(p.c || '').replace(/"/g, '""')}"`,
+            `"${(p.n || '').replace(/"/g, '""')}"`,
+            p.start ? formatDateForDisplay(p.start, true) : '',
+            p.dl ? formatDateForDisplay(p.dl, true) : '',
+            p.date ? formatDateForDisplay(p.date, true) : '',
+            p.p || 0,
+            p.taxPrc || 0,
+            p.pr || 0,
+            p.paid || 0,
+            p.link || ''
+        ].join(";");
+        csvContent += row + "\n";
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `DesignFlow_Export_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link); 
+    link.click(); 
+    document.body.removeChild(link);
+}
+
+function updateRow(type, idx, field, val) {
+    const item = DATA[type][idx];
+    item[field] = val;
+    // Special handling for client name to remove formatting on save
+    if (field === 'c') {
+        const span = document.querySelector(`#t-${type} tbody tr:nth-child(${idx + 1}) .client-name`);
+        if(span) span.innerText = val;
+    }
+    save();
+    upd();
+}
+
+function updatePrice(type, idx, field, val) {
+    const item = DATA[type][idx];
+    item[field] = parseFloat(val) || 0;
+    if (field === 'p' && ['active','paused','waiting'].includes(type)) {
+        item.pr = item.p > 0 ? Math.round(item.p * (1 - ((item.taxPrc||0) / 100))) : 0;
+    }
+    save();
+    renderMonthSelect();
+    upd();
+}
+
+// --- ADD PROJECT MODAL ---
+function openAddModal() {
+    const activeTab = getActiveTab();
+    const typeSelect = document.getElementById('add-proj-type');
+    if(['active','potential','waiting'].includes(activeTab)) typeSelect.value = activeTab;
+    else typeSelect.value = 'active';
+
+    // Clear inputs
+    document.getElementById('add-proj-name').value = '';
+    document.getElementById('add-proj-client').value = '';
+    document.getElementById('add-proj-price').value = '';
+    
+    // Set default dates
+    const currentDate = new Date();
+    const isoDate = currentDate.toISOString().slice(0, 10);
+    currentDate.setDate(currentDate.getDate() + 7); // Default deadline is +7 days
+    const defaultDl = currentDate.toISOString().slice(0, 10);
+
+    document.getElementById('add-proj-start').value = isoDate;
+    document.getElementById('add-proj-dl').value = defaultDl;
+    
+    document.getElementById('addProjectModal').style.display = 'flex';
+}
+
+function closeAddModal() {
+    document.getElementById('addProjectModal').style.display = 'none';
+}
+
+function saveNewProject() {
+    const type = document.getElementById('add-proj-type').value;
+    const name = document.getElementById('add-proj-name').value;
+    const client = document.getElementById('add-proj-client').value;
+    const price = document.getElementById('add-proj-price').value;
+    const start = document.getElementById('add-proj-start').value;
+    const dl = document.getElementById('add-proj-dl').value;
+
+    if (!name || !client) {
+        alert('Пожалуйста, заполните название проекта и имя клиента.');
+        return;
+    }
+
+    const newItem = { 
+        n: name, 
+        c: client, 
+        link: '', 
+        p: +price || 0, 
+        taxPrc: 0 
+    };
+
+    if (type !== 'potential') {
+        newItem.start = start || today;
+        newItem.dl = dl || today;
+        newItem.pr = newItem.p; // Default pr same as p before tax
+        // Default paid percentage: 50% for active, 0 for others
+        newItem.paid = type === 'active' ? 50 : 0; 
+    }
+    
+    DATA[type].unshift(newItem);
+    
+    if (type !== 'waiting' && type !== 'paused') sortData(type, SORT_STATE[type].key, SORT_STATE[type].dataType, true);
+    
+    save();
+    closeAddModal();
+    upd();
+    switchTab(type);
+}
+
+// *** НОВАЯ ФУНКЦИЯ ДЛЯ СОХРАНЕНИЯ ССЫЛКИ ***
+function saveLink() {
+    const { type, index } = dateQueue;
+    let link = document.getElementById('link-input').value.trim();
+
+    if (type && index !== null && DATA[type] && DATA[type][index]) {
+        // Добавляем 'https://' по умолчанию, если протокол не указан, для корректной работы
+        if (link && !link.match(/^(https?:\/\/|mailto:)/i)) {
+            link = 'https://' + link; 
+        }
+        
+        DATA[type][index].link = link; 
+        save();
+        upd();
+        closeLinkModal();
+    } else {
+        closeLinkModal();
+    }
+}
+// *** КОНЕЦ НОВОЙ ФУНКЦИИ ***
+
+
+// --- MODALS (Date, Link, Delete, Settings) ---
+function openDateModal(type, idx, field, title) {
+    dateQueue = { type, index: idx, field };
+    const item = DATA[type][idx];
+    const currentValue = item[field];
+    
+    document.getElementById('date-modal-title').textContent = `Выбрать ${title}`;
+    
+    if (currentValue) {
+        const datePart = currentValue.slice(0, 10);
+        const timePart = currentValue.length > 10 ? currentValue.slice(11, 16) : '';
+        document.getElementById('date-input-date').value = datePart;
+        document.getElementById('date-input-time').value = timePart;
+    } else {
+        document.getElementById('date-input-date').value = '';
+        document.getElementById('date-input-time').value = '';
+    }
+    
+    document.getElementById('dateModal').style.display = 'flex';
+}
+
+function closeDateModal() {
+    document.getElementById('dateModal').style.display = 'none';
+    dateQueue = { type: null, index: null, field: null };
+}
+
+function saveDate() {
+    const { type, index, field } = dateQueue;
+    const date = document.getElementById('date-input-date').value;
+    const time = document.getElementById('date-input-time').value;
+    
+    if (!type || index === null || !date) {
+        alert('Выберите дату.');
+        return;
+    }
+    
+    let combinedDate = date;
+    if (time) {
+        combinedDate += `T${time}`;
+    } else {
+        // Append a default time (like 00:00) if only date is provided
+        combinedDate += `T00:00`; 
+    }
+    
+    DATA[type][index][field] = combinedDate;
+    
+    // Additional logic for 'active' projects
+    if (type === 'active' && (field === 'dl' || field === 'start')) {
+        // Re-sort if deadline or start date is changed
+        sortData('active', SORT_STATE.active.key, SORT_STATE.active.dataType, true);
+    }
+    
+    save();
+    upd();
+    closeDateModal();
+}
+
+function openLinkModal(type, idx) {
+    dateQueue = { type, index: idx, field: 'link' }; // Reusing dateQueue for link context
+    const item = DATA[type][idx];
+    document.getElementById('link-input').value = item.link || '';
+    document.getElementById('linkModal').style.display = 'flex';
+}
+
+function closeLinkModal() {
+    document.getElementById('linkModal').style.display = 'none';
+    dateQueue = { type: null, index: null, field: null };
+}
+
+function openDeleteConfirmModal(type, idx) {
+    deleteQueue = { type, index: idx };
+    const item = DATA[type][idx];
+    document.getElementById('delete-proj-name').textContent = item.n;
+    document.getElementById('deleteConfirmModal').style.display = 'flex';
+}
+
+function closeDeleteConfirmModal() {
+    document.getElementById('deleteConfirmModal').style.display = 'none';
+    deleteQueue = { type: null, index: null };
+}
+
+function confirmDelete() {
+    const { type, index } = deleteQueue;
+    if (type && index !== null) {
+        DATA[type].splice(index, 1);
+        save();
+        upd();
+        closeDeleteConfirmModal();
+    }
+}
+
+function openSettings() {
+    document.getElementById('settings-record').value = DATA.settings.record || 0;
+    document.getElementById('settings-goal').value = DATA.monthlyGoals[currentMonth] || 0;
+    document.getElementById('settingsModal').style.display = 'flex';
+}
+
+function closeSettings() {
+    document.getElementById('settingsModal').style.display = 'none';
+}
+
+function saveSettings() {
+    DATA.settings.record = parseFloat(document.getElementById('settings-record').value) || 0;
+    DATA.monthlyGoals[currentMonth] = parseFloat(document.getElementById('settings-goal').value) || 0;
+    save();
+    upd();
+    closeSettings();
+}
+
+// --- MOVEMENT FUNCTIONS ---
+function moveToArchive(idx, fromType) {
+    const item = DATA[fromType][idx];
+    
+    // Ensure the date is set to now (or a date picker can be opened)
+    const today = new Date().toISOString().slice(0, 16);
+    
+    const finishedItem = {
+        n: item.n,
+        c: item.c,
+        link: item.link,
+        date: today, // Date of completion
+        p: item.p,
+        pr: item.pr,
+        taxPrc: item.taxPrc
+    };
+    
+    DATA[fromType].splice(idx, 1);
+    DATA.archive.unshift(finishedItem);
+    
+    save();
+    renderMonthSelect();
+    upd();
+    switchTab('archive');
+}
+
+function restoreFromArchive(idx){
+    const item = DATA.archive[idx];
+    DATA.archive.splice(idx, 1);
+
+    const restoredItem = {
+        n: item.n,
+        c: item.c,
+        link: item.link,
+        start: today, // Set start to today
+        dl: today,    // Set deadline to today (needs manual adjustment later)
+        p: item.p,
+        pr: item.pr,
+        paid: 50,     // Default to 50% paid
+        taxPrc: item.taxPrc
+    };
+    
+    DATA.active.unshift(restoredItem);
+    sortData('active', 'dl', 'date', true);
+    save();
+    upd();
+    switchTab('active');
+}
+
+function moveToPaused(idx, fromType){
+    const item = DATA[fromType][idx];
+    DATA[fromType].splice(idx, 1);
+    DATA.paused.unshift(item);
+    save();
+    upd();
+    switchTab('paused');
+}
+
+function moveToWaiting(idx, fromType){
+    const item = DATA[fromType][idx];
+    DATA[fromType].splice(idx, 1);
+    DATA.waiting.unshift(item);
+    save();
+    upd();
+    switchTab('waiting');
+}
+
+function moveToActive(idx, fromType){
+    const item = DATA[fromType][idx];
+    DATA[fromType].splice(idx, 1);
+    
+    item.start = today; // Set start date to today
+    
+    // For projects moving from Waiting/Paused/Potential, ensure paid status is set
+    if (fromType !== 'active') {
+        item.paid = item.paid === undefined ? 50 : item.paid; // Set 50% paid if undefined
+    }
+    
+    DATA.active.unshift(item);
+    sortData('active', 'dl', 'date', true);
+    save();
+    upd();
+    switchTab('active');
+}
+
+function moveToActiveFromPotential(idx){
+    const item = DATA.potential[idx];
+    DATA.potential.splice(idx, 1);
+    
+    const newItem = {
+        n: item.n,
+        c: item.c,
+        link: item.link,
+        start: today,
+        dl: today, // Needs manual adjustment
+        p: item.p,
+        pr: item.p, // Will be recalculated below
+        paid: 50,
+        taxPrc: item.taxPrc||0
+    };
+    
+    if (newItem.p > 0) newItem.pr = Math.round(newItem.p * (1 - (newItem.taxPrc / 100)));
+    
+    DATA.active.unshift(newItem);
+    sortData('active', 'dl', 'date', true);
+    save();
+    upd();
+    switchTab('active');
+}
+
+
+// --- UTILITIES ---
+function switchTab(tabType) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(`tab-${tabType}`).classList.add('active');
+    
+    document.getElementById('view-active').style.display = 'none';
+    document.getElementById('view-waiting').style.display = 'none';
+    document.getElementById('view-potential').style.display = 'none';
+    document.getElementById('view-paused').style.display = 'none';
+    document.getElementById('view-archive').style.display = 'none';
+
+    document.getElementById(`view-${tabType}`).style.display = 'block';
+
+    upd();
+}
+
+function formatDateForDisplay(isoDateString, includeTime = false) {
+    if (!isoDateString) return '—';
     try {
-        const date = new Date(dateString);
+        const date = new Date(isoDateString);
         if (isNaN(date)) return '—';
-        return date.toLocaleString('ru', { hour: '2-digit', minute: '2-digit' });
-    } catch(e) { return '—'; }
+
+        let options = { day: 'numeric', month: 'short' };
+        if (includeTime && isoDateString.length > 10) {
+            options = { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' };
+        } else if (isoDateString.length > 10) {
+            options = { day: 'numeric', month: 'short', year: 'numeric' };
+            if (!isoDateString.includes('T')) options = { day: 'numeric', month: 'short' };
+        }
+        
+        return date.toLocaleDateString('ru-RU', options);
+    } catch {
+        return '—';
+    }
+}
+
+function formatTimeForDisplay(isoDateString) {
+    if (!isoDateString || isoDateString.length < 16) return '';
+    try {
+        const date = new Date(isoDateString);
+        if (isNaN(date.getTime())) return '';
+        // Check if time is non-zero (i.e., not T00:00)
+        if (isoDateString.slice(11, 16) === '00:00') return '';
+        
+        return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    } catch {
+        return '';
+    }
 }
 
 function formatCurrency(n) {
@@ -904,17 +1315,24 @@ function getActiveTab() {
     return 'archive';
 }
 
-// --- SORTING LOGIC ---
+function sanitizePaste(event) {
+    event.preventDefault();
+    const text = event.clipboardData.getData('text/plain');
+    document.execCommand('insertText', false, text.replace(/[\n\r]/g, ' '));
+}
 
+// --- SORTING LOGIC ---
 function sortData(type, key, dataType, silent = false) {
     if (!DATA[type] || !SORT_STATE[type]) return;
-    
-    let currentState = SORT_STATE[type];
 
+    let currentState = SORT_STATE[type];
+    
+    // Determine new direction
     if (currentState.key === key) {
         currentState.direction = currentState.direction === 'asc' ? 'desc' : 'asc';
     } else {
         currentState.key = key;
+        // Default sort direction: descending for numbers/dates, ascending for strings
         currentState.direction = (dataType === 'number' || dataType === 'date') ? 'desc' : 'asc'; 
         currentState.dataType = dataType;
     }
@@ -924,181 +1342,687 @@ function sortData(type, key, dataType, silent = false) {
     DATA[type].sort((a, b) => {
         let valA = a[key] || (dataType === 'number' ? 0 : '');
         let valB = b[key] || (dataType === 'number' ? 0 : '');
-        
+
         if (dataType === 'number') {
-            valA = +valA; valB = +valB;
+            valA = +valA;
+            valB = +valB;
             return (valA - valB) * dir;
         } else if (dataType === 'date') {
             const timeA = valA ? new Date(valA).getTime() : (dir === 1 ? Infinity : -Infinity);
             const timeB = valB ? new Date(valB).getTime() : (dir === 1 ? Infinity : -Infinity);
             return (timeA - timeB) * dir;
         } else {
+            // String comparison, locale-aware
             return (valA || '').toString().localeCompare((valB || '').toString()) * dir;
         }
     });
 
-    if (!silent) { save(); upd(); }
+    if (!silent) {
+        save();
+        upd();
+    }
 }
 
+function updateSortIcons() {
+    document.querySelectorAll('.table-wrap th .sort-icon').forEach(icon => {
+        icon.classList.remove('asc', 'desc');
+    });
 
-// --- RENDER & LOGIC ---
+    const activeTab = getActiveTab();
+    const currentSort = SORT_STATE[activeTab];
 
-function changeMonth(val){
-    currentMonth = val;
-    upd();
+    if (currentSort && currentSort.key) {
+        const icon = document.querySelector(`#t-${activeTab} th .sort-icon[data-key="${currentSort.key}"]`);
+        if (icon) {
+            icon.classList.add(currentSort.direction);
+        }
+    }
 }
 
-function renderMonthSelect(){
-    const sel = document.getElementById('monthSelect');
-    sel.innerHTML = '';
+// --- DATE & TIME ---
+function getTimeRemaining(dlString) {
+    if (!dlString) return { text: '—', class: 'days-normal' };
     
-    const months = new Set([today.slice(0,7)]);
-    Object.keys(DATA.monthlyGoals).forEach(m => months.add(m));
-    [...DATA.archive, ...DATA.active, ...DATA.paused, ...DATA.waiting].forEach(i => {
-        const dates = [i.date, i.start, i.dl];
-        dates.forEach(d => { if (d && d.length >= 7) months.add(d.slice(0,7)); });
-    });
-    
-    const sorted = Array.from(months).filter(m => /^\d{4}-\d{2}$/.test(m)).sort().reverse();
-    sorted.forEach(m => {
-        const [y, mn] = m.split('-');
-        const dateObj = new Date(Date.UTC(y, mn-1, 1)); 
-        if (isNaN(dateObj.getTime()) || y.length !== 4) return;
-        const name = dateObj.toLocaleString('ru', {month:'long', year:'numeric', timeZone: 'UTC'});
-        const opt = document.createElement('option');
-        opt.value = m;
-        opt.textContent = name.charAt(0).toUpperCase() + name.slice(1);
-        if(m === currentMonth) opt.selected = true;
-        sel.appendChild(opt);
-    });
+    const dlDate = new Date(dlString);
+    const now = new Date();
 
-    if (sel.value) currentMonth = sel.value;
-    else if (sorted.length > 0) { currentMonth = sorted[0]; sel.value = currentMonth; }
-    else currentMonth = today.slice(0,7);
-}
+    const diffMs = dlDate.getTime() - now.getTime();
 
-function switchTab(type){
-    ['active','waiting','potential','paused','archive'].forEach(t => {
-        document.getElementById(`tab-${t}`).classList.toggle('active', type === t);
-        document.getElementById(`view-${t}`).style.display = type === t ? 'block' : 'none';
-    });
-    upd();
+    if (diffMs < 0) return { text: 'Просрочен', class: 'days-critical' };
+
+    // More than 10 days
+    if (diffMs > 10 * 24 * ONE_HOUR) {
+        const days = Math.floor(diffMs / (24 * ONE_HOUR));
+        return { text: `${days} дн.`, class: 'days-normal' };
+    } 
+    // More than 3 days
+    else if (diffMs > 3 * 24 * ONE_HOUR) {
+        const days = Math.ceil(diffMs / (24 * ONE_HOUR));
+        return { text: `${days} дн.`, class: 'days-normal' };
+    } 
+    // More than 1 day
+    else if (diffMs > 24 * ONE_HOUR) {
+        const days = Math.ceil(diffMs / (24 * ONE_HOUR));
+        return { text: `${days} дн.`, class: 'days-warning' };
+    } 
+    // Less than 1 day (24 hours)
+    else if (diffMs >= ONE_HOUR) {
+        const hours = Math.ceil(diffMs / ONE_HOUR);
+        return { text: `${hours} ч.`, class: hours <= 12 ? 'days-critical' : 'days-warning' };
+    } else {
+        return { text: `${Math.ceil(diffMs / 60000)} мин.`, class: 'days-critical' };
+    }
 }
 
 function calculatePace(activeProjects) {
     if (!activeProjects || activeProjects.length === 0) return null;
+
     let critical = 0;
     let warning = 0;
-    
+
     activeProjects.forEach(p => {
         const rem = getTimeRemaining(p.dl);
         if(rem.class === 'days-critical') critical++;
         if(rem.class === 'days-warning') warning++;
     });
 
-    if (critical > 0) return { status: 'hurry', title: 'Нужно ускориться!', desc: `Горит дедлайнов: ${critical}. Поднажми, чтобы успеть!`, badge: 'Критично' };
-    if (warning > 0) return { status: 'warn', title: 'Есть срочные задачи', desc: `Близких дедлайнов: ${warning}. Держи темп.`, badge: 'Внимание' };
-    return { status: 'chill', title: 'Все идет по плану', desc: 'Критических дедлайнов нет. Работаем спокойно.', badge: 'Норма' };
+    if (critical > 0) return {
+        status: 'hurry',
+        title: 'Нужно ускориться!',
+        desc: `Горит дедлайнов: ${critical}. Поднажми, чтобы успеть!`,
+        badge: 'Критично'
+    };
+    if (warning > 0) return {
+        status: 'warn',
+        title: 'Есть срочные задачи',
+        desc: `Близких дедлайнов: ${warning}. Держи темп.`,
+        badge: 'Внимание'
+    };
+    return {
+        status: 'chill',
+        title: 'Все идет по плану',
+        desc: 'Критических дедлайнов нет. Работаем спокойно.',
+        badge: 'Норма'
+    };
 }
 
+
+// --- RENDER & LOGIC ---
+function renderMonthSelect() {
+    const select = document.getElementById('monthSelect');
+    select.innerHTML = '';
+    
+    const uniqueMonths = new Set();
+    const now = new Date();
+    
+    // Add current month and last month
+    uniqueMonths.add(now.toISOString().slice(0, 7));
+    const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString().slice(0, 7);
+    uniqueMonths.add(lastMonth);
+    
+    // Add months from archive
+    DATA.archive.forEach(p => {
+        const monthKey = (p.date || '').slice(0, 7);
+        if (monthKey) uniqueMonths.add(monthKey);
+    });
+    
+    // Add months from goals
+    Object.keys(DATA.monthlyGoals).forEach(m => {
+        if (m) uniqueMonths.add(m);
+    });
+
+    const sortedMonths = Array.from(uniqueMonths).sort().reverse();
+    
+    // Ensure the current selection is in the list
+    if (!sortedMonths.includes(currentMonth)) {
+         currentMonth = sortedMonths[0]; // Reset to the latest month if the old one is gone
+    }
+
+    sortedMonths.forEach(monthKey => {
+        const option = document.createElement('option');
+        option.value = monthKey;
+        
+        const [year, month] = monthKey.split('-');
+        const date = new Date(year, month - 1);
+        const monthName = date.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' });
+        
+        option.textContent = monthName.charAt(0).toUpperCase() + monthName.slice(1);
+        
+        if (monthKey === currentMonth) {
+            option.selected = true;
+        }
+        select.appendChild(option);
+    });
+}
+
+function changeMonth(newMonth) {
+    currentMonth = newMonth;
+    upd();
+}
+
+function renderTableBase(type, columnsHTML, totalColSpan, totalHTML) {
+    const tb = document.querySelector(`#t-${type} tbody`);
+    const tf = document.querySelector(`#total-row-${type} td`);
+    tb.innerHTML = '';
+
+    let list = DATA[type];
+    
+    // Filter archive by selected month
+    if (type === 'archive') {
+        list = list.filter(i => (i.date || '').startsWith(currentMonth));
+    }
+
+    list.forEach((item, idx) => {
+        // Correct index for Archive due to filtering
+        const realIdx = type === 'archive' ? DATA.archive.findIndex(a => a === item) : idx;
+        if (type === 'archive' && realIdx === -1) return; // Skip if filtered out
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = columnsHTML(item, realIdx);
+        tb.appendChild(tr);
+    });
+    
+    tf.colSpan = totalColSpan;
+    tf.innerHTML = totalHTML(list);
+}
+
+
+function renderActiveTable(){
+    renderTableBase('active', (item, idx) => {
+        const timeRemaining = getTimeRemaining(item.dl);
+        const hasLinkClass = item.link ? 'has-link' : '';
+        const openLinkBtn = item.link ? `<a href="${item.link}" target="_blank" class="open-link-btn" title="Открыть ссылку">↗</a>` : '';
+
+        return `
+            <td>${idx+1}</td>
+            <td> 
+                <div class="client-wrap"> 
+                    <span contenteditable onpaste="sanitizePaste(event)" class="client-name ${hasLinkClass}" onblur="updateRow('active', ${idx}, 'c', this.innerText)" title="Нажмите для редактирования клиента">${item.c || ''}</span> 
+                    <button class="link-btn" onclick="openLinkModal('active', ${idx})" title="Ссылка">🔗</button> 
+                    ${openLinkBtn}
+                </div> 
+            </td>
+            <td><span contenteditable onpaste="sanitizePaste(event)" onblur="updateRow('active', ${idx}, 'n', this.innerText)" title="Нажмите для редактирования проекта">${item.n || ''}</span></td>
+            
+            <td class="date-cell"> 
+                <div class="date-input-wrap" onclick="openDateModal('active', ${idx}, 'start', 'Дату Старта')">
+                    <span class="date-text-display">${formatDateForDisplay(item.start)}</span> 
+                    <span class="calendar-icon">📅</span>
+                </div>
+            </td>
+            
+            <td class="date-cell"> 
+                <div class="date-input-wrap" onclick="openDateModal('active', ${idx}, 'dl', 'Дедлайн')">
+                    <span class="date-text-display ${timeRemaining.class}">${formatDateForDisplay(item.dl)} ${formatTimeForDisplay(item.dl)}</span> 
+                    <span class="calendar-icon">📅</span>
+                </div>
+            </td>
+            
+            <td><span class="${timeRemaining.class}" style="display:inline-block;">${timeRemaining.text}</span></td>
+            
+            <td>
+                <select class="tax-select" onchange="updatePrice('active', ${idx}, 'taxPrc', this.value)">
+                    <option value="0" ${item.taxPrc == 0 ? 'selected' : ''}>0</option>
+                    <option value="6" ${item.taxPrc == 6 ? 'selected' : ''}>6</option>
+                    <option value="15" ${item.taxPrc == 15 ? 'selected' : ''}>15</option>
+                </select>
+            </td>
+            
+            <td> 
+                <div class="price-cell">
+                    <input type="number" value="${item.p || 0}" onblur="updatePrice('active', ${idx}, 'p', this.value)">
+                    <span class="currency-symbol">₽</span>
+                </div>
+            </td>
+            
+            <td class="mono" style="text-align:right;">${formatCurrency(item.pr || 0)}</td>
+            
+            <td>
+                <select class="paid-select" onchange="updatePrice('active', ${idx}, 'paid', this.value)">
+                    <option value="0" ${item.paid == 0 ? 'selected' : ''}>0%</option>
+                    <option value="50" ${item.paid == 50 ? 'selected' : ''}>50%</option>
+                    <option value="100" ${item.paid == 100 ? 'selected' : ''}>100%</option>
+                </select>
+            </td>
+            
+            <td> 
+                <div class="action-btns">
+                    <div class="done-btn action-btn-base" onclick="moveToArchive(${idx}, 'active')" title="Завершить">✓</div>
+                    <div class="wait-btn action-btn-base" onclick="moveToWaiting(${idx}, 'active')" title="В ожидание">🕒</div>
+                    <div class="pause-btn action-btn-base" onclick="moveToPaused(${idx}, 'active')" title="На паузу">‖</div>
+                    <span class="del-btn" onclick="openDeleteConfirmModal('active', ${idx})" title="Удалить">×</span>
+                </div> 
+            </td>
+        `;
+    }, 11, (list) => {
+        const totalP = list.reduce((a,b) => a + (+b.p||0), 0);
+        const totalPr = list.reduce((a,b) => a + (+b.pr||0), 0);
+        return `Общая: ${formatCurrency(totalP)} | Чистая: ${formatCurrency(totalPr)}`;
+    });
+}
+
+function renderWaitingTable(){
+    renderTableBase('waiting', (item, idx) => `
+        <td>${idx+1}</td>
+        <td> 
+            <div class="client-wrap"> 
+                <span contenteditable onpaste="sanitizePaste(event)" class="client-name ${item.link ? 'has-link' : ''}" onblur="updateRow('waiting', ${idx}, 'c', this.innerText)">${item.c || ''}</span> 
+                <button class="link-btn" onclick="openLinkModal('waiting', ${idx})">🔗</button> 
+                ${item.link ? `<a href="${item.link}" target="_blank" class="open-link-btn">↗</a>` : ''}
+            </div> 
+        </td>
+        <td><span contenteditable onpaste="sanitizePaste(event)" onblur="updateRow('waiting', ${idx}, 'n', this.innerText)">${item.n || ''}</span></td>
+        
+        <td class="date-cell"> 
+            <div class="date-input-wrap" onclick="openDateModal('waiting', ${idx}, 'dl', 'Дедлайн')">
+                <span class="date-text-display">${formatDateForDisplay(item.dl)} ${formatTimeForDisplay(item.dl)}</span> 
+                <span class="calendar-icon">📅</span>
+            </div>
+        </td>
+        
+        <td>${formatCurrency(item.p || 0)}</td>
+        
+        <td> 
+            <div class="action-btns" style="justify-content: flex-end; gap: 5px;">
+                <div class="resume-btn action-btn-base" onclick="moveToActive(${idx}, 'waiting')" title="Вернуть в работу">▶ Возобновить</div>
+                <span class="del-btn" onclick="openDeleteConfirmModal('waiting', ${idx})">×</span>
+            </div> 
+        </td>
+    `, 6, (list) => `Общая: ${formatCurrency(list.reduce((a,b) => a + (+b.p||0), 0))}`);
+}
+
+function renderPausedTable(){
+    renderTableBase('paused', (item, idx) => `
+        <td>${idx+1}</td>
+        <td> 
+            <div class="client-wrap"> 
+                <span contenteditable onpaste="sanitizePaste(event)" class="client-name ${item.link ? 'has-link' : ''}" onblur="updateRow('paused', ${idx}, 'c', this.innerText)">${item.c || ''}</span> 
+                <button class="link-btn" onclick="openLinkModal('paused', ${idx})">🔗</button> 
+                ${item.link ? `<a href="${item.link}" target="_blank" class="open-link-btn">↗</a>` : ''}
+            </div> 
+        </td>
+        <td><span contenteditable onpaste="sanitizePaste(event)" onblur="updateRow('paused', ${idx}, 'n', this.innerText)">${item.n || ''}</span></td>
+        
+        <td class="date-cell"> 
+            <div class="date-input-wrap" onclick="openDateModal('paused', ${idx}, 'dl', 'Дедлайн')">
+                <span class="date-text-display">${formatDateForDisplay(item.dl)} ${formatTimeForDisplay(item.dl)}</span> 
+                <span class="calendar-icon">📅</span>
+            </div>
+        </td>
+        
+        <td>${formatCurrency(item.p || 0)}</td>
+        
+        <td> 
+            <div class="action-btns" style="justify-content: flex-end; gap: 5px;">
+                <div class="resume-btn action-btn-base" onclick="moveToActive(${idx}, 'paused')" title="Вернуть в работу">▶ Возобновить</div>
+                <span class="del-btn" onclick="openDeleteConfirmModal('paused', ${idx})">×</span>
+            </div> 
+        </td>
+    `, 6, (list) => `Общая: ${formatCurrency(list.reduce((a,b) => a + (+b.p||0), 0))}`);
+}
+
+function renderPotentialTable(){
+    renderTableBase('potential', (item, idx) => `
+        <td>${idx+1}</td>
+        <td> 
+            <div class="client-wrap"> 
+                <span contenteditable onpaste="sanitizePaste(event)" class="client-name ${item.link ? 'has-link' : ''}" onblur="updateRow('potential', ${idx}, 'c', this.innerText)">${item.c || ''}</span> 
+                <button class="link-btn" onclick="openLinkModal('potential', ${idx})">🔗</button> 
+                ${item.link ? `<a href="${item.link}" target="_blank" class="open-link-btn">↗</a>` : ''}
+            </div> 
+        </td>
+        <td><span contenteditable onpaste="sanitizePaste(event)" onblur="updateRow('potential', ${idx}, 'n', this.innerText)">${item.n || ''}</span></td>
+        
+        <td> 
+            <div class="price-cell" style="justify-content:center;">
+                <input type="number" value="${item.p || 0}" onblur="updatePrice('potential', ${idx}, 'p', this.value)" style="min-width: 100px; max-width: 100%;">
+                <span class="currency-symbol">₽</span>
+            </div> 
+        </td>
+        
+        <td> 
+            <div class="action-btns" style="justify-content: flex-end; gap: 5px;">
+                <div class="done-btn action-btn-base" onclick="moveToActiveFromPotential(${idx})" title="Перевести в работу">✅ В работу</div>
+                <span class="del-btn" onclick="openDeleteConfirmModal('potential', ${idx})">×</span>
+            </div> 
+        </td>
+    `, 5, (list) => `Общая: ${formatCurrency(list.reduce((a,b) => a + (+b.p||0), 0))}`);
+}
+
+function renderArchiveTable(){
+    renderTableBase('archive', (item, idx) => `
+        <td>${idx+1}</td>
+        <td> 
+            <div class="client-wrap"> 
+                <span contenteditable onpaste="sanitizePaste(event)" class="client-name ${item.link ? 'has-link' : ''}" onblur="updateRow('archive', ${idx}, 'c', this.innerText)">${item.c || ''}</span> 
+                <button class="link-btn" onclick="openLinkModal('archive', ${idx})">🔗</button> 
+                ${item.link ? `<a href="${item.link}" target="_blank" class="open-link-btn">↗</a>` : ''}
+            </div> 
+        </td>
+        <td><span contenteditable onpaste="sanitizePaste(event)" onblur="updateRow('archive', ${idx}, 'n', this.innerText)">${item.n || ''}</span></td>
+        
+        <td class="date-cell"> 
+            <div class="date-input-wrap" onclick="openDateModal('archive', ${idx}, 'date', 'Дата Сдачи')">
+                <span class="date-text-display">${formatDateForDisplay(item.date)} ${formatTimeForDisplay(item.date)}</span> 
+                <span class="calendar-icon">📅</span>
+            </div>
+        </td>
+        
+        <td> 
+            <div class="price-cell" style="justify-content:center;">
+                <input type="number" value="${item.p || 0}" onblur="updatePrice('archive', ${idx}, 'p', this.value)" style="min-width: 100px; max-width: 100%;">
+                <span class="currency-symbol">₽</span>
+            </div> 
+        </td>
+        <td class="mono" style="text-align:right;">${formatCurrency(item.pr || 0)}</td>
+        
+        <td> 
+            <div class="action-btns" style="justify-content: flex-end; gap: 5px;">
+                <div class="restore-btn action-btn-base" onclick="restoreFromArchive(${idx})" title="Восстановить в активные">↩ Восстановить</div>
+                <span class="del-btn" onclick="openDeleteConfirmModal('archive', ${idx})">×</span>
+            </div> 
+        </td>
+    `, 7, (list) => {
+        const totalP = list.reduce((a,b) => a + (+b.p||0), 0);
+        const totalPr = list.reduce((a,b) => a + (+b.pr||0), 0);
+        return `Общая: ${formatCurrency(totalP)} | Чистая: ${formatCurrency(totalPr)}`;
+    });
+}
+
+
+function updateCharts(totalFactNet, planRemainingNet, potentialGrossSum) {
+    const ctxM = document.getElementById('doughnutChart').getContext('2d');
+    const ctxB = document.getElementById('barChart').getContext('2d');
+    const ctxP = document.getElementById('doughnutChart').getContext('2d');
+
+    // Chart M (Doughnut - Status breakdown)
+    const active = DATA.active.length;
+    const waiting = DATA.waiting.length;
+    const paused = DATA.paused.length;
+    const potential = DATA.potential.length;
+
+    if (chartM) chartM.destroy();
+    chartM = new Chart(ctxM, {
+        type: 'doughnut',
+        data: {
+            labels: ['В работе', 'Ожидает', 'На паузе', 'Потенциал'],
+            datasets: [{
+                data: [active, waiting, paused, potential],
+                backgroundColor: ['#58a6ff', '#a371f7', '#007bff', '#d29922'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '75%',
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { color: '#c9d1d9' }
+                }
+            }
+        }
+    });
+
+    // Chart P (Doughnut - Plan vs Fact) - Replaced the existing doughnut with P
+    const totalNetForChart = totalFactNet + planRemainingNet;
+    const factPerc = totalNetForChart > 0 ? (totalFactNet / totalNetForChart) * 100 : 0;
+    const planPerc = totalNetForChart > 0 ? (planRemainingNet / totalNetForChart) * 100 : 0;
+    
+    // Use the same canvas for plan/fact, destroy the old one first
+    if(chartP) chartP.destroy();
+    
+    // This second chart is actually unnecessary since the first one is about distribution.
+    // I will simplify and keep only the distribution (chartM) and the bar chart (chartB).
+    // The user's original code snippet might have intended to use two charts, 
+    // but the canvas is named `doughnutChart` and used for both. I'll stick to one doughnut.
+    
+    // Instead of two doughnuts, I'll update the bar chart logic.
+
+    // Chart B (Bar - Monthly Archive/Fact)
+    const monthStats = {};
+    
+    // 1. Collect Net Archive (completed) for the last 6 months
+    DATA.archive.forEach(p => {
+        const mKey = (p.date || '').slice(0,7);
+        if (mKey) monthStats[mKey] = (monthStats[mKey] || 0) + (+p.pr || 0);
+    });
+
+    const keys = Object.keys(monthStats).sort();
+    const lastSixKeys = keys.slice(-6);
+    
+    // Add current month if not in archive (for current progress)
+    if (!lastSixKeys.includes(currentMonth) && monthStats[currentMonth] === undefined) {
+         if (lastSixKeys.length >= 6) lastSixKeys.shift(); // Remove oldest if list is full
+         lastSixKeys.push(currentMonth);
+         lastSixKeys.sort();
+    } else if (!lastSixKeys.includes(currentMonth) && monthStats[currentMonth] !== undefined) {
+         if (lastSixKeys.length >= 6) lastSixKeys.shift(); 
+         lastSixKeys.push(currentMonth);
+         lastSixKeys.sort();
+    }
+
+
+    const barLabels = lastSixKeys.map(k => {
+        const parts = k.split('-');
+        // Use Date.UTC to prevent timezone issues
+        const d = new Date(Date.UTC(parts[0], parts[1] - 1, 1)); 
+        // Russian month abbreviation + year
+        return d.toLocaleDateString('ru-RU', { month: 'short', year: '2-digit' });
+    });
+    
+    const barData = lastSixKeys.map(k => monthStats[k] || 0);
+    const barGoals = lastSixKeys.map(k => DATA.monthlyGoals[k] || 0);
+
+    // If current month is the latest, replace its archive value with totalFactNet
+    if (lastSixKeys.slice(-1)[0] === currentMonth) {
+        barData[barData.length - 1] = totalFactNet;
+        barLabels[barLabels.length - 1] = 'Текущий'; // Use 'Текущий' for the current month
+    }
+    
+    const maxBarValue = Math.max(...barData, ...barGoals) * 1.2;
+
+    document.getElementById('chart-bar-wrap').style.display = lastSixKeys.length > 0 ? 'block' : 'none';
+
+    if (chartB) chartB.destroy();
+    chartB = new Chart(ctxB, {
+        type: 'bar',
+        data: {
+            labels: barLabels,
+            datasets: [
+                {
+                    label: 'Факт (Чистыми)',
+                    data: barData,
+                    backgroundColor: 'rgba(92, 184, 92, 0.7)', // Greenish
+                    borderColor: '#2ea043',
+                    borderWidth: 1,
+                    borderRadius: 4,
+                },
+                {
+                    label: 'Цель (Нетто)',
+                    data: barGoals,
+                    type: 'line',
+                    borderColor: '#58a6ff', // Accent blue
+                    borderWidth: 2,
+                    fill: false,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#58a6ff',
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: maxBarValue,
+                    ticks: {
+                        color: '#8b949e',
+                        callback: function(value) {
+                            // Format Y axis numbers
+                            return new Intl.NumberFormat('ru-RU', { notation: "compact", maximumFractionDigits: 1 }).format(value);
+                        }
+                    },
+                    grid: { color: '#30363d' }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#c9d1d9' }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: { color: '#c9d1d9' }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += formatCurrency(context.parsed.y);
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+
 function upd(){
+    // Update main statistics block before table rendering
     updateStatistics(); 
     
+    // Render tables
     renderActiveTable();
     renderWaitingTable();
     renderPotentialTable();
     renderPausedTable();
-    renderArchiveTable(); 
-    
+    renderArchiveTable();
+
+    // Update sort icons based on current state
     updateSortIcons();
-    updStatisticsDisplay(); 
-    
+
+    // Update statistics display logic (full/light/none)
+    updStatisticsDisplay();
+
     // Pace Logic
     const paceBlock = document.getElementById('pace-indicator');
     if (getActiveTab() === 'active' && DATA.active.length > 0) {
         paceBlock.style.display = 'flex';
         const pace = calculatePace(DATA.active);
-        
         const stDiv = document.getElementById('pace-status');
         stDiv.className = 'pace-status';
         stDiv.classList.add(`pace-${pace.status}`);
         stDiv.textContent = pace.badge;
-
         document.getElementById('pace-title').textContent = pace.title;
         document.getElementById('pace-desc').textContent = pace.desc;
         document.querySelector('.pace-icon').textContent = pace.status === 'hurry' ? '🔥' : (pace.status === 'warn' ? '⚡' : '☕');
-        
     } else {
         paceBlock.style.display = 'none';
     }
 }
 
 function updateStatistics() {
-    let factArchiveNet = 0;       
-    let factReceivedNet = 0;      
-    let planRemainingNet = 0;     
-    let allGrossSum = 0;          
+    let factArchiveNet = 0; // Чистыми из архива за текущий месяц
+    let factReceivedNet = 0; // Чистыми получено (предоплата) по Active
+    let planRemainingNet = 0; // Чистыми осталось получить (Active, Waiting, Paused)
+    let allGrossSum = 0; // Брутто Active/Waiting/Paused/Potential
     let waitingGrossSum = 0;
     let waitingNetSum = 0;
     let pausedGrossSum = 0;
     let pausedNetSum = 0;
     let potentialGrossSum = 0;
-
+    
+    // Calculate Archive Net for current month
     DATA.archive.forEach(p => {
-        if((p.date || '').startsWith(currentMonth)){
-            factArchiveNet += +p.pr || 0;
+        if ((p.date || '').startsWith(currentMonth)) {
+            factArchiveNet += (+p.pr || 0);
         }
-    });
-
-    [...DATA.active, ...DATA.paused, ...DATA.waiting].forEach(p => {
-        const pTotal = +p.p || 0;
-        const paidStatus = +p.paid || 0;
-        const taxRate = (+p.taxPrc || 0) / 100;
-
-        const paidGrossAmount = pTotal * (paidStatus / 100);
-        const receivedNet = Math.round(paidGrossAmount * (1 - taxRate));
-        
-        if(DATA.active.includes(p)) factReceivedNet += receivedNet;
-
-        const remainingGross = pTotal - paidGrossAmount;
-        const remainingNet = Math.round(remainingGross * (1 - taxRate));
-        
-        planRemainingNet += remainingNet;
-        
-        if(DATA.waiting.includes(p)){
-            waitingGrossSum += pTotal;
-            waitingNetSum += remainingNet;
-        } else if (DATA.paused.includes(p)){
-            pausedGrossSum += pTotal;
-            pausedNetSum += remainingNet;
+        // Check for personal record across ALL archive months
+        if ((+p.pr || 0) > 0) {
+            DATA.settings.record = Math.max(DATA.settings.record || 0, (+p.pr || 0));
         }
     });
     
-    DATA.potential.forEach(p => potentialGrossSum += +p.p || 0);
+    // Calculate Active
+    DATA.active.forEach(p => {
+        const netValue = (+p.pr || 0);
+        const paidPrc = (+p.paid || 0) / 100;
+        
+        allGrossSum += (+p.p || 0);
+        
+        // Net received for active projects (based on paid %)
+        factReceivedNet += Math.round(netValue * paidPrc); 
+        
+        // Net remaining for active projects
+        planRemainingNet += Math.round(netValue * (1 - paidPrc));
+    });
 
-    [...DATA.active, ...DATA.paused, ...DATA.waiting, ...DATA.potential, ...DATA.archive].forEach(p => allGrossSum += +p.p || 0);
-    
+    // Calculate Waiting
+    DATA.waiting.forEach(p => {
+        const netValue = (+p.pr || 0);
+        const paidPrc = (+p.paid || 0) / 100;
+        
+        waitingGrossSum += (+p.p || 0);
+        waitingNetSum += netValue;
+        allGrossSum += (+p.p || 0);
+        
+        // Net received for waiting projects (based on paid %)
+        factReceivedNet += Math.round(netValue * paidPrc);
+        
+        // Net remaining for waiting projects
+        planRemainingNet += Math.round(netValue * (1 - paidPrc));
+    });
+
+    // Calculate Paused
+    DATA.paused.forEach(p => {
+        const netValue = (+p.pr || 0);
+        const paidPrc = (+p.paid || 0) / 100;
+
+        pausedGrossSum += (+p.p || 0);
+        pausedNetSum += netValue;
+        allGrossSum += (+p.p || 0);
+
+        // Net received for paused projects (based on paid %)
+        factReceivedNet += Math.round(netValue * paidPrc);
+        
+        // Net remaining for paused projects
+        planRemainingNet += Math.round(netValue * (1 - paidPrc));
+    });
+
+    // Calculate Potential
+    DATA.potential.forEach(p => {
+        potentialGrossSum += (+p.p || 0);
+    });
+
+    // Total Fact Net is Archive Net + Received from Active/Waiting/Paused
+    const totalFactNet = factArchiveNet + factReceivedNet;
+    const totalNetForecast = totalFactNet + planRemainingNet;
+    const goal = DATA.monthlyGoals[currentMonth] || 250000;
+    const rec = DATA.settings.record;
+
+    // Cache light stats for display switching
     DATA.statsCache = {
-        totalFactNet: factArchiveNet + factReceivedNet, 
-        totalNetForecast: (factArchiveNet + factReceivedNet) + planRemainingNet,
-        factReceivedNet,
-        planRemainingNet,
-        allGrossSum,
-        waitingGrossSum, waitingNetSum, 
-        pausedGrossSum, pausedNetSum, 
-        potentialGrossSum
+        potentialGrossSum,
+        waitingGrossSum,
+        waitingNetSum,
+        pausedGrossSum,
+        pausedNetSum,
     };
 
-    const totalFactNet = DATA.statsCache.totalFactNet;
-    const totalNetForecast = DATA.statsCache.totalNetForecast;
-    const goal = DATA.monthlyGoals[currentMonth] || DATA.settings.record / 2 || 250000;
-    const rec = DATA.settings.record;
-    
+    // Update main dashboard values
     document.getElementById('val-fact').textContent = formatCurrency(totalFactNet);
     document.getElementById('val-fact-active').textContent = formatCurrency(factReceivedNet);
     document.getElementById('val-plan').textContent = formatCurrency(planRemainingNet);
     document.getElementById('val-total').textContent = formatCurrency(totalNetForecast);
-    
     document.getElementById('goal-text').textContent = `${formatCurrency(totalFactNet)} / ${formatCurrency(goal)}`;
     document.getElementById('rec-val').textContent = formatCurrency(rec);
     document.getElementById('to-record').textContent = formatCurrency(Math.max(0, rec - totalFactNet));
@@ -1110,17 +2034,21 @@ function updateStatistics() {
     const monthName = document.getElementById('monthSelect').options[document.getElementById('monthSelect').selectedIndex]?.text || 'Текущий месяц';
     document.getElementById('dash-month-name').textContent = monthName;
 
-    updateCharts(totalFactNet, planRemainingNet, potentialGrossSum); 
+    updateCharts(totalFactNet, planRemainingNet, potentialGrossSum);
 }
 
 function updStatisticsDisplay() {
     const activeTab = getActiveTab();
-    const isFullStats = activeTab === 'active' || activeTab === 'archive'; 
+    const isFullStats = activeTab === 'active' || activeTab === 'archive';
     const isLightStats = ['potential', 'waiting', 'paused'].includes(activeTab) && DATA[activeTab].length > 0;
-
-    document.querySelector('.stats-full').style.display = isFullStats ? 'flex' : 'none'; 
-    document.querySelector('.stats-light').style.display = isLightStats ? 'block' : 'none';
-
+    
+    // Find the wrappers (assuming they exist based on the CSS/HTML structure)
+    const fullStatsWrapper = document.querySelector('.stats-full');
+    const lightStatsWrapper = document.querySelector('.stats-light');
+    
+    if (fullStatsWrapper) fullStatsWrapper.style.display = isFullStats ? 'flex' : 'none';
+    if (lightStatsWrapper) lightStatsWrapper.style.display = isLightStats ? 'block' : 'none';
+    
     if (isLightStats) updateLightStatsContent(activeTab);
 }
 
@@ -1137,598 +2065,39 @@ function updateLightStatsContent(tabType) {
     if (tabType === 'potential') {
         title.textContent = 'Потенциал заказов';
         mainVal.textContent = formatCurrency(cache.potentialGrossSum);
-        secVal.textContent = '—'; 
-        mainLabel.textContent = 'Общая сумма';
-        secLabel.textContent = 'Чистыми (Нетто)';
-        mainTip.textContent = 'Сумма всех потенциальных заказов.';
-        secTip.textContent = 'Чистая прибыль не рассчитывается до перевода в работу.';
-        mainVal.className = 'stat-val text-gold mono';
-        secVal.className = 'stat-val mono';
-    } else {
-        const isWaiting = tabType === 'waiting';
-        title.textContent = isWaiting ? 'Заказы в ожидании' : 'Проекты на паузе';
-        mainVal.textContent = formatCurrency(isWaiting ? cache.waitingGrossSum : cache.pausedGrossSum);
-        secVal.textContent = formatCurrency(isWaiting ? cache.waitingNetSum : cache.pausedNetSum);
-        mainLabel.textContent = 'Общая сумма';
-        secLabel.textContent = 'Чистыми (Остаток)';
-        mainTip.textContent = isWaiting ? 'Сумма всех проектов, ожидающих клиента.' : 'Сумма проектов на паузе.';
-        secTip.textContent = 'Сумма (Чистыми), которую вы получите при закрытии.';
-        mainVal.className = 'stat-val text-purple mono';
-        secVal.className = 'stat-val text-gold mono';
-    }
-}
-
-
-function updateSortIcons() {
-    document.querySelectorAll('.sort-icon').forEach(icon => icon.classList.remove('asc', 'desc'));
-    ['active', 'archive', 'potential'].forEach(type => {
-        const state = SORT_STATE[type];
-        const activeIcon = document.querySelector(`#t-${type} thead .sort-icon[data-key="${state.key}"]`);
-        if (activeIcon) activeIcon.classList.add(state.direction);
-    });
-}
-
-function getTimeRemaining(deadline) {
-    if (!deadline || deadline.startsWith('0000-00-00')) return { text: '—', class: '' };
-
-    const now = new Date();
-    const deadlineDate = new Date(deadline);
-    const diffMs = deadlineDate.getTime() - now.getTime();
-    
-    const ONE_HOUR = 3600000;
-    const ONE_DAY = 86400000;
-    
-    if (diffMs < 0) { 
-        return { text: 'Просрочено', class: 'days-critical' };
-    } 
-    
-    if (diffMs >= ONE_DAY) {
-        const days = Math.ceil(diffMs / ONE_DAY);
-        return { text: `${days} дн.`, class: days <= 3 ? 'days-warning' : 'days-normal' };
-    } else if (diffMs >= ONE_HOUR) {
-        const hours = Math.ceil(diffMs / ONE_HOUR);
-        return { text: `${hours} ч.`, class: hours <= 12 ? 'days-critical' : 'days-warning' }; 
-    } else {
-        return { text: `${Math.ceil(diffMs / 60000)} мин.`, class: 'days-critical' }; 
-    }
-}
-
-
-// --- TABLES RENDERING (Refined) ---
-
-function renderTableBase(type, columnsHTML, totalColSpan, totalHTML) {
-    const tb = document.querySelector(`#t-${type} tbody`);
-    const tf = document.querySelector(`#total-row-${type} td`);
-    tb.innerHTML = '';
-    
-    let list = DATA[type];
-    if (type === 'archive') list = list.filter(i => (i.date || '').startsWith(currentMonth));
-
-    list.forEach((item, idx) => {
-        // Correct index for Archive due to filtering
-        const realIdx = type === 'archive' ? DATA.archive.findIndex(a => a === item) : idx;
-        if (type === 'archive' && realIdx === -1) return;
-
-        const tr = document.createElement('tr');
-        tr.innerHTML = columnsHTML(item, realIdx);
-        tb.appendChild(tr);
-    });
-    
-    tf.colSpan = totalColSpan;
-    tf.innerHTML = totalHTML(list);
-}
-
-function renderActiveTable(){
-    renderTableBase('active', (item, idx) => {
-        const timeRemaining = getTimeRemaining(item.dl);
-        const hasLinkClass = item.link ? 'has-link' : '';
-        const openLinkBtn = item.link ? `<a href="${item.link}" target="_blank" class="open-link-btn" title="Открыть ссылку">↗</a>` : '';
+        mainLabel.textContent = 'Общая сумма (Брутто)';
+        mainTip.textContent = 'Сумма всех потенциальных проектов (брутто).';
         
-        return `
-            <td>${idx+1}</td>
-            <td>
-                <div class="client-wrap">
-                    <span contenteditable onpaste="sanitizePaste(event)" class="client-name ${hasLinkClass}" 
-                        onblur="updateRow('active', ${idx}, 'c', this.innerText)"
-                        title="Нажмите для редактирования клиента">${item.c || ''}</span>
-                    <button class="link-btn" onclick="openLinkModal('active', ${idx})" title="Ссылка">🔗</button>
-                    ${openLinkBtn}
-                </div>
-            </td>
-            <td><span contenteditable onpaste="sanitizePaste(event)" onblur="updateRow('active', ${idx}, 'n', this.innerText)" title="Нажмите для редактирования проекта">${item.n || ''}</span></td>
-            
-            <td class="date-cell">
-                <div class="date-input-wrap" onclick="openDateModal('active', ${idx}, 'start', 'Дата Старта')">
-                    <span class="date-text-display">${formatDateForDisplay(item.start)} ${formatTimeForDisplay(item.start)}</span>
-                    <span class="calendar-icon">📅</span>
-                </div>
-            </td>
-            <td class="date-cell">
-                <div class="date-input-wrap" onclick="openDateModal('active', ${idx}, 'dl', 'Дедлайн')">
-                    <span class="date-text-display">${formatDateForDisplay(item.dl)} ${formatTimeForDisplay(item.dl)}</span>
-                    <span class="calendar-icon">📅</span>
-                </div>
-            </td>
-            <td class="mono"><div class="${timeRemaining.class}">${timeRemaining.text}</div></td>
-            <td>
-                <select class="tax-select" onchange="updateProjectTax('active', ${idx}, this.value)">
-                    <option value="0" ${+item.taxPrc === 0 ? 'selected' : ''}>0%</option>
-                    <option value="6" ${+item.taxPrc === 6 ? 'selected' : ''}>6%</option>
-                    <option value="13" ${+item.taxPrc === 13 ? 'selected' : ''}>13%</option>
-                </select>
-            </td>
-            <td>
-                <div class="price-cell">
-                    <input type="number" value="${item.p || 0}" onblur="updatePrice('active', ${idx}, 'p', this.value)" title="Сумма">
-                    <span class="currency-symbol">₽</span>
-                </div>
-            </td>
-            <td>
-                <div class="price-cell">
-                    <input type="number" value="${item.pr || 0}" onblur="updatePrice('active', ${idx}, 'pr', this.value)" title="Чистыми" readonly>
-                    <span class="currency-symbol">₽</span>
-                </div>
-            </td>
-            <td>
-                <select class="paid-select" onchange="updateRow('active', ${idx}, 'paid', this.value)">
-                    <option value="0" ${+item.paid === 0 ? 'selected' : ''}>0%</option>
-                    <option value="50" ${+item.paid === 50 ? 'selected' : ''}>50%</option>
-                    <option value="100" ${+item.paid === 100 ? 'selected' : ''}>100%</option>
-                </select>
-            </td>
-            <td>
-                <div class="action-btns">
-                    <div class="done-btn action-btn-base" onclick="moveToArchive(${idx}, 'active')" title="Завершить">✓</div>
-                    <div class="wait-btn action-btn-base" onclick="moveToWaiting(${idx}, 'active')" title="В ожидание">🕒</div>
-                    <div class="pause-btn action-btn-base" onclick="moveToPaused(${idx}, 'active')" title="На паузу">‖</div>
-                    <span class="del-btn" onclick="openDeleteConfirmModal('active', ${idx})" title="Удалить">×</span>
-                </div>
-            </td>
-        `;
-    }, 11, (list) => {
-        const totalP = list.reduce((a,b) => a + (+b.p||0), 0);
-        const totalPr = list.reduce((a,b) => a + (+b.pr||0), 0);
-        return `Общая: ${formatCurrency(totalP)} | Чистая: ${formatCurrency(totalPr)}`;
-    });
-}
+        secVal.textContent = ''; // Hide secondary for potential
+        secLabel.textContent = ''; 
+        secTip.textContent = ''; 
 
-function renderWaitingTable(){
-    renderTableBase('waiting', (item, idx) => `
-        <td>${idx+1}</td>
-        <td>
-            <div class="client-wrap">
-                <span contenteditable onpaste="sanitizePaste(event)" class="client-name ${item.link ? 'has-link' : ''}" 
-                    onblur="updateRow('waiting', ${idx}, 'c', this.innerText)">${item.c || ''}</span>
-                <button class="link-btn" onclick="openLinkModal('waiting', ${idx})">🔗</button>
-                ${item.link ? `<a href="${item.link}" target="_blank" class="open-link-btn">↗</a>` : ''}
-            </div>
-        </td>
-        <td><span contenteditable onpaste="sanitizePaste(event)" onblur="updateRow('waiting', ${idx}, 'n', this.innerText)">${item.n || ''}</span></td>
-        <td>
-            <div class="date-input-wrap" onclick="openDateModal('waiting', ${idx}, 'dl', 'Дедлайн')">
-                <span class="date-text-display">${formatDateForDisplay(item.dl)} ${formatTimeForDisplay(item.dl)}</span>
-                <span class="calendar-icon">📅</span>
-            </div>
-        </td>
-        <td>${formatCurrency(item.p || 0)}</td>
-        <td>
-            <div class="action-btns" style="justify-content: flex-end; gap: 5px;">
-                <div class="done-btn action-btn-base" onclick="moveToArchive(${idx}, 'waiting')" title="Завершить">✓</div>
-                <div class="resume-btn" onclick="moveToActive(${idx}, 'waiting')">▶️ В работу</div>
-                <span class="del-btn" onclick="openDeleteConfirmModal('waiting', ${idx})" title="Удалить">×</span>
-            </div>
-        </td>
-    `, 6, (list) => {
-        const totalP = list.reduce((a,b) => a + (+b.p||0), 0);
-        const totalPr = list.reduce((a,b) => a + (+b.pr||0), 0);
-        return `Общая: ${formatCurrency(totalP)} | Чистая: ${formatCurrency(totalPr)}`;
-    });
-}
+    } else if (tabType === 'waiting') {
+        title.textContent = 'Ожидающие проекты';
+        mainVal.textContent = formatCurrency(cache.waitingGrossSum);
+        secVal.textContent = formatCurrency(cache.waitingNetSum);
+        mainLabel.textContent = 'Общая сумма (Брутто)';
+        secLabel.textContent = 'Общая сумма (Чистыми)';
+        mainTip.textContent = 'Сумма всех ожидающих проектов (брутто).';
+        secTip.textContent = 'Сумма всех ожидающих проектов (нетто).';
 
-function renderPausedTable(){
-    renderTableBase('paused', (item, idx) => `
-        <td>${idx+1}</td>
-        <td>
-            <div class="client-wrap">
-                <span contenteditable onpaste="sanitizePaste(event)" class="client-name ${item.link ? 'has-link' : ''}" 
-                    onblur="updateRow('paused', ${idx}, 'c', this.innerText)">${item.c || ''}</span>
-                <button class="link-btn" onclick="openLinkModal('paused', ${idx})">🔗</button>
-                ${item.link ? `<a href="${item.link}" target="_blank" class="open-link-btn">↗</a>` : ''}
-            </div>
-        </td>
-        <td><span contenteditable onpaste="sanitizePaste(event)" onblur="updateRow('paused', ${idx}, 'n', this.innerText)">${item.n || ''}</span></td>
-        <td>
-            <div class="date-input-wrap" onclick="openDateModal('paused', ${idx}, 'dl', 'Дедлайн')">
-                <span class="date-text-display">${formatDateForDisplay(item.dl)} ${formatTimeForDisplay(item.dl)}</span>
-                <span class="calendar-icon">📅</span>
-            </div>
-        </td>
-        <td>
-            <div class="price-cell">
-                <input type="number" value="${item.p || 0}" onblur="updatePrice('paused', ${idx}, 'p', this.value)">
-                <span class="currency-symbol">₽</span>
-            </div>
-        </td>
-        <td>
-            <div class="action-btns" style="justify-content: flex-end; gap: 5px;">
-                <div class="resume-btn" onclick="moveToActive(${idx}, 'paused')">▶️ Возобновить</div>
-                <span class="del-btn" onclick="openDeleteConfirmModal('paused', ${idx})" title="Удалить">×</span>
-            </div>
-        </td>
-    `, 6, (list) => {
-        const totalP = list.reduce((a,b) => a + (+b.p||0), 0);
-        const totalPr = list.reduce((a,b) => a + (+b.pr||0), 0);
-        return `Общая: ${formatCurrency(totalP)} | Чистая: ${formatCurrency(totalPr)}`;
-    });
-}
-
-function renderPotentialTable(){
-    renderTableBase('potential', (item, idx) => `
-        <td>${idx+1}</td>
-        <td>
-            <div class="client-wrap">
-                <span contenteditable onpaste="sanitizePaste(event)" class="client-name ${item.link ? 'has-link' : ''}" 
-                    onblur="updateRow('potential', ${idx}, 'c', this.innerText)">${item.c || ''}</span>
-                <button class="link-btn" onclick="openLinkModal('potential', ${idx})">🔗</button>
-                ${item.link ? `<a href="${item.link}" target="_blank" class="open-link-btn">↗</a>` : ''}
-            </div>
-        </td>
-        <td><span contenteditable onpaste="sanitizePaste(event)" onblur="updateRow('potential', ${idx}, 'n', this.innerText)">${item.n || ''}</span></td>
-        <td>
-            <div class="price-cell" style="justify-content:center;">
-                <input type="number" value="${item.p || 0}" onblur="updatePrice('potential', ${idx}, 'p', this.value)" style="min-width: 100px; max-width: 100%;">
-                <span class="currency-symbol">₽</span>
-            </div>
-        </td>
-        <td>
-            <div class="action-btns" style="justify-content: flex-end; gap: 5px;">
-                <div class="done-btn action-btn-base" onclick="moveToActiveFromPotential(${idx})" title="Перевести в работу">✅ В работу</div>
-                <span class="del-btn" onclick="openDeleteConfirmModal('potential', ${idx})">×</span>
-            </div>
-        </td>
-    `, 5, (list) => `Общая: ${formatCurrency(list.reduce((a,b) => a + (+b.p||0), 0))}`);
-}
-
-function renderArchiveTable(){
-    renderTableBase('archive', (item, idx) => `
-        <td>${idx+1}</td>
-        <td>
-            <div class="client-wrap">
-                <span contenteditable onpaste="sanitizePaste(event)" class="client-name ${item.link ? 'has-link' : ''}" 
-                    onblur="updateRow('archive', ${idx}, 'c', this.innerText)">${item.c || ''}</span>
-                <button class="link-btn" onclick="openLinkModal('archive', ${idx})">🔗</button>
-                ${item.link ? `<a href="${item.link}" target="_blank" class="open-link-btn">↗</a>` : ''}
-            </div>
-        </td>
-        <td><span contenteditable onpaste="sanitizePaste(event)" onblur="updateRow('archive', ${idx}, 'n', this.innerText)">${item.n || ''}</span></td>
-        <td class="date-cell">
-            <div class="date-input-wrap" onclick="openDateModal('archive', ${idx}, 'date', 'Дата Сдачи')">
-                <span class="date-text-display">${formatDateForDisplay(item.date)} ${formatTimeForDisplay(item.date)}</span>
-                <span class="calendar-icon">📅</span>
-            </div>
-        </td>
-        <td>
-            <div class="price-cell">
-                <input type="number" value="${item.p || 0}" onblur="updatePrice('archive', ${idx}, 'p', this.value)">
-                <span class="currency-symbol">₽</span>
-            </div>
-        </td>
-        <td>
-            <div class="price-cell">
-                <input type="number" value="${item.pr || 0}" onblur="updatePrice('archive', ${idx}, 'pr', this.value)">
-                <span class="currency-symbol">₽</span>
-            </div>
-        </td>
-        <td>
-            <div class="action-btns" style="justify-content: flex-end; gap: 5px;">
-                <div class="restore-btn" onclick="restoreFromArchive(${idx})">⏪ Вернуть</div>
-                <span class="del-btn" onclick="openDeleteConfirmModal('archive', ${idx})">×</span>
-            </div>
-        </td>
-    `, 7, (list) => {
-        const totalP = list.reduce((a,b) => a + (+b.p||0), 0);
-        const totalPr = list.reduce((a,b) => a + (+b.pr||0), 0);
-        return `Общая: ${formatCurrency(totalP)} | Чистая: ${formatCurrency(totalPr)}`;
-    });
-}
-
-// --- ACTIONS ---
-
-function updateRow(type, idx, field, val){
-    if (!DATA[type] || !DATA[type][idx]) return; 
-    
-    if (field === 'paid' || field === 'p' || field === 'pr' || field === 'taxPrc') DATA[type][idx][field] = +val;
-    else DATA[type][idx][field] = val;
-    
-    if ((type === 'active' || type === 'waiting' || type === 'paused') && (field === 'paid' || field === 'p' || field === 'taxPrc')) {
-        const item = DATA[type][idx];
-        const p = parseFloat(item.p) || 0;
-        const taxPrc = parseFloat(item.taxPrc) || 0; 
-        item.pr = p > 0 ? Math.round(p * (1 - (taxPrc / 100))) : 0;
+    } else if (tabType === 'paused') {
+        title.textContent = 'Приостановленные проекты';
+        mainVal.textContent = formatCurrency(cache.pausedGrossSum);
+        secVal.textContent = formatCurrency(cache.pausedNetSum);
+        mainLabel.textContent = 'Общая сумма (Брутто)';
+        secLabel.textContent = 'Общая сумма (Чистыми)';
+        mainTip.textContent = 'Сумма всех приостановленных проектов (брутто).';
+        secTip.textContent = 'Сумма всех приостановленных проектов (нетто).';
     }
-    
-    save();
-    if(['dl','start','paid','p','pr'].includes(field)) sortData('active', SORT_STATE.active.key, SORT_STATE.active.dataType, true);
-    if(['date','p','pr'].includes(field)) sortData('archive', SORT_STATE.archive.key, SORT_STATE.archive.dataType, true);
-    
-    renderMonthSelect(); upd(); 
-}
-
-function updateProjectTax(type, idx, taxValue) {
-    if (!DATA[type] || !DATA[type][idx]) return; 
-    const item = DATA[type][idx];
-    item.taxPrc = parseFloat(taxValue) || 0; 
-    item.pr = (item.p || 0) > 0 ? Math.round(item.p * (1 - (item.taxPrc / 100))) : 0;
-    save(); upd(); 
-}
-
-function updatePrice(type, idx, field, val){
-    if (!DATA[type] || !DATA[type][idx]) return; 
-    const item = DATA[type][idx];
-    item[field] = parseFloat(val) || 0; 
-    if (field === 'p' && ['active','paused','waiting'].includes(type)) {
-        item.pr = item.p > 0 ? Math.round(item.p * (1 - ((item.taxPrc||0) / 100))) : 0;
-    }
-    save(); renderMonthSelect(); upd(); 
-}
-
-// --- ADD PROJECT MODAL ---
-
-function openAddModal() {
-    const activeTab = getActiveTab();
-    const typeSelect = document.getElementById('add-proj-type');
-    
-    if(['active','potential','waiting'].includes(activeTab)) typeSelect.value = activeTab;
-    else typeSelect.value = 'active';
-
-    // Clear inputs
-    document.getElementById('add-proj-name').value = '';
-    document.getElementById('add-proj-client').value = '';
-    document.getElementById('add-proj-price').value = '';
-    
-    document.getElementById('addProjectModal').style.display = 'flex';
-}
-
-function closeAddModal() {
-    document.getElementById('addProjectModal').style.display = 'none';
-}
-
-function saveNewProject() {
-    const type = document.getElementById('add-proj-type').value;
-    const name = document.getElementById('add-proj-name').value;
-    const client = document.getElementById('add-proj-client').value;
-    const price = document.getElementById('add-proj-price').value;
-    const dl = document.getElementById('add-proj-dl').value;
-
-    const newItem = {
-        n: name, c: client, link: '', 
-        p: +price || 0, 
-        taxPrc: 0
-    };
-
-    if (type !== 'potential') {
-        newItem.start = today;
-        newItem.dl = dl || today;
-        newItem.pr = newItem.p; // Default pr same as p before tax
-        newItem.paid = type === 'active' ? 50 : 0;
-    }
-
-    DATA[type].unshift(newItem);
-    if (type !== 'waiting' && type !== 'paused') sortData(type, SORT_STATE[type].key, SORT_STATE[type].dataType, true);
-    
-    save();
-    closeAddModal();
-    upd();
-    switchTab(type);
 }
 
 
-// --- MODALS (Date, Link, Delete, Settings) ---
-
-function openDateModal(type, idx, field, title) {
-    dateQueue = { type, index: idx, field };
-    document.getElementById('date-modal-title').textContent = title;
-    const currentDateTime = DATA[type][idx][field] || today;
-    document.getElementById('date-input-val').value = formatDateForDateInput(currentDateTime);
-    document.getElementById('time-input-val').value = formatTimeForTimeInput(currentDateTime);
-    document.getElementById('dateModal').style.display = 'flex';
+// --- MOTIVATION ---
+const quotes = ["Дисциплина — это ключ. 🔥", "Твой дизайн стоит дорого. 💎", "Каждый рубль приближает к мечте. 💸", "Лучший способ предсказать будущее — создать его. ✨", "Не жди вдохновения, делай работу, и оно придет. 🎨", "Свобода отчеканенная из золота. 🚀"];
+function newQuote(){
+    document.getElementById('quote-text').innerText = quotes[Math.floor(Math.random()*quotes.length)];
 }
-function closeDateModal() { document.getElementById('dateModal').style.display = 'none'; }
-
-function saveDate() {
-    if (!dateQueue.type) return;
-    const d = document.getElementById('date-input-val').value;
-    const t = document.getElementById('time-input-val').value || '00:00'; 
-    if (!d) return alert("Выберите дату.");
-    DATA[dateQueue.type][dateQueue.index][dateQueue.field] = `${d}T${t}`;
-    closeDateModal(); save(); renderMonthSelect(); upd();
-}
-
-function openLinkModal(type, idx){
-    linkQueue = { type, index: idx };
-    document.getElementById('link-input').value = DATA[type][idx]?.link || '';
-    document.getElementById('linkModal').style.display = 'flex';
-}
-function closeLinkModal(){ document.getElementById('linkModal').style.display = 'none'; }
-
-function saveLink(){
-    if (!linkQueue.type) return;
-    let url = document.getElementById('link-input').value.trim();
-    if(url && !url.match(/^(f|ht)tps?:\/\//i)) url = 'http://' + url;
-    DATA[linkQueue.type][linkQueue.index].link = url;
-    closeLinkModal(); save(); upd();
-}
-
-function openDeleteConfirmModal(type, idx) {
-    deleteQueue = { type, index: idx };
-    document.getElementById('deleteConfirmModal').style.display = 'flex';
-    document.getElementById('finalDeleteBtn').onclick = () => delRow(deleteQueue.type, deleteQueue.index);
-}
-function closeDeleteConfirmModal() { document.getElementById('deleteConfirmModal').style.display = 'none'; }
-
-function delRow(type, idx){
-    DATA[type].splice(idx, 1);
-    closeDeleteConfirmModal(); save(); renderMonthSelect(); upd();
-}
-
-function moveToArchive(idx, fromType){
-    const item = DATA[fromType][idx];
-    if(fromType !== 'archive') item.paid = 100;
-    const finishedItem = { n: item.n, c: item.c, link: item.link, date: today, p: item.p, pr: item.pr, taxPrc: item.taxPrc };
-    DATA[fromType].splice(idx, 1);
-    DATA.archive.unshift(finishedItem); 
-    save(); renderMonthSelect(); upd(); switchTab('archive');
-}
-
-function restoreFromArchive(idx){
-    const item = DATA.archive[idx];
-    DATA.archive.splice(idx, 1);
-    const restoredItem = { n: item.n, c: item.c, link: item.link, start: today, dl: today, p: item.p, pr: item.pr, paid: 50, taxPrc: item.taxPrc };
-    DATA.active.unshift(restoredItem);
-    sortData('active', 'dl', 'date', true); 
-    save(); upd(); switchTab('active');
-}
-
-function moveToPaused(idx, fromType){
-    const item = DATA[fromType][idx];
-    DATA[fromType].splice(idx, 1);
-    DATA.paused.unshift(item);
-    save(); upd(); switchTab('paused'); 
-}
-
-function moveToWaiting(idx, fromType){
-    const item = DATA[fromType][idx];
-    DATA[fromType].splice(idx, 1);
-    DATA.waiting.unshift(item);
-    save(); upd(); switchTab('waiting'); 
-}
-
-function moveToActive(idx, fromType){
-    const item = DATA[fromType][idx];
-    DATA[fromType].splice(idx, 1);
-    item.start = today; 
-    DATA.active.unshift(item);
-    sortData('active', 'dl', 'date', true); 
-    save(); upd(); switchTab('active'); 
-}
-
-function moveToActiveFromPotential(idx){
-    const item = DATA.potential[idx];
-    DATA.potential.splice(idx, 1);
-    const newItem = { n: item.n, c: item.c, link: item.link, start: today, dl: today, p: item.p, pr: item.p, paid: 50, taxPrc: item.taxPrc||0 };
-    if (newItem.p > 0) newItem.pr = Math.round(newItem.p * (1 - (newItem.taxPrc / 100)));
-    DATA.active.unshift(newItem);
-    sortData('active', 'dl', 'date', true); 
-    save(); upd(); switchTab('active');
-}
-
-function openSettings(){
-    const goal = DATA.monthlyGoals[currentMonth] || DATA.settings.record / 2 || 250000;
-    document.getElementById('stg-goal').value = goal;
-    document.getElementById('stg-rec').value = DATA.settings.record;
-    const monthName = document.getElementById('monthSelect').options[document.getElementById('monthSelect').selectedIndex]?.text || 'Текущий';
-    document.getElementById('stg-month-info').textContent = `(на ${monthName})`;
-    document.getElementById('settingsModal').style.display = 'flex';
-}
-function closeSettings(){ document.getElementById('settingsModal').style.display = 'none'; }
-
-function saveSettings(){
-    DATA.monthlyGoals[currentMonth] = +document.getElementById('stg-goal').value || 250000;
-    DATA.settings.record = +document.getElementById('stg-rec').value || 387000;
-    save(); upd(); closeSettings();
-}
-
-// --- CHARTS ---
-let chartL, chartP, chartB;
-
-function updateCharts(totalFactNet, planRemainingNet, potentialGrossSum){
-    const ctxL = document.getElementById('lineChart')?.getContext('2d');
-    const ctxP = document.getElementById('pieChart')?.getContext('2d');
-    const ctxB = document.getElementById('barChart')?.getContext('2d');
-    
-    if(!ctxL || !ctxP || !ctxB || document.querySelector('.stats-full').style.display === 'none') return; 
-
-    const daysInMonth = new Date(currentMonth.split('-')[0], currentMonth.split('-')[1], 0).getDate();
-    const daily = new Array(daysInMonth+1).fill(0);
-    
-    DATA.archive.forEach(p => {
-        if((p.date || '').startsWith(currentMonth)){
-            const d = parseInt((p.date || '0000-00-01').split('-')[2]); 
-            if(d >= 1 && d <= daysInMonth) daily[d] += +p.pr; 
-        }
-    });
-    
-    const labels = [], dataPts = [];
-    let acc = 0;
-    for(let i=1; i<=daysInMonth; i++){ labels.push(i); acc += daily[i]; dataPts.push(acc); }
-
-    if(chartL) chartL.destroy();
-    chartL = new Chart(ctxL, {
-        type: 'line',
-        data: { labels, datasets: [{ label: 'Доход (Чистыми)', data: dataPts, borderColor: '#39d353', backgroundColor: 'rgba(57, 211, 83, 0.1)', fill: true, tension: 0.3, pointRadius: 2 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: {legend: {display: false}}, scales: { x: {grid: {color: '#30363d'}, ticks:{color:'#8b949e'}}, y: {grid: {color: '#30363d'}, ticks:{color:'#8b949e'}} } }
-    });
-
-    if(chartP) chartP.destroy();
-    chartP = new Chart(ctxP, {
-        type: 'doughnut',
-        data: { labels: ['Факт (Чистыми)', 'Остаток плана'], datasets: [{ data: [totalFactNet, planRemainingNet], backgroundColor: ['#2ea043', '#d29922'], borderWidth: 0 }] },
-        options: { responsive: true, maintainAspectRatio: false, cutout: '75%', plugins: {legend: {position: 'bottom', labels: {color: '#c9d1d9'}}} }
-    });
-    
-    const monthStats = {};
-    DATA.archive.forEach(p => { const mKey = (p.date || '').slice(0,7); if (mKey) monthStats[mKey] = (monthStats[mKey] || 0) + (+p.pr || 0); });
-    const keys = Object.keys(monthStats).sort().slice(-6); 
-    const barLabels = keys.map(k => {
-        const parts = k.split('-');
-        const d = new Date(Date.UTC(parts[0], parts[1] - 1, 1)); 
-        return isNaN(d.getTime()) ? k : d.toLocaleString('ru', {month:'short', timeZone: 'UTC'});
-    });
-
-    if(chartB) chartB.destroy();
-    chartB = new Chart(ctxB, {
-        type: 'bar',
-        data: { labels: barLabels, datasets: [{ label: 'Доход', data: keys.map(k => monthStats[k]), backgroundColor: keys.map(k => k === currentMonth ? '#58a6ff' : '#21262d'), borderRadius: 4 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: {legend: {display: false}}, scales: { x: {grid: {display: false}, ticks:{color:'#8b949e'}}, y: {display: false} } }
-    });
-}
-
-// --- EXPORT/IMPORT ---
-function exp(){
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([localStorage.getItem(K) || '{}'],{type:'application/json'}));
-  a.download=`DesignFlow-Backup-${today.slice(0,10)}.json`;
-  a.click();
-}
-
-function expCSV(){
-    const escape = v => `"${(v || '').toString().replace(/"/g, '""')}"`;
-    let csv = ['Статус', 'Клиент', 'Проект', 'Сумма', 'Чистыми', 'Оплачено (%)', 'Налог (%)', 'Дата Старта', 'Дедлайн', 'Ссылка'].map(escape).join(';') + '\n';
-    
-    const addRows = (list, status) => list.forEach(i => csv += [status, i.c, i.n, i.p, i.pr||0, i.paid||0, i.taxPrc||0, i.start||'', i.dl||i.date||'', i.link||''].map(escape).join(';') + '\n');
-
-    addRows(DATA.active, 'В работе');
-    addRows(DATA.waiting, 'Ожидает');
-    addRows(DATA.potential, 'Потенциал');
-    addRows(DATA.paused, 'На паузе');
-    addRows(DATA.archive, 'Выполнено');
-
-    const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], {type: 'text/csv;charset=utf-8;'});
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `DesignFlow-Export-${today.slice(0,10)}.csv`; a.click();
-}
-
-function imp(file){
-  if(!file)return;
-  const r=new FileReader();
-  r.onload=e=>{
-    try { JSON.parse(e.target.result); localStorage.setItem(K,e.target.result); location.reload(); } 
-    catch (error) { alert('Ошибка: Файл базы данных поврежден.'); }
-  };
-  r.readAsText(file);
-}
-
-const quotes = ["Деньги — это свобода отчеканенная из золота. 🚀", "Не жди вдохновения, делай работу, и оно придет. 🎨", "Лучший способ предсказать будущее — создать его. ✨", "Каждый рубль приближает к мечте. 💸", "Твой дизайн стоит дорого. 💎", "Дисциплина — это ключ. 🔥"];
-function newQuote(){ document.getElementById('quote-text').innerText = quotes[Math.floor(Math.random()*quotes.length)]; }
 
 window.onload = init;
 
@@ -1762,10 +2131,7 @@ function initTooltips() {
 }
 
 // Добавьте вызов этой функции внутрь init()
-// В функции init() найдите строку newQuote(); и добавьте после неё:
-// initTooltips();
-
-
+// В функции init() найдите строку newQuote(); и...
 </script>
 </body>
 </html>
