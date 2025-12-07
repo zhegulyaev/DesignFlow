@@ -110,8 +110,8 @@
   [contenteditable]:focus { white-space: pre-wrap; -webkit-line-clamp: initial; overflow: visible; text-overflow: unset; }
   
   .date-cell { padding: 0 !important; } 
-  .date-input-wrap { width: 100%; padding: 8px 10px; cursor: pointer; user-select: none; display: flex; align-items: center; justify-left: flex-start; transition: .2s; border-radius: 10px; gap: 8px; border: 1px solid transparent; background: linear-gradient(120deg, rgba(88,166,255,0.06), rgba(163,113,247,0.06)); }
-  .date-input-wrap:hover { background: linear-gradient(120deg, rgba(88,166,255,0.12), rgba(163,113,247,0.12)); border-color: var(--border); }
+  .date-input-wrap { width: 100%; padding: 6px 8px; cursor: pointer; user-select: none; display: flex; align-items: center; justify-left: flex-start; transition: .2s; border-radius: 10px; gap: 6px; border: 1px solid var(--border); background: transparent; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .date-input-wrap:hover { background: #161b22; border-color: #3a3f4b; }
   .date-text-display { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; display: flex; align-items: center; gap: 8px; letter-spacing: -0.1px; }
   .date-icon { display: inline-flex; width: 14px; height: 14px; color: var(--muted); opacity: 0.85; }
   .time-text { color: var(--muted); font-weight: 700; font-size: 12px; }
@@ -122,20 +122,20 @@
   .days-normal { color: var(--muted); }
   
   /* Price/Contractor/Net Styling */
-  .price-cell-wrap { display: flex; align-items: center; justify-content: flex-end; gap: 5px; height: 100%;}
-  .price-cell-wrap input[type="number"] {
+  .price-cell-wrap { display: flex; align-items: center; justify-content: flex-end; gap: 4px; height: 100%; padding: 2px 0;}
+  .price-cell-wrap input {
     background: transparent;
     border: none;
     color: var(--text);
     width: 100%;
-    max-width: 90px;
-    min-width: 70px;
+    max-width: 110px;
+    min-width: 64px;
     flex: 1 1 70px;
     font-family: monospace;
     font-weight: 600;
     outline: none;
     text-align: right;
-    padding: 5px 0; /* Добавлен отступ для кликабельности */
+    padding: 4px 0; /* Добавлен отступ для кликабельности */
     margin: 0;
     -moz-appearance: textfield;
   }
@@ -154,9 +154,9 @@
       margin-top: 2px;
   }
 
-  .expense-cell { gap: 6px; }
-  .expense-mode { background: #1a1f26; color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 5px 6px; font-size: 12px; cursor: pointer; min-width: 58px; }
-  .expense-helper { color: var(--muted); font-size: 12px; margin-top: 2px; text-align: right; }
+  .expense-cell { gap: 4px; }
+  .expense-mode { background: #1a1f26; color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 4px 6px; font-size: 12px; cursor: pointer; min-width: 54px; }
+  .expense-helper { color: var(--muted); font-size: 11px; margin-top: 2px; text-align: right; line-height: 1.2; }
 
   .paid-amount { font-size: 12px; color: var(--muted); margin-top: 4px; text-align: center; }
 
@@ -255,6 +255,13 @@
   .text-green { color: var(--green); }
   .text-gold { color: var(--gold); }
   .mono { font-family: monospace; }
+  .stat-scope-note { margin-top: 6px; color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; }
+  .status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #1a1f26; border: 1px solid var(--border); color: var(--muted); white-space: nowrap; }
+  .status-pill.active { color: #58ffb3; border-color: rgba(88,255,179,0.25); background: rgba(88,255,179,0.05); }
+  .status-pill.waiting { color: #facc15; border-color: rgba(250,204,21,0.25); background: rgba(250,204,21,0.05); }
+  .status-pill.potential { color: #58a6ff; border-color: rgba(88,166,255,0.25); background: rgba(88,166,255,0.05); }
+  .status-pill.paused { color: #a371f7; border-color: rgba(163,113,247,0.25); background: rgba(163,113,247,0.05); }
+  .status-pill.archive { color: #8b949e; border-color: rgba(139,148,158,0.25); background: rgba(139,148,158,0.05); }
   .record-banner { background: linear-gradient(135deg, rgba(250,204,21,0.06), rgba(88,166,255,0.05)); border: 1px solid var(--border); padding: 16px 18px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; gap: 16px; box-shadow: inset 0 0 0 1px rgba(250, 204, 21, 0.05); }
   .record-texts { flex:1; min-width: 0; }
   .record-title { color: var(--muted); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -305,14 +312,14 @@
   .inp-group{margin-bottom:15px;text-align:left;}
   .inp-group label{display:block;margin-bottom:5px;font-size:13px;color:var(--muted);font-weight:600;}
   .inp-group input, .inp-group select {background-color: #21262d;border:1px solid var(--border);padding:10px;width:100%;color:var(--text);border-radius:8px; outline: none; box-sizing: border-box;}
-  .row-inputs{display:flex;gap:15px;margin-bottom:15px;}
-  .row-inputs > div {flex: 1;}
+  .row-inputs{display:flex;gap:12px;margin-bottom:15px;flex-wrap:wrap;}
+  .row-inputs > div {flex: 1 1 180px;}
   .deadline-presets { display: flex; gap: 10px; align-items: center; flex-wrap: nowrap; }
   .deadline-presets select { min-width: 150px; white-space: nowrap; }
   .deadline-presets input { min-width: 120px; }
-  .date-duo { display: flex; gap: 14px; align-items: stretch; margin-bottom: 15px; }
+  .date-duo { display: flex; gap: 12px; align-items: stretch; margin-bottom: 15px; flex-wrap: wrap; }
   .date-duo .inp-group { margin-bottom: 0; }
-  .date-duo-card { flex: 1; padding: 14px; border-radius: 14px; border: 1px solid var(--border); background: linear-gradient(125deg, rgba(17,21,28,0.9), rgba(12,17,25,0.9)); box-shadow: inset 0 0 0 1px rgba(88,166,255,0.08); }
+  .date-duo-card { flex: 1 1 220px; padding: 12px; border-radius: 14px; border: 1px solid var(--border); background: #10151d; box-shadow: inset 0 0 0 1px rgba(88,166,255,0.06); }
   .date-duo .inp-group label { display: flex; align-items: center; gap: 6px; color: #dce7ff; font-weight: 700; }
   .deadline-presets select { min-width: 140px; }
   .deadline-presets input { min-width: 110px; }
@@ -453,6 +460,7 @@
         <div class="tab" id="tab-potential" onclick="switchTab('potential')"><svg><use href="#icon-potential"/></svg> Потенциал</div>
         <div class="tab" id="tab-paused" onclick="switchTab('paused')"><svg><use href="#icon-paused"/></svg> На паузе</div>
         <div class="tab" id="tab-archive" onclick="switchTab('archive')"><svg><use href="#icon-archive"/></svg> Выполнено</div>
+        <div class="tab" id="tab-all" onclick="switchTab('all')"><svg><use href="#icon-active"/></svg> Все проекты</div>
         <div class="tab tab-trash" id="tab-trash" onclick="switchTab('trash')"><svg><use href="#icon-trash"/></svg> Корзина</div>
     </div>
     <button id="newProjectButton" onclick="openAddModal()">＋ Новый</button>
@@ -574,6 +582,28 @@
         </table>
       </div>
     </div>
+
+    <div id="view-all" style="display:none">
+      <div class="table-wrap">
+        <table id="t-all">
+          <thead>
+            <tr>
+              <th class="select-col">№</th>
+              <th width="12%">Статус</th>
+              <th width="16%">Клиент</th>
+              <th width="24%">Проект</th>
+              <th width="14%">Срок</th>
+              <th width="10%">Сумма</th>
+              <th width="10%">Расходы</th>
+              <th width="8%">Налог</th>
+              <th width="12%">Чистыми</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+          <tfoot id="total-row-all"><tr><td colspan="5">Итого:</td><td></td><td></td><td></td><td></td></tr></tfoot>
+        </table>
+      </div>
+    </div>
     
     <div id="view-trash" style="display:none">
       <div class="table-wrap">
@@ -605,6 +635,7 @@
                   <div>
                       <div class="finance-title">Финансы: <span class="text-green" id="dash-month-name">...</span></div>
                       <div class="finance-sub">Дашборд по чистой прибыли и платежам</div>
+                      <div class="stat-scope-note" id="stat-scope-note">Статистика по: В работе</div>
                   </div>
                   <div class="card-head-actions">
                       <div class="stat-pill" id="goal-pill">Цель: 0 ₽</div>
@@ -743,12 +774,12 @@
         <div class="row-inputs">
              <div class="inp-group" style="flex:1.2">
                 <label>Сумма (₽)</label>
-                <input type="number" id="add-proj-price" placeholder="50000">
+                <input type="text" id="add-proj-price" placeholder="50000">
             </div>
              <div class="inp-group" style="flex:1.3">
                 <label>Расходы</label>
                 <div style="display:flex; gap:10px; align-items:center;">
-                    <input type="number" id="add-proj-contractor" placeholder="0" style="flex:1 1 280px">
+                    <input type="text" id="add-proj-contractor" placeholder="0" style="flex:1 1 280px">
                     <select id="add-proj-contractor-mode" class="symbol-select">
                         <option value="amount">₽</option>
                         <option value="percent">%</option>
@@ -862,11 +893,11 @@
         <h2>Настройки</h2>
         <div class="inp-group">
             <label>Цель на месяц (₽)</label>
-            <input type="number" id="stg-goal">
+            <input type="text" id="stg-goal">
         </div>
         <div class="inp-group">
             <label>Рекорд (₽)</label>
-            <input type="number" id="stg-rec">
+            <input type="text" id="stg-rec">
         </div>
         <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveSettings()">Сохранить</button>
     </div>
@@ -896,7 +927,22 @@ const TAB_DESCRIPTIONS = {
     potential: "Лиды и переговоры. Ещё не начаты.",
     paused: "Замороженные проекты.",
     archive: "Успешно завершенные заказы.",
+    all: "Все проекты и архив в одном месте.",
     trash: "Удаленные объекты. Хранятся 7 дней."
+};
+
+const STATUS_META = {
+    active: { label: 'В работе', cls: 'active' },
+    waiting: { label: 'Ожидает', cls: 'waiting' },
+    potential: { label: 'Потенциал', cls: 'potential' },
+    paused: { label: 'На паузе', cls: 'paused' },
+    archive: { label: 'Выполнено', cls: 'archive' },
+};
+
+const toNumeric = (val) => {
+    const cleaned = String(val || '').replace(/\s+/g, '').replace(',', '.');
+    const num = parseFloat(cleaned);
+    return isNaN(num) ? 0 : num;
 };
 
 let DATA = {
@@ -1204,21 +1250,21 @@ function formatDateDisplay(str) {
 }
 
 function calcContractorAmount(item) {
-    const gross = +item.p || 0;
+    const gross = toNumeric(item.p);
     const mode = item.contractorMode || 'amount';
-    const raw = +item.contractor || 0;
+    const raw = toNumeric(item.contractor);
     return mode === 'percent' ? gross * (raw / 100) : raw;
 }
 
 function calcNet(item){
-    const gross = +item.p || 0;
+    const gross = toNumeric(item.p);
     const contr = calcContractorAmount(item);
-    const tax = +item.taxPrc || 0;
+    const tax = toNumeric(item.taxPrc);
     const taxAmt = gross * (tax / 100);
     return Math.round(gross - taxAmt - contr);
 }
 function calcMarginPrc(item) {
-    const gross = +item.p || 0;
+    const gross = toNumeric(item.p);
     if (gross === 0) return 0;
     const net = calcNet(item);
     return Math.round((net / gross) * 100);
@@ -1236,7 +1282,7 @@ function switchTab(t){
     currentTab = t;
     document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
     document.getElementById(`tab-${t}`).classList.add('active');
-    ['active','waiting','potential','paused','archive','trash'].forEach(k => {
+    ['active','waiting','potential','paused','archive','all','trash'].forEach(k => {
         const el = document.getElementById(`view-${k}`);
         if(el) el.style.display = (k === t) ? 'block' : 'none';
         const cb = document.getElementById(`selectAll${k.charAt(0).toUpperCase() + k.slice(1)}`);
@@ -1254,30 +1300,6 @@ function switchTab(t){
 }
 
 function getTabSummary(type, baseText) {
-    const format = (val) => formatCurrency(val).replace(/ /g, '&nbsp;');
-    if (type === 'active') {
-        const gross = DATA.active.reduce((s, i) => s + (+i.p || 0), 0);
-        const paid = DATA.active.reduce((s, i) => s + ((+i.p || 0) * ((+i.paid || 0) / 100)), 0);
-        return `${baseText} · ${DATA.active.length} проектов · Сумма ${format(gross)} · Оплачено ${format(paid)}`;
-    }
-    if (type === 'waiting') {
-        const gross = DATA.waiting.reduce((s, i) => s + (+i.p || 0), 0);
-        return `${baseText} · ${DATA.waiting.length} проектов · Сумма ${format(gross)}`;
-    }
-    if (type === 'potential') {
-        const gross = DATA.potential.reduce((s, i) => s + (+i.p || 0), 0);
-        return `${baseText} · ${DATA.potential.length} лидов · Потенциал ${format(gross)}`;
-    }
-    if (type === 'paused') {
-        const gross = DATA.paused.reduce((s, i) => s + (+i.p || 0), 0);
-        return `${baseText} · ${DATA.paused.length} проектов · Сумма ${format(gross)}`;
-    }
-    if (type === 'archive') {
-        const visibleItems = DATA.archive.filter(i => (i.date||'').startsWith(currentMonth));
-        const gross = visibleItems.reduce((s, i) => s + (+i.p || 0), 0);
-        const net = visibleItems.reduce((s, i) => s + calcNet(i), 0);
-        return `${baseText} · ${visibleItems.length} проектов · ${format(gross)} / ${format(net)} чистыми`;
-    }
     if (type === 'trash') {
         return `${baseText} · Статистика скрыта в корзине.`;
     }
@@ -1298,7 +1320,7 @@ function sortData(type, key, dataType, initial = false) {
              if (remA !== remB) return direction * (remA - remB);
         }
         if (dataType === 'date') return direction * (new Date((va || '9999').replace(' ', 'T')) - new Date((vb || '9999').replace(' ', 'T')));
-        if (dataType === 'number') return direction * ((+va || 0) - (+vb || 0));
+        if (dataType === 'number') return direction * (toNumeric(va) - toNumeric(vb));
         return direction * String(va).localeCompare(String(vb));
     });
     DATA[type].sortDirection = direction;
@@ -1325,6 +1347,7 @@ function upd(){
     renderSimple('paused');
     renderPotential();
     renderArchive();
+    renderAll();
     renderTrash();
     calcStats();
     const desc = document.getElementById('tab-description');
@@ -1339,10 +1362,11 @@ function renderActive(){
     
     DATA.active.forEach((item, i) => {
         item.pr = calcNet(item);
-        totalP += +item.p || 0; totalPr += item.pr || 0;
+        const gross = toNumeric(item.p);
+        totalP += gross; totalPr += item.pr || 0;
         const contractorAmount = calcContractorAmount(item);
         totalContr += contractorAmount;
-        totalTax += (+item.p || 0) * ((+item.taxPrc || 0) / 100);
+        totalTax += gross * ((toNumeric(item.taxPrc) || 0) / 100);
 
         const rem = getTimeRemaining(item.dl);
         const tr = document.createElement('tr');
@@ -1352,7 +1376,7 @@ function renderActive(){
         if (isSelected) tr.classList.add('row-selected');
 
         const linkIcon = renderLinkControls(item, i, 'active');
-        const paidAmount = Math.round((+item.p || 0) * ((+item.paid || 0) / 100));
+        const paidAmount = Math.round(gross * ((toNumeric(item.paid) || 0) / 100));
         totalPaidGross += paidAmount;
         const contractorSymbol = item.contractorMode === 'percent' ? '%' : '₽';
 
@@ -1387,7 +1411,7 @@ function renderActive(){
             
             <td style="text-align:right;">
                 <div class="price-cell-wrap expense-cell">
-                    <input type="number" value="${item.contractor||0}" onblur="updateContractorValue('active',${i},this.value)">
+                    <input type="text" value="${item.contractor||0}" onblur="updateContractorValue('active',${i},this.value)">
                     <span class="currency-symbol">${contractorSymbol}</span>
                     <select class="expense-mode" onchange="updateContractorMode('active',${i},this.value)">
                         <option value="amount" ${item.contractorMode!=='percent'?'selected':''}>₽</option>
@@ -1397,7 +1421,7 @@ function renderActive(){
                 <div class="expense-helper">≈ ${formatCurrency(contractorAmount)}</div>
             </td>
             
-            <td style="text-align:right;"><div class="price-cell-wrap"><input type="number" value="${item.p||0}" onblur="updVal('active',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
+            <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${item.p||0}" onblur="updVal('active',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td style="text-align:right;"><div class="net-display-wrap">${formatCurrency(item.pr)}<span class="net-prc-val">(${calcMarginPrc(item)}%)</span></div></td>
             
             <td>
@@ -1479,7 +1503,7 @@ function renderSimple(type){
     tbody.innerHTML = '';
     let tot = 0;
     DATA[type].forEach((item, i) => {
-        tot += +item.p || 0;
+        tot += toNumeric(item.p);
         const tr = document.createElement('tr');
         tr.dataset.index = i;
 
@@ -1507,7 +1531,7 @@ function renderSimple(type){
                 <span class="project-name" contenteditable onblur="updVal('${type}',${i},'n',this.innerText)">${item.n}</span>
             </td>
             <td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('${type}',${i},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.dl)} (${rem.txt})</span></div></td>
-            <td><div class="price-cell-wrap"><input type="number" value="${item.p||0}" onblur="updVal('${type}',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
+            <td><div class="price-cell-wrap"><input type="text" value="${item.p||0}" onblur="updVal('${type}',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td><div class="action-btns" style="justify-content:flex-end">
                 <div class="action-btn-base" onclick="mv(${i},'${type}','active')" title="В работу">▶️</div>
                 <span class="del-btn" onclick="askDel('${type}',${i})">×</span>
@@ -1532,7 +1556,7 @@ function renderPotential(){
     tbody.innerHTML = '';
     let tot = 0;
     DATA.potential.forEach((item, i) => {
-        tot += +item.p || 0;
+        tot += toNumeric(item.p);
         const tr = document.createElement('tr');
         tr.dataset.index = i;
 
@@ -1557,7 +1581,7 @@ function renderPotential(){
             <td class="project-name-wrap">
                 <span class="project-name" contenteditable onblur="updVal('potential',${i},'n',this.innerText)">${item.n}</span>
             </td>
-            <td><div class="price-cell-wrap"><input type="number" value="${item.p||0}" onblur="updVal('potential',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
+            <td><div class="price-cell-wrap"><input type="text" value="${item.p||0}" onblur="updVal('potential',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td><div class="action-btns" style="justify-content:flex-end">
                 <div class="done-btn action-btn-base" onclick="mv(${i},'potential','active')" title="В работу">✅ В работу</div>
                 <span class="del-btn" onclick="askDel('potential',${i})">×</span>
@@ -1585,10 +1609,10 @@ function renderArchive(){
     visibleItems.forEach((item, i) => {
         const realIdx = DATA.archive.indexOf(item);
         item.pr = calcNet(item);
-        tP += +item.p || 0; tPr += +item.pr || 0;
+        tP += toNumeric(item.p); tPr += +item.pr || 0;
         const contractorAmount = calcContractorAmount(item);
         tContr += contractorAmount;
-        tTax += (+item.p || 0) * ((+item.taxPrc || 0) / 100);
+        tTax += toNumeric(item.p) * ((toNumeric(item.taxPrc) || 0) / 100);
         const tr = document.createElement('tr');
         tr.dataset.index = realIdx;
 
@@ -1616,10 +1640,10 @@ function renderArchive(){
                 <span class="project-name" contenteditable onblur="updVal('archive',${realIdx},'n',this.innerText)">${item.n}</span>
             </td>
             <td class="date-cell"><div class="date-input-wrap" onclick="openDate('archive',${realIdx},'date')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.date)}</span></div></td>
-            <td><div class="price-cell-wrap"><input type="number" value="${item.p||0}" onblur="updVal('archive',${realIdx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
+            <td><div class="price-cell-wrap"><input type="text" value="${item.p||0}" onblur="updVal('archive',${realIdx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td>
                 <div class="price-cell-wrap expense-cell">
-                    <input type="number" value="${item.contractor||0}" onblur="updateContractorValue('archive',${realIdx},this.value)">
+                    <input type="text" value="${item.contractor||0}" onblur="updateContractorValue('archive',${realIdx},this.value)">
                     <span class="currency-symbol">${contractorSymbol}</span>
                     <select class="expense-mode" onchange="updateContractorMode('archive',${realIdx},this.value)">
                         <option value="amount" ${item.contractorMode!=='percent'?'selected':''}>₽</option>
@@ -1655,6 +1679,85 @@ function renderArchive(){
         </td>
         <td></td>
     </tr>`;
+}
+
+function formatTimelineBlock(item){
+    const dl = item.dl || item.date;
+    if (dl) {
+        const rem = getTimeRemaining(dl);
+        const suffix = rem.txt !== '—' ? ` · ${rem.txt}` : '';
+        return `<span class="${rem.cls}">${formatDateDisplay(dl)}${suffix}</span>`;
+    }
+    if (item.start) return `<span>${formatDateDisplay(item.start)}</span>`;
+    return '<span>—</span>';
+}
+
+function renderAll(){
+    const tbody = document.querySelector('#t-all tbody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    const allItems = [];
+    ['active','waiting','potential','paused','archive'].forEach(type => {
+        DATA[type].forEach((item, idx) => allItems.push({ item, __type: type, idx }));
+    });
+
+    let totalGross = 0, totalNet = 0, totalExp = 0, totalTax = 0;
+
+    allItems.forEach((wrap, i) => {
+        const item = wrap.item;
+        const status = STATUS_META[wrap.__type] || { label: wrap.__type, cls: '' };
+        const contractorAmount = calcContractorAmount(item);
+        const net = calcNet(item);
+        const gross = toNumeric(item.p);
+        const taxAmount = gross * ((toNumeric(item.taxPrc) || 0) / 100);
+        totalGross += gross;
+        totalNet += net;
+        totalExp += contractorAmount;
+        totalTax += taxAmount;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="select-col"><div class="row-index">${i + 1}</div></td>
+            <td><span class="status-pill ${status.cls}">${status.label}</span></td>
+            <td><div class="client-wrap">${item.c || '—'}</div></td>
+            <td class="project-name-wrap">${item.n || '—'}</td>
+            <td class="date-cell"><div class="date-text-display">${formatTimelineBlock(item)}</div></td>
+            <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${gross}" onblur="updVal('${wrap.__type}',${wrap.idx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
+            <td style="text-align:right;">
+                <div class="price-cell-wrap expense-cell">
+                    <input type="text" value="${item.contractor||0}" onblur="updateContractorValue('${wrap.__type}',${wrap.idx},this.value)">
+                    <span class="currency-symbol">${item.contractorMode==='percent'?'%':'₽'}</span>
+                </div>
+                <div class="expense-helper">≈ ${formatCurrency(contractorAmount)}</div>
+            </td>
+            <td style="text-align:right;">${item.taxPrc || 0}%</td>
+            <td style="text-align:right;"><div class="net-display-wrap">${formatCurrency(net)}</div></td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    const footer = document.querySelector('#total-row-all');
+    if (footer) {
+        footer.innerHTML = `<tr>
+            <td colspan="5">Всего ${allItems.length} записей</td>
+            <td style="text-align:right;">
+                <div class="footer-note">Сумма</div>
+                <div>${formatCurrency(totalGross)}</div>
+            </td>
+            <td style="text-align:right;">
+                <div class="footer-note">Расходы</div>
+                <div>${formatCurrency(totalExp)}</div>
+            </td>
+            <td style="text-align:right;">
+                <div class="footer-note">Налоги</div>
+                <div>${formatCurrency(totalTax)}</div>
+            </td>
+            <td style="text-align:right;">
+                <div class="footer-note">Чистыми</div>
+                <div>${formatCurrency(totalNet)}</div>
+            </td>
+        </tr>`;
+    }
 }
 
 function renderTrash(){
@@ -1695,14 +1798,14 @@ function renderTrash(){
 }
 
 function updVal(type, idx, key, val){
-    if(key==='p' || key==='contractor' || key==='paid' || key==='taxPrc') val = +val;
+    if(key==='p' || key==='contractor' || key==='paid' || key==='taxPrc') val = toNumeric(val);
     DATA[type][idx][key] = val;
     sortData('active', 'dl', 'date', true);
     save(); upd();
 }
 
 function updateContractorValue(type, idx, val) {
-    DATA[type][idx].contractor = +val || 0;
+    DATA[type][idx].contractor = toNumeric(val);
     sortData('active', 'dl', 'date', true);
     save(); upd();
 }
@@ -1784,8 +1887,8 @@ function openAddModal(){
 function saveNewProject(){
     const name = document.getElementById('add-proj-name').value;
     const client = document.getElementById('add-proj-client').value;
-    const price = +document.getElementById('add-proj-price').value || 0;
-    const contr = +document.getElementById('add-proj-contractor').value || 0;
+    const price = toNumeric(document.getElementById('add-proj-price').value);
+    const contr = toNumeric(document.getElementById('add-proj-contractor').value);
     const contrMode = document.getElementById('add-proj-contractor-mode').value || 'amount';
     const tax = +document.getElementById('add-proj-tax').value || 0;
     const type = document.getElementById('add-proj-type').value;
@@ -1968,8 +2071,8 @@ function openRecordSettings(){
     }
 }
 function saveSettings(){
-    DATA.monthlyGoals[currentMonth] = +document.getElementById('stg-goal').value;
-    DATA.settings.record = +document.getElementById('stg-rec').value;
+    DATA.monthlyGoals[currentMonth] = toNumeric(document.getElementById('stg-goal').value);
+    DATA.settings.record = toNumeric(document.getElementById('stg-rec').value);
     document.getElementById('settingsModal').style.display = 'none';
     save(); upd();
 }
@@ -2025,6 +2128,13 @@ function getScopedDataForStats() {
         case 'paused': scope.paused = DATA.paused; break;
         case 'waiting': scope.waiting = DATA.waiting; break;
         case 'potential': scope.potential = DATA.potential; break;
+        case 'all':
+            scope.active = DATA.active;
+            scope.archive = DATA.archive;
+            scope.paused = DATA.paused;
+            scope.waiting = DATA.waiting;
+            scope.potential = DATA.potential;
+            break;
         default:
             scope.active = DATA.active;
             scope.archive = DATA.archive;
@@ -2037,14 +2147,14 @@ function getScopedDataForStats() {
 
 function calcStats(){
     const scope = getScopedDataForStats();
-    const goal = DATA.monthlyGoals[currentMonth] || 250000;
+    const goal = toNumeric(DATA.monthlyGoals[currentMonth]) || 250000;
     let fact = 0, activeFact = 0, plan = 0, totalGross = 0, totalNet = 0;
     let totalExpenses = 0, totalTaxes = 0, totalPaidGross = 0;
 
     ['active','archive','paused','waiting','potential'].forEach(type => {
         scope[type].forEach(i => {
             totalExpenses += calcContractorAmount(i);
-            totalTaxes += (+i.p || 0) * ((+i.taxPrc || 0) / 100);
+            totalTaxes += toNumeric(i.p) * ((toNumeric(i.taxPrc) || 0) / 100);
         });
     });
 
@@ -2052,15 +2162,15 @@ function calcStats(){
     archiveThisMonth.forEach(i => {
         const net = calcNet(i);
         fact += net;
-        totalGross += +i.p || 0;
+        totalGross += toNumeric(i.p);
         totalNet += net;
-        totalPaidGross += +i.p || 0;
+        totalPaidGross += toNumeric(i.p);
     });
 
     scope.active.forEach(i => {
         const net = calcNet(i);
-        const gross = +i.p || 0;
-        const paidPrc = (i.paid||0)/100;
+        const gross = toNumeric(i.p);
+        const paidPrc = (toNumeric(i.paid)||0)/100;
         const paidGross = gross * paidPrc;
         activeFact += net * paidPrc;
         plan += net * (1 - paidPrc);
@@ -2109,6 +2219,11 @@ function calcStats(){
 
     document.getElementById('p-bar').style.width = goal > 0 ? Math.min(100, (totalFact/goal)*100) + '%' : '0%';
     document.getElementById('dash-month-name').innerText = document.getElementById('monthSelect').options[document.getElementById('monthSelect').selectedIndex]?.text || '';
+    const scopeLabel = currentTab === 'all' ? 'Все проекты' : (STATUS_META[currentTab]?.label || 'Раздел');
+    const scopeNote = currentTab === 'all' ? 'Статистика по всем проектам' : `Статистика по разделу: ${scopeLabel}`;
+    const scopeHint = currentTab === 'all' ? '' : ' (только для этой вкладки)';
+    const scopeEl = document.getElementById('stat-scope-note');
+    if (scopeEl) scopeEl.innerText = scopeNote + scopeHint;
     updateCharts(totalFact, plan, scope);
 }
 
