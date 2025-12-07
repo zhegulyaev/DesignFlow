@@ -1685,24 +1685,25 @@ function renderMonthSelect(){
 
 function calcStats(){
     const goal = DATA.monthlyGoals[currentMonth] || 250000;
-    let fact = 0, activeFact = 0, plan = 0, totalGross = 0, totalNet = 0;
-    
+    let fact = 0, activeFact = 0, plan = 0;
+    let archiveGross = 0, archiveNet = 0, activeGross = 0, activeNet = 0;
+
     const archiveThisMonth = DATA.archive.filter(i=>(i.date||'').startsWith(currentMonth));
     archiveThisMonth.forEach(i => {
         const net = calcNet(i);
         fact += net;
-        totalGross += +i.p || 0;
-        totalNet += net;
+        archiveGross += +i.p || 0;
+        archiveNet += net;
     });
-    
+
     DATA.active.forEach(i => {
         const net = calcNet(i);
         const gross = +i.p || 0;
         const paidPrc = (i.paid||0)/100;
         activeFact += net * paidPrc;
         plan += net * (1 - paidPrc);
-        totalGross += gross;
-        totalNet += net;
+        activeGross += gross;
+        activeNet += net;
     });
 
     DATA.paused.forEach(i => plan += calcNet(i));
@@ -1711,9 +1712,9 @@ function calcStats(){
 
     const totalFact = fact + activeFact;
     const forecast = totalFact + plan;
-    
-    const totalMargin = totalNet;
-    const totalGrossCombined = totalGross;
+
+    const totalMargin = archiveNet + activeNet;
+    const totalGrossCombined = archiveGross + activeGross;
 
     document.getElementById('val-fact').innerText = formatCurrency(totalFact);
     document.getElementById('val-fact-prc').innerText = `${Math.round((totalFact/goal)*100)}%`;
