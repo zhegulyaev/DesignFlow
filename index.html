@@ -107,6 +107,8 @@
   tfoot td:nth-last-child(2) { color: var(--green); } /* Total net (Archive) */
   /* Active table footer fix */
   #total-row-active td:nth-child(2) { color: var(--green); } /* Total net (Active) */
+  .footer-total-toggle { cursor: pointer; color: var(--accent); font-weight: 700; }
+  .footer-total-toggle:hover { color: #8ab4ff; }
 
   
   /* Inputs & Selects */
@@ -329,14 +331,14 @@
   .deadline-presets input { min-width: 120px; }
   .date-duo { display: flex; gap: 12px; align-items: stretch; margin-bottom: 12px; flex-wrap: nowrap; }
   .date-duo .inp-group { margin-bottom: 0; }
-  .date-duo-card { flex: 1 1 220px; padding: 12px; border-radius: 14px; border: 1px solid var(--border); background: #10151d; box-shadow: inset 0 0 0 1px rgba(88,166,255,0.06); }
+  .date-duo-card { flex: 1 1 220px; padding: 0; border-radius: 14px; border: none; background: transparent; box-shadow: none; }
   .date-duo .inp-group label { display: flex; align-items: center; gap: 6px; color: #dce7ff; font-weight: 700; }
   .deadline-presets select { min-width: 140px; }
   .deadline-presets input { min-width: 110px; }
   .date-chip { margin-top: 8px; }
 
   .deadline-template { margin-bottom: 15px; }
-  .deadline-template .deadline-presets { gap: 8px; flex-wrap: wrap; }
+  .deadline-template .deadline-presets { gap: 8px; flex-wrap: nowrap; }
   .deadline-template .inp-group { margin-bottom: 0; }
   .deadline-template .deadline-presets select,
   .deadline-template .deadline-presets input { background: #21262d; border: 1px solid var(--border); }
@@ -453,6 +455,7 @@ td.date-cell + td.date-cell {
 
 <svg style="display: none;">
     <symbol id="icon-active" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM3 8a5 5 0 0 1 10 0 5 5 0 0 1-10 0Z"/></symbol>
+    <symbol id="icon-all" viewBox="0 0 16 16"><path fill="currentColor" d="M2.5 2.5A.5.5 0 0 1 3 2h4.5a.5.5 0 0 1 .5.5V7a.5.5 0 0 1-.5.5H3A.5.5 0 0 1 2.5 7Zm6 0A.5.5 0 0 1 9 2h4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-.5.5H9a.5.5 0 0 1-.5-.5Zm-6 6A.5.5 0 0 1 3 8h4.5a.5.5 0 0 1 .5.5V13a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5Zm8 0A.5.5 0 0 1 11 8h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5Z"/></symbol>
     <symbol id="icon-waiting" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM8 4a1 1 0 0 1 1 1v3.5a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1 0-1H8V5a1 1 0 0 1 1-1Z"/></symbol>
     <symbol id="icon-potential" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM8 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3ZM6 3a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3A.5.5 0 0 1 6 3Zm-2.5 5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Z"/></symbol>
     <symbol id="icon-paused" viewBox="0 0 16 16"><path fill="currentColor" d="M5 2.5a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0V3a.5.5 0 0 1 .5-.5Zm6 0a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0V3a.5.5 0 0 1 .5-.5Z"/></symbol>
@@ -488,12 +491,12 @@ td.date-cell + td.date-cell {
 
   <div class="tabs-container">
     <div class="tabs">
+        <div class="tab" id="tab-all" onclick="switchTab('all')"><svg><use href="#icon-all"/></svg> Все проекты</div>
         <div class="tab active" id="tab-active" onclick="switchTab('active')"><svg><use href="#icon-active"/></svg> В работе</div>
         <div class="tab" id="tab-waiting" onclick="switchTab('waiting')"><svg><use href="#icon-waiting"/></svg> Ожидает</div>
         <div class="tab" id="tab-potential" onclick="switchTab('potential')"><svg><use href="#icon-potential"/></svg> Потенциал</div>
         <div class="tab" id="tab-paused" onclick="switchTab('paused')"><svg><use href="#icon-paused"/></svg> На паузе</div>
         <div class="tab" id="tab-archive" onclick="switchTab('archive')"><svg><use href="#icon-archive"/></svg> Выполнено</div>
-        <div class="tab" id="tab-all" onclick="switchTab('all')"><svg><use href="#icon-active"/></svg> Все проекты</div>
         <div class="tab tab-trash" id="tab-trash" onclick="switchTab('trash')"><svg><use href="#icon-trash"/></svg> Корзина</div>
     </div>
     <button id="newProjectButton" onclick="openAddModal()">＋ Новый</button>
@@ -645,13 +648,14 @@ td.date-cell + td.date-cell {
             <tr>
               <th class="select-col">№</th>
               <th width="20%">Удалено</th>
-              <th width="20%">Клиент</th> 
-              <th width="30%">Проект</th> 
+              <th width="20%">Клиент</th>
+              <th width="30%">Проект</th>
               <th width="15%">Сумма</th>
               <th width="15%">Действия</th>
             </tr>
           </thead>
           <tbody></tbody>
+          <tfoot id="total-row-trash"><tr><td colspan="6">Итого</td></tr></tfoot>
         </table>
       </div>
       <div style="text-align:center; padding: 20px; color: var(--muted); font-size: 13px;">
@@ -807,12 +811,12 @@ td.date-cell + td.date-cell {
         <div class="row-inputs">
              <div class="inp-group" style="flex:1">
                 <label>Сумма (₽)</label>
-                <input type="text" id="add-proj-price" placeholder="50000">
+                <input type="text" id="add-proj-price" placeholder="50 000" oninput="formatNumberInput(this)">
             </div>
              <div class="inp-group" style="flex:1">
                 <label>Расходы</label>
                 <div style="display:flex; gap:10px; align-items:center;">
-                    <input type="text" id="add-proj-contractor" placeholder="0" style="flex:1 1 280px">
+                    <input type="text" id="add-proj-contractor" placeholder="0" style="flex:1 1 280px" oninput="formatNumberInput(this)">
                     <select id="add-proj-contractor-mode" class="symbol-select">
                         <option value="amount">₽</option>
                         <option value="percent">%</option>
@@ -927,11 +931,11 @@ td.date-cell + td.date-cell {
         <h2>Настройки</h2>
         <div class="inp-group">
             <label>Цель на месяц (₽)</label>
-            <input type="text" id="stg-goal">
+            <input type="text" id="stg-goal" oninput="formatNumberInput(this)">
         </div>
         <div class="inp-group">
             <label>Рекорд (₽)</label>
-            <input type="text" id="stg-rec">
+            <input type="text" id="stg-rec" oninput="formatNumberInput(this)">
         </div>
         <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveSettings()">Сохранить</button>
     </div>
@@ -978,6 +982,24 @@ const toNumeric = (val) => {
     const num = parseFloat(cleaned);
     return isNaN(num) ? 0 : num;
 };
+
+function formatPlainNumber(val) {
+    const raw = String(val ?? '').replace(/\s+/g, '').trim();
+    if (raw === '') return '';
+    const isNegative = raw.startsWith('-');
+    const normalized = raw.replace(/[^\d.,]/g, '').replace(/^-/, '');
+    const [intPartRaw, fracRaw] = normalized.split(/[.,]/);
+    const intPart = (intPartRaw || '0').replace(/\D/g, '');
+    const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    const frac = fracRaw ? fracRaw.replace(/\D/g, '') : '';
+    const formatted = frac ? `${formattedInt},${frac}` : formattedInt;
+    return isNegative ? `-${formatted}` : formatted;
+}
+
+function formatNumberInput(inputEl) {
+    if (!inputEl) return;
+    inputEl.value = formatPlainNumber(inputEl.value);
+}
 
 let DATA = {
     settings: { record: 0 },
@@ -1097,7 +1119,55 @@ function toggleSelectAll(type) {
     updateBulkToolbar(type);
 }
 
+function toggleFooterSelection(type) {
+    if (type !== 'all' && !DATA[type]) return;
+    const rows = document.querySelectorAll(`#t-${type} tbody tr`);
+    const totalRows = rows.length;
+    if (!selectedRows[type]) selectedRows[type] = new Set();
+    if (totalRows === 0) { clearSelection(type); return; }
+
+    const shouldSelectAll = selectedRows[type].size !== totalRows;
+    const checkboxes = document.querySelectorAll(`#t-${type} tbody .bulk-checkbox`);
+
+    if (checkboxes.length > 0) {
+        checkboxes.forEach(cb => {
+            cb.checked = shouldSelectAll;
+            const row = cb.closest('tr');
+            if (row && row.dataset.index) {
+                const indexStr = row.dataset.index;
+                row.classList.toggle('row-selected', shouldSelectAll);
+                if (shouldSelectAll) {
+                    selectedRows[type].add(indexStr);
+                } else {
+                    selectedRows[type].delete(indexStr);
+                }
+            }
+        });
+    } else {
+        rows.forEach(row => {
+            const indexStr = row.dataset.index;
+            row.classList.toggle('row-selected', shouldSelectAll);
+            if (indexStr) {
+                if (shouldSelectAll) {
+                    selectedRows[type].add(indexStr);
+                } else {
+                    selectedRows[type].delete(indexStr);
+                }
+            }
+        });
+    }
+
+    const selectAllCheckbox = document.getElementById(`selectAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
+    if (selectAllCheckbox) selectAllCheckbox.checked = shouldSelectAll;
+    updateBulkToolbar(type);
+}
+
 function updateBulkToolbar(type) {
+    if (type === 'all') {
+        const toolbar = document.getElementById('bulkToolbar');
+        if (toolbar) toolbar.style.display = 'none';
+        return;
+    }
     const count = selectedRows[type] ? selectedRows[type].size : 0;
     const toolbar = document.getElementById('bulkToolbar');
     
@@ -1470,7 +1540,7 @@ function renderActive(){
             
             <td style="text-align:right;">
                 <div class="price-cell-wrap expense-cell">
-                    <input type="text" value="${item.contractor||0}" onblur="updateContractorValue('active',${i},this.value)">
+                    <input type="text" value="${formatPlainNumber(item.contractor ?? 0)}" oninput="formatNumberInput(this)" onblur="updateContractorValue('active',${i},this.value)">
                     <span class="currency-symbol">${contractorSymbol}</span>
                     <select class="expense-mode" onchange="updateContractorMode('active',${i},this.value)">
                         <option value="amount" ${item.contractorMode!=='percent'?'selected':''}>₽</option>
@@ -1479,8 +1549,8 @@ function renderActive(){
                 </div>
                 <div class="expense-helper">≈ ${formatCurrency(contractorAmount)}</div>
             </td>
-            
-            <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${item.p||0}" onblur="updVal('active',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
+
+            <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('active',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td style="text-align:right;"><div class="net-display-wrap">${formatCurrency(item.pr)}<span class="net-prc-val">(${calcMarginPrc(item)}%)</span></div></td>
             
             <td>
@@ -1505,7 +1575,7 @@ function renderActive(){
     
     const footer = document.querySelector('#total-row-active');
     footer.innerHTML = `<tr>
-        <td colspan="6">Всего ${DATA.active.length} проектов</td>
+        <td colspan="6" class="footer-total-toggle" onclick="toggleFooterSelection('active')">Всего ${DATA.active.length} проектов</td>
         <td style="text-align:right;">
             <div class="footer-note">Налоги</div>
             <div>${formatCurrency(totalTax)}</div>
@@ -1590,7 +1660,7 @@ function renderSimple(type){
                 <span class="project-name" contenteditable onblur="updVal('${type}',${i},'n',this.innerText)">${item.n}</span>
             </td>
             <td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('${type}',${i},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.dl)} (${rem.txt})</span></div></td>
-            <td><div class="price-cell-wrap"><input type="text" value="${item.p||0}" onblur="updVal('${type}',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
+            <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('${type}',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td><div class="action-btns" style="justify-content:flex-end">
                 <div class="action-btn-base" onclick="mv(${i},'${type}','active')" title="В работу">▶️</div>
                 <span class="del-btn" onclick="askDel('${type}',${i})">×</span>
@@ -1601,7 +1671,7 @@ function renderSimple(type){
     });
     const footer = document.querySelector(`#total-row-${type}`);
     footer.innerHTML = `<tr>
-        <td colspan="4">Всего ${DATA[type].length} проектов</td>
+        <td colspan="4" class="footer-total-toggle" onclick="toggleFooterSelection('${type}')">Всего ${DATA[type].length} проектов</td>
         <td>
             <div class="footer-note">Сумма</div>
             <div>${formatCurrency(tot)}</div>
@@ -1640,7 +1710,7 @@ function renderPotential(){
             <td class="project-name-wrap">
                 <span class="project-name" contenteditable onblur="updVal('potential',${i},'n',this.innerText)">${item.n}</span>
             </td>
-            <td><div class="price-cell-wrap"><input type="text" value="${item.p||0}" onblur="updVal('potential',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
+            <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('potential',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td><div class="action-btns" style="justify-content:flex-end">
                 <div class="done-btn action-btn-base" onclick="mv(${i},'potential','active')" title="В работу">✅ В работу</div>
                 <span class="del-btn" onclick="askDel('potential',${i})">×</span>
@@ -1651,7 +1721,7 @@ function renderPotential(){
     });
     const footer = document.querySelector('#total-row-potential');
     footer.innerHTML = `<tr>
-        <td colspan="3">Всего ${DATA.potential.length} лидов</td>
+        <td colspan="3" class="footer-total-toggle" onclick="toggleFooterSelection('potential')">Всего ${DATA.potential.length} лидов</td>
         <td>
             <div class="footer-note">Сумма</div>
             <div>${formatCurrency(tot)}</div>
@@ -1699,10 +1769,10 @@ function renderArchive(){
                 <span class="project-name" contenteditable onblur="updVal('archive',${realIdx},'n',this.innerText)">${item.n}</span>
             </td>
             <td class="date-cell"><div class="date-input-wrap" onclick="openDate('archive',${realIdx},'date')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.date)}</span></div></td>
-            <td><div class="price-cell-wrap"><input type="text" value="${item.p||0}" onblur="updVal('archive',${realIdx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
+            <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('archive',${realIdx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td>
                 <div class="price-cell-wrap expense-cell">
-                    <input type="text" value="${item.contractor||0}" onblur="updateContractorValue('archive',${realIdx},this.value)">
+                    <input type="text" value="${formatPlainNumber(item.contractor ?? 0)}" oninput="formatNumberInput(this)" onblur="updateContractorValue('archive',${realIdx},this.value)">
                     <span class="currency-symbol">${contractorSymbol}</span>
                     <select class="expense-mode" onchange="updateContractorMode('archive',${realIdx},this.value)">
                         <option value="amount" ${item.contractorMode!=='percent'?'selected':''}>₽</option>
@@ -1722,7 +1792,7 @@ function renderArchive(){
     });
     const footer = document.querySelector('#total-row-archive');
     footer.innerHTML = `<tr>
-        <td colspan="4">Всего ${visibleItems.length} проектов</td>
+        <td colspan="4" class="footer-total-toggle" onclick="toggleFooterSelection('archive')">Всего ${visibleItems.length} проектов</td>
         <td style="text-align:right;">
             <div class="footer-note">Сумма</div>
             <div>${formatCurrency(tP)}</div>
@@ -1738,17 +1808,6 @@ function renderArchive(){
         </td>
         <td></td>
     </tr>`;
-}
-
-function formatTimelineBlock(item){
-    const dl = item.dl || item.date;
-    if (dl) {
-        const rem = getTimeRemaining(dl);
-        const suffix = rem.txt !== '—' ? ` · ${rem.txt}` : '';
-        return `<span class="${rem.cls}">${formatDateDisplay(dl)}${suffix}</span>`;
-    }
-    if (item.start) return `<span>${formatDateDisplay(item.start)}</span>`;
-    return '<span>—</span>';
 }
 
 function renderAll(){
@@ -1775,16 +1834,22 @@ function renderAll(){
         totalTax += taxAmount;
 
         const tr = document.createElement('tr');
+        const deadlineValue = wrap.__type === 'archive' ? item.date : (item.dl || item.date || item.start);
+        const rem = wrap.__type === 'archive' ? { cls: '', txt: '' } : getTimeRemaining(deadlineValue);
+        const remText = wrap.__type === 'archive' || rem.txt === '—' ? '' : ` (${rem.txt})`;
+        const dateDisplay = deadlineValue ? formatDateDisplay(deadlineValue) : '—';
+        const dateCls = wrap.__type === 'archive' ? '' : rem.cls;
+
         tr.innerHTML = `
             <td class="select-col"><div class="row-index">${i + 1}</div></td>
             <td><span class="status-pill ${status.cls}">${status.label}</span></td>
             <td><div class="client-wrap">${item.c || '—'}</div></td>
             <td class="project-name-wrap">${item.n || '—'}</td>
-            <td class="date-cell"><div class="date-text-display">${formatTimelineBlock(item)}</div></td>
-            <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${gross}" onblur="updVal('${wrap.__type}',${wrap.idx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
+            <td class="date-cell"><div class="date-input-wrap ${dateCls}"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${dateDisplay}${remText}</span></div></td>
+            <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(gross)}" oninput="formatNumberInput(this)" onblur="updVal('${wrap.__type}',${wrap.idx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td style="text-align:right;">
                 <div class="price-cell-wrap expense-cell">
-                    <input type="text" value="${item.contractor||0}" onblur="updateContractorValue('${wrap.__type}',${wrap.idx},this.value)">
+                    <input type="text" value="${formatPlainNumber(item.contractor ?? 0)}" oninput="formatNumberInput(this)" onblur="updateContractorValue('${wrap.__type}',${wrap.idx},this.value)">
                     <span class="currency-symbol">${item.contractorMode==='percent'?'%':'₽'}</span>
                 </div>
                 <div class="expense-helper">≈ ${formatCurrency(contractorAmount)}</div>
@@ -1798,7 +1863,7 @@ function renderAll(){
     const footer = document.querySelector('#total-row-all');
     if (footer) {
         footer.innerHTML = `<tr>
-            <td colspan="5">Всего ${allItems.length} записей</td>
+            <td colspan="5" class="footer-total-toggle" onclick="toggleFooterSelection('all')">Всего ${allItems.length} записей</td>
             <td style="text-align:right;">
                 <div class="footer-note">Сумма</div>
                 <div>${formatCurrency(totalGross)}</div>
@@ -1853,7 +1918,11 @@ function renderTrash(){
         tbody.appendChild(tr);
     });
     const footer = document.querySelector('#t-trash tfoot td:first-child');
-    if (footer) footer.innerText = `Всего ${DATA.trash.length} элементов`;
+    if (footer) {
+        footer.className = 'footer-total-toggle';
+        footer.onclick = () => toggleFooterSelection('trash');
+        footer.innerText = `Всего ${DATA.trash.length} элементов`;
+    }
 }
 
 function updVal(type, idx, key, val){
@@ -2111,8 +2180,8 @@ function saveLink(){
 }
 
 function openSettings(){
-    document.getElementById('stg-goal').value = DATA.monthlyGoals[currentMonth] || 250000;
-    document.getElementById('stg-rec').value = DATA.settings.record || 0;
+    document.getElementById('stg-goal').value = formatPlainNumber(DATA.monthlyGoals[currentMonth] || 250000);
+    document.getElementById('stg-rec').value = formatPlainNumber(DATA.settings.record || 0);
     document.getElementById('settingsModal').style.display = 'flex';
 }
 function openGoalSettings(){
