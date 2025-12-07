@@ -1711,8 +1711,8 @@ function calcStats(){
     const totalFact = fact + activeFact;
     const forecast = totalFact + plan;
     
-    const totalMargin = totalNet + archiveThisMonth.reduce((sum, i) => sum + calcNet(i), 0);
-    const totalGrossCombined = totalGross + archiveThisMonth.reduce((sum, i) => sum + (+i.p || 0), 0);
+    const totalMargin = totalNet;
+    const totalGrossCombined = totalGross;
 
     document.getElementById('val-fact').innerText = formatCurrency(totalFact);
     document.getElementById('val-fact-prc').innerText = `${Math.round((totalFact/goal)*100)}%`;
