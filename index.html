@@ -255,13 +255,21 @@
   .text-green { color: var(--green); }
   .text-gold { color: var(--gold); }
   .mono { font-family: monospace; }
-  .stat-scope-note { margin-top: 6px; color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; }
+  .stat-scope-note { margin: 0; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--border); background: #10151d; color: var(--text); font-size: 12px; font-weight: 700; letter-spacing: 0; text-transform: none; white-space: nowrap; }
+  .stat-scope-select { background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 6px 10px; font-weight: 600; cursor: pointer; }
+  .stat-scope-select:focus { outline: none; border-color: var(--accent); }
   .status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #1a1f26; border: 1px solid var(--border); color: var(--muted); white-space: nowrap; }
   .status-pill.active { color: #58ffb3; border-color: rgba(88,255,179,0.25); background: rgba(88,255,179,0.05); }
   .status-pill.waiting { color: #facc15; border-color: rgba(250,204,21,0.25); background: rgba(250,204,21,0.05); }
   .status-pill.potential { color: #58a6ff; border-color: rgba(88,166,255,0.25); background: rgba(88,166,255,0.05); }
   .status-pill.paused { color: #a371f7; border-color: rgba(163,113,247,0.25); background: rgba(163,113,247,0.05); }
   .status-pill.archive { color: #8b949e; border-color: rgba(139,148,158,0.25); background: rgba(139,148,158,0.05); }
+  .timeline-chips { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .timeline-chip { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border-radius: 10px; border: 1px solid var(--border); background: #11161f; font-weight: 700; font-size: 13px; color: var(--text); }
+  .timeline-chip .date-icon { width: 14px; height: 14px; }
+  .timeline-chip.days-critical { border-color: rgba(218,54,51,0.4); color: var(--red); }
+  .timeline-chip.days-warning { border-color: rgba(210,153,34,0.35); color: var(--gold); }
+  .timeline-chip.days-normal { color: var(--muted); }
   .record-banner { background: linear-gradient(135deg, rgba(250,204,21,0.06), rgba(88,166,255,0.05)); border: 1px solid var(--border); padding: 16px 18px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; gap: 16px; box-shadow: inset 0 0 0 1px rgba(250, 204, 21, 0.05); }
   .record-texts { flex:1; min-width: 0; }
   .record-title { color: var(--muted); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -306,23 +314,24 @@
 
   /* Modals */
   .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:1000;justify-content:center;align-items:center;backdrop-filter: blur(4px);}
-  .modal-content{background:var(--card);padding:30px;border-radius:16px;width:460px;max-width:95%;border:1px solid var(--border);text-align:center; position: relative; box-shadow: 0 18px 60px rgba(0,0,0,0.35);}
+  .modal-content{background:var(--card);padding:30px;border-radius:16px;width:520px;max-width:95%;border:1px solid var(--border);text-align:center; position: relative; box-shadow: 0 18px 60px rgba(0,0,0,0.35);}
   
   /* Inputs & Selects inside modal */
   .inp-group{margin-bottom:15px;text-align:left;}
   .inp-group label{display:block;margin-bottom:5px;font-size:13px;color:var(--muted);font-weight:600;}
   .inp-group input, .inp-group select {background-color: #21262d;border:1px solid var(--border);padding:10px;width:100%;color:var(--text);border-radius:8px; outline: none; box-sizing: border-box;}
-  .row-inputs{display:flex;gap:12px;margin-bottom:15px;flex-wrap:wrap;}
+  .row-inputs{display:grid;grid-template-columns: 1fr 1.2fr 0.8fr;gap:12px;margin-bottom:15px;align-items:flex-end;}
   .row-inputs > div {flex: 1 1 180px;}
-  .deadline-presets { display: flex; gap: 10px; align-items: center; flex-wrap: nowrap; }
-  .deadline-presets select { min-width: 150px; white-space: nowrap; }
-  .deadline-presets input { min-width: 120px; }
   .date-duo { display: flex; gap: 12px; align-items: stretch; margin-bottom: 15px; flex-wrap: wrap; }
+  .date-duo.main-dates { flex-wrap: nowrap; }
+  .date-duo.main-dates .date-duo-card { flex: 1; min-width: 0; }
   .date-duo .inp-group { margin-bottom: 0; }
   .date-duo-card { flex: 1 1 220px; padding: 12px; border-radius: 14px; border: 1px solid var(--border); background: #10151d; box-shadow: inset 0 0 0 1px rgba(88,166,255,0.06); }
   .date-duo .inp-group label { display: flex; align-items: center; gap: 6px; color: #dce7ff; font-weight: 700; }
   .deadline-presets select { min-width: 140px; }
   .deadline-presets input { min-width: 110px; }
+  .deadline-presets { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .deadline-presets select, .deadline-presets input { flex: 1 1 180px; min-width: 0; }
   .date-chip { margin-top: 8px; }
   
   .close-modal-x { 
@@ -363,7 +372,7 @@
   .help-icon::after { content: attr(data-tooltip); position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); background: #0f141b; color: var(--text); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 8px 30px rgba(0,0,0,0.35); width: 260px; max-width: 70vw; font-size: 12px; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity .15s, visibility .15s; z-index: 10; }
   .help-icon:hover::after { opacity: 1; visibility: visible; }
   .text-red { color: var(--red); }
-  .symbol-select { width: 68px !important; padding: 8px; text-align: center; }
+  .symbol-select { width: 90px !important; padding: 8px; text-align: center; }
   
   /* Link Modal Specific */
   #linkModal .modal-content { width: 350px; }
@@ -419,6 +428,7 @@
 </div>
 
 <svg style="display: none;">
+    <symbol id="icon-all" viewBox="0 0 16 16"><path fill="currentColor" d="M1.5 1.5h5v5h-5zm8 0h5v5h-5zm0 8h5v5h-5zm-8 0h5v5h-5z"/></symbol>
     <symbol id="icon-active" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM3 8a5 5 0 0 1 10 0 5 5 0 0 1-10 0Z"/></symbol>
     <symbol id="icon-waiting" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM8 4a1 1 0 0 1 1 1v3.5a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1 0-1H8V5a1 1 0 0 1 1-1Z"/></symbol>
     <symbol id="icon-potential" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM8 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3ZM6 3a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3A.5.5 0 0 1 6 3Zm-2.5 5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Z"/></symbol>
@@ -455,18 +465,18 @@
 
   <div class="tabs-container">
     <div class="tabs">
-        <div class="tab active" id="tab-active" onclick="switchTab('active')"><svg><use href="#icon-active"/></svg> В работе</div>
+        <div class="tab active" id="tab-all" onclick="switchTab('all')"><svg><use href="#icon-all"/></svg> Все проекты</div>
+        <div class="tab" id="tab-active" onclick="switchTab('active')"><svg><use href="#icon-active"/></svg> В работе</div>
         <div class="tab" id="tab-waiting" onclick="switchTab('waiting')"><svg><use href="#icon-waiting"/></svg> Ожидает</div>
         <div class="tab" id="tab-potential" onclick="switchTab('potential')"><svg><use href="#icon-potential"/></svg> Потенциал</div>
         <div class="tab" id="tab-paused" onclick="switchTab('paused')"><svg><use href="#icon-paused"/></svg> На паузе</div>
         <div class="tab" id="tab-archive" onclick="switchTab('archive')"><svg><use href="#icon-archive"/></svg> Выполнено</div>
-        <div class="tab" id="tab-all" onclick="switchTab('all')"><svg><use href="#icon-active"/></svg> Все проекты</div>
         <div class="tab tab-trash" id="tab-trash" onclick="switchTab('trash')"><svg><use href="#icon-trash"/></svg> Корзина</div>
     </div>
     <button id="newProjectButton" onclick="openAddModal()">＋ Новый</button>
   </div>
-  
-  <div class="tab-desc-block" id="tab-description">Проекты в работе. Следите за дедлайнами и фиксируйте предоплату.</div>
+
+  <div class="tab-desc-block" id="tab-description">Все проекты и архив без раздела «Потенциал».</div>
 
   <div class="pace-block" id="pace-indicator" style="display:none;">
       <div class="pace-info">
@@ -481,7 +491,7 @@
 
   <div class="main-layout">
     
-    <div id="view-active">
+    <div id="view-active" style="display:none">
       <div class="table-wrap">
         <table id="t-active">
           <thead>
@@ -583,7 +593,7 @@
       </div>
     </div>
 
-    <div id="view-all" style="display:none">
+    <div id="view-all">
       <div class="table-wrap">
         <table id="t-all">
           <thead>
@@ -592,7 +602,7 @@
               <th width="12%">Статус</th>
               <th width="16%">Клиент</th>
               <th width="24%">Проект</th>
-              <th width="14%">Срок</th>
+              <th width="18%">Даты</th>
               <th width="10%">Сумма</th>
               <th width="10%">Расходы</th>
               <th width="8%">Налог</th>
@@ -635,9 +645,13 @@
                   <div>
                       <div class="finance-title">Финансы: <span class="text-green" id="dash-month-name">...</span></div>
                       <div class="finance-sub">Дашборд по чистой прибыли и платежам</div>
-                      <div class="stat-scope-note" id="stat-scope-note">Статистика по: В работе</div>
                   </div>
                   <div class="card-head-actions">
+                      <select id="statsScopeSelect" class="stat-scope-select" onchange="changeStatsScope(this.value)">
+                          <option value="all">Все проекты</option>
+                          <option value="tab">Текущий раздел</option>
+                      </select>
+                      <div class="stat-scope-note" id="stat-scope-note">Статистика: Все проекты</div>
                       <div class="stat-pill" id="goal-pill">Цель: 0 ₽</div>
                       <button class="inline-link-btn" onclick="openGoalSettings()">Редактировать</button>
                   </div>
@@ -778,17 +792,17 @@
             </div>
              <div class="inp-group" style="flex:1.3">
                 <label>Расходы</label>
-                <div style="display:flex; gap:10px; align-items:center;">
-                    <input type="text" id="add-proj-contractor" placeholder="0" style="flex:1 1 280px">
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap: nowrap;">
+                    <input type="text" id="add-proj-contractor" placeholder="0" style="flex:1 1 320px; min-width: 0;">
                     <select id="add-proj-contractor-mode" class="symbol-select">
                         <option value="amount">₽</option>
                         <option value="percent">%</option>
                     </select>
                 </div>
             </div>
-             <div class="inp-group" style="width:120px">
+             <div class="inp-group" style="width:140px">
                 <label>Налог</label>
-                <select id="add-proj-tax" class="symbol-select">
+                <select id="add-proj-tax" class="symbol-select" style="width:100%">
                     <option value="0">0%</option>
                     <option value="4">4%</option>
                     <option value="6">6%</option>
@@ -796,8 +810,8 @@
                 </select>
             </div>
         </div>
-        
-        <div class="date-duo">
+
+        <div class="date-duo main-dates">
             <div class="date-duo-card">
                 <div class="inp-group">
                     <label>⚡ Старт</label>
@@ -818,22 +832,20 @@
                      <input type="hidden" id="add-proj-dl-val" value="">
                 </div>
             </div>
-            <div class="date-duo-card" style="min-width:240px;">
-                <div class="inp-group">
-                    <label>Шаблон срока</label>
-                    <div class="deadline-presets">
-                        <select id="add-proj-dl-days" onchange="applyDeadlinePreset()">
-                            <option value="">Не выбрано</option>
-                            <option value="1">1 день</option>
-                            <option value="2">2 дня</option>
-                            <option value="3">3 дня</option>
-                            <option value="5">5 дней</option>
-                            <option value="7">7 дней</option>
-                            <option value="custom">Свои дни</option>
-                        </select>
-                        <input type="number" id="add-proj-dl-custom" placeholder="Свои дни" style="width:140px" oninput="applyDeadlinePreset()">
-                    </div>
-                </div>
+        </div>
+        <div class="deadline-preset">
+            <label>⏱ Шаблон срока</label>
+            <div class="deadline-presets">
+                <select id="add-proj-dl-days" onchange="applyDeadlinePreset()">
+                    <option value="">Не выбрано</option>
+                    <option value="1">1 день</option>
+                    <option value="2">2 дня</option>
+                    <option value="3">3 дня</option>
+                    <option value="5">5 дней</option>
+                    <option value="7">7 дней</option>
+                    <option value="custom">Свои дни</option>
+                </select>
+                <input type="number" id="add-proj-dl-custom" placeholder="Свои дни" oninput="applyDeadlinePreset()">
             </div>
         </div>
 
@@ -920,14 +932,16 @@ const K = 'grok_design_v5';
 const now = new Date();
 const today = now.toISOString().slice(0, 10);
 let currentMonth = today.slice(0,7);
-let currentTab = 'active';
+const LAST_TAB_KEY = 'df_last_tab';
+let statsScopeMode = localStorage.getItem('df_stats_scope') || 'all';
+let currentTab = localStorage.getItem(LAST_TAB_KEY) || 'all';
 const TAB_DESCRIPTIONS = {
     active: "Проекты в работе. Следите за дедлайнами и фиксируйте предоплату.",
     waiting: "Ожидают реакции клиента или материалов.",
     potential: "Лиды и переговоры. Ещё не начаты.",
     paused: "Замороженные проекты.",
     archive: "Успешно завершенные заказы.",
-    all: "Все проекты и архив в одном месте.",
+    all: "Все проекты и архив, без лидов из раздела «Потенциал».",
     trash: "Удаленные объекты. Хранятся 7 дней."
 };
 
@@ -1194,9 +1208,12 @@ function bulkMove(from, to) {
 function init(){
     let exist = localStorage.getItem(K);
     if(!exist) { const v4 = localStorage.getItem('grok_design_v4'); if(v4) exist = v4; }
-    
+
+    const availableTabs = ['all','active','waiting','potential','paused','archive','trash'];
+    if (!availableTabs.includes(currentTab)) currentTab = 'all';
+
     if (exist) {
-        try { 
+        try {
             const parsed = JSON.parse(exist);
             DATA = { ...DATA, ...parsed };
             if(!DATA.trash) DATA.trash = [];
@@ -1216,12 +1233,14 @@ function init(){
     document.getElementById('saveLinkBtn').onclick = saveLink;
     document.getElementById('add-proj-start-val').value = today;
     document.getElementById('add-proj-dl-val').value = today;
+    const scopeSelect = document.getElementById('statsScopeSelect');
+    if (scopeSelect) scopeSelect.value = statsScopeMode;
     sortData('active', 'dl', 'date', true);
     ['active','waiting','potential','paused','archive'].forEach(t => {
         DATA[t].sortDirection = DATA[t].sortDirection || 1;
         updateSortIndicators(t);
     });
-    upd();
+    switchTab(currentTab);
 }
 
 function save(){ localStorage.setItem(K, JSON.stringify(DATA)); }
@@ -1280,6 +1299,7 @@ function setupModalsBackgroundCheck() {
 
 function switchTab(t){
     currentTab = t;
+    localStorage.setItem(LAST_TAB_KEY, t);
     document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
     document.getElementById(`tab-${t}`).classList.add('active');
     ['active','waiting','potential','paused','archive','all','trash'].forEach(k => {
@@ -1681,15 +1701,23 @@ function renderArchive(){
     </tr>`;
 }
 
-function formatTimelineBlock(item){
-    const dl = item.dl || item.date;
-    if (dl) {
-        const rem = getTimeRemaining(dl);
-        const suffix = rem.txt !== '—' ? ` · ${rem.txt}` : '';
-        return `<span class="${rem.cls}">${formatDateDisplay(dl)}${suffix}</span>`;
+function formatTimelineBlock(item, type){
+    const chips = [];
+    if (type === 'archive') {
+        if (item.date) {
+            chips.push(`<div class="timeline-chip"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.date)}</span><span class="time-text">Сдано</span></div>`);
+        }
+    } else {
+        if (item.start) {
+            chips.push(`<div class="timeline-chip"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.start)}</span></div>`);
+        }
+        if (item.dl) {
+            const rem = getTimeRemaining(item.dl);
+            chips.push(`<div class="timeline-chip ${rem.cls}"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.dl)}</span><span class="time-text">${rem.txt}</span></div>`);
+        }
     }
-    if (item.start) return `<span>${formatDateDisplay(item.start)}</span>`;
-    return '<span>—</span>';
+    if (!chips.length) chips.push('<div class="timeline-chip days-normal">—</div>');
+    return `<div class="timeline-chips">${chips.join('')}</div>`;
 }
 
 function renderAll(){
@@ -1697,7 +1725,7 @@ function renderAll(){
     if (!tbody) return;
     tbody.innerHTML = '';
     const allItems = [];
-    ['active','waiting','potential','paused','archive'].forEach(type => {
+    ['active','waiting','paused','archive'].forEach(type => {
         DATA[type].forEach((item, idx) => allItems.push({ item, __type: type, idx }));
     });
 
@@ -1721,7 +1749,7 @@ function renderAll(){
             <td><span class="status-pill ${status.cls}">${status.label}</span></td>
             <td><div class="client-wrap">${item.c || '—'}</div></td>
             <td class="project-name-wrap">${item.n || '—'}</td>
-            <td class="date-cell"><div class="date-text-display">${formatTimelineBlock(item)}</div></td>
+            <td class="date-cell">${formatTimelineBlock(item, wrap.__type)}</td>
             <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${gross}" onblur="updVal('${wrap.__type}',${wrap.idx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td style="text-align:right;">
                 <div class="price-cell-wrap expense-cell">
@@ -2122,6 +2150,14 @@ function renderMonthSelect(){
 
 function getScopedDataForStats() {
     const scope = { active: [], archive: [], paused: [], waiting: [], potential: [] };
+    if (statsScopeMode === 'all') {
+        scope.active = DATA.active;
+        scope.archive = DATA.archive;
+        scope.paused = DATA.paused;
+        scope.waiting = DATA.waiting;
+        return scope;
+    }
+
     switch (currentTab) {
         case 'active': scope.active = DATA.active; break;
         case 'archive': scope.archive = DATA.archive; break;
@@ -2133,7 +2169,6 @@ function getScopedDataForStats() {
             scope.archive = DATA.archive;
             scope.paused = DATA.paused;
             scope.waiting = DATA.waiting;
-            scope.potential = DATA.potential;
             break;
         default:
             scope.active = DATA.active;
@@ -2143,6 +2178,12 @@ function getScopedDataForStats() {
             scope.potential = DATA.potential;
     }
     return scope;
+}
+
+function changeStatsScope(mode) {
+    statsScopeMode = mode === 'tab' ? 'tab' : 'all';
+    localStorage.setItem('df_stats_scope', statsScopeMode);
+    calcStats();
 }
 
 function calcStats(){
@@ -2219,9 +2260,12 @@ function calcStats(){
 
     document.getElementById('p-bar').style.width = goal > 0 ? Math.min(100, (totalFact/goal)*100) + '%' : '0%';
     document.getElementById('dash-month-name').innerText = document.getElementById('monthSelect').options[document.getElementById('monthSelect').selectedIndex]?.text || '';
+    const isGlobalScope = statsScopeMode === 'all';
     const scopeLabel = currentTab === 'all' ? 'Все проекты' : (STATUS_META[currentTab]?.label || 'Раздел');
-    const scopeNote = currentTab === 'all' ? 'Статистика по всем проектам' : `Статистика по разделу: ${scopeLabel}`;
-    const scopeHint = currentTab === 'all' ? '' : ' (только для этой вкладки)';
+    const scopeNote = isGlobalScope ? 'Статистика: все проекты (без потенциала)' : `Статистика по разделу: ${scopeLabel}`;
+    const scopeHint = isGlobalScope ? '' : ' (для выбранного раздела)';
+    const scopeSelect = document.getElementById('statsScopeSelect');
+    if (scopeSelect) scopeSelect.value = statsScopeMode;
     const scopeEl = document.getElementById('stat-scope-note');
     if (scopeEl) scopeEl.innerText = scopeNote + scopeHint;
     updateCharts(totalFact, plan, scope);
