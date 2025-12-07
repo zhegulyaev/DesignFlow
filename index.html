@@ -197,7 +197,17 @@
   .row-controls .bulk-checkbox { width: 18px; height: 18px; }
 
   .client-name.has-link { color: var(--link-blue); font-weight: 700; }
-  
+
+  .table-rep-row td { background: #0f141b; border-top: 1px solid var(--border); padding: 12px 10px; }
+  .table-rep-info { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 13px; }
+  .table-rep-title { font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px; }
+  .table-rep-desc { font-size: 12px; color: var(--muted); }
+  .table-rep-score { margin-left: auto; font-weight: 900; color: var(--text); font-size: 16px; }
+  .rep-score-inline { padding: 4px 8px; border-radius: 8px; border: 1px solid var(--border); }
+  .rep-score-inline.good { color: #2ea043; border-color: rgba(46,160,67,0.4); }
+  .rep-score-inline.warn { color: #d29922; border-color: rgba(210,153,34,0.4); }
+  .rep-score-inline.bad { color: #f85149; border-color: rgba(248,81,73,0.5); }
+
   .action-btns{display:flex;gap:6px;align-items:center;}
   .action-btn-base { padding: 6px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; user-select: none; min-width: 32px; text-align: center; }
   .done-btn:hover { background: var(--green); color: #fff; border-color: var(--green);}
@@ -291,9 +301,12 @@
   .reputation-strip.warn { border-color: rgba(210,153,34,0.5); background: linear-gradient(90deg, rgba(210,153,34,0.1), rgba(210,153,34,0.05)); }
   .reputation-strip.bad { border-color: rgba(248,81,73,0.4); background: linear-gradient(90deg, rgba(248,81,73,0.08), rgba(248,81,73,0.04)); }
   .reputation-card { border: 1px solid var(--border); border-radius: 14px; padding: 16px; background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 10px; }
+  .reputation-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .reputation-title { display: flex; align-items: center; gap: 8px; font-weight: 700; }
   .reputation-score { font-size: 26px; font-weight: 900; color: var(--text); }
   .reputation-grade { font-weight: 700; color: var(--muted); }
   .reputation-detail { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .reputation-fallout { font-size: 12px; color: #f85149; background: rgba(248,81,73,0.08); border: 1px dashed rgba(248,81,73,0.4); padding: 10px 12px; border-radius: 10px; line-height: 1.5; }
   .rep-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; font-weight: 700; font-size: 12px; }
   .rep-chip.good { background: rgba(46,160,67,0.15); color: #2ea043; }
   .rep-chip.warn { background: rgba(210,153,34,0.15); color: #d29922; }
@@ -304,8 +317,17 @@
   .rep-value { font-size: 18px; font-weight: 800; color: #f0f6fc; margin-top: 6px; }
   .rep-helper { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
   .reputation-mini { display: grid; grid-template-columns: 1fr 1.1fr; gap: 12px; align-items: stretch; }
-  .rep-chart-box { border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: #0f141b; min-height: 140px; display: flex; flex-direction: column; gap: 8px; }
-  .rep-chart-legend { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .rep-chart-box { border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: #0f141b; min-height: 140px; display: flex; flex-direction: column; gap: 8px; position: relative; overflow: hidden; }
+  .rep-chart-box::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 30% 20%, rgba(88,166,255,0.12), transparent 45%); opacity: 0.5; }
+  .rep-chart-legend { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; gap: 8px; }
+  .rep-chart-legend .legend-title { display: flex; align-items: center; gap: 6px; }
+  .rep-chart-legend .legend-score { display: inline-flex; align-items: center; gap: 6px; font-weight: 800; color: var(--text); background: rgba(46,160,67,0.1); padding: 4px 10px; border-radius: 999px; }
+  .rep-chart-caption { display: flex; gap: 6px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .rep-chart-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.02); }
+  .rep-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .rep-dot.good { background: #2ea043; box-shadow: 0 0 0 3px rgba(46,160,67,0.15); }
+  .rep-dot.warn { background: #d29922; box-shadow: 0 0 0 3px rgba(210,153,34,0.15); }
+  .rep-dot.bad { background: #f85149; box-shadow: 0 0 0 3px rgba(248,81,73,0.18); }
   .rep-tips { border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: #0f141b; display: flex; flex-direction: column; gap: 8px; }
   .rep-tips-title { font-weight: 800; color: #f0f6fc; font-size: 13px; letter-spacing: 0.3px; text-transform: uppercase; }
   .rep-tip { display: flex; gap: 8px; color: var(--muted); font-size: 13px; line-height: 1.4; }
@@ -542,14 +564,6 @@ td.date-cell + td.date-cell {
       <div class="pace-status" id="pace-status">Критично</div>
   </div>
 
-  <div class="reputation-strip good" id="reputation-strip">
-      <div>
-          <div class="tag">Репутация</div>
-          <div class="headline" id="reputation-headline">Всё ок — ты держишь сроки</div>
-      </div>
-      <div class="hint" id="reputation-hint">Просроченных дедлайнов нет, продолжай в том же духе.</div>
-  </div>
-
   <div class="main-layout">
     
     <div id="view-active">
@@ -572,7 +586,24 @@ td.date-cell + td.date-cell {
             </tr>
           </thead>
           <tbody></tbody>
-          <tfoot id="total-row-active"><tr><td colspan="8">Итого:</td><td></td><td></td><td></td><td></td></tr></tfoot>
+          <tfoot id="total-row-active">
+            <tr><td colspan="8">Итого:</td><td></td><td></td><td></td><td></td></tr>
+            <tr class="table-rep-row">
+              <td colspan="5"></td>
+              <td colspan="2">
+                <div class="table-rep-info">
+                  <span class="table-rep-title">Репутация</span>
+                  <span class="rep-dot good" id="table-rep-dot"></span>
+                  <div>
+                    <div class="table-rep-desc" id="table-rep-desc">Держишь сроки, претензий нет</div>
+                  </div>
+                  <span class="table-rep-score rep-score-inline good" id="reputation-score-inline">100 / 100</span>
+                  <span class="help-icon" data-tooltip="Итоговая оценка по дедлайнам во всех разделах. Чем ближе к нулю, тем сильнее риск потери клиентов.">?</span>
+                </div>
+              </td>
+              <td colspan="5"></td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
@@ -793,7 +824,7 @@ td.date-cell + td.date-cell {
               </div>
               <div class="record-banner">
                   <div class="record-texts">
-                      <div class="record-title">🏆 Рекордный заработок за месяц</div>
+                      <div class="record-title">🏆 Рекордный заработок за месяц <span class="help-icon" data-tooltip="Сравниваем текущий факт по чистой прибыли с твоим личным рекордом. Настрой значение, чтобы видеть прогресс к новой планке.">?</span></div>
                       <div class="record-motiv" id="record-motiv">Обновим цифры!</div>
                       <div class="record-progress-bg"><div class="record-progress-fill" id="record-progress"></div></div>
                   </div>
@@ -804,11 +835,14 @@ td.date-cell + td.date-cell {
                   </div>
               </div>
               <div class="reputation-card" id="reputation-card">
-                  <div class="card-head" style="margin-bottom:4px;">Репутация дизайнера</div>
-                  <div class="rep-chip good" id="reputation-chip">🔥 Всё ок</div>
+                  <div class="reputation-heading">
+                      <div class="reputation-title">Репутация дизайнера <span class="help-icon" data-tooltip="Пульс по дедлайнам: учитываем все активные проекты и просрочки, чтобы предупредить потери клиентов.">?</span></div>
+                      <div class="rep-chip good" id="reputation-chip">🔥 Всё ок</div>
+                  </div>
                   <div class="reputation-score" id="reputation-score">100 / 100</div>
                   <div class="reputation-grade" id="reputation-grade">Просроченных дедлайнов нет</div>
                   <div class="reputation-detail" id="reputation-detail">Отсутствие просрочек усиливает доверие клиентов. Держи темп и фиксируй успехи в архиве.</div>
+                  <div class="reputation-fallout" id="reputation-fallout" style="display:none"></div>
                   <div class="reputation-grid">
                       <div class="rep-metric">
                           <div class="rep-label">Активных проектов</div>
@@ -823,8 +857,13 @@ td.date-cell + td.date-cell {
                   </div>
                   <div class="reputation-mini">
                       <div class="rep-chart-box">
-                          <div class="rep-chart-legend"><span>Общая репутация</span><span id="rep-score-label">100</span></div>
+                          <div class="rep-chart-legend"><span class="legend-title">Общая репутация <span class="help-icon" data-tooltip="Диаграмма показывает, сколько задач вовремя, сколько горят и где уже просрочка.">?</span></span><span class="legend-score" id="rep-score-label">100</span></div>
                           <div style="flex:1; position:relative; min-height: 120px;"><canvas id="reputationChart"></canvas></div>
+                          <div class="rep-chart-caption">
+                              <div class="rep-chart-pill"><span class="rep-dot good"></span> В срок: <span id="rep-on-time-pill">0</span></div>
+                              <div class="rep-chart-pill"><span class="rep-dot warn"></span> На грани: <span id="rep-near-pill">0</span></div>
+                              <div class="rep-chart-pill"><span class="rep-dot bad"></span> Просрочено: <span id="rep-overdue-pill">0</span></div>
+                          </div>
                       </div>
                       <div class="rep-tips">
                           <div class="rep-tips-title">Что улучшить</div>
@@ -2323,6 +2362,22 @@ function renderMonthSelect(){
     });
 }
 
+const repCenterText = {
+    id: 'repCenterText',
+    afterDraw(chart, args, opts) {
+        const { ctx, chartArea: { width, height } } = chart;
+        ctx.save();
+        ctx.font = '900 22px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif';
+        ctx.fillStyle = '#f0f6fc';
+        ctx.textAlign = 'center';
+        ctx.fillText(opts.text || '', width / 2, height / 2 + 6);
+        ctx.font = '600 12px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif';
+        ctx.fillStyle = '#8b949e';
+        ctx.fillText(opts.subText || '', width / 2, height / 2 + 22);
+        ctx.restore();
+    }
+};
+
 function analyzeReputation(){
     const projectTypes = ['active', 'waiting', 'paused', 'potential'];
     const overdue = [];
@@ -2347,6 +2402,7 @@ function analyzeReputation(){
         const rem = getTimeRemaining(item.dl);
         return rem.days >= 0 && rem.days <= 2;
     }).length;
+    const onTime = Math.max(activeCount - total - nearDeadline, 0);
     const score = Math.max(0, Math.min(100, 100 - total * 12 - Math.max(0, worst - 2) * 3 - nearDeadline * 2));
 
     let level = 'good';
@@ -2354,6 +2410,7 @@ function analyzeReputation(){
     let hint = 'Просроченных дедлайнов нет, продолжай в том же духе.';
     let chip = '🔥 Всё ок';
     let detail = 'Отсутствие просрочек усиливает доверие клиентов. Держи темп и фиксируй успехи в архиве.';
+    let fallout = 'Сохраняй привычку опережать дедлайны — это личный бренд и поток рекомендаций.';
     let tips = [
         'Фиксируй дедлайны при постановке задач, чтобы контролировать загрузку.',
         'Закрывай готовые проекты в архив — это повышает итоговый рейтинг.',
@@ -2368,6 +2425,7 @@ function analyzeReputation(){
             hint = `${overdueWord} до ${daysWord}. Обнови план и предупреди клиентов.`;
             chip = '⚠ Поднажми';
             detail = 'Пара задержек ещё поправима: договорись о новых сроках и закрой задачи, чтобы не терять доверие.';
+            fallout = 'Если так тянуть и дальше, клиенты начнут замораживать платежи и уйдут к тем, кто держит сроки.';
             tips = [
                 'Договорись с клиентами о новых сроках и отметь их в таблице.',
                 'Сконцентрируйся на задачах с максимальной просрочкой, чтобы снять красные индикаторы.',
@@ -2379,6 +2437,7 @@ function analyzeReputation(){
             hint = `${overdueWord} до ${daysWord} — пора спасать ситуацию.`;
             chip = '🔥 Жесть';
             detail = 'Множественные просрочки уже бьют по имени. Наведи порядок в приоритетах и верни сроки под контроль.';
+            fallout = 'Продолжение срывов = штрафы, возвраты и жёсткие отзывы. Лиды будут обходить тебя стороной.';
             tips = [
                 'Составь антикризисный список: сначала закрывай самые старые и дорогие проекты.',
                 'Разбей объём на краткие чекпоинты и ежедневно отмечай прогресс.',
@@ -2386,10 +2445,11 @@ function analyzeReputation(){
             ];
         }
     } else if (nearDeadline > 0) {
+        fallout = 'Если проморгать задачи на ближайшие 2 дня — они уйдут в красную зону и потянут рейтинг вниз.';
         tips.push('На радаре есть задачи с дедлайном в ближайшие 2 дня — выдели под них фиксированные слоты.');
     }
 
-    return { level, headline, hint, chip, detail, score, total, worst, avg, activeCount, nearDeadline, tips };
+    return { level, headline, hint, chip, detail, fallout, score, total, worst, avg, activeCount, nearDeadline, tips, onTime };
 }
 
 function updateReputationUI(){
@@ -2428,12 +2488,18 @@ function updateReputationUI(){
     const detail = document.getElementById('reputation-detail');
     if (detail) detail.innerText = state.detail;
 
+    const fallout = document.getElementById('reputation-fallout');
+    if (fallout) {
+        fallout.style.display = state.level === 'good' ? 'none' : 'block';
+        fallout.innerText = state.level === 'good' ? '' : state.fallout;
+    }
+
     const activeCount = document.getElementById('rep-active-count');
     if (activeCount) activeCount.innerText = state.activeCount;
 
     const repOnTime = document.getElementById('rep-on-time');
     if (repOnTime) {
-        const onTime = Math.max(state.activeCount - state.total, 0);
+        const onTime = Math.max(state.onTime, 0);
         repOnTime.innerText = onTime > 0 ? `${onTime} без просрочек` : 'Все задачи просрочены';
     }
 
@@ -2455,16 +2521,45 @@ function updateReputationUI(){
         `).join('');
     }
 
+    const tableScore = document.getElementById('reputation-score-inline');
+    if (tableScore) {
+        tableScore.innerText = `${state.score} / 100`;
+        tableScore.className = `table-rep-score rep-score-inline ${state.level}`;
+    }
+
+    const tableDesc = document.getElementById('table-rep-desc');
+    if (tableDesc) tableDesc.innerText = state.hint;
+
+    const tableDot = document.getElementById('table-rep-dot');
+    if (tableDot) tableDot.className = `rep-dot ${state.level}`;
+
+    const repOnTimePill = document.getElementById('rep-on-time-pill');
+    if (repOnTimePill) repOnTimePill.innerText = Math.max(state.onTime, 0);
+
+    const repNearPill = document.getElementById('rep-near-pill');
+    if (repNearPill) repNearPill.innerText = state.nearDeadline;
+
+    const repOverduePill = document.getElementById('rep-overdue-pill');
+    if (repOverduePill) repOverduePill.innerText = state.total;
+
     const repChartEl = document.getElementById('reputationChart');
     if (repChartEl) {
         if (chRep) chRep.destroy();
+        const onTimeVal = Math.max(state.onTime, 0);
+        const nearVal = state.nearDeadline;
+        const overdueVal = state.total;
+        const totalVal = onTimeVal + nearVal + overdueVal;
+        const hasData = totalVal > 0;
+        const labels = hasData ? ['В срок', 'На грани', 'Просрочки'] : ['Репутация'];
+        const data = hasData ? [onTimeVal, nearVal, overdueVal] : [1];
+        const colors = hasData ? ['#2ea043', '#d29922', '#f85149'] : ['#2ea043'];
         chRep = new Chart(repChartEl.getContext('2d'), {
             type: 'doughnut',
             data: {
-                labels: ['Без просрочек', 'Просрочки'],
+                labels,
                 datasets: [{
-                    data: [Math.max(state.activeCount - state.total, 0), state.total || 0.5],
-                    backgroundColor: ['#2ea043', '#f85149'],
+                    data,
+                    backgroundColor: colors,
                     borderWidth: 0,
                 }]
             },
@@ -2474,9 +2569,18 @@ function updateReputationUI(){
                 cutout: '72%',
                 plugins: {
                     legend: { display: false },
-                    tooltip: { enabled: false }
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => `${ctx.label}: ${hasData ? ctx.parsed : 0}`
+                        }
+                    },
+                    repCenterText: {
+                        text: `${state.score} / 100`,
+                        subText: state.level === 'good' ? 'Доверие стабильно' : 'Нужно ускориться'
+                    }
                 }
-            }
+            },
+            plugins: [repCenterText]
         });
     }
 }
