@@ -62,7 +62,6 @@
 
   /* Main Layout & Tables */
   .table-wrap{overflow-x:visible;overflow-y:visible;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:5px; margin-top: 10px; position: relative;}
-  .table-wrap *::selection { background: rgba(88,166,255,0.25); color: #f0f6fc; }
   table{width:100%;border-collapse:collapse; min-width: 1400px;}
   th{text-align:left;color:var(--muted);font-size:12px;text-transform:uppercase;padding:12px 10px;border-bottom:1px solid var(--border);user-select:none; white-space: nowrap; cursor: pointer;}
   
@@ -74,7 +73,7 @@
   }
 
   th:first-child, td:first-child { width: 24px; cursor: default; text-align: center; }
-  td{ padding: 8px 10px; border-bottom:1px solid var(--border); vertical-align:middle; font-size:15px; position: relative; }
+  td{ padding: 5px 10px; border-bottom:1px solid #21262d; vertical-align:middle; font-size:15px; position: relative; }
   tr:last-child td{border-bottom:none;}
   tr:hover td{background:#1c2128;}
 
@@ -110,11 +109,11 @@
   [contenteditable]:focus, [contenteditable]:hover { border-color: var(--border); background: #21262d; cursor: text; }
   [contenteditable]:focus { white-space: pre-wrap; -webkit-line-clamp: initial; overflow: visible; text-overflow: unset; }
   
-  .date-cell { padding: 0 !important; }
-  .date-input-wrap { width: 100%; padding: 10px 12px; cursor: pointer; user-select: none; display: flex; align-items: center; justify-left: flex-start; transition: .2s; border-radius: 10px; gap: 10px; background: linear-gradient(145deg, #111720, #0c1118); border: 1px solid var(--border); box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 6px 16px rgba(0,0,0,0.25); }
-  .date-input-wrap:hover { background: linear-gradient(145deg, #131a24, #0f151d); border-color: var(--accent); }
-  .date-text-display { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; display: flex; align-items: center; gap: 6px; letter-spacing: 0.1px; }
-  .date-icon { width: 16px; height: 16px; opacity: 0.9; color: var(--accent); }
+  .date-cell { padding: 0 !important; } 
+  .date-input-wrap { width: 100%; padding: 5px 8px; cursor: pointer; user-select: none; display: flex; align-items: center; justify-left: flex-start; transition: .2s; border-radius: 6px; gap: 6px; }
+  .date-input-wrap:hover { background: #21262d; }
+  .date-text-display { font-size: 14px; font-weight: 500; color: var(--text); white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+  .date-icon { display: none; }
   .time-text { color: var(--muted); font-weight: 700; font-size: 12px; }
 
   /* Deadline Colors */
@@ -129,9 +128,9 @@
     border: none;
     color: var(--text);
     width: 100%;
-    max-width: 110px;
-    min-width: 90px;
-    flex: 1 1 90px;
+    max-width: 90px;
+    min-width: 70px;
+    flex: 1 1 70px;
     font-family: monospace;
     font-weight: 600;
     outline: none;
@@ -155,7 +154,7 @@
       margin-top: 2px;
   }
 
-  .expense-cell { gap: 8px; }
+  .expense-cell { gap: 6px; }
   .expense-mode { background: #1a1f26; color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 5px 6px; font-size: 12px; cursor: pointer; min-width: 58px; }
   .expense-helper { color: var(--muted); font-size: 12px; margin-top: 2px; text-align: right; }
 
@@ -181,8 +180,6 @@
   
   .dup-icon { opacity: 0; transition: opacity 0.2s; cursor: pointer; color: var(--muted); width: 16px; height: 16px; flex-shrink: 0;}
   tr:hover .dup-icon { opacity: 1; }
-
-  .row-selected td { background: #1f2630 !important; box-shadow: inset 0 0 0 1px rgba(88,166,255,0.2); }
 
   .select-col { position: relative; }
   .row-index { color: var(--muted); font-weight: 700; font-size: 12px; text-align: center; }
@@ -232,13 +229,11 @@
   
   /* Stats Dashboard fixes */
   .stats-full { margin-top: 50px; display: flex; flex-direction: column; gap: 20px; }
-  .stats-two-columns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; align-items: start; }
-  .stats-columns-right { display: flex; flex-direction: column; gap: 16px; }
+  .stats-two-columns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
   .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
   .card-head { font-size: 18px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
   .finance-title { font-size: 20px; font-weight: 800; color: #fff; }
   .finance-sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
-  .finance-scope { color: var(--muted); font-size: 12px; margin-top: 6px; letter-spacing: 0.2px; text-transform: uppercase; }
   .goal-wrap { margin-bottom: 18px; }
   .goal-info { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
   .card-head-actions { display: flex; align-items: center; gap: 10px; }
@@ -251,16 +246,16 @@
   .stat-label-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
   .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
   .stat-pill { padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; background: rgba(88,166,255,0.12); color: var(--accent); border: 1px solid rgba(88,166,255,0.3); }
-  #goal-pill { background: linear-gradient(120deg, rgba(250,204,21,0.25), rgba(88,166,255,0.18)); border-color: rgba(250,204,21,0.6); color: #fffbe6; padding: 8px 14px; font-size: 13px; box-shadow: 0 10px 24px rgba(250,204,21,0.15); display: inline-flex; gap: 8px; align-items: center; letter-spacing: 0.3px; font-weight: 800; border-radius: 10px; text-transform: uppercase; }
-  #goal-pill::before { content: "⚡"; }
+  #goal-pill { background: linear-gradient(120deg, rgba(88,166,255,0.22), rgba(163,113,247,0.22)); border-color: rgba(163,113,247,0.4); color: #dce7ff; padding: 6px 12px; font-size: 13px; box-shadow: 0 4px 18px rgba(88,166,255,0.22); display: inline-flex; gap: 6px; align-items: center; }
+  #goal-pill::before { content: "🎯"; }
   .stat-val { font-size: 30px; font-weight: 800; }
   .stat-helper { font-size: 12px; color: var(--muted); margin-top: 4px; }
   .text-green { color: var(--green); }
   .text-gold { color: var(--gold); }
   .mono { font-family: monospace; }
-  .record-banner { background: linear-gradient(145deg, #121826, #0e1320); border: 1px solid rgba(250, 204, 21, 0.35); padding: 18px 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; gap: 20px; box-shadow: 0 12px 32px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(250, 204, 21, 0.08); }
+  .record-banner { background: #0f141b; border: 1px solid var(--border); padding: 18px 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; gap: 20px; box-shadow: inset 0 0 0 1px rgba(250, 204, 21, 0.05); }
   .record-texts { flex:1; min-width: 0; }
-  .record-title { color: #f8e3a1; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+  .record-title { color: var(--muted); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
   .record-motiv { color: #f0f6fc; font-weight: 700; margin-top: 6px; font-size: 15px; }
   .record-progress-bg { margin-top: 10px; height: 10px; background: linear-gradient(90deg, #1c2128, #11151c); border-radius: 10px; overflow: hidden; border: 1px solid rgba(250,204,21,0.25); width: 100%; box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
   .record-progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, #facc15, #f9a825); box-shadow: 0 0 12px rgba(250,204,21,0.4); transition: width .4s ease; border-radius: 999px; }
@@ -310,9 +305,9 @@
   .inp-group input, .inp-group select {background-color: #21262d;border:1px solid var(--border);padding:10px;width:100%;color:var(--text);border-radius:8px; outline: none; box-sizing: border-box;}
   .row-inputs{display:flex;gap:15px;margin-bottom:15px;}
   .row-inputs > div {flex: 1;}
-  .deadline-presets { display: flex; gap: 8px; align-items: center; flex-wrap: nowrap; }
-  .deadline-presets select { min-width: 150px; }
-  .deadline-presets input { min-width: 110px; }
+  .deadline-presets { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .deadline-presets select { min-width: 160px; }
+  .deadline-presets input { min-width: 130px; }
   
   .close-modal-x { 
       position: absolute; 
@@ -335,7 +330,6 @@
   #settingsModal .modal-content h2 { margin-bottom: 15px; }
 
   .footer-note { color: var(--muted); font-size: 12px; font-weight: 600; }
-  .hint-text { color: var(--muted); font-size: 12px; line-height: 1.5; }
 
   /* Date/Time Input Styling (Override attempts for dark theme) */
   .inp-group input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
@@ -477,11 +471,11 @@
               <th class="select-col">№</th>
               <th width="15%" data-type="active" data-key="c" onclick="sortData('active', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
               <th width="20%" data-type="active" data-key="n" onclick="sortData('active', 'n', 'string')">Проект <span class="sort-icon"></span></th>
-              <th width="9%" data-type="active" data-key="start" onclick="sortData('active', 'start', 'date')">Старт <span class="sort-icon"></span></th>
-              <th width="9%" data-type="active" data-key="dl" onclick="sortData('active', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
+              <th width="8%" data-type="active" data-key="start" onclick="sortData('active', 'start', 'date')">Старт <span class="sort-icon"></span></th>
+              <th width="8%" data-type="active" data-key="dl" onclick="sortData('active', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
               <th width="6%" data-type="active" data-key="rem" onclick="sortData('active', 'rem', 'number')">Осталось <span class="sort-icon"></span></th>
               <th width="4%" data-type="active" data-key="taxPrc" onclick="sortData('active', 'taxPrc', 'number')">Налог % <span class="sort-icon"></span></th>
-              <th width="9%" data-type="active" data-key="contractor" onclick="sortData('active', 'contractor', 'number')" style="text-align:right;">Расходы <span class="sort-icon"></span></th>
+              <th width="7%" data-type="active" data-key="contractor" onclick="sortData('active', 'contractor', 'number')" style="text-align:right;">Расходы <span class="sort-icon"></span></th>
               <th width="8%" data-type="active" data-key="p" onclick="sortData('active', 'p', 'number')" style="text-align:right;">Сумма <span class="sort-icon"></span></th>
               <th width="8%" style="text-align:right;">Чистыми</th>
               <th width="6%">Оплачено</th>
@@ -601,7 +595,6 @@
                   <div>
                       <div class="finance-title">Финансы: <span class="text-green" id="dash-month-name">...</span></div>
                       <div class="finance-sub">Дашборд по чистой прибыли и платежам</div>
-                      <div class="finance-scope" id="stats-scope"></div>
                   </div>
                   <div class="card-head-actions">
                       <div class="stat-pill" id="goal-pill">Цель: 0 ₽</div>
@@ -676,27 +669,26 @@
               <div style="position:relative;height:250px;width:100%"><canvas id="lineChart"></canvas></div>
           </div>
 
-          <div class="stats-columns-right">
-              <div class="card efficiency-card">
-                  <div class="card-head">Эффективность <span class="help-icon" data-tooltip="Визуализация распределения чистой прибыли между уже полученными средствами и оставшимся потенциалом проектов.">?</span></div>
-                  <div style="position:relative;height:170px;width:100%;display:flex;justify-content:center;margin-bottom:16px;"><canvas id="pieChart"></canvas></div>
-                  <div style="border-top:1px solid var(--border); padding-top:16px;">
-                      <div style="font-size:14px;color:var(--muted);margin-bottom:12px;font-weight:600">По месяцам</div>
-                      <div style="height:120px;width:100%"><canvas id="barChart"></canvas></div>
-                  </div>
+          <div class="card">
+              <div class="card-head">Эффективность <span class="help-icon" data-tooltip="Визуализация распределения чистой прибыли между уже полученными средствами и оставшимся потенциалом проектов.">?</span></div>
+              <div style="position:relative;height:200px;width:100%;display:flex;justify-content:center;margin-bottom:20px;"><canvas id="pieChart"></canvas></div>
+              <div style="border-top:1px solid var(--border); padding-top:20px;">
+                  <div style="font-size:14px;color:var(--muted);margin-bottom:15px;font-weight:600">По месяцам</div>
+                  <div style="height:150px;width:100%"><canvas id="barChart"></canvas></div>
               </div>
-              <div class="record-banner">
-                  <div class="record-texts">
-                      <div class="record-title">🏆 Рекордный заработок за месяц</div>
-                      <div class="record-motiv" id="record-motiv">Обновим цифры!</div>
-                      <div class="record-progress-bg"><div class="record-progress-fill" id="record-progress"></div></div>
-                  </div>
-                  <div class="record-side">
-                      <div class="record-value mono" id="record-amount">0 ₽</div>
-                      <div class="record-remaining" id="record-remaining">До рекорда 0 ₽</div>
-                      <button class="inline-link-btn" onclick="openRecordSettings()">Редактировать рекорд</button>
-                  </div>
-              </div>
+          </div>
+      </div>
+
+      <div class="record-banner">
+          <div class="record-texts">
+              <div class="record-title">🏆 Рекордный заработок за месяц</div>
+              <div class="record-motiv" id="record-motiv">Обновим цифры!</div>
+              <div class="record-progress-bg"><div class="record-progress-fill" id="record-progress"></div></div>
+          </div>
+          <div class="record-side">
+              <div class="record-value mono" id="record-amount">0 ₽</div>
+              <div class="record-remaining" id="record-remaining">До рекорда 0 ₽</div>
+              <button class="inline-link-btn" onclick="openRecordSettings()">Редактировать рекорд</button>
           </div>
       </div>
     </div>
@@ -792,7 +784,7 @@
                         <option value="7">7 дней</option>
                         <option value="custom">Свои дни</option>
                     </select>
-                    <input type="number" id="add-proj-dl-custom" placeholder="Свои дни" style="width:120px" oninput="applyDeadlinePreset()">
+                    <input type="number" id="add-proj-dl-custom" placeholder="Свои дни" style="width:140px" oninput="applyDeadlinePreset()">
                 </div>
             </div>
         </div>
@@ -823,7 +815,6 @@
             <input type="checkbox" id="link-is-telegram">
             Открывается в Telegram (чат/канал)
         </label>
-        <div class="hint-text" style="margin-top:-6px;">Укажите @username — мы сами уберём «@» и сделаем кликабельную ссылку.</div>
         <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" id="saveLinkBtn">Сохранить</button>
     </div>
 </div>
@@ -1235,6 +1226,30 @@ function switchTab(t){
 }
 
 function getTabSummary(type, baseText) {
+    const format = (val) => formatCurrency(val).replace(/ /g, '&nbsp;');
+    if (type === 'active') {
+        const gross = DATA.active.reduce((s, i) => s + (+i.p || 0), 0);
+        const paid = DATA.active.reduce((s, i) => s + ((+i.p || 0) * ((+i.paid || 0) / 100)), 0);
+        return `${baseText} · ${DATA.active.length} проектов · Сумма ${format(gross)} · Оплачено ${format(paid)}`;
+    }
+    if (type === 'waiting') {
+        const gross = DATA.waiting.reduce((s, i) => s + (+i.p || 0), 0);
+        return `${baseText} · ${DATA.waiting.length} проектов · Сумма ${format(gross)}`;
+    }
+    if (type === 'potential') {
+        const gross = DATA.potential.reduce((s, i) => s + (+i.p || 0), 0);
+        return `${baseText} · ${DATA.potential.length} лидов · Потенциал ${format(gross)}`;
+    }
+    if (type === 'paused') {
+        const gross = DATA.paused.reduce((s, i) => s + (+i.p || 0), 0);
+        return `${baseText} · ${DATA.paused.length} проектов · Сумма ${format(gross)}`;
+    }
+    if (type === 'archive') {
+        const visibleItems = DATA.archive.filter(i => (i.date||'').startsWith(currentMonth));
+        const gross = visibleItems.reduce((s, i) => s + (+i.p || 0), 0);
+        const net = visibleItems.reduce((s, i) => s + calcNet(i), 0);
+        return `${baseText} · ${visibleItems.length} проектов · ${format(gross)} / ${format(net)} чистыми`;
+    }
     if (type === 'trash') {
         return `${baseText} · Статистика скрыта в корзине.`;
     }
@@ -1387,14 +1402,8 @@ function renderActive(){
             <div class="footer-note">Расходы</div>
             <div>${formatCurrency(totalContr)}</div>
         </td>
-        <td style="text-align:right;">
-            <div class="footer-note">Сумма</div>
-            <div>${formatCurrency(totalP)}</div>
-        </td>
-        <td style="text-align:right;">
-            <div class="footer-note">Чистыми</div>
-            <div>${formatCurrency(totalPr)}</div>
-        </td>
+        <td style="text-align:right;">${formatCurrency(totalP)}</td>
+        <td style="text-align:right;">${formatCurrency(totalPr)}</td>
         <td style="text-align:center;">
             <div class="footer-note">Оплачено</div>
             <div>${formatCurrency(totalPaidGross)}</div>
@@ -1587,18 +1596,14 @@ function renderArchive(){
     const footer = document.querySelector('#total-row-archive');
     footer.innerHTML = `<tr>
         <td colspan="4">Всего ${visibleItems.length} проектов</td>
-        <td style="text-align:right;">
-            <div class="footer-note">Сумма</div>
-            <div>${formatCurrency(tP)}</div>
-        </td>
+        <td style="text-align:right;">${formatCurrency(tP)}</td>
         <td style="text-align:right;">
             <div class="footer-note">Расходы</div>
             <div>${formatCurrency(tContr)}</div>
         </td>
         <td style="text-align:right;">
-            <div class="footer-note">Чистыми</div>
             <div>${formatCurrency(tPr)}</div>
-            <div class="footer-note" style="margin-top:4px;">Налоги: ${formatCurrency(tTax)}</div>
+            <div class="footer-note">Налоги: ${formatCurrency(tTax)}</div>
         </td>
         <td></td>
     </tr>`;
@@ -1934,8 +1939,8 @@ function getTimeRemaining(dl){
     return {txt: days + ' дн.', cls:'days-normal', days: days};
 }
 
-function changeMonth(m){
-    currentMonth = m;
+function changeMonth(m){ 
+    currentMonth = m; 
     if (!DATA.monthlyGoals[currentMonth]) {
         DATA.monthlyGoals[currentMonth] = 250000; 
         save();
@@ -1963,43 +1968,53 @@ function renderMonthSelect(){
     });
 }
 
-function getScopedItemsForStats() {
-    if (currentTab === 'trash') return [];
-    if (currentTab === 'archive') return DATA.archive.filter(i => (i.date||'').startsWith(currentMonth));
-    return DATA[currentTab] || [];
-}
-
 function calcStats(){
     const goal = DATA.monthlyGoals[currentMonth] || 250000;
-    const scopedItems = getScopedItemsForStats();
-    let fact = 0, plan = 0, totalGross = 0, totalNet = 0;
+    let fact = 0, activeFact = 0, plan = 0, totalGross = 0, totalNet = 0;
     let totalExpenses = 0, totalTaxes = 0, totalPaidGross = 0;
 
-    scopedItems.forEach(i => {
+    ['active','archive','paused','waiting','potential'].forEach(type => {
+        DATA[type].forEach(i => {
+            totalExpenses += calcContractorAmount(i);
+            totalTaxes += (+i.p || 0) * ((+i.taxPrc || 0) / 100);
+        });
+    });
+    
+    const archiveThisMonth = DATA.archive.filter(i=>(i.date||'').startsWith(currentMonth));
+    archiveThisMonth.forEach(i => {
+        const net = calcNet(i);
+        fact += net;
+        totalGross += +i.p || 0;
+        totalNet += net;
+        totalPaidGross += +i.p || 0;
+    });
+    
+    DATA.active.forEach(i => {
         const net = calcNet(i);
         const gross = +i.p || 0;
-        const paidPrc = (+i.paid || 0)/100;
+        const paidPrc = (i.paid||0)/100;
         const paidGross = gross * paidPrc;
-
-        totalExpenses += calcContractorAmount(i);
-        totalTaxes += gross * ((+i.taxPrc || 0) / 100);
+        activeFact += net * paidPrc;
+        plan += net * (1 - paidPrc);
         totalGross += gross;
         totalNet += net;
         totalPaidGross += paidGross;
-        fact += net * paidPrc;
-        plan += net * (1 - paidPrc);
     });
 
-    const totalFact = fact;
-    const forecast = totalFact + plan;
+    DATA.paused.forEach(i => plan += calcNet(i));
+    DATA.waiting.forEach(i => plan += calcNet(i));
+    DATA.potential.forEach(i => plan += calcNet(i));
 
+    const totalFact = fact + activeFact;
+    const forecast = totalFact + plan;
+    
     const totalMargin = totalNet;
     const totalGrossCombined = totalGross;
     const goalProgress = goal ? Math.round((totalFact/goal)*100) : 0;
 
     document.getElementById('val-fact').innerText = formatCurrency(totalFact);
     document.getElementById('val-fact-prc').innerText = `${goalProgress}% от цели`;
-    document.getElementById('val-active-fact').innerText = formatCurrency(totalFact);
+    document.getElementById('val-active-fact').innerText = formatCurrency(activeFact);
     document.getElementById('val-margin').innerText = formatCurrency(totalMargin);
     document.getElementById('val-margin-prc').innerText = `${totalGrossCombined > 0 ? Math.round((totalMargin/totalGrossCombined)*100) : 0}%`;
     document.getElementById('val-plan').innerText = formatCurrency(plan);
@@ -2026,25 +2041,21 @@ function calcStats(){
 
     document.getElementById('p-bar').style.width = goal > 0 ? Math.min(100, (totalFact/goal)*100) + '%' : '0%';
     document.getElementById('dash-month-name').innerText = document.getElementById('monthSelect').options[document.getElementById('monthSelect').selectedIndex]?.text || '';
-    const scopeLabel = document.querySelector('.tab.active')?.textContent.trim();
-    document.getElementById('stats-scope').innerText = scopeLabel ? `Раздел: ${scopeLabel}` : '';
-    updateCharts(totalFact, plan, scopedItems);
+    updateCharts(totalFact, plan);
 }
 
 let chL = null, chP = null, chB = null;
-function updateCharts(fact, plan, scopedItems){
+function updateCharts(fact, plan){
     const ctxL = document.getElementById('lineChart').getContext('2d');
     const ctxP = document.getElementById('pieChart').getContext('2d');
     const ctxB = document.getElementById('barChart').getContext('2d');
     const daysInM = new Date(currentMonth.split('-')[0], currentMonth.split('-')[1], 0).getDate();
     const labelsL = Array.from({length:daysInM},(_,i)=>i+1);
-
+    
     const dataL = new Array(daysInM).fill(0);
-
-    scopedItems.forEach(i => {
-        const dateStr = (i.date || i.dl || i.start || '').replace(' ', 'T');
-        if(!dateStr.startsWith(currentMonth)) return;
-        const d = parseInt(dateStr.split('-')[2]) - 1;
+    
+    DATA.archive.filter(i=>(i.date||'').startsWith(currentMonth)).forEach(i => {
+        const d = parseInt(i.date.split('-')[2]) - 1;
         if(d>=0 && d<daysInM) dataL[d] += calcNet(i);
     });
     
@@ -2066,19 +2077,15 @@ function updateCharts(fact, plan, scopedItems){
     });
     
     const h = {};
-    scopedItems.forEach(i => { const m = (i.date || i.dl || i.start || '').slice(0,7); if(m) h[m] = (h[m]||0) + calcNet(i); });
+    DATA.archive.forEach(i => { const m = (i.date||'').slice(0,7); if(m) h[m] = (h[m]||0) + calcNet(i); });
     const allMonths = Object.keys(h);
     allMonths.sort();
-    const keys = allMonths.slice(-6);
-
-    const barLabels = keys.length ? keys.map(m => new Date(m + '-01').toLocaleString('ru', {month:'short'})) : ['—'];
-    const barData = keys.length ? keys.map(k=>h[k]) : [0];
-    const barColors = keys.length ? keys.map(k=>k===currentMonth?'#58a6ff':'#21262d') : ['#21262d'];
+    const keys = allMonths.slice(-6); 
 
     if(chB) chB.destroy();
     chB = new Chart(ctxB, {
         type: 'bar',
-        data: { labels: barLabels, datasets: [{data: barData, backgroundColor: barColors, borderRadius:4}] },
+        data: { labels: keys.map(m => new Date(m + '-01').toLocaleString('ru', {month:'short'})), datasets: [{data: keys.map(k=>h[k]), backgroundColor: keys.map(k=>k===currentMonth?'#58a6ff':'#21262d'), borderRadius:4}] },
         options: {responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}, y:{display:false, ticks:{beginAtZero:true}}}}
     });
 }
