@@ -148,9 +148,9 @@
 
   /* Actions */
   .client-wrap{display:flex;align-items:center;gap:8px; width: 100%;}
-  .project-name-wrap { 
-    display: flex; align-items: center; gap: 8px; 
-    overflow: hidden; 
+  .project-name-wrap {
+    display: flex; align-items: center; gap: 8px;
+    overflow: hidden;
   }
   .project-name-wrap span[contenteditable] { 
     flex-grow: 1; 
@@ -161,7 +161,9 @@
   }
   
   .dup-icon { opacity: 0; transition: opacity 0.2s; cursor: pointer; color: var(--muted); width: 16px; height: 16px; flex-shrink: 0;}
-  tr:hover .dup-icon { opacity: 1; } 
+  tr:hover .dup-icon { opacity: 1; }
+
+  .client-name.has-link { color: var(--link-blue); font-weight: 700; }
   
   .action-btns{display:flex;gap:6px;align-items:center;}
   .action-btn-base { padding: 6px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; user-select: none; min-width: 32px; text-align: center; }
@@ -183,6 +185,9 @@
       flex-shrink: 0;
   }
   .link-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .link-btn-active { color: var(--accent); border-color: var(--border); background: #1a1f26; border-radius: 6px; }
+  .link-btn-go { border: 1px solid var(--border); border-radius: 6px; background: #1a1f26; color: var(--text); }
+  .link-btn-go:hover { border-color: var(--accent); color: var(--accent); }
   
   .del-btn{color:var(--red);cursor:pointer;font-size:18px;opacity:0.5; margin-left: 8px; flex-shrink: 0;}
   .del-btn:hover{opacity:1;}
@@ -206,21 +211,29 @@
   .pace-hurry { background: var(--red); color: white; }
   
   /* Stats Dashboard fixes */
-  .stats-full { margin-top: 50px; }
+  .stats-full { margin-top: 50px; display: flex; flex-direction: column; gap: 20px; }
   .stats-two-columns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
   .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-  .card-head { font-size: 18px; font-weight: 600; margin-bottom: 20px; }
-  .goal-wrap { margin-bottom: 20px; }
-  .goal-info { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); margin-bottom: 5px; }
-  .progress-bg { height: 8px; background: #21262d; border-radius: 4px; overflow: hidden; }
-  .progress-fill { height: 100%; width: 0; background: var(--green); transition: width 0.5s; }
-  .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; }
-  .stat-box { padding: 10px 0; }
-  .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; font-weight: 600; }
-  .stat-val { font-size: 32px; font-weight: 800; }
+  .card-head { font-size: 18px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+  .finance-title { font-size: 20px; font-weight: 800; color: #fff; }
+  .finance-sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .goal-wrap { margin-bottom: 18px; }
+  .goal-info { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
+  .progress-bg { height: 8px; background: linear-gradient(90deg, #1c2128, #1a1f26); border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
+  .progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, #2ea043, #3fb950); transition: width 0.5s; box-shadow: 0 0 12px rgba(46,160,67,0.3); }
+  .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+  .stat-box { padding: 14px; border: 1px solid var(--border); border-radius: 10px; background: #0f141b; }
+  .stat-label-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+  .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+  .stat-pill { padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; background: rgba(88,166,255,0.12); color: var(--accent); border: 1px solid rgba(88,166,255,0.3); }
+  .stat-val { font-size: 30px; font-weight: 800; }
+  .stat-helper { font-size: 12px; color: var(--muted); margin-top: 4px; }
   .text-green { color: var(--green); }
   .text-gold { color: var(--gold); }
   .mono { font-family: monospace; }
+  .record-banner { background: #0f141b; border: 1px solid var(--border); padding: 18px 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: inset 0 0 0 1px rgba(250, 204, 21, 0.05); }
+  .record-title { color: var(--muted); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .record-value { font-size: 26px; font-weight: 900; color: var(--gold); }
   /* Bulk Toolbar */
   .bulk-toolbar {
       position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); 
@@ -264,6 +277,8 @@
   .inp-group input, .inp-group select {background-color: #21262d;border:1px solid var(--border);padding:10px;width:100%;color:var(--text);border-radius:8px; outline: none; box-sizing: border-box;}
   .row-inputs{display:flex;gap:15px;margin-bottom:15px;}
   .row-inputs > div {flex: 1;}
+  .deadline-presets { display: flex; gap: 10px; align-items: flex-end; }
+  .deadline-presets select { min-width: 130px; }
   
   .close-modal-x { 
       position: absolute; 
@@ -528,52 +543,75 @@
   </div> 
   
   <div class="dashboard">
-    <div class="stats-full stats-two-columns"> 
-        <div class="card">
-            <div class="card-head">Финансы: <span class="text-green" id="dash-month-name">...</span></div>
-            <div class="goal-wrap">
-                <div class="goal-info">
-                    <span>Прогресс (Чистыми)</span>
-                    <span id="goal-text">0 / 0 ₽</span>
-                </div>
-                <div class="progress-bg"><div class="progress-fill" id="p-bar"></div></div>
-            </div>
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <div class="stat-label-row">
-                        <div class="stat-label">Факт (Чистыми)</div>
-                        <div class="stat-label" id="val-fact-prc">0%</div>
-                    </div>
-                    <div class="stat-val text-green mono" id="val-fact">0 ₽</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label-row">
-                        <div class="stat-label">Маржа</div>
-                        <div class="stat-label" id="val-margin-prc">0%</div>
-                    </div>
-                    <div class="stat-val-margin mono" id="val-margin">0 ₽</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">План (Остаток)</div>
-                    <div class="stat-val text-gold mono" id="val-plan">0 ₽</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">Прогноз итога</div>
-                    <div class="stat-val mono" id="val-total" style="color:var(--accent)">0 ₽</div>
-                </div>
-            </div>
-            <div style="position:relative;height:250px;width:100%"><canvas id="lineChart"></canvas></div>
-        </div>
+    <div class="stats-full">
+      <div class="stats-two-columns">
+          <div class="card">
+              <div class="card-head">
+                  <div>
+                      <div class="finance-title">Финансы: <span class="text-green" id="dash-month-name">...</span></div>
+                      <div class="finance-sub">Прогресс цели (Общий Факт Чистыми)</div>
+                  </div>
+                  <div class="stat-pill" id="goal-pill">Цель: 0 ₽</div>
+              </div>
+              <div class="goal-wrap">
+                  <div class="goal-info">
+                      <span>Прогресс цели</span>
+                      <span id="goal-text">0 / 0 ₽</span>
+                  </div>
+                  <div class="progress-bg"><div class="progress-fill" id="p-bar"></div></div>
+              </div>
+              <div class="stats-grid">
+                  <div class="stat-box">
+                      <div class="stat-label-row">
+                          <div class="stat-label">Факт</div>
+                          <div class="stat-pill">Чистыми</div>
+                      </div>
+                      <div class="stat-val text-green mono" id="val-fact">0 ₽</div>
+                      <div class="stat-helper" id="val-fact-prc">0%</div>
+                  </div>
+                  <div class="stat-box">
+                      <div class="stat-label-row">
+                          <div class="stat-label">Получено</div>
+                          <div class="stat-pill">Чистыми, Active</div>
+                      </div>
+                      <div class="stat-val text-green mono" id="val-active-fact">0 ₽</div>
+                      <div class="stat-helper">Оплачено в текущих проектах</div>
+                  </div>
+                  <div class="stat-box">
+                      <div class="stat-label-row">
+                          <div class="stat-label">План</div>
+                          <div class="stat-pill">Остаток</div>
+                      </div>
+                      <div class="stat-val text-gold mono" id="val-plan">0 ₽</div>
+                      <div class="stat-helper">Осталось получить</div>
+                  </div>
+                  <div class="stat-box">
+                      <div class="stat-label-row">
+                          <div class="stat-label">Прогноз итога</div>
+                          <div class="stat-pill">Факт + План</div>
+                      </div>
+                      <div class="stat-val mono" id="val-total" style="color:var(--accent)">0 ₽</div>
+                      <div class="stat-helper">Маржа: <span id="val-margin">0 ₽</span> (<span id="val-margin-prc">0%</span>)</div>
+                  </div>
+              </div>
+              <div style="position:relative;height:250px;width:100%"><canvas id="lineChart"></canvas></div>
+          </div>
 
-        <div class="card">
-            <div class="card-head">Эффективность</div>
-            <div style="position:relative;height:200px;width:100%;display:flex;justify-content:center;margin-bottom:20px;"><canvas id="pieChart"></canvas></div>
-            <div style="border-top:1px solid var(--border); padding-top:20px;">
-                <div style="font-size:14px;color:var(--muted);margin-bottom:15px;font-weight:600">По месяцам</div>
-                <div style="height:150px;width:100%"><canvas id="barChart"></canvas></div>
-            </div>
-        </div>
-    </div> 
+          <div class="card">
+              <div class="card-head">Эффективность</div>
+              <div style="position:relative;height:200px;width:100%;display:flex;justify-content:center;margin-bottom:20px;"><canvas id="pieChart"></canvas></div>
+              <div style="border-top:1px solid var(--border); padding-top:20px;">
+                  <div style="font-size:14px;color:var(--muted);margin-bottom:15px;font-weight:600">По месяцам</div>
+                  <div style="height:150px;width:100%"><canvas id="barChart"></canvas></div>
+              </div>
+          </div>
+      </div>
+
+      <div class="record-banner">
+          <div class="record-title">🏆 Рекордный заработок за месяц</div>
+          <div class="record-value mono" id="record-amount">0 ₽</div>
+      </div>
+    </div>
   </div>
   
   <footer style="text-align:center; margin-top:50px; padding-top:20px; border-top:1px solid var(--border); color:var(--muted); font-size: 14px;">
@@ -629,7 +667,7 @@
             </div>
         </div>
         
-        <div class="row-inputs">
+        <div class="row-inputs deadline-presets">
             <div class="inp-group" style="flex:1">
                 <label>Старт</label>
                  <div class="date-input-wrap" id="add-proj-start-display" onclick="openDateInModal('add-proj-start-val')">
@@ -645,6 +683,18 @@
                     <span class="date-text-display">Сегодня</span>
                  </div>
                  <input type="hidden" id="add-proj-dl-val" value="">
+            </div>
+            <div class="inp-group" style="width:160px">
+                <label>Быстрый дедлайн</label>
+                <select id="add-proj-dl-days" onchange="applyDeadlinePreset()">
+                    <option value="">—</option>
+                    <option value="1">1 день</option>
+                    <option value="2">2 дня</option>
+                    <option value="3">3 дня</option>
+                    <option value="5">5 дней</option>
+                    <option value="7">7 дней</option>
+                    <option value="14">14 дней</option>
+                </select>
             </div>
         </div>
 
@@ -739,6 +789,17 @@ let queue = { type: null, idx: null, field: null, targetId: null };
 
 // --- BULK ACTIONS ---
 let selectedRows = {}; // {active: Set(), waiting: Set(), ...}
+
+function renderLinkControls(item, idx, type) {
+    const hasLink = !!item.link;
+    const editBtn = `<button class="link-btn ${hasLink ? 'link-btn-active' : ''}" onclick="openLink('${type}',${idx})" title="${hasLink ? 'Изменить ссылку' : 'Добавить ссылку'}">🔗</button>`;
+    const goBtn = hasLink ? `<button class="link-btn link-btn-go" onclick="openProjectLink(${idx}, '${type}')" title="Открыть ссылку">↗</button>` : '';
+    return editBtn + goBtn;
+}
+
+function getClientNameClass(item) {
+    return `client-name${item.link ? ' has-link' : ''}`;
+}
 
 function toggleSelect(type, idx, checkbox) {
     if (!selectedRows[type]) selectedRows[type] = new Set();
@@ -1041,8 +1102,7 @@ function renderActive(){
         const tr = document.createElement('tr');
         tr.dataset.index = i;
         
-        const linkIcon = item.link ? `<button class="link-btn" onclick="openProjectLink(${i}, 'active')" title="Перейти по ссылке">🔗</button>` : 
-                                      `<button class="link-btn" onclick="openLink('active',${i})" title="Добавить ссылку">🔗</button>`;
+        const linkIcon = renderLinkControls(item, i, 'active');
         
         tr.innerHTML = `
             <td class="select-col">
@@ -1053,7 +1113,7 @@ function renderActive(){
                 </div>
             </td>
             <td><div class="client-wrap">
-                <span contenteditable onblur="updVal('active',${i},'c',this.innerText)" class="client-name">${item.c}</span>
+                <span contenteditable onblur="updVal('active',${i},'c',this.innerText)" class="${getClientNameClass(item)}">${item.c}</span>
                 ${linkIcon}
             </div></td>
             <td class="project-name-wrap">
@@ -1138,8 +1198,7 @@ function renderSimple(type){
         const tr = document.createElement('tr');
         tr.dataset.index = i;
         
-        const linkIcon = item.link ? `<button class=\"link-btn\" onclick=\"openProjectLink(${i}, '${type}')\" title=\"Перейти по ссылке\">🔗</button>` : 
-                                      `<button class=\"link-btn\" onclick=\"openLink('${type}',${i})\" title=\"Добавить ссылку\">🔗</button>`;
+        const linkIcon = renderLinkControls(item, i, type);
                                       
         const rem = getTimeRemaining(item.dl);
         
@@ -1152,7 +1211,7 @@ function renderSimple(type){
                 </div>
             </td>
             <td><div class="client-wrap">
-                <span contenteditable onblur="updVal('${type}',${i},'c',this.innerText)" class="client-name">${item.c}</span>
+                <span contenteditable onblur="updVal('${type}',${i},'c',this.innerText)" class="${getClientNameClass(item)}">${item.c}</span>
                 ${linkIcon}
             </div></td>
             <td class="project-name-wrap">
@@ -1184,8 +1243,7 @@ function renderPotential(){
         const tr = document.createElement('tr');
         tr.dataset.index = i;
         
-        const linkIcon = item.link ? `<button class="link-btn" onclick="openProjectLink(${i}, 'potential')" title="Перейти по ссылке">🔗</button>` : 
-                                      `<button class="link-btn" onclick="openLink('potential',${i})" title="Добавить ссылку">🔗</button>`;
+        const linkIcon = renderLinkControls(item, i, 'potential');
                                       
         tr.innerHTML = `
             <td class="select-col">
@@ -1196,7 +1254,7 @@ function renderPotential(){
                 </div>
             </td>
             <td><div class="client-wrap">
-                <span contenteditable onblur="updVal('potential',${i},'c',this.innerText)" class="client-name">${item.c}</span>
+                <span contenteditable onblur="updVal('potential',${i},'c',this.innerText)" class="${getClientNameClass(item)}">${item.c}</span>
                 ${linkIcon}
             </div></td>
             <td class="project-name-wrap">
@@ -1230,8 +1288,7 @@ function renderArchive(){
         const tr = document.createElement('tr');
         tr.dataset.index = realIdx;
         
-        const linkIcon = item.link ? `<button class="link-btn" onclick="openProjectLink(${realIdx}, 'archive')" title="Перейти по ссылке">🔗</button>` : 
-                                      `<button class="link-btn" onclick="openLink('archive',${realIdx})" title="Добавить ссылку">🔗</button>`;
+        const linkIcon = renderLinkControls(item, realIdx, 'archive');
                                       
         tr.innerHTML = `
             <td class="select-col">
@@ -1242,7 +1299,7 @@ function renderArchive(){
                 </div>
             </td>
             <td><div class="client-wrap">
-                <span contenteditable onblur="updVal('archive',${realIdx},'c',this.innerText)" class="client-name">${item.c}</span>
+                <span contenteditable onblur="updVal('archive',${realIdx},'c',this.innerText)" class="${getClientNameClass(item)}">${item.c}</span>
                 ${linkIcon}
             </div></td>
             <td class="project-name-wrap">
@@ -1376,6 +1433,7 @@ function openAddModal(){
     document.getElementById('add-proj-tax').value = '0';
     document.getElementById('add-proj-start-val').value = today;
     document.getElementById('add-proj-dl-val').value = today;
+    document.getElementById('add-proj-dl-days').value = '';
     document.getElementById('add-proj-start-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
     document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
     document.getElementById('addProjectModal').style.display = 'flex';
@@ -1402,6 +1460,19 @@ function saveNewProject(){
     document.getElementById('addProjectModal').style.display = 'none';
     sortData('active', 'dl', 'date', true);
     save(); switchTab(type);
+}
+
+function applyDeadlinePreset() {
+    const days = parseInt(document.getElementById('add-proj-dl-days').value, 10);
+    if (!days) return;
+    const startRaw = document.getElementById('add-proj-start-val').value || today;
+    const baseDate = new Date(startRaw);
+    if (isNaN(baseDate)) return;
+    const dlDate = new Date(baseDate);
+    dlDate.setDate(dlDate.getDate() + days);
+    const iso = dlDate.toISOString().slice(0, 10);
+    document.getElementById('add-proj-dl-val').value = iso;
+    document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(iso);
 }
 
 function openDate(type, idx, field){
@@ -1445,9 +1516,13 @@ function saveDate(){
         document.getElementById(queue.targetId).value = result;
         const displayId = queue.targetId.replace('-val', '-display');
         document.getElementById(displayId).querySelector('.date-text-display').innerHTML = formatDateDisplay(result);
+        if (queue.targetId === 'add-proj-start-val') {
+            const presetDays = parseInt(document.getElementById('add-proj-dl-days').value, 10);
+            if (presetDays) applyDeadlinePreset();
+        }
     } else {
         DATA[queue.type][queue.idx][queue.field] = result;
-        sortData('active', 'dl', 'date', true); 
+        sortData('active', 'dl', 'date', true);
     }
     
     closeDateModal(); save(); upd();
@@ -1558,17 +1633,21 @@ function calcStats(){
     const totalFact = fact + activeFact;
     const forecast = totalFact + plan;
     
-    const totalMargin = totalNet + archiveThisMonth.reduce((sum, i) => sum + calcNet(i), 0);
-    const totalGrossCombined = totalGross + archiveThisMonth.reduce((sum, i) => sum + (+i.p || 0), 0);
-    
+    const totalMargin = totalNet;
+    const totalGrossCombined = totalGross;
+    const goalProgress = goal ? Math.round((totalFact/goal)*100) : 0;
+
     document.getElementById('val-fact').innerText = formatCurrency(totalFact);
-    document.getElementById('val-fact-prc').innerText = `${Math.round((totalFact/goal)*100)}%`;
+    document.getElementById('val-fact-prc').innerText = `${goalProgress}% от цели`;
+    document.getElementById('val-active-fact').innerText = formatCurrency(activeFact);
     document.getElementById('val-margin').innerText = formatCurrency(totalMargin);
     document.getElementById('val-margin-prc').innerText = `${totalGrossCombined > 0 ? Math.round((totalMargin/totalGrossCombined)*100) : 0}%`;
     document.getElementById('val-plan').innerText = formatCurrency(plan);
     document.getElementById('val-total').innerText = formatCurrency(forecast);
     document.getElementById('goal-text').innerText = `${formatCurrency(totalFact)} / ${formatCurrency(goal)}`;
-    document.getElementById('p-bar').style.width = Math.min(100, (totalFact/goal)*100) + '%';
+    document.getElementById('goal-pill').innerText = `Цель: ${formatCurrency(goal)}`;
+    document.getElementById('record-amount').innerText = formatCurrency(DATA.settings.record || 0);
+    document.getElementById('p-bar').style.width = goal > 0 ? Math.min(100, (totalFact/goal)*100) + '%' : '0%';
     document.getElementById('dash-month-name').innerText = document.getElementById('monthSelect').options[document.getElementById('monthSelect').selectedIndex]?.text || '';
     updateCharts(totalFact, plan);
 }
