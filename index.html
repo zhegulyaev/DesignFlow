@@ -152,6 +152,10 @@
       margin-top: 2px;
   }
 
+  .expense-cell { gap: 6px; }
+  .expense-mode { background: #1a1f26; color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 5px 6px; font-size: 12px; cursor: pointer; min-width: 58px; }
+  .expense-helper { color: var(--muted); font-size: 12px; margin-top: 2px; text-align: right; }
+
   .paid-amount { font-size: 12px; color: var(--muted); margin-top: 4px; text-align: center; }
 
 
@@ -165,6 +169,12 @@
   .client-name { max-width: 210px; font-weight:700; color:var(--text); }
   .project-name-wrap { display: flex; align-items: center; gap: 8px; overflow: visible; }
   .project-name { max-width: 320px; font-weight:600; }
+
+  .sort-icon { color: var(--muted); font-size: 11px; margin-left: 6px; opacity: 0.5; }
+  th.sorted .sort-icon { opacity: 1; color: var(--text); }
+  th.sorted.asc .sort-icon::after { content: '↑'; }
+  th.sorted.desc .sort-icon::after { content: '↓'; }
+  th .sort-icon::after { content: '↕'; }
   
   .dup-icon { opacity: 0; transition: opacity 0.2s; cursor: pointer; color: var(--muted); width: 16px; height: 16px; flex-shrink: 0;}
   tr:hover .dup-icon { opacity: 1; }
@@ -224,8 +234,8 @@
   .finance-sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
   .goal-wrap { margin-bottom: 18px; }
   .goal-info { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
-  .progress-bg { height: 8px; background: linear-gradient(90deg, #1c2128, #1a1f26); border-radius: 999px; overflow: hidden; border: 1px solid var(--border); margin-top: 8px; }
-  .progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, #2ea043, #3fb950); transition: width 0.5s; box-shadow: 0 0 12px rgba(46,160,67,0.3); }
+  .progress-bg { height: 8px; background: linear-gradient(90deg, #1c2128, #1a1f26); border-radius: 999px; overflow: hidden; border: 1px solid var(--border); margin-top: 8px; width: 100%; }
+  .progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, #2ea043, #3fb950); transition: width 0.5s; box-shadow: 0 0 12px rgba(46,160,67,0.3); border-radius: 999px; }
   .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
   .stat-box { padding: 14px; border: 1px solid var(--border); border-radius: 10px; background: #0f141b; }
   .stat-label-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
@@ -240,8 +250,8 @@
   .record-texts { flex:1; min-width: 0; }
   .record-title { color: var(--muted); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
   .record-motiv { color: #f0f6fc; font-weight: 700; margin-top: 6px; font-size: 15px; }
-  .record-progress-bg { margin-top: 10px; height: 8px; background: linear-gradient(90deg, #1c2128, #11151c); border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
-  .record-progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, #facc15, #f9a825); box-shadow: 0 0 12px rgba(250,204,21,0.4); transition: width .4s ease; }
+  .record-progress-bg { margin-top: 10px; height: 8px; background: linear-gradient(90deg, #1c2128, #11151c); border-radius: 999px; overflow: hidden; border: 1px solid var(--border); width: 100%; }
+  .record-progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, #facc15, #f9a825); box-shadow: 0 0 12px rgba(250,204,21,0.4); transition: width .4s ease; border-radius: 999px; }
   .record-value { font-size: 26px; font-weight: 900; color: var(--gold); text-align: right; }
   .record-remaining { color: var(--muted); font-weight: 700; font-size: 13px; text-align: right; margin-top: 6px; }
   /* Bulk Toolbar */
@@ -287,8 +297,9 @@
   .inp-group input, .inp-group select {background-color: #21262d;border:1px solid var(--border);padding:10px;width:100%;color:var(--text);border-radius:8px; outline: none; box-sizing: border-box;}
   .row-inputs{display:flex;gap:15px;margin-bottom:15px;}
   .row-inputs > div {flex: 1;}
-  .deadline-presets { display: flex; gap: 10px; align-items: flex-end; }
-  .deadline-presets select { min-width: 130px; }
+  .deadline-presets { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .deadline-presets select { min-width: 140px; }
+  .deadline-presets input { min-width: 90px; }
   
   .close-modal-x { 
       position: absolute; 
@@ -443,14 +454,14 @@
           <thead>
             <tr>
               <th class="select-col">№</th>
-              <th width="15%" onclick="sortData('active', 'c', 'string')">Клиент</th> 
-              <th width="20%" onclick="sortData('active', 'n', 'string')">Проект</th> 
-              <th width="8%" onclick="sortData('active', 'start', 'date')">Старт</th> 
-              <th width="8%" onclick="sortData('active', 'dl', 'date')">Дедлайн</th> 
-              <th width="6%" onclick="sortData('active', 'rem', 'number')">Осталось</th>
-              <th width="4%" onclick="sortData('active', 'taxPrc', 'number')">Налог %</th>
-              <th width="7%" onclick="sortData('active', 'contractor', 'number')" style="text-align:right;">Расходы</th>
-              <th width="8%" onclick="sortData('active', 'p', 'number')" style="text-align:right;">Сумма</th>
+              <th width="15%" data-type="active" data-key="c" onclick="sortData('active', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
+              <th width="20%" data-type="active" data-key="n" onclick="sortData('active', 'n', 'string')">Проект <span class="sort-icon"></span></th>
+              <th width="8%" data-type="active" data-key="start" onclick="sortData('active', 'start', 'date')">Старт <span class="sort-icon"></span></th>
+              <th width="8%" data-type="active" data-key="dl" onclick="sortData('active', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
+              <th width="6%" data-type="active" data-key="rem" onclick="sortData('active', 'rem', 'number')">Осталось <span class="sort-icon"></span></th>
+              <th width="4%" data-type="active" data-key="taxPrc" onclick="sortData('active', 'taxPrc', 'number')">Налог % <span class="sort-icon"></span></th>
+              <th width="7%" data-type="active" data-key="contractor" onclick="sortData('active', 'contractor', 'number')" style="text-align:right;">Расходы <span class="sort-icon"></span></th>
+              <th width="8%" data-type="active" data-key="p" onclick="sortData('active', 'p', 'number')" style="text-align:right;">Сумма <span class="sort-icon"></span></th>
               <th width="8%" style="text-align:right;">Чистыми</th>
               <th width="6%">Оплачено</th>
               <th width="4%"></th>
@@ -468,11 +479,11 @@
             <thead>
               <tr>
                 <th class="select-col">№</th>
-                <th width="20%" onclick="sortData('waiting', 'c', 'string')">Клиент</th> 
-                <th width="30%" onclick="sortData('waiting', 'n', 'string')">Проект</th> 
-                <th width="15%" onclick="sortData('waiting', 'dl', 'date')">Дедлайн</th>
-                <th width="15%" onclick="sortData('waiting', 'p', 'number')">Сумма</th>
-                <th width="15%"></th>
+              <th width="20%" data-type="waiting" data-key="c" onclick="sortData('waiting', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
+              <th width="30%" data-type="waiting" data-key="n" onclick="sortData('waiting', 'n', 'string')">Проект <span class="sort-icon"></span></th>
+              <th width="15%" data-type="waiting" data-key="dl" onclick="sortData('waiting', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
+              <th width="15%" data-type="waiting" data-key="p" onclick="sortData('waiting', 'p', 'number')">Сумма <span class="sort-icon"></span></th>
+              <th width="15%"></th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -487,10 +498,10 @@
             <thead>
               <tr>
                 <th class="select-col">№</th>
-                <th width="25%" onclick="sortData('potential', 'c', 'string')">Клиент</th> 
-                <th width="40%" onclick="sortData('potential', 'n', 'string')">Проект</th> 
-                <th width="15%" onclick="sortData('potential', 'p', 'number')">Сумма</th>
-                <th width="20%"></th>
+              <th width="25%" data-type="potential" data-key="c" onclick="sortData('potential', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
+              <th width="40%" data-type="potential" data-key="n" onclick="sortData('potential', 'n', 'string')">Проект <span class="sort-icon"></span></th>
+              <th width="15%" data-type="potential" data-key="p" onclick="sortData('potential', 'p', 'number')">Сумма <span class="sort-icon"></span></th>
+              <th width="20%"></th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -505,10 +516,10 @@
           <thead>
             <tr>
               <th class="select-col">№</th>
-              <th width="20%" onclick="sortData('paused', 'c', 'string')">Клиент</th> 
-              <th width="30%" onclick="sortData('paused', 'n', 'string')">Проект</th> 
-              <th width="15%" onclick="sortData('paused', 'dl', 'date')">Дедлайн</th>
-              <th width="15%" onclick="sortData('paused', 'p', 'number')">Сумма</th>
+              <th width="20%" data-type="paused" data-key="c" onclick="sortData('paused', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
+              <th width="30%" data-type="paused" data-key="n" onclick="sortData('paused', 'n', 'string')">Проект <span class="sort-icon"></span></th>
+              <th width="15%" data-type="paused" data-key="dl" onclick="sortData('paused', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
+              <th width="15%" data-type="paused" data-key="p" onclick="sortData('paused', 'p', 'number')">Сумма <span class="sort-icon"></span></th>
               <th width="15%"></th>
             </tr>
           </thead>
@@ -524,11 +535,11 @@
           <thead>
             <tr>
               <th class="select-col">№</th>
-              <th width="15%" onclick="sortData('archive', 'c', 'string')">Клиент</th> 
-              <th width="25%" onclick="sortData('archive', 'n', 'string')">Проект</th> 
-              <th width="15%" onclick="sortData('archive', 'date', 'date')">Дата сдачи</th>
-              <th width="10%" onclick="sortData('archive', 'p', 'number')">Сумма</th>
-              <th width="10%" onclick="sortData('archive', 'contractor', 'number')">Расходы</th>
+              <th width="15%" data-type="archive" data-key="c" onclick="sortData('archive', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
+              <th width="25%" data-type="archive" data-key="n" onclick="sortData('archive', 'n', 'string')">Проект <span class="sort-icon"></span></th>
+              <th width="15%" data-type="archive" data-key="date" onclick="sortData('archive', 'date', 'date')">Дата сдачи <span class="sort-icon"></span></th>
+              <th width="10%" data-type="archive" data-key="p" onclick="sortData('archive', 'p', 'number')">Сумма <span class="sort-icon"></span></th>
+              <th width="10%" data-type="archive" data-key="contractor" onclick="sortData('archive', 'contractor', 'number')">Расходы <span class="sort-icon"></span></th>
               <th width="10%">Чистыми</th>
               <th width="10%"></th>
             </tr>
@@ -595,6 +606,14 @@
                       </div>
                       <div class="stat-val text-green mono" id="val-active-fact">0 ₽</div>
                       <div class="stat-helper">Оплачено в текущих проектах</div>
+                  </div>
+                  <div class="stat-box">
+                      <div class="stat-label-row">
+                          <div class="stat-label">ОПЛАЧЕНО</div>
+                          <div class="stat-pill">Всего, ₽</div>
+                      </div>
+                      <div class="stat-val mono" id="val-paid-gross" style="color:var(--accent)">0 ₽</div>
+                      <div class="stat-helper">Полученные платежи (грязными)</div>
                   </div>
                   <div class="stat-box">
                       <div class="stat-label-row">
@@ -672,6 +691,7 @@
         <option value="active">В работу</option>
         <option value="waiting">Ожидает</option>
         <option value="paused">На паузе</option>
+        <option value="potential">Потенциал</option>
         <option value="archive">Выполнено (Архив)</option>
     </select>
     
@@ -696,8 +716,14 @@
                 <input type="number" id="add-proj-price" placeholder="50000">
             </div>
              <div class="inp-group" style="flex:1">
-                <label>Расходы (₽)</label>
-                <input type="number" id="add-proj-contractor" placeholder="0">
+                <label>Расходы</label>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <input type="number" id="add-proj-contractor" placeholder="0" style="flex:1">
+                    <select id="add-proj-contractor-mode" style="width:90px">
+                        <option value="amount">₽</option>
+                        <option value="percent">%</option>
+                    </select>
+                </div>
             </div>
              <div class="inp-group" style="width:80px">
                 <label>Налог</label>
@@ -731,7 +757,7 @@
                 <label>Шаблон срока</label>
                 <div class="deadline-presets">
                     <select id="add-proj-dl-days" onchange="applyDeadlinePreset()">
-                        <option value="">Выберите дни</option>
+                        <option value="">Не выбрано</option>
                         <option value="1">1 день</option>
                         <option value="2">2 дня</option>
                         <option value="3">3 дня</option>
@@ -768,7 +794,7 @@
         </div>
         <label class="checkbox-wrap" style="margin-top:-5px;">
             <input type="checkbox" id="link-is-telegram">
-            Это ссылка на Telegram
+            Открывается в Telegram (чат/канал)
         </label>
         <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" id="saveLinkBtn">Сохранить</button>
     </div>
@@ -822,11 +848,19 @@
 </div>
 
 <script>
-const K = 'grok_design_v5'; 
+const K = 'grok_design_v5';
 const now = new Date();
 const today = now.toISOString().slice(0, 10);
-let currentMonth = today.slice(0,7); 
+let currentMonth = today.slice(0,7);
 let currentTab = 'active';
+const TAB_DESCRIPTIONS = {
+    active: "Проекты в работе. Следите за дедлайнами и фиксируйте предоплату.",
+    waiting: "Ожидают реакции клиента или материалов.",
+    potential: "Лиды и переговоры. Ещё не начаты.",
+    paused: "Замороженные проекты.",
+    archive: "Успешно завершенные заказы.",
+    trash: "Удаленные объекты. Хранятся 7 дней."
+};
 
 let DATA = {
     settings: { record: 0 }, 
@@ -836,6 +870,7 @@ let DATA = {
 
 let SORT = { active: 'dl', archive: 'date', potential: 'p', waiting: 'dl', paused: 'dl' };
 let queue = { type: null, idx: null, field: null, targetId: null };
+let previousDeadlineValue = '';
 let toastTimeout = null;
 
 function showToast(message, actionText = '', actionHandler = null, duration = 3500) {
@@ -1076,6 +1111,7 @@ function init(){
                  DATA[type].forEach(i => {
                     if(i.contractor === undefined) i.contractor = 0;
                     if(i.taxPrc === undefined) i.taxPrc = 0;
+                    if(!i.contractorMode) i.contractorMode = 'amount';
                  });
             });
         } catch(e) { console.error("Data load error", e); }
@@ -1083,12 +1119,16 @@ function init(){
     
     cleanupTrash();
     renderMonthSelect();
-    setupModalsBackgroundCheck(); 
+    setupModalsBackgroundCheck();
     document.getElementById('saveLinkBtn').onclick = saveLink;
     document.getElementById('add-proj-start-val').value = today;
     document.getElementById('add-proj-dl-val').value = today;
     sortData('active', 'dl', 'date', true);
-    upd(); 
+    ['active','waiting','potential','paused','archive'].forEach(t => {
+        DATA[t].sortDirection = DATA[t].sortDirection || 1;
+        updateSortIndicators(t);
+    });
+    upd();
 }
 
 function save(){ localStorage.setItem(K, JSON.stringify(DATA)); }
@@ -1116,9 +1156,16 @@ function formatDateDisplay(str) {
     return d;
 }
 
+function calcContractorAmount(item) {
+    const gross = +item.p || 0;
+    const mode = item.contractorMode || 'amount';
+    const raw = +item.contractor || 0;
+    return mode === 'percent' ? gross * (raw / 100) : raw;
+}
+
 function calcNet(item){
     const gross = +item.p || 0;
-    const contr = +item.contractor || 0;
+    const contr = calcContractorAmount(item);
     const tax = +item.taxPrc || 0;
     const taxAmt = gross * (tax / 100);
     return Math.round(gross - taxAmt - contr);
@@ -1149,19 +1196,45 @@ function switchTab(t){
         if(cb) cb.checked = false;
         if(selectedRows[k]) selectedRows[k].clear();
     });
-    
+
     const desc = document.getElementById('tab-description');
-    const descs = {
-        active: "Проекты в работе. Следите за дедлайнами и фиксируйте предоплату.",
-        waiting: "Ожидают реакции клиента или материалов.",
-        potential: "Лиды и переговоры. Ещё не начаты.",
-        paused: "Замороженные проекты.",
-        archive: "Успешно завершенные заказы.",
-        trash: "Удаленные объекты. Хранятся 7 дней."
-    };
-    desc.textContent = descs[t];
+    desc.innerHTML = getTabSummary(t, TAB_DESCRIPTIONS[t]);
+    const dashboard = document.querySelector('.dashboard');
+    if (dashboard) dashboard.style.display = t === 'trash' ? 'none' : 'block';
+    updateSortIndicators(t);
     updateBulkToolbar(t);
     upd();
+}
+
+function getTabSummary(type, baseText) {
+    const format = (val) => formatCurrency(val).replace(/ /g, '&nbsp;');
+    if (type === 'active') {
+        const gross = DATA.active.reduce((s, i) => s + (+i.p || 0), 0);
+        const paid = DATA.active.reduce((s, i) => s + ((+i.p || 0) * ((+i.paid || 0) / 100)), 0);
+        return `${baseText} · ${DATA.active.length} проектов · Сумма ${format(gross)} · Оплачено ${format(paid)}`;
+    }
+    if (type === 'waiting') {
+        const gross = DATA.waiting.reduce((s, i) => s + (+i.p || 0), 0);
+        return `${baseText} · ${DATA.waiting.length} проектов · Сумма ${format(gross)}`;
+    }
+    if (type === 'potential') {
+        const gross = DATA.potential.reduce((s, i) => s + (+i.p || 0), 0);
+        return `${baseText} · ${DATA.potential.length} лидов · Потенциал ${format(gross)}`;
+    }
+    if (type === 'paused') {
+        const gross = DATA.paused.reduce((s, i) => s + (+i.p || 0), 0);
+        return `${baseText} · ${DATA.paused.length} проектов · Сумма ${format(gross)}`;
+    }
+    if (type === 'archive') {
+        const visibleItems = DATA.archive.filter(i => (i.date||'').startsWith(currentMonth));
+        const gross = visibleItems.reduce((s, i) => s + (+i.p || 0), 0);
+        const net = visibleItems.reduce((s, i) => s + calcNet(i), 0);
+        return `${baseText} · ${visibleItems.length} проектов · ${format(gross)} / ${format(net)} чистыми`;
+    }
+    if (type === 'trash') {
+        return `${baseText} · Статистика скрыта в корзине.`;
+    }
+    return baseText;
 }
 
 function sortData(type, key, dataType, initial = false) {
@@ -1175,7 +1248,7 @@ function sortData(type, key, dataType, initial = false) {
         if (type === 'active' && (key === 'dl' || initial)) {
              const remA = getTimeRemaining(a.dl).days || Infinity;
              const remB = getTimeRemaining(b.dl).days || Infinity;
-             if (remA !== remB) return direction * (remA - remB); 
+             if (remA !== remB) return direction * (remA - remB);
         }
         if (dataType === 'date') return direction * (new Date((va || '9999').replace(' ', 'T')) - new Date((vb || '9999').replace(' ', 'T')));
         if (dataType === 'number') return direction * ((+va || 0) - (+vb || 0));
@@ -1183,8 +1256,20 @@ function sortData(type, key, dataType, initial = false) {
     });
     DATA[type].sortDirection = direction;
     SORT[type] = key;
-    save(); 
+    save();
+    updateSortIndicators(type);
     if(!initial) upd();
+}
+
+function updateSortIndicators(type) {
+    const activeKey = SORT[type];
+    const dir = DATA[type].sortDirection || 1;
+    document.querySelectorAll(`th[data-type="${type}"]`).forEach(th => th.classList.remove('sorted', 'asc', 'desc'));
+    const activeTh = document.querySelector(`th[data-type="${type}"][data-key="${activeKey}"]`);
+    if (activeTh) {
+        activeTh.classList.add('sorted');
+        activeTh.classList.add(dir === 1 ? 'asc' : 'desc');
+    }
 }
 
 function upd(){
@@ -1195,18 +1280,21 @@ function upd(){
     renderArchive();
     renderTrash();
     calcStats();
+    const desc = document.getElementById('tab-description');
+    if (desc) desc.innerHTML = getTabSummary(currentTab, TAB_DESCRIPTIONS[currentTab]);
     updateBulkToolbar(currentTab);
 }
 
 function renderActive(){
     const tbody = document.querySelector('#t-active tbody');
     tbody.innerHTML = '';
-    let totalP = 0, totalPr = 0, totalContr = 0, totalTax = 0;
+    let totalP = 0, totalPr = 0, totalContr = 0, totalTax = 0, totalPaidGross = 0;
     
     DATA.active.forEach((item, i) => {
         item.pr = calcNet(item);
-        totalP += +item.p; totalPr += item.pr;
-        totalContr += +item.contractor || 0;
+        totalP += +item.p || 0; totalPr += item.pr || 0;
+        const contractorAmount = calcContractorAmount(item);
+        totalContr += contractorAmount;
         totalTax += (+item.p || 0) * ((+item.taxPrc || 0) / 100);
 
         const rem = getTimeRemaining(item.dl);
@@ -1218,6 +1306,8 @@ function renderActive(){
 
         const linkIcon = renderLinkControls(item, i, 'active');
         const paidAmount = Math.round((+item.p || 0) * ((+item.paid || 0) / 100));
+        totalPaidGross += paidAmount;
+        const contractorSymbol = item.contractorMode === 'percent' ? '%' : '₽';
 
         tr.innerHTML = `
             <td class="select-col">
@@ -1248,7 +1338,17 @@ function renderActive(){
                 <option value="13" ${+item.taxPrc===13?'selected':''}>13%</option>
             </select></td>
             
-            <td style="text-align:right;"><div class="price-cell-wrap"><input type="number" value="${item.contractor||0}" onblur="updVal('active',${i},'contractor',this.value)"><span class="currency-symbol">₽</span></div></td>
+            <td style="text-align:right;">
+                <div class="price-cell-wrap expense-cell">
+                    <input type="number" value="${item.contractor||0}" onblur="updateContractorValue('active',${i},this.value)">
+                    <span class="currency-symbol">${contractorSymbol}</span>
+                    <select class="expense-mode" onchange="updateContractorMode('active',${i},this.value)">
+                        <option value="amount" ${item.contractorMode!=='percent'?'selected':''}>₽</option>
+                        <option value="percent" ${item.contractorMode==='percent'?'selected':''}>%</option>
+                    </select>
+                </div>
+                <div class="expense-helper">≈ ${formatCurrency(contractorAmount)}</div>
+            </td>
             
             <td style="text-align:right;"><div class="price-cell-wrap"><input type="number" value="${item.p||0}" onblur="updVal('active',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td style="text-align:right;"><div class="net-display-wrap">${formatCurrency(item.pr)}<span class="net-prc-val">(${calcMarginPrc(item)}%)</span></div></td>
@@ -1285,7 +1385,11 @@ function renderActive(){
         </td>
         <td style="text-align:right;">${formatCurrency(totalP)}</td>
         <td style="text-align:right;">${formatCurrency(totalPr)}</td>
-        <td colspan="2"></td>
+        <td style="text-align:center;">
+            <div class="footer-note">Оплачено</div>
+            <div>${formatCurrency(totalPaidGross)}</div>
+        </td>
+        <td></td>
     </tr>`;
 
     const paceBlock = document.getElementById('pace-indicator');
@@ -1321,7 +1425,7 @@ function renderSimple(type){
     tbody.innerHTML = '';
     let tot = 0;
     DATA[type].forEach((item, i) => {
-        tot += +item.p;
+        tot += +item.p || 0;
         const tr = document.createElement('tr');
         tr.dataset.index = i;
 
@@ -1370,7 +1474,7 @@ function renderPotential(){
     tbody.innerHTML = '';
     let tot = 0;
     DATA.potential.forEach((item, i) => {
-        tot += +item.p;
+        tot += +item.p || 0;
         const tr = document.createElement('tr');
         tr.dataset.index = i;
 
@@ -1419,8 +1523,9 @@ function renderArchive(){
     visibleItems.forEach((item, i) => {
         const realIdx = DATA.archive.indexOf(item);
         item.pr = calcNet(item);
-        tP += +item.p; tPr += +item.pr;
-        tContr += +item.contractor || 0;
+        tP += +item.p || 0; tPr += +item.pr || 0;
+        const contractorAmount = calcContractorAmount(item);
+        tContr += contractorAmount;
         tTax += (+item.p || 0) * ((+item.taxPrc || 0) / 100);
         const tr = document.createElement('tr');
         tr.dataset.index = realIdx;
@@ -1430,6 +1535,8 @@ function renderArchive(){
         
         const linkIcon = renderLinkControls(item, realIdx, 'archive');
                                       
+        const contractorSymbol = item.contractorMode === 'percent' ? '%' : '₽';
+
         tr.innerHTML = `
             <td class="select-col">
                 <div class="row-index">${i + 1}</div>
@@ -1448,7 +1555,17 @@ function renderArchive(){
             </td>
             <td class="date-cell"><div class="date-input-wrap" onclick="openDate('archive',${realIdx},'date')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.date)}</span></div></td>
             <td><div class="price-cell-wrap"><input type="number" value="${item.p||0}" onblur="updVal('archive',${realIdx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
-            <td><div class="price-cell-wrap"><input type="number" value="${item.contractor||0}" onblur="updVal('archive',${realIdx},'contractor',this.value)"><span class="currency-symbol">₽</span></div></td>
+            <td>
+                <div class="price-cell-wrap expense-cell">
+                    <input type="number" value="${item.contractor||0}" onblur="updateContractorValue('archive',${realIdx},this.value)">
+                    <span class="currency-symbol">${contractorSymbol}</span>
+                    <select class="expense-mode" onchange="updateContractorMode('archive',${realIdx},this.value)">
+                        <option value="amount" ${item.contractorMode!=='percent'?'selected':''}>₽</option>
+                        <option value="percent" ${item.contractorMode==='percent'?'selected':''}>%</option>
+                    </select>
+                </div>
+                <div class="expense-helper">≈ ${formatCurrency(contractorAmount)}</div>
+            </td>
             <td><div class="net-display-wrap">${formatCurrency(item.pr)}<span class="net-prc-val">(${calcMarginPrc(item)}%)</span></div></td>
             <td><div class="action-btns" style="justify-content:flex-end">
                 <div class="action-btn-base" title="Вернуть" onclick="mv(${realIdx},'archive','active')">⏪</div>
@@ -1516,6 +1633,18 @@ function updVal(type, idx, key, val){
     save(); upd();
 }
 
+function updateContractorValue(type, idx, val) {
+    DATA[type][idx].contractor = +val || 0;
+    sortData('active', 'dl', 'date', true);
+    save(); upd();
+}
+
+function updateContractorMode(type, idx, mode) {
+    DATA[type][idx].contractorMode = mode;
+    sortData('active', 'dl', 'date', true);
+    save(); upd();
+}
+
 function mv(idx, from, to){
     const item = DATA[from][idx];
     DATA[from].splice(idx, 1);
@@ -1574,8 +1703,10 @@ function restoreFromTrash(idx){
 function openAddModal(){
     ['name','client','price','contractor'].forEach(id => document.getElementById(`add-proj-${id}`).value = '');
     document.getElementById('add-proj-tax').value = '0';
+    document.getElementById('add-proj-contractor-mode').value = 'amount';
     document.getElementById('add-proj-start-val').value = today;
     document.getElementById('add-proj-dl-val').value = today;
+    previousDeadlineValue = today;
     document.getElementById('add-proj-dl-days').value = '';
     document.getElementById('add-proj-dl-custom').value = '';
     document.getElementById('add-proj-start-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
@@ -1587,14 +1718,15 @@ function saveNewProject(){
     const client = document.getElementById('add-proj-client').value;
     const price = +document.getElementById('add-proj-price').value || 0;
     const contr = +document.getElementById('add-proj-contractor').value || 0;
+    const contrMode = document.getElementById('add-proj-contractor-mode').value || 'amount';
     const tax = +document.getElementById('add-proj-tax').value || 0;
     const type = document.getElementById('add-proj-type').value;
     const start = document.getElementById('add-proj-start-val').value || today;
     const dl = document.getElementById('add-proj-dl-val').value || today;
     
     const item = {
-        n: name, c: client, p: price, contractor: contr, taxPrc: tax, link: '',
-        start: type==='active'? start : undefined, 
+        n: name, c: client, p: price, contractor: contr, contractorMode: contrMode, taxPrc: tax, link: '',
+        start: type==='active'? start : undefined,
         dl: type==='active' || type==='waiting' || type==='paused' ? dl : undefined, 
         paid: (type==='active'||type==='archive'? (type==='archive'?100:50) : 0),
         date: type==='archive' ? today : undefined
@@ -1609,17 +1741,31 @@ function saveNewProject(){
 function applyDeadlinePreset() {
     const select = document.getElementById('add-proj-dl-days');
     const customInput = document.getElementById('add-proj-dl-custom');
+    const currentDl = document.getElementById('add-proj-dl-val').value || document.getElementById('add-proj-start-val').value || today;
+
+    if (!previousDeadlineValue) {
+        previousDeadlineValue = currentDl;
+    }
 
     if (document.activeElement === customInput && select.value !== 'custom') {
         select.value = 'custom';
     }
 
+    if (select.value === '') {
+        const restoreVal = previousDeadlineValue || currentDl;
+        document.getElementById('add-proj-dl-val').value = restoreVal;
+        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(restoreVal);
+        customInput.value = '';
+        previousDeadlineValue = '';
+        return;
+    }
+
     if (select.value === 'custom' && customInput.value.trim() === '') {
         select.value = '';
-        const fallbackDate = document.getElementById('add-proj-start-val').value || today;
-        document.getElementById('add-proj-dl-val').value = fallbackDate;
-        const currentDl = document.getElementById('add-proj-dl-val').value || fallbackDate;
-        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(currentDl);
+        document.getElementById('add-proj-dl-val').value = previousDeadlineValue || currentDl;
+        const restoredDl = document.getElementById('add-proj-dl-val').value || currentDl;
+        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(restoredDl);
+        previousDeadlineValue = '';
         return;
     }
 
@@ -1790,11 +1936,11 @@ function renderMonthSelect(){
 function calcStats(){
     const goal = DATA.monthlyGoals[currentMonth] || 250000;
     let fact = 0, activeFact = 0, plan = 0, totalGross = 0, totalNet = 0;
-    let totalExpenses = 0, totalTaxes = 0;
+    let totalExpenses = 0, totalTaxes = 0, totalPaidGross = 0;
 
     ['active','archive','paused','waiting','potential'].forEach(type => {
         DATA[type].forEach(i => {
-            totalExpenses += +i.contractor || 0;
+            totalExpenses += calcContractorAmount(i);
             totalTaxes += (+i.p || 0) * ((+i.taxPrc || 0) / 100);
         });
     });
@@ -1805,16 +1951,19 @@ function calcStats(){
         fact += net;
         totalGross += +i.p || 0;
         totalNet += net;
+        totalPaidGross += +i.p || 0;
     });
     
     DATA.active.forEach(i => {
         const net = calcNet(i);
         const gross = +i.p || 0;
         const paidPrc = (i.paid||0)/100;
+        const paidGross = gross * paidPrc;
         activeFact += net * paidPrc;
         plan += net * (1 - paidPrc);
         totalGross += gross;
         totalNet += net;
+        totalPaidGross += paidGross;
     });
 
     DATA.paused.forEach(i => plan += calcNet(i));
@@ -1837,6 +1986,7 @@ function calcStats(){
     document.getElementById('val-total').innerText = formatCurrency(forecast);
     document.getElementById('val-expenses').innerText = formatCurrency(totalExpenses);
     document.getElementById('val-taxes').innerText = formatCurrency(totalTaxes);
+    document.getElementById('val-paid-gross').innerText = formatCurrency(totalPaidGross);
     document.getElementById('goal-text').innerText = `${formatCurrency(totalFact)} / ${formatCurrency(goal)}`;
     document.getElementById('goal-pill').innerText = `Цель: ${formatCurrency(goal)}`;
 
@@ -1914,7 +2064,7 @@ function exp(){
 function expCSV(){
     const escape = v => `"${(v || '').toString().replace(/"/g, '""')}"`;
     let csv = ['Статус', 'Клиент', 'Проект', 'Сумма', 'Чистыми', 'Оплачено (%)', 'Налог (%)', 'Расходы', 'Дата Старта', 'Дедлайн/Сдачи', 'Ссылка'].map(escape).join(';') + '\n';
-    const addRows = (list, status) => list.forEach(i => csv += [status, i.c, i.n, i.p, calcNet(i), i.paid||0, i.taxPrc||0, i.contractor||0, i.start||'', i.dl||i.date||'', i.link||''].map(escape).join(';') + '\n');
+    const addRows = (list, status) => list.forEach(i => csv += [status, i.c, i.n, i.p, calcNet(i), i.paid||0, i.taxPrc||0, calcContractorAmount(i), i.start||'', i.dl||i.date||'', i.link||''].map(escape).join(';') + '\n');
     addRows(DATA.active, 'В работе'); addRows(DATA.waiting, 'Ожидает'); addRows(DATA.potential, 'Потенциал');
     addRows(DATA.paused, 'На паузе'); addRows(DATA.archive, 'Выполнено');
     const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], {type: 'text/csv;charset=utf-8;'});
