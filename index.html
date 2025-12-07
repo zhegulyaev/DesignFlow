@@ -205,15 +205,6 @@
 
   .client-name.has-link { color: var(--link-blue); font-weight: 700; }
 
-  .table-rep-row td { background: #0f141b; border-top: 1px solid var(--border); padding: 12px 10px; }
-  .table-rep-info { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 13px; }
-  .table-rep-title { font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px; }
-  .table-rep-desc { font-size: 12px; color: var(--muted); }
-  .table-rep-score { margin-left: auto; font-weight: 900; color: var(--text); font-size: 16px; }
-  .rep-score-inline { padding: 4px 8px; border-radius: 8px; border: 1px solid var(--border); }
-  .rep-score-inline.good { color: #2ea043; border-color: rgba(46,160,67,0.4); }
-  .rep-score-inline.warn { color: #d29922; border-color: rgba(210,153,34,0.4); }
-  .rep-score-inline.bad { color: #f85149; border-color: rgba(248,81,73,0.5); }
 
   .action-btns{display:flex;gap:6px;align-items:center;}
   .action-btn-base { padding: 6px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; user-select: none; min-width: 32px; text-align: center; }
@@ -235,15 +226,16 @@
   .del-btn:hover{opacity:1; border-color: var(--border); background: #1c2128; color: var(--red);}
   
   /* Pacing Block Updated (Fire) */
-  .pace-block { 
-    background: var(--card); border: 1px solid var(--border); border-radius: 12px; 
-    padding: 15px 20px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    margin-bottom: 20px; 
+  .pace-block {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
     margin-top: 15px; /* Дополнительный отступ сверху */
-    transition: background .3s; 
+    transition: background .3s;
+    gap: 20px;
   }
   .pace-block.critical { background: rgba(218, 54, 51, 0.15); border-color: var(--red); }
   .pace-info { display: flex; align-items: center; gap: 15px; }
@@ -251,6 +243,15 @@
   .pace-status { font-weight: 700; font-size: 14px; padding: 5px 12px; border-radius: 6px; }
   .pace-chill { background: rgba(57, 211, 83, 0.1); color: var(--green); }
   .pace-hurry { background: var(--red); color: white; }
+
+  .pace-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .pace-rep-chip { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 999px; background: #1a1f26; border: 1px solid var(--border); color: var(--text); font-weight: 700; }
+  .pace-rep-chip .rep-dot { width: 10px; height: 10px; }
+  .pace-rep-chip.good { border-color: rgba(46, 160, 67, 0.35); box-shadow: 0 0 0 1px rgba(46, 160, 67, 0.12); }
+  .pace-rep-chip.warn { border-color: rgba(210, 153, 34, 0.35); box-shadow: 0 0 0 1px rgba(210, 153, 34, 0.12); }
+  .pace-rep-chip.bad { border-color: rgba(218, 54, 51, 0.35); box-shadow: 0 0 0 1px rgba(218, 54, 51, 0.12); }
+
+  .pace-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
 
       .date-input-wrap:not(:last-child) {
@@ -440,6 +441,12 @@
       transition: border-color .2s, background .2s, box-shadow .2s;
   }
 
+  .date-time-inputs { display: flex; gap: 15px; width: 100%; }
+  .input-with-icon { position: relative; flex: 1; }
+  .input-with-icon .input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--muted); opacity: 0.9; }
+  .input-with-icon input { padding-left: 38px; }
+  .input-with-icon .flatpickr-input { width: 100%; }
+
   .flatpickr-alt-input {
       background: #0f141b;
       border: 1px solid var(--border);
@@ -449,6 +456,7 @@
       font-weight: 700;
       letter-spacing: 0.2px;
       width: 100%;
+      padding-left: 38px;
   }
 
   .flatpickr-alt-input:focus {
@@ -475,10 +483,36 @@
       box-shadow: 0 16px 40px rgba(0,0,0,0.45);
       color: var(--text);
       border-radius: 14px;
+      overflow: hidden;
+  }
+
+  .flatpickr-months,
+  .flatpickr-weekdays,
+  .flatpickr-time {
+      background: #0f141b;
+      border-color: var(--border);
+  }
+
+  .flatpickr-months .flatpickr-month {
+      color: var(--text);
+  }
+
+  .flatpickr-monthDropdown-months,
+  .flatpickr-current-month input.cur-year {
+      color: var(--text);
+      background: #0f141b;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+  }
+
+  .flatpickr-monthDropdown-months option {
+      background: #0f141b;
+      color: var(--text);
   }
 
   .flatpickr-day, .flatpickr-weekday {
       color: var(--text);
+      border-radius: 10px;
   }
 
   .flatpickr-day:hover, .flatpickr-day:focus {
@@ -492,8 +526,14 @@
       box-shadow: 0 4px 16px rgba(88,166,255,0.35);
   }
 
-  .flatpickr-current-month input.cur-year {
-      color: var(--text);
+  .flatpickr-day.today:not(.selected) {
+      border-color: var(--accent);
+      color: var(--accent);
+  }
+
+  .flatpickr-weekday {
+      color: var(--muted);
+      font-weight: 700;
   }
 
   .flatpickr-months .flatpickr-prev-month svg,
@@ -503,10 +543,21 @@
 
   .flatpickr-time {
       border-top: 1px solid var(--border);
+      padding: 8px 10px;
   }
 
   .flatpickr-time input, .flatpickr-time .numInputWrapper span {
       color: var(--text);
+  }
+
+  .flatpickr-time .numInputWrapper {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0f141b;
+  }
+
+  .flatpickr-time input {
+      background: transparent;
   }
 
   .flatpickr-time input:hover, .flatpickr-time .numInputWrapper span:hover {
@@ -519,16 +570,6 @@
       border-top-color: var(--accent);
   }
 
-  .flatpickr-day.today:not(.selected) {
-      border-color: var(--accent);
-      color: var(--accent);
-  }
-
-  .flatpickr-weekday {
-      color: var(--muted);
-      font-weight: 700;
-  }
-
   /* Finance Block Percentage */
   .stat-val-small { font-size: 16px; font-weight: 600; color: var(--muted); margin-left: 10px;}
   .stat-label-row { display: flex; align-items: center; justify-content: space-between; }
@@ -536,7 +577,7 @@
   .stat-label-with-help { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
   .help-icon { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); color: var(--muted); font-size: 11px; cursor: help; position: relative; transition: border-color .2s, color .2s; }
   .help-icon:hover { color: var(--text); border-color: var(--accent); }
-  .help-icon::after { content: attr(data-tooltip); position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); background: #0f141b; color: var(--text); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 8px 30px rgba(0,0,0,0.35); width: 260px; max-width: 70vw; font-size: 12px; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity .15s, visibility .15s; z-index: 10; }
+  .help-icon::after { content: attr(data-tooltip); position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); background: #0f141b; color: var(--text); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 8px 30px rgba(0,0,0,0.35); width: 260px; max-width: 70vw; font-size: 12px; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity .15s, visibility .15s; z-index: 10; text-transform: none; }
   .help-icon:hover::after { opacity: 1; visibility: visible; }
   .text-red { color: var(--red); }
   .symbol-select { width: 68px !important; padding: 8px; text-align: center; }
@@ -601,9 +642,6 @@ td.date-cell + td.date-cell {
 }
 
 
-     .table-rep-row {display:none}
-      
-      
 </style>
 </head>
 <body>
@@ -618,7 +656,7 @@ td.date-cell + td.date-cell {
     <symbol id="icon-active" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM3 8a5 5 0 0 1 10 0 5 5 0 0 1-10 0Z"/></symbol>
     <symbol id="icon-all" viewBox="0 0 16 16"><path fill="currentColor" d="M2.5 2.5A.5.5 0 0 1 3 2h4.5a.5.5 0 0 1 .5.5V7a.5.5 0 0 1-.5.5H3A.5.5 0 0 1 2.5 7Zm6 0A.5.5 0 0 1 9 2h4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-.5.5H9a.5.5 0 0 1-.5-.5Zm-6 6A.5.5 0 0 1 3 8h4.5a.5.5 0 0 1 .5.5V13a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5Zm8 0A.5.5 0 0 1 11 8h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5Z"/></symbol>
     <symbol id="icon-waiting" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM8 4a1 1 0 0 1 1 1v3.5a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1 0-1H8V5a1 1 0 0 1 1-1Z"/></symbol>
-    <symbol id="icon-potential" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM8 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3ZM6 3a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3A.5.5 0 0 1 6 3Zm-2.5 5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5Z"/></symbol>
+    <symbol id="icon-potential" viewBox="0 0 16 16"><path fill="currentColor" d="M3 1.5A.5.5 0 0 1 3.5 1h7a.5.5 0 0 1 .4.8L9.6 4l1.3 2.2a.5.5 0 0 1-.43.8H5.5V14a.5.5 0 0 1-1 0z"/></symbol>
     <symbol id="icon-paused" viewBox="0 0 16 16"><path fill="currentColor" d="M5 2.5a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0V3a.5.5 0 0 1 .5-.5Zm6 0a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0V3a.5.5 0 0 1 .5-.5Z"/></symbol>
     <symbol id="icon-archive" viewBox="0 0 16 16"><path fill="currentColor" d="M13 1.75a.75.75 0 0 0-.75-.75H3.75a.75.75 0 0 0-.75.75v12.5c0 .414.336.75.75.75h8.5a.75.75 0 0 0 .75-.75Zm-1.5 8.75a.5.5 0 0 1-1 0V6.707L6.464 10.464a.5.5 0 0 1-.708-.708L10.793 6H7.5a.5.5 0 0 1 0-1h4.5a.5.5 0 0 1 .5.5v4.5Z"/></symbol>
     <symbol id="icon-trash" viewBox="0 0 24 24">
@@ -627,6 +665,7 @@ td.date-cell + td.date-cell {
     </symbol>
     <symbol id="icon-duplicate" viewBox="0 0 16 16"><path fill="currentColor" d="M2.25 1.75a.75.75 0 0 1 .75-.75h7.25a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0V2.5h-6.5v8h2a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1-.75-.75Zm4.5 4a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 .75.75v8a.75.75 0 0 1-.75.75h-6a.75.75 0 0 1-.75-.75v-8Z"/></symbol>
     <symbol id="icon-calendar" viewBox="0 0 16 16"><path fill="currentColor" d="M3 2.75A.75.75 0 0 1 3.75 2h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 3 2.75ZM12.25 2a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5c0-.414.336-.75.75-.75ZM2 5.5a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 5.5Zm12.5 2.25v7.25c0 .414-.336.75-.75.75H2.25a.75.75 0 0 1-.75-.75V7.75c0-.414.336-.75.75-.75h11.5c.414 0 .75.336.75.75Z"/></symbol>
+    <symbol id="icon-clock" viewBox="0 0 16 16"><path fill="currentColor" d="M8 1.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13Zm0 1.5a5 5 0 1 1 0 10a5 5 0 0 1 0-10Zm-.5 1.25c0-.276.224-.5.5-.5s.5.224.5.5v2.6l2 1.2a.5.5 0 1 1-.5.866l-2.25-1.35A.5.5 0 0 1 7.5 7V4.25Z"/></symbol>
 </svg>
 
 <div class="c">
@@ -663,7 +702,7 @@ td.date-cell + td.date-cell {
         <div class="tab" id="tab-archive" onclick="switchTab('archive')"><svg><use href="#icon-archive"/></svg> Выполнено</div>
         <div class="tab tab-trash" id="tab-trash" onclick="switchTab('trash')"><svg><use href="#icon-trash"/></svg> Корзина</div>
     </div>
-    <button id="newProjectButton" onclick="openAddModal()">＋ Новый</button>
+    <button id="newProjectButton" onclick="openAddModal()">＋ новый проект</button>
   </div>
   
   <div class="tab-desc-block" id="tab-description">Проекты в работе. Следите за дедлайнами и фиксируйте предоплату.</div>
@@ -676,7 +715,14 @@ td.date-cell + td.date-cell {
               <div style="font-size:13px;color:var(--muted)" id="pace-desc">Загрузка...</div>
           </div>
       </div>
-      <div class="pace-status" id="pace-status">Критично</div>
+      <div class="pace-actions">
+          <div class="pace-rep-chip good" id="pace-rep-chip">
+              <span class="rep-dot good" id="pace-rep-dot"></span>
+              <span id="pace-rep-text">Репутация: 100 / 100</span>
+          </div>
+          <button class="inline-link-btn" onclick="scrollToReputation()">Подробнее</button>
+          <div class="pace-status" id="pace-status">Критично</div>
+      </div>
   </div>
 
   <div class="main-layout">
@@ -703,21 +749,6 @@ td.date-cell + td.date-cell {
           <tbody></tbody>
           <tfoot id="total-row-active">
             <tr><td colspan="8">Итого:</td><td></td><td></td><td></td><td></td></tr>
-            <tr class="table-rep-row">
-              <td colspan="5"></td>
-              <td colspan="2">
-                <div class="table-rep-info">
-                  <span class="table-rep-title">Репутация</span>
-                  <span class="rep-dot good" id="table-rep-dot"></span>
-                  <div>
-                    <div class="table-rep-desc" id="table-rep-desc">Держишь сроки, претензий нет</div>
-                  </div>
-                  <span class="table-rep-score rep-score-inline good" id="reputation-score-inline">100 / 100</span>
-                  <span class="help-icon" data-tooltip="Итоговая оценка по дедлайнам во всех разделах. Чем ближе к нулю, тем сильнее риск потери клиентов.">?</span>
-                </div>
-              </td>
-              <td colspan="5"></td>
-            </tr>
           </tfoot>
         </table>
       </div>
@@ -1135,9 +1166,15 @@ td.date-cell + td.date-cell {
             Указать точное время
         </label>
         
-        <div class="date-time-inputs" style="display:flex; gap: 15px;">
-            <input type="text" id="date-input-val" style="flex:1" placeholder="ДД.ММ.ГГГГ">
-            <input type="text" id="time-input-val" style="flex:1" placeholder="ЧЧ:ММ" disabled>
+        <div class="date-time-inputs">
+            <div class="input-with-icon">
+                <svg class="input-icon"><use href="#icon-calendar"/></svg>
+                <input type="text" id="date-input-val" placeholder="ДД.ММ.ГГГГ">
+            </div>
+            <div class="input-with-icon">
+                <svg class="input-icon"><use href="#icon-clock"/></svg>
+                <input type="text" id="time-input-val" placeholder="ЧЧ:ММ" disabled>
+            </div>
         </div>
         <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveDate()">Сохранить</button>
     </div>
@@ -1821,22 +1858,9 @@ function renderActive(){
             <div>${formatCurrency(totalPaidGross)}</div>
         </td>
         <td></td>
-    </tr>
-    <tr class="table-rep-row">
-        <td colspan="5"></td>
-        <td colspan="2">
-            <div class="table-rep-info">
-                <span class="table-rep-title">Репутация</span>
-                <span class="rep-dot ${repState.level}" id="table-rep-dot"></span>
-                <div>
-                    <div class="table-rep-desc" id="table-rep-desc">${repState.hint}</div>
-                </div>
-                <span class="table-rep-score rep-score-inline ${repState.level}" id="reputation-score-inline">${repState.score} / 100</span>
-                <span class="help-icon" data-tooltip="Итоговая оценка по дедлайнам во всех разделах. Чем ближе к нулю, тем сильнее риск потери клиентов.">?</span>
-            </div>
-        </td>
-        <td colspan="5"></td>
     </tr>`;
+
+    updatePaceReputation(repState);
 
     const paceBlock = document.getElementById('pace-indicator');
     const urgent = DATA.active.filter(x => getTimeRemaining(x.dl).cls.includes('critical')).length;
@@ -2107,7 +2131,6 @@ function renderAll(){
 
     const footer = document.querySelector('#total-row-all');
     if (footer) {
-        const repState = analyzeReputation();
         footer.innerHTML = `<tr>
             <td colspan="5" class="footer-total-toggle" onclick="toggleFooterSelection('all')">Всего ${allItems.length} записей</td>
             <td style="text-align:right;">
@@ -2126,21 +2149,6 @@ function renderAll(){
                 <div class="footer-note">Чистыми</div>
                 <div>${formatCurrency(totalNet)}</div>
             </td>
-        </tr>
-        <tr class="table-rep-row">
-            <td colspan="3"></td>
-            <td colspan="3">
-                <div class="table-rep-info">
-                    <span class="table-rep-title">Репутация</span>
-                    <span class="rep-dot ${repState.level}" aria-hidden="true"></span>
-                    <div>
-                        <div class="table-rep-desc">${repState.hint}</div>
-                    </div>
-                    <span class="table-rep-score rep-score-inline ${repState.level}">${repState.score} / 100</span>
-                    <span class="help-icon" data-tooltip="Пульс по дедлайнам во всех разделах. Чем выше значение, тем надёжнее график.">?</span>
-                </div>
-            </td>
-            <td colspan="3"></td>
         </tr>`;
     }
 }
@@ -2712,17 +2720,7 @@ function updateReputationUI(){
         `).join('');
     }
 
-    const tableScore = document.getElementById('reputation-score-inline');
-    if (tableScore) {
-        tableScore.innerText = `${state.score} / 100`;
-        tableScore.className = `table-rep-score rep-score-inline ${state.level}`;
-    }
-
-    const tableDesc = document.getElementById('table-rep-desc');
-    if (tableDesc) tableDesc.innerText = state.hint;
-
-    const tableDot = document.getElementById('table-rep-dot');
-    if (tableDot) tableDot.className = `rep-dot ${state.level}`;
+    updatePaceReputation(state);
 
     const repOnTimePill = document.getElementById('rep-on-time-pill');
     if (repOnTimePill) repOnTimePill.innerText = Math.max(state.onTime, 0);
@@ -2773,6 +2771,27 @@ function updateReputationUI(){
             },
             plugins: [repCenterText]
         });
+    }
+}
+
+function updatePaceReputation(state){
+    const chip = document.getElementById('pace-rep-chip');
+    const text = document.getElementById('pace-rep-text');
+    const dot = document.getElementById('pace-rep-dot');
+
+    if (chip) {
+        chip.classList.remove('good', 'warn', 'bad');
+        chip.classList.add(state.level);
+    }
+
+    if (text) text.innerText = `Репутация: ${state.score} / 100`;
+    if (dot) dot.className = `rep-dot ${state.level}`;
+}
+
+function scrollToReputation(){
+    const card = document.getElementById('reputation-card');
+    if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 }
 
