@@ -98,8 +98,9 @@
 
   
   /* Inputs & Selects */
-  [contenteditable]{ outline:none; background: transparent; border: 1px solid transparent; padding: 5px 8px; border-radius: 6px; transition:.2s; display:inline-block; width: 100%; }
+  [contenteditable]{ outline:none; background: transparent; border: 1px solid transparent; padding: 5px 8px; border-radius: 6px; transition:.2s; display:inline-block; width: 100%; overflow: hidden; text-overflow: ellipsis; }
   [contenteditable]:focus, [contenteditable]:hover { border-color: var(--border); background: #21262d; cursor: text; }
+  [contenteditable]:focus { white-space: normal; -webkit-line-clamp: initial; overflow: visible; text-overflow: unset; }
   
   .date-cell { padding: 0 !important; } 
   .date-input-wrap { width: 100%; padding: 5px 8px; cursor: pointer; user-select: none; display: flex; align-items: center; justify-left: flex-start; transition: .2s; border-radius: 6px; gap: 6px; }
@@ -158,8 +159,12 @@
   .dup-icon { opacity: 0; transition: opacity 0.2s; cursor: pointer; color: var(--muted); width: 16px; height: 16px; flex-shrink: 0;}
   tr:hover .dup-icon { opacity: 1; }
 
-  .row-controls { position:absolute; left:-48px; top:50%; transform:translateY(-50%); display:flex; gap:10px; align-items:center; opacity:0; transition:opacity .2s; }
-  tr:hover .row-controls { opacity:1; }
+  .select-col { position: relative; }
+  .row-index { color: var(--muted); font-weight: 700; font-size: 12px; text-align: center; }
+  .row-selected .row-index { color: var(--text); }
+
+  .row-controls { position:absolute; left:-60px; top:50%; transform:translateY(-50%); display:flex; gap:12px; align-items:center; opacity:0; transition:opacity .2s; }
+  tr:hover .row-controls, .row-selected .row-controls { opacity:1; }
   .row-controls .bulk-checkbox { width: 18px; height: 18px; }
 
   .client-name.has-link { color: var(--link-blue); font-weight: 700; }
@@ -418,7 +423,7 @@
         <table id="t-active">
           <thead>
             <tr>
-              <th class="select-col"></th>
+              <th class="select-col">№</th>
               <th width="15%" onclick="sortData('active', 'c', 'string')">Клиент</th> 
               <th width="20%" onclick="sortData('active', 'n', 'string')">Проект</th> 
               <th width="8%" onclick="sortData('active', 'start', 'date')">Старт</th> 
@@ -443,7 +448,7 @@
           <table id="t-waiting">
             <thead>
               <tr>
-                <th class="select-col"></th>
+                <th class="select-col">№</th>
                 <th width="20%" onclick="sortData('waiting', 'c', 'string')">Клиент</th> 
                 <th width="30%" onclick="sortData('waiting', 'n', 'string')">Проект</th> 
                 <th width="15%" onclick="sortData('waiting', 'dl', 'date')">Дедлайн</th>
@@ -462,7 +467,7 @@
           <table id="t-potential">
             <thead>
               <tr>
-                <th class="select-col"></th>
+                <th class="select-col">№</th>
                 <th width="25%" onclick="sortData('potential', 'c', 'string')">Клиент</th> 
                 <th width="40%" onclick="sortData('potential', 'n', 'string')">Проект</th> 
                 <th width="15%" onclick="sortData('potential', 'p', 'number')">Сумма</th>
@@ -480,7 +485,7 @@
         <table id="t-paused">
           <thead>
             <tr>
-              <th class="select-col"></th>
+              <th class="select-col">№</th>
               <th width="20%" onclick="sortData('paused', 'c', 'string')">Клиент</th> 
               <th width="30%" onclick="sortData('paused', 'n', 'string')">Проект</th> 
               <th width="15%" onclick="sortData('paused', 'dl', 'date')">Дедлайн</th>
@@ -499,7 +504,7 @@
         <table id="t-archive">
           <thead>
             <tr>
-              <th class="select-col"></th>
+              <th class="select-col">№</th>
               <th width="15%" onclick="sortData('archive', 'c', 'string')">Клиент</th> 
               <th width="25%" onclick="sortData('archive', 'n', 'string')">Проект</th> 
               <th width="15%" onclick="sortData('archive', 'date', 'date')">Дата сдачи</th>
@@ -520,7 +525,7 @@
         <table id="t-trash">
           <thead>
             <tr>
-              <th class="select-col"></th>
+              <th class="select-col">№</th>
               <th width="20%">Удалено</th>
               <th width="20%">Клиент</th> 
               <th width="30%">Проект</th> 
@@ -809,11 +814,14 @@ function getClientNameClass(item) {
 function toggleSelect(type, idx, checkbox) {
     if (!selectedRows[type]) selectedRows[type] = new Set();
     const indexStr = idx.toString();
-    
+    const row = checkbox.closest('tr');
+
     if (checkbox.checked) {
         selectedRows[type].add(indexStr);
+        if (row) row.classList.add('row-selected');
     } else {
         selectedRows[type].delete(indexStr);
+        if (row) row.classList.remove('row-selected');
     }
     updateBulkToolbar(type);
     
@@ -836,6 +844,7 @@ function toggleSelectAll(type) {
         const row = cb.closest('tr');
         if (row && row.dataset.index) {
             const indexStr = row.dataset.index;
+            row.classList.toggle('row-selected', isChecked);
             if (isChecked) {
                 selectedRows[type].add(indexStr);
             } else {
@@ -1100,17 +1109,21 @@ function renderActive(){
     let totalP = 0, totalPr = 0;
     
     DATA.active.forEach((item, i) => {
-        item.pr = calcNet(item); 
+        item.pr = calcNet(item);
         totalP += +item.p; totalPr += item.pr;
-        
+
         const rem = getTimeRemaining(item.dl);
         const tr = document.createElement('tr');
         tr.dataset.index = i;
-        
+
+        const isSelected = selectedRows.active?.has(i.toString());
+        if (isSelected) tr.classList.add('row-selected');
+
         const linkIcon = renderLinkControls(item, i, 'active');
-        
+
         tr.innerHTML = `
             <td class="select-col">
+                <div class="row-index">${i + 1}</div>
                 <div class="row-controls">
                     <svg class="dup-icon" onclick="duplicateRow('active',${i})" title="Дублировать"><use href="#icon-duplicate"/></svg>
                     <input type="checkbox" class="bulk-checkbox" id="check-active-${i}" onchange="toggleSelect('active', ${i}, this)" ${selectedRows.active?.has(i.toString()) ? 'checked' : ''}>
@@ -1202,6 +1215,9 @@ function renderSimple(type){
         tot += +item.p;
         const tr = document.createElement('tr');
         tr.dataset.index = i;
+
+        const isSelected = selectedRows[type]?.has(i.toString());
+        if (isSelected) tr.classList.add('row-selected');
         
         const linkIcon = renderLinkControls(item, i, type);
                                       
@@ -1209,6 +1225,7 @@ function renderSimple(type){
         
         tr.innerHTML = `
             <td class="select-col">
+                <div class="row-index">${i + 1}</div>
                 <div class="row-controls">
                     <svg class="dup-icon" onclick="duplicateRow('${type}',${i})" title="Дублировать"><use href="#icon-duplicate"/></svg>
                     <input type="checkbox" class="bulk-checkbox" id="check-${type}-${i}" onchange="toggleSelect('${type}', ${i}, this)" ${selectedRows[type]?.has(i.toString()) ? 'checked' : ''}>
@@ -1247,11 +1264,15 @@ function renderPotential(){
         tot += +item.p;
         const tr = document.createElement('tr');
         tr.dataset.index = i;
+
+        const isSelected = selectedRows.potential?.has(i.toString());
+        if (isSelected) tr.classList.add('row-selected');
         
         const linkIcon = renderLinkControls(item, i, 'potential');
                                       
         tr.innerHTML = `
             <td class="select-col">
+                <div class="row-index">${i + 1}</div>
                 <div class="row-controls">
                     <svg class="dup-icon" onclick="duplicateRow('potential',${i})" title="Дублировать"><use href="#icon-duplicate"/></svg>
                     <input type="checkbox" class="bulk-checkbox" id="check-potential-${i}" onchange="toggleSelect('potential', ${i}, this)" ${selectedRows.potential?.has(i.toString()) ? 'checked' : ''}>
@@ -1292,11 +1313,15 @@ function renderArchive(){
         tP += +item.p; tPr += +item.pr;
         const tr = document.createElement('tr');
         tr.dataset.index = realIdx;
+
+        const isSelected = selectedRows.archive?.has(realIdx.toString());
+        if (isSelected) tr.classList.add('row-selected');
         
         const linkIcon = renderLinkControls(item, realIdx, 'archive');
                                       
         tr.innerHTML = `
             <td class="select-col">
+                <div class="row-index">${i + 1}</div>
                 <div class="row-controls">
                     <svg class="dup-icon" onclick="duplicateRow('archive',${realIdx})" title="Дублировать"><use href="#icon-duplicate"/></svg>
                     <input type="checkbox" class="bulk-checkbox" id="check-archive-${realIdx}" onchange="toggleSelect('archive', ${realIdx}, this)" ${selectedRows.archive?.has(realIdx.toString()) ? 'checked' : ''}>
@@ -1337,9 +1362,13 @@ function renderTrash(){
     DATA.trash.forEach((item, i) => {
         const tr = document.createElement('tr');
         tr.dataset.index = i;
+
+        const isSelected = selectedRows.trash?.has(i.toString());
+        if (isSelected) tr.classList.add('row-selected');
         const delDate = item.deletedAt ? new Date(item.deletedAt).toLocaleDateString() : '?';
         tr.innerHTML = `
             <td class="select-col">
+                <div class="row-index">${i + 1}</div>
                 <div class="row-controls">
                     <svg class="dup-icon" onclick="duplicateRow('trash',${i})" title="Дублировать"><use href="#icon-duplicate"/></svg>
                     <input type="checkbox" class="bulk-checkbox" id="check-trash-${i}" onchange="toggleSelect('trash', ${i}, this)" ${selectedRows.trash?.has(i.toString()) ? 'checked' : ''}>
