@@ -899,7 +899,8 @@ function selectAllVisible(type, shouldSelect = true) {
 
     checkboxes.forEach(cb => {
         cb.checked = shouldSelect;
-        const indexStr = cb.dataset.index;
+        const indexStr = cb.dataset.index || cb.closest('tr')?.dataset.index;
+        if (!indexStr) return;
         if (shouldSelect) selectedRows[type].add(indexStr);
         else selectedRows[type].delete(indexStr);
     });
