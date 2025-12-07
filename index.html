@@ -245,14 +245,14 @@
   .pace-hurry { background: var(--red); color: white; }
 
   .pace-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .pace-rep-chip { display: inline-flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 14px; background: linear-gradient(135deg, rgba(88,166,255,0.12), rgba(163,113,247,0.12)); border: 1px solid rgba(88,166,255,0.35); color: var(--text); font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.04); }
+  .pace-rep-chip { display: inline-flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 14px; background: #121720; border: 1px solid var(--border); color: #e9edf4; font-weight: 700; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); min-height: 44px; }
   .pace-rep-chip .rep-dot { width: 10px; height: 10px; box-shadow: 0 0 0 4px rgba(88,166,255,0.12); }
   .pace-rep-chip .rep-chip-text { display: flex; flex-direction: column; gap: 2px; line-height: 1.2; }
   .pace-rep-chip .rep-chip-label { font-size: 11px; letter-spacing: 0.4px; text-transform: uppercase; color: var(--muted); }
   .pace-rep-chip .rep-chip-score { font-size: 15px; font-weight: 800; }
-  .pace-rep-chip.good { border-color: rgba(46, 160, 67, 0.45); box-shadow: 0 10px 30px rgba(0,0,0,0.28), 0 0 0 1px rgba(46, 160, 67, 0.22); background: linear-gradient(135deg, rgba(46,160,67,0.12), rgba(134,239,172,0.08)); }
-  .pace-rep-chip.warn { border-color: rgba(210, 153, 34, 0.45); box-shadow: 0 10px 30px rgba(0,0,0,0.28), 0 0 0 1px rgba(210, 153, 34, 0.18); background: linear-gradient(135deg, rgba(210,153,34,0.16), rgba(250,204,21,0.08)); }
-  .pace-rep-chip.bad { border-color: rgba(218, 54, 51, 0.45); box-shadow: 0 10px 30px rgba(0,0,0,0.28), 0 0 0 1px rgba(218, 54, 51, 0.18); background: linear-gradient(135deg, rgba(248,81,73,0.18), rgba(218,54,51,0.08)); }
+  .pace-rep-chip.good { border-color: rgba(46, 160, 67, 0.35); background: linear-gradient(135deg, rgba(46,160,67,0.14), rgba(15,23,31,0.8)); box-shadow: 0 0 0 1px rgba(46,160,67,0.18); }
+  .pace-rep-chip.warn { border-color: rgba(210, 153, 34, 0.35); background: linear-gradient(135deg, rgba(210,153,34,0.14), rgba(15,23,31,0.8)); box-shadow: 0 0 0 1px rgba(210,153,34,0.16); }
+  .pace-rep-chip.bad { border-color: rgba(218, 54, 51, 0.35); background: linear-gradient(135deg, rgba(248,81,73,0.14), rgba(15,23,31,0.8)); box-shadow: 0 0 0 1px rgba(218,54,51,0.16); }
 
   .pace-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
@@ -558,13 +558,22 @@
       color: #e9edf4;
   }
 
+  .flatpickr-time .flatpickr-time-separator { color: var(--muted); font-weight: 800; }
+
   .flatpickr-time .numInputWrapper {
       border: 1px solid #3a3f4b;
       border-radius: 12px;
-      background: linear-gradient(180deg, #161b22, #10151d);
+      background: linear-gradient(180deg, #161b22, #0d1118);
       overflow: hidden;
       min-width: 76px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 8px 20px rgba(0,0,0,0.3);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 8px 20px rgba(0,0,0,0.3);
+      transition: border-color .2s, box-shadow .2s, background .2s;
+  }
+
+  .flatpickr-time .numInputWrapper:focus-within {
+      border-color: rgba(88,166,255,0.7);
+      box-shadow: 0 0 0 1px rgba(88,166,255,0.25), 0 10px 30px rgba(0,0,0,0.35);
+      background: linear-gradient(180deg, #111722, #0b1016);
   }
 
   .flatpickr-time input {
@@ -573,10 +582,16 @@
       font-size: 16px;
       text-align: center;
       padding: 10px 12px;
+      letter-spacing: 0.3px;
   }
 
   .flatpickr-time input:hover, .flatpickr-time .numInputWrapper span:hover {
       background: rgba(88,166,255,0.08);
+  }
+
+  .flatpickr-time .numInputWrapper span {
+      background: transparent;
+      transition: background .15s;
   }
 
   .flatpickr-time .numInputWrapper span.arrowUp:after,
