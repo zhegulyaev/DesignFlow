@@ -110,10 +110,10 @@
   [contenteditable]:focus { white-space: pre-wrap; -webkit-line-clamp: initial; overflow: visible; text-overflow: unset; }
   
   .date-cell { padding: 0 !important; } 
-  .date-input-wrap { width: 100%; padding: 5px 8px; cursor: pointer; user-select: none; display: flex; align-items: center; justify-left: flex-start; transition: .2s; border-radius: 6px; gap: 6px; }
-  .date-input-wrap:hover { background: #21262d; }
-  .date-text-display { font-size: 14px; font-weight: 500; color: var(--text); white-space: nowrap; display: flex; align-items: center; gap: 6px; }
-  .date-icon { display: none; }
+  .date-input-wrap { width: 100%; padding: 8px 10px; cursor: pointer; user-select: none; display: flex; align-items: center; justify-left: flex-start; transition: .2s; border-radius: 10px; gap: 8px; border: 1px solid transparent; background: linear-gradient(120deg, rgba(88,166,255,0.06), rgba(163,113,247,0.06)); }
+  .date-input-wrap:hover { background: linear-gradient(120deg, rgba(88,166,255,0.12), rgba(163,113,247,0.12)); border-color: var(--border); }
+  .date-text-display { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; display: flex; align-items: center; gap: 8px; letter-spacing: -0.1px; }
+  .date-icon { display: inline-flex; width: 14px; height: 14px; color: var(--muted); opacity: 0.85; }
   .time-text { color: var(--muted); font-weight: 700; font-size: 12px; }
 
   /* Deadline Colors */
@@ -229,7 +229,9 @@
   
   /* Stats Dashboard fixes */
   .stats-full { margin-top: 50px; display: flex; flex-direction: column; gap: 20px; }
-  .stats-two-columns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
+  .stats-two-columns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; align-items: start; }
+  .side-stack { display: flex; flex-direction: column; gap: 16px; }
+  .efficiency-card { padding-bottom: 14px; }
   .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
   .card-head { font-size: 18px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
   .finance-title { font-size: 20px; font-weight: 800; color: #fff; }
@@ -239,7 +241,7 @@
   .card-head-actions { display: flex; align-items: center; gap: 10px; }
   .inline-link-btn { padding: 8px 12px; background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; transition: .2s; }
   .inline-link-btn:hover { color: var(--accent); border-color: var(--accent); background: #21262d; }
-  .progress-bg { height: 14px; background: linear-gradient(90deg, #11151c, #0b1017); border-radius: 12px; overflow: hidden; border: 1px solid rgba(88,166,255,0.2); margin-top: 8px; width: 100%; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02), 0 0 0 1px rgba(15,20,27,0.6); }
+  .progress-bg { height: 14px; background: linear-gradient(90deg, #11151c, #0b1017); border-radius: 12px; overflow: hidden; border: 1px solid rgba(88,166,255,0.2); margin-top: 8px; width: 100%; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 0 0 1px rgba(15,20,27,0.65); }
   .progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, #2ea043, #3fb950); transition: width 0.5s; box-shadow: 0 0 14px rgba(46,160,67,0.3); border-radius: 12px; }
   .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
   .stat-box { padding: 14px; border: 1px solid var(--border); border-radius: 10px; background: #0f141b; }
@@ -247,20 +249,20 @@
   .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
   .stat-pill { padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; background: rgba(88,166,255,0.12); color: var(--accent); border: 1px solid rgba(88,166,255,0.3); }
   #goal-pill { background: linear-gradient(120deg, rgba(88,166,255,0.22), rgba(163,113,247,0.22)); border-color: rgba(163,113,247,0.4); color: #dce7ff; padding: 6px 12px; font-size: 13px; box-shadow: 0 4px 18px rgba(88,166,255,0.22); display: inline-flex; gap: 6px; align-items: center; }
-  #goal-pill::before { content: "🎯"; }
+  #goal-pill::before { content: "⚡"; }
   .stat-val { font-size: 30px; font-weight: 800; }
   .stat-helper { font-size: 12px; color: var(--muted); margin-top: 4px; }
   .text-green { color: var(--green); }
   .text-gold { color: var(--gold); }
   .mono { font-family: monospace; }
-  .record-banner { background: #0f141b; border: 1px solid var(--border); padding: 18px 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; gap: 20px; box-shadow: inset 0 0 0 1px rgba(250, 204, 21, 0.05); }
+  .record-banner { background: linear-gradient(135deg, rgba(250,204,21,0.06), rgba(88,166,255,0.05)); border: 1px solid var(--border); padding: 16px 18px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; gap: 16px; box-shadow: inset 0 0 0 1px rgba(250, 204, 21, 0.05); }
   .record-texts { flex:1; min-width: 0; }
   .record-title { color: var(--muted); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-  .record-motiv { color: #f0f6fc; font-weight: 700; margin-top: 6px; font-size: 15px; }
+  .record-motiv { color: #f0f6fc; font-weight: 700; margin-top: 4px; font-size: 15px; }
   .record-progress-bg { margin-top: 10px; height: 10px; background: linear-gradient(90deg, #1c2128, #11151c); border-radius: 10px; overflow: hidden; border: 1px solid rgba(250,204,21,0.25); width: 100%; box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
   .record-progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, #facc15, #f9a825); box-shadow: 0 0 12px rgba(250,204,21,0.4); transition: width .4s ease; border-radius: 999px; }
-  .record-value { font-size: 26px; font-weight: 900; color: var(--gold); text-align: right; }
-  .record-remaining { color: var(--muted); font-weight: 700; font-size: 13px; text-align: right; margin-top: 6px; }
+  .record-value { font-size: 24px; font-weight: 900; color: var(--gold); text-align: right; }
+  .record-remaining { color: var(--muted); font-weight: 700; font-size: 12px; text-align: right; margin-top: 4px; }
   .record-side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
   /* Bulk Toolbar */
   .bulk-toolbar {
@@ -297,7 +299,7 @@
 
   /* Modals */
   .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:1000;justify-content:center;align-items:center;backdrop-filter: blur(4px);}
-  .modal-content{background:var(--card);padding:30px;border-radius:16px;width:400px;max-width:90%;border:1px solid var(--border);text-align:center; position: relative;}
+  .modal-content{background:var(--card);padding:30px;border-radius:16px;width:460px;max-width:95%;border:1px solid var(--border);text-align:center; position: relative; box-shadow: 0 18px 60px rgba(0,0,0,0.35);}
   
   /* Inputs & Selects inside modal */
   .inp-group{margin-bottom:15px;text-align:left;}
@@ -305,9 +307,16 @@
   .inp-group input, .inp-group select {background-color: #21262d;border:1px solid var(--border);padding:10px;width:100%;color:var(--text);border-radius:8px; outline: none; box-sizing: border-box;}
   .row-inputs{display:flex;gap:15px;margin-bottom:15px;}
   .row-inputs > div {flex: 1;}
-  .deadline-presets { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .deadline-presets select { min-width: 160px; }
-  .deadline-presets input { min-width: 130px; }
+  .deadline-presets { display: flex; gap: 10px; align-items: center; flex-wrap: nowrap; }
+  .deadline-presets select { min-width: 150px; white-space: nowrap; }
+  .deadline-presets input { min-width: 120px; }
+  .date-duo { display: flex; gap: 14px; align-items: stretch; margin-bottom: 15px; }
+  .date-duo .inp-group { margin-bottom: 0; }
+  .date-duo-card { flex: 1; padding: 14px; border-radius: 14px; border: 1px solid var(--border); background: linear-gradient(125deg, rgba(17,21,28,0.9), rgba(12,17,25,0.9)); box-shadow: inset 0 0 0 1px rgba(88,166,255,0.08); }
+  .date-duo .inp-group label { display: flex; align-items: center; gap: 6px; color: #dce7ff; font-weight: 700; }
+  .deadline-presets select { min-width: 140px; }
+  .deadline-presets input { min-width: 110px; }
+  .date-chip { margin-top: 8px; }
   
   .close-modal-x { 
       position: absolute; 
@@ -330,6 +339,7 @@
   #settingsModal .modal-content h2 { margin-bottom: 15px; }
 
   .footer-note { color: var(--muted); font-size: 12px; font-weight: 600; }
+  .helper-note { color: var(--muted); font-size: 12px; margin-top: 6px; line-height: 1.4; text-align: left; }
 
   /* Date/Time Input Styling (Override attempts for dark theme) */
   .inp-group input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
@@ -669,26 +679,27 @@
               <div style="position:relative;height:250px;width:100%"><canvas id="lineChart"></canvas></div>
           </div>
 
-          <div class="card">
-              <div class="card-head">Эффективность <span class="help-icon" data-tooltip="Визуализация распределения чистой прибыли между уже полученными средствами и оставшимся потенциалом проектов.">?</span></div>
-              <div style="position:relative;height:200px;width:100%;display:flex;justify-content:center;margin-bottom:20px;"><canvas id="pieChart"></canvas></div>
-              <div style="border-top:1px solid var(--border); padding-top:20px;">
-                  <div style="font-size:14px;color:var(--muted);margin-bottom:15px;font-weight:600">По месяцам</div>
-                  <div style="height:150px;width:100%"><canvas id="barChart"></canvas></div>
+          <div class="side-stack">
+              <div class="card efficiency-card">
+                  <div class="card-head">Эффективность <span class="help-icon" data-tooltip="Визуализация распределения чистой прибыли между уже полученными средствами и оставшимся потенциалом проектов.">?</span></div>
+                  <div style="position:relative;height:170px;width:100%;display:flex;justify-content:center;margin-bottom:14px;"><canvas id="pieChart"></canvas></div>
+                  <div style="border-top:1px solid var(--border); padding-top:16px;">
+                      <div style="font-size:14px;color:var(--muted);margin-bottom:12px;font-weight:600">По месяцам</div>
+                      <div style="height:120px;width:100%"><canvas id="barChart"></canvas></div>
+                  </div>
               </div>
-          </div>
-      </div>
-
-      <div class="record-banner">
-          <div class="record-texts">
-              <div class="record-title">🏆 Рекордный заработок за месяц</div>
-              <div class="record-motiv" id="record-motiv">Обновим цифры!</div>
-              <div class="record-progress-bg"><div class="record-progress-fill" id="record-progress"></div></div>
-          </div>
-          <div class="record-side">
-              <div class="record-value mono" id="record-amount">0 ₽</div>
-              <div class="record-remaining" id="record-remaining">До рекорда 0 ₽</div>
-              <button class="inline-link-btn" onclick="openRecordSettings()">Редактировать рекорд</button>
+              <div class="record-banner">
+                  <div class="record-texts">
+                      <div class="record-title">🏆 Рекордный заработок за месяц</div>
+                      <div class="record-motiv" id="record-motiv">Обновим цифры!</div>
+                      <div class="record-progress-bg"><div class="record-progress-fill" id="record-progress"></div></div>
+                  </div>
+                  <div class="record-side">
+                      <div class="record-value mono" id="record-amount">0 ₽</div>
+                      <div class="record-remaining" id="record-remaining">До рекорда 0 ₽</div>
+                      <button class="inline-link-btn" onclick="openRecordSettings()">Редактировать рекорд</button>
+                  </div>
+              </div>
           </div>
       </div>
     </div>
@@ -736,8 +747,8 @@
             </div>
              <div class="inp-group" style="flex:1.3">
                 <label>Расходы</label>
-                <div style="display:flex; gap:8px; align-items:center;">
-                    <input type="number" id="add-proj-contractor" placeholder="0" style="flex:1 1 200px">
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <input type="number" id="add-proj-contractor" placeholder="0" style="flex:1 1 280px">
                     <select id="add-proj-contractor-mode" class="symbol-select">
                         <option value="amount">₽</option>
                         <option value="percent">%</option>
@@ -755,36 +766,42 @@
             </div>
         </div>
         
-        <div class="row-inputs deadline-presets">
-            <div class="inp-group" style="flex:1">
-                <label>Старт</label>
-                 <div class="date-input-wrap" id="add-proj-start-display" onclick="openDateInModal('add-proj-start-val')">
-                    <svg class="date-icon"><use href="#icon-calendar"/></svg>
-                    <span class="date-text-display">Сегодня</span>
-                 </div>
-                 <input type="hidden" id="add-proj-start-val" value="">
+        <div class="date-duo">
+            <div class="date-duo-card">
+                <div class="inp-group">
+                    <label>⚡ Старт</label>
+                     <div class="date-input-wrap date-chip" id="add-proj-start-display" onclick="openDateInModal('add-proj-start-val')">
+                        <svg class="date-icon"><use href="#icon-calendar"/></svg>
+                        <span class="date-text-display">Сегодня</span>
+                     </div>
+                     <input type="hidden" id="add-proj-start-val" value="">
+                </div>
             </div>
-            <div class="inp-group" style="flex:1">
-                 <label>Дедлайн</label>
-                 <div class="date-input-wrap" id="add-proj-dl-display" onclick="openDateInModal('add-proj-dl-val')">
-                    <svg class="date-icon"><use href="#icon-calendar"/></svg>
-                    <span class="date-text-display">Сегодня</span>
-                 </div>
-                 <input type="hidden" id="add-proj-dl-val" value="">
+            <div class="date-duo-card">
+                <div class="inp-group">
+                     <label>🏁 Дедлайн</label>
+                     <div class="date-input-wrap date-chip" id="add-proj-dl-display" onclick="openDateInModal('add-proj-dl-val')">
+                        <svg class="date-icon"><use href="#icon-calendar"/></svg>
+                        <span class="date-text-display">Сегодня</span>
+                     </div>
+                     <input type="hidden" id="add-proj-dl-val" value="">
+                </div>
             </div>
-            <div class="inp-group" style="flex:1.2; min-width:240px;">
-                <label>Шаблон срока</label>
-                <div class="deadline-presets">
-                    <select id="add-proj-dl-days" onchange="applyDeadlinePreset()">
-                        <option value="">Не выбрано</option>
-                        <option value="1">1 день</option>
-                        <option value="2">2 дня</option>
-                        <option value="3">3 дня</option>
-                        <option value="5">5 дней</option>
-                        <option value="7">7 дней</option>
-                        <option value="custom">Свои дни</option>
-                    </select>
-                    <input type="number" id="add-proj-dl-custom" placeholder="Свои дни" style="width:140px" oninput="applyDeadlinePreset()">
+            <div class="date-duo-card" style="min-width:240px;">
+                <div class="inp-group">
+                    <label>Шаблон срока</label>
+                    <div class="deadline-presets">
+                        <select id="add-proj-dl-days" onchange="applyDeadlinePreset()">
+                            <option value="">Не выбрано</option>
+                            <option value="1">1 день</option>
+                            <option value="2">2 дня</option>
+                            <option value="3">3 дня</option>
+                            <option value="5">5 дней</option>
+                            <option value="7">7 дней</option>
+                            <option value="custom">Свои дни</option>
+                        </select>
+                        <input type="number" id="add-proj-dl-custom" placeholder="Свои дни" style="width:140px" oninput="applyDeadlinePreset()">
+                    </div>
                 </div>
             </div>
         </div>
@@ -815,6 +832,7 @@
             <input type="checkbox" id="link-is-telegram">
             Открывается в Telegram (чат/канал)
         </label>
+        <p class="helper-note">Если указать @username, мы уберём @ и превратим его в кликабельную ссылку.</p>
         <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" id="saveLinkBtn">Сохранить</button>
     </div>
 </div>
@@ -986,6 +1004,16 @@ function updateBulkToolbar(type) {
     document.getElementById('bulkMoveSelect').value = ''; 
 
     toolbar.style.display = count > 0 ? 'flex' : 'none';
+}
+
+function attachRowSelection(tr, type, idx, checkboxId) {
+    tr.addEventListener('click', (e) => {
+        if (e.target.closest('input, select, button, .action-btn-base, .del-btn, .date-input-wrap, .dup-icon, [contenteditable], .trash-action-btns, .link-btn, .inline-link-btn')) return;
+        const checkbox = document.getElementById(checkboxId);
+        if (!checkbox) return;
+        checkbox.checked = !checkbox.checked;
+        toggleSelect(type, idx, checkbox);
+    });
 }
 
 function clearSelection(type = currentTab) {
@@ -1388,6 +1416,7 @@ function renderActive(){
                 <span class="del-btn" onclick="askDel('active',${i})" title="Удалить">×</span>
             </div></td>
         `;
+        attachRowSelection(tr, 'active', i, `check-active-${i}`);
         tbody.appendChild(tr);
     });
     
@@ -1402,8 +1431,14 @@ function renderActive(){
             <div class="footer-note">Расходы</div>
             <div>${formatCurrency(totalContr)}</div>
         </td>
-        <td style="text-align:right;">${formatCurrency(totalP)}</td>
-        <td style="text-align:right;">${formatCurrency(totalPr)}</td>
+        <td style="text-align:right;">
+            <div class="footer-note">Сумма</div>
+            <div>${formatCurrency(totalP)}</div>
+        </td>
+        <td style="text-align:right;">
+            <div class="footer-note">Чистыми</div>
+            <div>${formatCurrency(totalPr)}</div>
+        </td>
         <td style="text-align:center;">
             <div class="footer-note">Оплачено</div>
             <div>${formatCurrency(totalPaidGross)}</div>
@@ -1478,12 +1513,16 @@ function renderSimple(type){
                 <span class="del-btn" onclick="askDel('${type}',${i})">×</span>
             </div></td>
         `;
+        attachRowSelection(tr, type, i, `check-${type}-${i}`);
         tbody.appendChild(tr);
     });
     const footer = document.querySelector(`#total-row-${type}`);
     footer.innerHTML = `<tr>
         <td colspan="4">Всего ${DATA[type].length} проектов</td>
-        <td>${formatCurrency(tot)}</td>
+        <td>
+            <div class="footer-note">Сумма</div>
+            <div>${formatCurrency(tot)}</div>
+        </td>
         <td></td>
     </tr>`;
 }
@@ -1524,12 +1563,16 @@ function renderPotential(){
                 <span class="del-btn" onclick="askDel('potential',${i})">×</span>
             </div></td>
         `;
+        attachRowSelection(tr, 'potential', i, `check-potential-${i}`);
         tbody.appendChild(tr);
     });
     const footer = document.querySelector('#total-row-potential');
     footer.innerHTML = `<tr>
         <td colspan="3">Всего ${DATA.potential.length} лидов</td>
-        <td>${formatCurrency(tot)}</td>
+        <td>
+            <div class="footer-note">Сумма</div>
+            <div>${formatCurrency(tot)}</div>
+        </td>
         <td></td>
     </tr>`;
 }
@@ -1591,17 +1634,22 @@ function renderArchive(){
                 <span class="del-btn" onclick="askDel('archive',${realIdx})">×</span>
             </div></td>
         `;
+        attachRowSelection(tr, 'archive', realIdx, `check-archive-${realIdx}`);
         tbody.appendChild(tr);
     });
     const footer = document.querySelector('#total-row-archive');
     footer.innerHTML = `<tr>
         <td colspan="4">Всего ${visibleItems.length} проектов</td>
-        <td style="text-align:right;">${formatCurrency(tP)}</td>
+        <td style="text-align:right;">
+            <div class="footer-note">Сумма</div>
+            <div>${formatCurrency(tP)}</div>
+        </td>
         <td style="text-align:right;">
             <div class="footer-note">Расходы</div>
             <div>${formatCurrency(tContr)}</div>
         </td>
         <td style="text-align:right;">
+            <div class="footer-note">Чистыми</div>
             <div>${formatCurrency(tPr)}</div>
             <div class="footer-note">Налоги: ${formatCurrency(tTax)}</div>
         </td>
@@ -1639,6 +1687,7 @@ function renderTrash(){
                 </div>
             </td>
         `;
+        attachRowSelection(tr, 'trash', i, `check-trash-${i}`);
         tbody.appendChild(tr);
     });
     const footer = document.querySelector('#t-trash tfoot td:first-child');
@@ -1968,19 +2017,38 @@ function renderMonthSelect(){
     });
 }
 
+function getScopedDataForStats() {
+    const scope = { active: [], archive: [], paused: [], waiting: [], potential: [] };
+    switch (currentTab) {
+        case 'active': scope.active = DATA.active; break;
+        case 'archive': scope.archive = DATA.archive; break;
+        case 'paused': scope.paused = DATA.paused; break;
+        case 'waiting': scope.waiting = DATA.waiting; break;
+        case 'potential': scope.potential = DATA.potential; break;
+        default:
+            scope.active = DATA.active;
+            scope.archive = DATA.archive;
+            scope.paused = DATA.paused;
+            scope.waiting = DATA.waiting;
+            scope.potential = DATA.potential;
+    }
+    return scope;
+}
+
 function calcStats(){
+    const scope = getScopedDataForStats();
     const goal = DATA.monthlyGoals[currentMonth] || 250000;
     let fact = 0, activeFact = 0, plan = 0, totalGross = 0, totalNet = 0;
     let totalExpenses = 0, totalTaxes = 0, totalPaidGross = 0;
 
     ['active','archive','paused','waiting','potential'].forEach(type => {
-        DATA[type].forEach(i => {
+        scope[type].forEach(i => {
             totalExpenses += calcContractorAmount(i);
             totalTaxes += (+i.p || 0) * ((+i.taxPrc || 0) / 100);
         });
     });
-    
-    const archiveThisMonth = DATA.archive.filter(i=>(i.date||'').startsWith(currentMonth));
+
+    const archiveThisMonth = scope.archive.filter(i=>(i.date||'').startsWith(currentMonth));
     archiveThisMonth.forEach(i => {
         const net = calcNet(i);
         fact += net;
@@ -1988,8 +2056,8 @@ function calcStats(){
         totalNet += net;
         totalPaidGross += +i.p || 0;
     });
-    
-    DATA.active.forEach(i => {
+
+    scope.active.forEach(i => {
         const net = calcNet(i);
         const gross = +i.p || 0;
         const paidPrc = (i.paid||0)/100;
@@ -2001,9 +2069,9 @@ function calcStats(){
         totalPaidGross += paidGross;
     });
 
-    DATA.paused.forEach(i => plan += calcNet(i));
-    DATA.waiting.forEach(i => plan += calcNet(i));
-    DATA.potential.forEach(i => plan += calcNet(i));
+    scope.paused.forEach(i => plan += calcNet(i));
+    scope.waiting.forEach(i => plan += calcNet(i));
+    scope.potential.forEach(i => plan += calcNet(i));
 
     const totalFact = fact + activeFact;
     const forecast = totalFact + plan;
@@ -2041,20 +2109,20 @@ function calcStats(){
 
     document.getElementById('p-bar').style.width = goal > 0 ? Math.min(100, (totalFact/goal)*100) + '%' : '0%';
     document.getElementById('dash-month-name').innerText = document.getElementById('monthSelect').options[document.getElementById('monthSelect').selectedIndex]?.text || '';
-    updateCharts(totalFact, plan);
+    updateCharts(totalFact, plan, scope);
 }
 
 let chL = null, chP = null, chB = null;
-function updateCharts(fact, plan){
+function updateCharts(fact, plan, scope){
     const ctxL = document.getElementById('lineChart').getContext('2d');
     const ctxP = document.getElementById('pieChart').getContext('2d');
     const ctxB = document.getElementById('barChart').getContext('2d');
     const daysInM = new Date(currentMonth.split('-')[0], currentMonth.split('-')[1], 0).getDate();
     const labelsL = Array.from({length:daysInM},(_,i)=>i+1);
-    
+
     const dataL = new Array(daysInM).fill(0);
-    
-    DATA.archive.filter(i=>(i.date||'').startsWith(currentMonth)).forEach(i => {
+
+    scope.archive.filter(i=>(i.date||'').startsWith(currentMonth)).forEach(i => {
         const d = parseInt(i.date.split('-')[2]) - 1;
         if(d>=0 && d<daysInM) dataL[d] += calcNet(i);
     });
@@ -2077,7 +2145,7 @@ function updateCharts(fact, plan){
     });
     
     const h = {};
-    DATA.archive.forEach(i => { const m = (i.date||'').slice(0,7); if(m) h[m] = (h[m]||0) + calcNet(i); });
+    scope.archive.forEach(i => { const m = (i.date||'').slice(0,7); if(m) h[m] = (h[m]||0) + calcNet(i); });
     const allMonths = Object.keys(h);
     allMonths.sort();
     const keys = allMonths.slice(-6); 
