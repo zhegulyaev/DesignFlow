@@ -239,13 +239,15 @@
   .card-head-actions { display: flex; align-items: center; gap: 10px; }
   .inline-link-btn { padding: 8px 12px; background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; transition: .2s; }
   .inline-link-btn:hover { color: var(--accent); border-color: var(--accent); background: #21262d; }
-  .progress-bg { height: 8px; background: linear-gradient(90deg, #1c2128, #1a1f26); border-radius: 999px; overflow: hidden; border: 1px solid var(--border); margin-top: 8px; width: 100%; }
-  .progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, #2ea043, #3fb950); transition: width 0.5s; box-shadow: 0 0 12px rgba(46,160,67,0.3); border-radius: 999px; }
+  .progress-bg { height: 14px; background: linear-gradient(90deg, #11151c, #0b1017); border-radius: 12px; overflow: hidden; border: 1px solid rgba(88,166,255,0.2); margin-top: 8px; width: 100%; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02), 0 0 0 1px rgba(15,20,27,0.6); }
+  .progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, #2ea043, #3fb950); transition: width 0.5s; box-shadow: 0 0 14px rgba(46,160,67,0.3); border-radius: 12px; }
   .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
   .stat-box { padding: 14px; border: 1px solid var(--border); border-radius: 10px; background: #0f141b; }
   .stat-label-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
   .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
   .stat-pill { padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; background: rgba(88,166,255,0.12); color: var(--accent); border: 1px solid rgba(88,166,255,0.3); }
+  #goal-pill { background: linear-gradient(120deg, rgba(88,166,255,0.22), rgba(163,113,247,0.22)); border-color: rgba(163,113,247,0.4); color: #dce7ff; padding: 6px 12px; font-size: 13px; box-shadow: 0 4px 18px rgba(88,166,255,0.22); display: inline-flex; gap: 6px; align-items: center; }
+  #goal-pill::before { content: "🎯"; }
   .stat-val { font-size: 30px; font-weight: 800; }
   .stat-helper { font-size: 12px; color: var(--muted); margin-top: 4px; }
   .text-green { color: var(--green); }
@@ -255,10 +257,11 @@
   .record-texts { flex:1; min-width: 0; }
   .record-title { color: var(--muted); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
   .record-motiv { color: #f0f6fc; font-weight: 700; margin-top: 6px; font-size: 15px; }
-  .record-progress-bg { margin-top: 10px; height: 8px; background: linear-gradient(90deg, #1c2128, #11151c); border-radius: 999px; overflow: hidden; border: 1px solid var(--border); width: 100%; }
+  .record-progress-bg { margin-top: 10px; height: 10px; background: linear-gradient(90deg, #1c2128, #11151c); border-radius: 10px; overflow: hidden; border: 1px solid rgba(250,204,21,0.25); width: 100%; box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
   .record-progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, #facc15, #f9a825); box-shadow: 0 0 12px rgba(250,204,21,0.4); transition: width .4s ease; border-radius: 999px; }
   .record-value { font-size: 26px; font-weight: 900; color: var(--gold); text-align: right; }
   .record-remaining { color: var(--muted); font-weight: 700; font-size: 13px; text-align: right; margin-top: 6px; }
+  .record-side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
   /* Bulk Toolbar */
   .bulk-toolbar {
       position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); 
@@ -303,8 +306,8 @@
   .row-inputs{display:flex;gap:15px;margin-bottom:15px;}
   .row-inputs > div {flex: 1;}
   .deadline-presets { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .deadline-presets select { min-width: 140px; }
-  .deadline-presets input { min-width: 90px; }
+  .deadline-presets select { min-width: 160px; }
+  .deadline-presets input { min-width: 130px; }
   
   .close-modal-x { 
       position: absolute; 
@@ -337,6 +340,13 @@
   .stat-val-small { font-size: 16px; font-weight: 600; color: var(--muted); margin-left: 10px;}
   .stat-label-row { display: flex; align-items: center; justify-content: space-between; }
   .stat-val-margin { font-size: 24px; font-weight: 800; color: var(--text); }
+  .stat-label-with-help { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+  .help-icon { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15); color: var(--muted); font-size: 11px; cursor: help; position: relative; transition: border-color .2s, color .2s; }
+  .help-icon:hover { color: var(--text); border-color: var(--accent); }
+  .help-icon::after { content: attr(data-tooltip); position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); background: #0f141b; color: var(--text); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 8px 30px rgba(0,0,0,0.35); width: 260px; max-width: 70vw; font-size: 12px; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity .15s, visibility .15s; z-index: 10; }
+  .help-icon:hover::after { opacity: 1; visibility: visible; }
+  .text-red { color: var(--red); }
+  .symbol-select { width: 68px !important; padding: 8px; text-align: center; }
   
   /* Link Modal Specific */
   #linkModal .modal-content { width: 350px; }
@@ -584,7 +594,7 @@
               <div class="card-head">
                   <div>
                       <div class="finance-title">Финансы: <span class="text-green" id="dash-month-name">...</span></div>
-                      <div class="finance-sub">Прогресс цели (Общий Факт Чистыми)</div>
+                      <div class="finance-sub">Дашборд по чистой прибыли и платежам</div>
                   </div>
                   <div class="card-head-actions">
                       <div class="stat-pill" id="goal-pill">Цель: 0 ₽</div>
@@ -593,7 +603,7 @@
               </div>
               <div class="goal-wrap">
                   <div class="goal-info">
-                      <span>Прогресс цели</span>
+                      <span class="stat-label-with-help">Прогресс цели <span class="help-icon" data-tooltip="Соотношение текущей чистой прибыли к месячной цели. Значение обновляется при изменении статусов проектов и оплат.">?</span></span>
                       <span id="goal-text">0 / 0 ₽</span>
                   </div>
                   <div class="progress-bg"><div class="progress-fill" id="p-bar"></div></div>
@@ -601,7 +611,7 @@
               <div class="stats-grid">
                   <div class="stat-box">
                       <div class="stat-label-row">
-                          <div class="stat-label">ФАКТ</div>
+                          <div class="stat-label-with-help"><span class="stat-label">ФАКТ</span><span class="help-icon" data-tooltip="Чистая прибыль за выбранный месяц с учётом всех статусов.">?</span></div>
                           <div class="stat-pill">Чистыми</div>
                       </div>
                       <div class="stat-val text-green mono" id="val-fact">0 ₽</div>
@@ -609,48 +619,48 @@
                   </div>
                   <div class="stat-box">
                       <div class="stat-label-row">
-                          <div class="stat-label">ПОЛУЧЕНО</div>
-                          <div class="stat-pill">Чистыми, Active</div>
+                          <div class="stat-label-with-help"><span class="stat-label">ПОЛУЧЕНО</span><span class="help-icon" data-tooltip="Чистая сумма, уже поступившая по проектам в работе (статус ‘В работе’).">?</span></div>
+                          <div class="stat-pill">Чистыми (в работе)</div>
                       </div>
                       <div class="stat-val text-green mono" id="val-active-fact">0 ₽</div>
                       <div class="stat-helper">Оплачено в текущих проектах</div>
                   </div>
                   <div class="stat-box">
                       <div class="stat-label-row">
-                          <div class="stat-label">ОПЛАЧЕНО</div>
-                          <div class="stat-pill">Всего, ₽</div>
+                          <div class="stat-label-with-help"><span class="stat-label">ОПЛАЧЕНО</span><span class="help-icon" data-tooltip="Все полученные платежи без вычета налогов и расходов (грязными).">?</span></div>
+                          <div class="stat-pill">Все поступления</div>
                       </div>
                       <div class="stat-val mono" id="val-paid-gross" style="color:var(--accent)">0 ₽</div>
                       <div class="stat-helper">Полученные платежи (грязными)</div>
                   </div>
                   <div class="stat-box">
                       <div class="stat-label-row">
-                          <div class="stat-label">ПЛАН</div>
-                          <div class="stat-pill">Остаток</div>
+                          <div class="stat-label-with-help"><span class="stat-label">ПЛАН</span><span class="help-icon" data-tooltip="Сколько ещё нужно получить до достижения цели месяца.">?</span></div>
+                          <div class="stat-pill">Остаток до цели</div>
                       </div>
                       <div class="stat-val text-gold mono" id="val-plan">0 ₽</div>
                       <div class="stat-helper">Осталось получить</div>
                   </div>
                   <div class="stat-box">
                       <div class="stat-label-row">
-                          <div class="stat-label">ПРОГНОЗ ИТОГА</div>
-                          <div class="stat-pill">Факт + План</div>
+                          <div class="stat-label-with-help"><span class="stat-label">ПРОГНОЗ ИТОГА</span><span class="help-icon" data-tooltip="Оценка конца месяца: текущий факт + ожидаемые платежи по проектам.">?</span></div>
+                          <div class="stat-pill">Факт + ожидаемое</div>
                       </div>
                       <div class="stat-val mono" id="val-total" style="color:var(--accent)">0 ₽</div>
                       <div class="stat-helper">Маржа: <span id="val-margin">0 ₽</span> (<span id="val-margin-prc">0%</span>)</div>
                   </div>
                   <div class="stat-box">
                       <div class="stat-label-row">
-                          <div class="stat-label">РАСХОДЫ</div>
-                          <div class="stat-pill">Все статусы</div>
+                          <div class="stat-label-with-help"><span class="stat-label">РАСХОДЫ</span><span class="help-icon" data-tooltip="Совокупные траты по всем проектам, включая архив и паузу.">?</span></div>
+                          <div class="stat-pill">По всем проектам</div>
                       </div>
-                      <div class="stat-val mono" id="val-expenses">0 ₽</div>
+                      <div class="stat-val mono text-red" id="val-expenses">0 ₽</div>
                       <div class="stat-helper">Сумма затрат</div>
                   </div>
                   <div class="stat-box">
                       <div class="stat-label-row">
-                          <div class="stat-label">НАЛОГИ</div>
-                          <div class="stat-pill">Начислено</div>
+                          <div class="stat-label-with-help"><span class="stat-label">НАЛОГИ</span><span class="help-icon" data-tooltip="Предварительные начисления по указанным ставкам для каждого проекта.">?</span></div>
+                          <div class="stat-pill">К уплате</div>
                       </div>
                       <div class="stat-val mono" id="val-taxes">0 ₽</div>
                       <div class="stat-helper">По указанным ставкам</div>
@@ -660,7 +670,7 @@
           </div>
 
           <div class="card">
-              <div class="card-head">Эффективность</div>
+              <div class="card-head">Эффективность <span class="help-icon" data-tooltip="Визуализация распределения чистой прибыли между уже полученными средствами и оставшимся потенциалом проектов.">?</span></div>
               <div style="position:relative;height:200px;width:100%;display:flex;justify-content:center;margin-bottom:20px;"><canvas id="pieChart"></canvas></div>
               <div style="border-top:1px solid var(--border); padding-top:20px;">
                   <div style="font-size:14px;color:var(--muted);margin-bottom:15px;font-weight:600">По месяцам</div>
@@ -675,9 +685,10 @@
               <div class="record-motiv" id="record-motiv">Обновим цифры!</div>
               <div class="record-progress-bg"><div class="record-progress-fill" id="record-progress"></div></div>
           </div>
-          <div>
+          <div class="record-side">
               <div class="record-value mono" id="record-amount">0 ₽</div>
               <div class="record-remaining" id="record-remaining">До рекорда 0 ₽</div>
+              <button class="inline-link-btn" onclick="openRecordSettings()">Редактировать рекорд</button>
           </div>
       </div>
     </div>
@@ -719,23 +730,23 @@
             <input type="text" id="add-proj-client" placeholder="Иван Иванов">
         </div>
         <div class="row-inputs">
-             <div class="inp-group" style="flex:1">
+             <div class="inp-group" style="flex:1.2">
                 <label>Сумма (₽)</label>
                 <input type="number" id="add-proj-price" placeholder="50000">
             </div>
-             <div class="inp-group" style="flex:1">
+             <div class="inp-group" style="flex:1.3">
                 <label>Расходы</label>
                 <div style="display:flex; gap:8px; align-items:center;">
-                    <input type="number" id="add-proj-contractor" placeholder="0" style="flex:1">
-                    <select id="add-proj-contractor-mode" style="width:90px">
+                    <input type="number" id="add-proj-contractor" placeholder="0" style="flex:1 1 200px">
+                    <select id="add-proj-contractor-mode" class="symbol-select">
                         <option value="amount">₽</option>
                         <option value="percent">%</option>
                     </select>
                 </div>
             </div>
-             <div class="inp-group" style="width:80px">
+             <div class="inp-group" style="width:120px">
                 <label>Налог</label>
-                <select id="add-proj-tax">
+                <select id="add-proj-tax" class="symbol-select">
                     <option value="0">0%</option>
                     <option value="4">4%</option>
                     <option value="6">6%</option>
@@ -761,7 +772,7 @@
                  </div>
                  <input type="hidden" id="add-proj-dl-val" value="">
             </div>
-            <div class="inp-group" style="width:200px">
+            <div class="inp-group" style="flex:1.2; min-width:240px;">
                 <label>Шаблон срока</label>
                 <div class="deadline-presets">
                     <select id="add-proj-dl-days" onchange="applyDeadlinePreset()">
@@ -773,7 +784,7 @@
                         <option value="7">7 дней</option>
                         <option value="custom">Свои дни</option>
                     </select>
-                    <input type="number" id="add-proj-dl-custom" placeholder="Свои дни" style="width:90px" oninput="applyDeadlinePreset()">
+                    <input type="number" id="add-proj-dl-custom" placeholder="Свои дни" style="width:140px" oninput="applyDeadlinePreset()">
                 </div>
             </div>
         </div>
@@ -1897,6 +1908,14 @@ function openGoalSettings(){
     if (goalInput) {
         goalInput.focus();
         goalInput.select();
+    }
+}
+function openRecordSettings(){
+    openSettings();
+    const recordInput = document.getElementById('stg-rec');
+    if (recordInput) {
+        recordInput.focus();
+        recordInput.select();
     }
 }
 function saveSettings(){
