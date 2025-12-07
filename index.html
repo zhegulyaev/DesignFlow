@@ -9,6 +9,9 @@
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' ry='6' fill='%230d1117'/%3E%3Cpath d='M11 2 L5 14 H10 L9 22 L19 8 H13 L14 2 Z' fill='%23facc15'/%3E%3C/svg%3E">
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
 <style>
   :root{--bg:#0d1117;--card:#161b22;--text:#c9d1d9;--muted:#8b949e;--accent:#58a6ff;--green:#2ea043;--red:#da3633;--gold:#d29922;--border:#30363d;--blue:#238636;--btn-blue:#2f81f7;--link-blue: #007bff;--purple:#a371f7;--btn-hover:#30363d;}
   *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;}
@@ -120,7 +123,7 @@
   .date-input-wrap { width: 100%; padding: 6px 8px; cursor: pointer; user-select: none; display: flex; align-items: center; justify-left: flex-start; transition: .2s; border-radius: 10px; gap: 6px; border: 1px solid var(--border); background: transparent; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
   .date-input-wrap:hover { background: #161b22; border-color: #3a3f4b; }
   .date-text-display { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; display: flex; align-items: center; gap: 8px; letter-spacing: -0.1px; }
-  .date-icon { display: inline-flex; width: 14px; height: 14px; color: var(--muted); opacity: 0.85; }
+  .date-icon { display: inline-flex; width: 14px; height: 14px; color: var(--accent); opacity: 0.95; }
   .time-text { color: var(--muted); font-weight: 700; font-size: 12px; }
 
   /* Deadline Colors */
@@ -419,6 +422,90 @@
   .inp-group input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
   .inp-group input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
   .inp-group input:focus, .inp-group select:focus { border-color: var(--accent); }
+
+  .date-time-inputs input {
+      background: #0f141b;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      width: 100%;
+      transition: border-color .2s, background .2s, box-shadow .2s;
+  }
+
+  .date-time-inputs input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(88,166,255,0.15);
+      background: #111722;
+  }
+
+  .date-time-inputs input:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+  }
+
+  /* Flatpickr Dark Theme Tweaks */
+  .flatpickr-calendar {
+      background: #0f141b;
+      border: 1px solid var(--border);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+      color: var(--text);
+      border-radius: 14px;
+  }
+
+  .flatpickr-day, .flatpickr-weekday {
+      color: var(--text);
+  }
+
+  .flatpickr-day:hover, .flatpickr-day:focus {
+      background: rgba(88,166,255,0.12);
+      border-color: rgba(88,166,255,0.35);
+  }
+
+  .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(88,166,255,0.35);
+  }
+
+  .flatpickr-current-month input.cur-year {
+      color: var(--text);
+  }
+
+  .flatpickr-months .flatpickr-prev-month svg,
+  .flatpickr-months .flatpickr-next-month svg {
+      fill: var(--text);
+  }
+
+  .flatpickr-time {
+      border-top: 1px solid var(--border);
+  }
+
+  .flatpickr-time input, .flatpickr-time .numInputWrapper span {
+      color: var(--text);
+  }
+
+  .flatpickr-time input:hover, .flatpickr-time .numInputWrapper span:hover {
+      background: rgba(88,166,255,0.1);
+  }
+
+  .flatpickr-time .numInputWrapper span.arrowUp:after,
+  .flatpickr-time .numInputWrapper span.arrowDown:after {
+      border-bottom-color: var(--accent);
+      border-top-color: var(--accent);
+  }
+
+  .flatpickr-day.today:not(.selected) {
+      border-color: var(--accent);
+      color: var(--accent);
+  }
+
+  .flatpickr-weekday {
+      color: var(--muted);
+      font-weight: 700;
+  }
 
   /* Finance Block Percentage */
   .stat-val-small { font-size: 16px; font-weight: 600; color: var(--muted); margin-left: 10px;}
@@ -1021,8 +1108,8 @@ td.date-cell + td.date-cell {
         </label>
         
         <div class="date-time-inputs" style="display:flex; gap: 15px;">
-            <input type="date" id="date-input-val" style="flex:1">
-            <input type="time" id="time-input-val" style="flex:1" disabled>
+            <input type="text" id="date-input-val" style="flex:1" placeholder="ДД.ММ.ГГГГ">
+            <input type="text" id="time-input-val" style="flex:1" placeholder="ЧЧ:ММ" disabled>
         </div>
         <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveDate()">Сохранить</button>
     </div>
@@ -1115,6 +1202,8 @@ let queue = { type: null, idx: null, field: null, targetId: null };
 let previousDeadlineValue = '';
 let toastTimeout = null;
 let lastPermanentDeletion = null;
+let datePicker = null;
+let timePicker = null;
 
 function showToast(message, actionText = '', actionHandler = null, duration = 3500) {
     const toast = document.getElementById('toast');
@@ -1445,6 +1534,7 @@ function init(){
     cleanupTrash();
     renderMonthSelect();
     setupModalsBackgroundCheck();
+    setupDatePickers();
     document.getElementById('saveLinkBtn').onclick = saveLink;
     document.getElementById('add-proj-start-val').value = today;
     document.getElementById('add-proj-dl-val').value = today;
@@ -1965,6 +2055,7 @@ function renderAll(){
 
     const footer = document.querySelector('#total-row-all');
     if (footer) {
+        const repState = analyzeReputation();
         footer.innerHTML = `<tr>
             <td colspan="5" class="footer-total-toggle" onclick="toggleFooterSelection('all')">Всего ${allItems.length} записей</td>
             <td style="text-align:right;">
@@ -1983,6 +2074,21 @@ function renderAll(){
                 <div class="footer-note">Чистыми</div>
                 <div>${formatCurrency(totalNet)}</div>
             </td>
+        </tr>
+        <tr class="table-rep-row">
+            <td colspan="3"></td>
+            <td colspan="3">
+                <div class="table-rep-info">
+                    <span class="table-rep-title">Репутация</span>
+                    <span class="rep-dot ${repState.level}" aria-hidden="true"></span>
+                    <div>
+                        <div class="table-rep-desc">${repState.hint}</div>
+                    </div>
+                    <span class="table-rep-score rep-score-inline ${repState.level}">${repState.score} / 100</span>
+                    <span class="help-icon" data-tooltip="Пульс по дедлайнам во всех разделах. Чем выше значение, тем надёжнее график.">?</span>
+                </div>
+            </td>
+            <td colspan="3"></td>
         </tr>`;
     }
 }
@@ -2199,24 +2305,55 @@ function openDateInModal(targetInputId){
     queue = {type: null, idx: null, field: null, targetId: targetInputId};
     openDateBase(val);
 }
+function setupDatePickers(){
+    if (typeof flatpickr !== 'function') return;
+
+    datePicker = flatpickr('#date-input-val', {
+        dateFormat: 'Y-m-d',
+        defaultDate: today,
+        locale: flatpickr.l10ns.ru,
+        disableMobile: true,
+    });
+
+    timePicker = flatpickr('#time-input-val', {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: 'H:i',
+        defaultDate: '12:00',
+        time_24hr: true,
+        minuteIncrement: 5,
+        disableMobile: true,
+    });
+}
 function openDateBase(val) {
     const hasTime = val && val.includes('T') && val.length > 10;
     document.getElementById('date-has-time').checked = hasTime;
-    
-    if(val) {
-        document.getElementById('date-input-val').value = val.slice(0, 10);
-        document.getElementById('time-input-val').value = hasTime ? val.slice(11, 16) : '12:00';
-    } else {
-        document.getElementById('date-input-val').value = today;
-        document.getElementById('time-input-val').value = '12:00';
-    }
+
+    const dateVal = val ? val.slice(0, 10) : today;
+    const timeVal = hasTime ? val.slice(11, 16) : '12:00';
+
+    if (datePicker) datePicker.setDate(dateVal, true);
+    else document.getElementById('date-input-val').value = dateVal;
+
+    if (timePicker) timePicker.setDate(timeVal, true, 'H:i');
+    else document.getElementById('time-input-val').value = timeVal;
+
     toggleTimeInput();
     document.getElementById('dateModal').style.display = 'flex';
 }
 function toggleTimeInput(){
     const chk = document.getElementById('date-has-time');
-    document.getElementById('time-input-val').disabled = !chk.checked;
-    document.getElementById('time-input-val').style.opacity = chk.checked ? '1' : '0.3';
+    const baseInput = document.getElementById('time-input-val');
+    const inputs = [baseInput, timePicker?.input, timePicker?.altInput].filter(Boolean);
+
+    inputs.forEach(inp => {
+        inp.disabled = !chk.checked;
+        inp.style.opacity = chk.checked ? '1' : '0.3';
+    });
+
+    if (timePicker) {
+        timePicker.set('clickOpens', chk.checked);
+    }
 }
 function closeDateModal(){ document.getElementById('dateModal').style.display = 'none'; }
 function saveDate(){
