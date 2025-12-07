@@ -236,6 +236,9 @@
   .finance-sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
   .goal-wrap { margin-bottom: 18px; }
   .goal-info { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
+  .card-head-actions { display: flex; align-items: center; gap: 10px; }
+  .inline-link-btn { padding: 8px 12px; background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; transition: .2s; }
+  .inline-link-btn:hover { color: var(--accent); border-color: var(--accent); background: #21262d; }
   .progress-bg { height: 8px; background: linear-gradient(90deg, #1c2128, #1a1f26); border-radius: 999px; overflow: hidden; border: 1px solid var(--border); margin-top: 8px; width: 100%; }
   .progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, #2ea043, #3fb950); transition: width 0.5s; box-shadow: 0 0 12px rgba(46,160,67,0.3); border-radius: 999px; }
   .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
@@ -583,7 +586,10 @@
                       <div class="finance-title">Финансы: <span class="text-green" id="dash-month-name">...</span></div>
                       <div class="finance-sub">Прогресс цели (Общий Факт Чистыми)</div>
                   </div>
-                  <div class="stat-pill" id="goal-pill">Цель: 0 ₽</div>
+                  <div class="card-head-actions">
+                      <div class="stat-pill" id="goal-pill">Цель: 0 ₽</div>
+                      <button class="inline-link-btn" onclick="openGoalSettings()">Редактировать</button>
+                  </div>
               </div>
               <div class="goal-wrap">
                   <div class="goal-info">
@@ -1884,6 +1890,14 @@ function openSettings(){
     document.getElementById('stg-goal').value = DATA.monthlyGoals[currentMonth] || 250000;
     document.getElementById('stg-rec').value = DATA.settings.record || 0;
     document.getElementById('settingsModal').style.display = 'flex';
+}
+function openGoalSettings(){
+    openSettings();
+    const goalInput = document.getElementById('stg-goal');
+    if (goalInput) {
+        goalInput.focus();
+        goalInput.select();
+    }
 }
 function saveSettings(){
     DATA.monthlyGoals[currentMonth] = +document.getElementById('stg-goal').value;
