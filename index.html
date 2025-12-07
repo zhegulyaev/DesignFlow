@@ -35,6 +35,13 @@
   
   button{padding:10px 20px;background:#21262d;border:1px solid var(--border);color:var(--text);border-radius:8px;cursor:pointer;font-weight:600;font-size:14px;transition:.2s;display:flex;align-items:center;gap:8px;white-space: nowrap;}
   button:hover{border-color:var(--accent);color:var(--accent);}
+
+  .toast { position: fixed; top: 15px; right: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; display: none; align-items: center; gap: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); z-index: 1200; min-width: 260px; }
+  .toast.show { display: flex; animation: fadeIn .2s ease; }
+  .toast-message { flex: 1; font-weight: 600; color: var(--text); }
+  .toast-action { background: var(--btn-blue); color: #fff; border: 1px solid var(--btn-blue); border-radius: 6px; padding: 6px 10px; font-weight: 700; cursor: pointer; }
+  .toast-close { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 16px; padding: 0 4px; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
   
   /* Tabs */
   .tabs-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
@@ -98,15 +105,16 @@
 
   
   /* Inputs & Selects */
-  [contenteditable]{ outline:none; background: transparent; border: 1px solid transparent; padding: 5px 8px; border-radius: 6px; transition:.2s; display:inline-block; width: 100%; overflow: hidden; text-overflow: ellipsis; }
+  [contenteditable]{ outline:none; background: transparent; border: 1px solid transparent; padding: 5px 8px; border-radius: 6px; transition:.2s; display:inline-block; width: 100%; white-space: pre-wrap; word-break: break-word; overflow: visible; text-overflow: unset; }
   [contenteditable]:focus, [contenteditable]:hover { border-color: var(--border); background: #21262d; cursor: text; }
-  [contenteditable]:focus { white-space: normal; -webkit-line-clamp: initial; overflow: visible; text-overflow: unset; }
+  [contenteditable]:focus { white-space: pre-wrap; -webkit-line-clamp: initial; overflow: visible; text-overflow: unset; }
   
   .date-cell { padding: 0 !important; } 
   .date-input-wrap { width: 100%; padding: 5px 8px; cursor: pointer; user-select: none; display: flex; align-items: center; justify-left: flex-start; transition: .2s; border-radius: 6px; gap: 6px; }
   .date-input-wrap:hover { background: #21262d; }
-  .date-text-display { font-size: 14px; font-weight: 500; color: var(--text); white-space: nowrap; }
-  .date-icon { color: var(--muted); width: 14px; height: 14px; flex-shrink: 0; } 
+  .date-text-display { font-size: 14px; font-weight: 500; color: var(--text); white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+  .date-icon { color: var(--muted); width: 14px; height: 14px; flex-shrink: 0; }
+  .time-badge { background: rgba(88,166,255,0.1); color: var(--accent); border: 1px solid rgba(88,166,255,0.4); padding: 2px 6px; border-radius: 6px; font-size: 12px; font-weight: 700; }
 
   /* Deadline Colors */
   .days-critical { color: var(--red); font-weight: 700; }
@@ -136,13 +144,15 @@
   /* Net Column Fix */
   .net-display-wrap { display: flex; flex-direction: column; align-items: flex-end; padding: 5px 0; }
   .net-main-val { font-weight: 600; color: var(--text); }
-  .net-prc-val { 
-      font-size: 12px; 
+  .net-prc-val {
+      font-size: 12px;
       font-weight: 500; /* Не жирный */
       opacity: 0.6; /* Полупрозрачность */
-      color: var(--muted); 
+      color: var(--muted);
       margin-top: 2px;
   }
+
+  .paid-amount { font-size: 12px; color: var(--muted); margin-top: 4px; text-align: center; }
 
 
   .paid-select, .tax-select { background: transparent; color: var(--text); border: 1px solid transparent; padding: 5px; border-radius: 6px; font-size: 13px; cursor: pointer; outline: none; transition: .2s; text-align: center;}
@@ -151,10 +161,10 @@
 
   /* Actions */
   .client-wrap{display:flex;align-items:center;gap:8px; width: 100%;}
-  .client-name, .project-name { display:block; line-height:1.2; overflow:hidden; text-overflow:ellipsis; white-space:normal; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
-  .client-name { max-width: 210px; font-weight:700; color:var(--text); display:-webkit-box; }
-  .project-name-wrap { display: flex; align-items: center; gap: 8px; overflow: hidden; }
-  .project-name { display:-webkit-box; max-width: 320px; font-weight:600; }
+  .client-name, .project-name { display:block; line-height:1.3; white-space:pre-wrap; -webkit-line-clamp:unset; -webkit-box-orient:vertical; overflow:visible; text-overflow:unset; word-break: break-word; }
+  .client-name { max-width: 210px; font-weight:700; color:var(--text); }
+  .project-name-wrap { display: flex; align-items: center; gap: 8px; overflow: visible; }
+  .project-name { max-width: 320px; font-weight:600; }
   
   .dup-icon { opacity: 0; transition: opacity 0.2s; cursor: pointer; color: var(--muted); width: 16px; height: 16px; flex-shrink: 0;}
   tr:hover .dup-icon { opacity: 1; }
@@ -355,6 +365,12 @@
 </style>
 </head>
 <body>
+
+<div class="toast" id="toast">
+    <div class="toast-message" id="toast-message"></div>
+    <button class="toast-action" id="toast-action" style="display:none"></button>
+    <button class="toast-close" onclick="hideToast()">×</button>
+</div>
 
 <svg style="display: none;">
     <symbol id="icon-active" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM3 8a5 5 0 0 1 10 0 5 5 0 0 1-10 0Z"/></symbol>
@@ -593,6 +609,22 @@
                       <div class="stat-val mono" id="val-total" style="color:var(--accent)">0 ₽</div>
                       <div class="stat-helper">Маржа: <span id="val-margin">0 ₽</span> (<span id="val-margin-prc">0%</span>)</div>
                   </div>
+                  <div class="stat-box">
+                      <div class="stat-label-row">
+                          <div class="stat-label">РАСХОДЫ</div>
+                          <div class="stat-pill">Все статусы</div>
+                      </div>
+                      <div class="stat-val mono" id="val-expenses">0 ₽</div>
+                      <div class="stat-helper">Сумма затрат</div>
+                  </div>
+                  <div class="stat-box">
+                      <div class="stat-label-row">
+                          <div class="stat-label">НАЛОГИ</div>
+                          <div class="stat-pill">Начислено</div>
+                      </div>
+                      <div class="stat-val mono" id="val-taxes">0 ₽</div>
+                      <div class="stat-helper">По указанным ставкам</div>
+                  </div>
               </div>
               <div style="position:relative;height:250px;width:100%"><canvas id="lineChart"></canvas></div>
           </div>
@@ -629,8 +661,9 @@
 
 <div class="bulk-toolbar" id="bulkToolbar" style="display: none;">
     <span style="color:var(--text); font-weight: 600;" id="bulkCount">0 выбрано</span>
+    <button class="bulk-action-btn" onclick="clearSelection()">↺ Отменить выделение</button>
     <button class="bulk-action-btn" onclick="bulkDuplicate()">❐ Дублировать</button>
-    
+
     <select id="bulkMoveSelect" class="bulk-move-select" onchange="askBulkMove(this.value)">
         <option value="">Перенести в...</option>
         <option value="active">В работу</option>
@@ -695,7 +728,7 @@
                 <label>Шаблон срока</label>
                 <div class="deadline-presets">
                     <select id="add-proj-dl-days" onchange="applyDeadlinePreset()">
-                        <option value="">—</option>
+                        <option value="">Выберите дни</option>
                         <option value="1">1 день</option>
                         <option value="2">2 дня</option>
                         <option value="3">3 дня</option>
@@ -730,6 +763,10 @@
         <div class="inp-group">
             <input type="url" id="link-input" placeholder="https://t.me/...">
         </div>
+        <label class="checkbox-wrap" style="margin-top:-5px;">
+            <input type="checkbox" id="link-is-telegram">
+            Это ссылка на Telegram
+        </label>
         <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" id="saveLinkBtn">Сохранить</button>
     </div>
 </div>
@@ -794,8 +831,37 @@ let DATA = {
     active: [], archive: [], paused: [], waiting: [], potential: [], trash: []
 };
 
-let SORT = { active: 'dl', archive: 'date', potential: 'p', waiting: 'dl', paused: 'dl' }; 
+let SORT = { active: 'dl', archive: 'date', potential: 'p', waiting: 'dl', paused: 'dl' };
 let queue = { type: null, idx: null, field: null, targetId: null };
+let toastTimeout = null;
+
+function showToast(message, actionText = '', actionHandler = null, duration = 3500) {
+    const toast = document.getElementById('toast');
+    const msgEl = document.getElementById('toast-message');
+    const actionBtn = document.getElementById('toast-action');
+
+    msgEl.textContent = message;
+
+    if (actionText && actionHandler) {
+        actionBtn.textContent = actionText;
+        actionBtn.style.display = 'inline-flex';
+        actionBtn.onclick = () => { actionHandler(); hideToast(); };
+    } else {
+        actionBtn.style.display = 'none';
+        actionBtn.onclick = null;
+    }
+
+    toast.classList.add('show');
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => hideToast(), duration);
+}
+
+function hideToast() {
+    const toast = document.getElementById('toast');
+    toast.classList.remove('show');
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = null;
+}
 
 // --- BULK ACTIONS ---
 let selectedRows = {}; // {active: Set(), waiting: Set(), ...}
@@ -865,20 +931,34 @@ function updateBulkToolbar(type) {
     toolbar.style.display = count > 0 ? 'flex' : 'none';
 }
 
+function clearSelection(type = currentTab) {
+    if (!selectedRows[type]) selectedRows[type] = new Set();
+    selectedRows[type].clear();
+
+    document.querySelectorAll(`#t-${type} tbody .bulk-checkbox`).forEach(cb => cb.checked = false);
+    document.querySelectorAll(`#t-${type} tbody tr`).forEach(tr => tr.classList.remove('row-selected'));
+
+    const selectAllCheckbox = document.getElementById(`selectAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
+    if (selectAllCheckbox) selectAllCheckbox.checked = false;
+
+    updateBulkToolbar(type);
+}
+
 function askBulkDelete(type = currentTab) {
     const count = selectedRows[type] ? selectedRows[type].size : 0;
     if (count === 0) return;
-    
-    document.getElementById('del-modal-title').innerText = `Удалить ${count} элементов в корзину?`;
-    document.getElementById('del-modal-desc').innerText = "Объекты будут храниться 7 дней.";
+
+    const isTrash = type === 'trash';
+    document.getElementById('del-modal-title').innerText = isTrash ? `Удалить ${count} элементов навсегда?` : `Удалить ${count} элементов в корзину?`;
+    document.getElementById('del-modal-desc').innerText = isTrash ? "Элементы будут удалены безвозвратно." : "Объекты будут храниться 7 дней.";
     document.getElementById('deleteConfirmModal').style.display = 'flex';
     document.getElementById('finalDeleteBtn').style.backgroundColor = 'var(--red)';
     document.getElementById('finalDeleteBtn').style.borderColor = 'var(--red)';
-    document.getElementById('finalDeleteBtn').innerText = 'Удалить';
-    document.getElementById('finalDeleteBtn').onclick = () => bulkDelete(type);
+    document.getElementById('finalDeleteBtn').innerText = isTrash ? 'Удалить навсегда' : 'Удалить';
+    document.getElementById('finalDeleteBtn').onclick = () => bulkDelete(type, isTrash);
 }
 
-function bulkDelete(type = currentTab) {
+function bulkDelete(type = currentTab, deleteForever = false) {
     if (!selectedRows[type] || selectedRows[type].size === 0) return;
 
     const indicesToDelete = Array.from(selectedRows[type])
@@ -889,14 +969,23 @@ function bulkDelete(type = currentTab) {
         const itemIndex = DATA[type].findIndex((_, i) => i === idx);
         if (itemIndex > -1) {
             const item = DATA[type].splice(itemIndex, 1)[0];
-            item.deletedAt = Date.now();
-            DATA.trash.unshift(item);
+            if (deleteForever) {
+                // просто удаляем
+            } else {
+                item.deletedAt = Date.now();
+                DATA.trash.unshift(item);
+            }
         }
     });
-    
+
     selectedRows[type].clear();
     document.getElementById('deleteConfirmModal').style.display = 'none';
     save(); upd();
+    if (deleteForever) {
+        showToast('Удалено навсегда');
+    } else {
+        showToast(`Перемещено в корзину: ${indicesToDelete.length}`, 'Перейти', () => switchTab('trash'));
+    }
 }
 
 function bulkDuplicate(type = currentTab) {
@@ -1017,7 +1106,10 @@ function formatDateDisplay(str) {
     const dateObj = new Date(str.replace(' ', 'T'));
     if(isNaN(dateObj.getTime())) return '—';
     const d = dateObj.toLocaleDateString('ru', { day: 'numeric', month: 'short' }).replace('.', '');
-    if(hasTime) return `${d} <span style="opacity:0.6;font-size:0.9em;margin-left:4px">${dateObj.toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})}</span>`;
+    if(hasTime) {
+        const t = dateObj.toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'});
+        return `${d} <span class="time-badge">🕒 ${t}</span>`;
+    }
     return d;
 }
 
@@ -1106,11 +1198,13 @@ function upd(){
 function renderActive(){
     const tbody = document.querySelector('#t-active tbody');
     tbody.innerHTML = '';
-    let totalP = 0, totalPr = 0;
+    let totalP = 0, totalPr = 0, totalContr = 0, totalTax = 0;
     
     DATA.active.forEach((item, i) => {
         item.pr = calcNet(item);
         totalP += +item.p; totalPr += item.pr;
+        totalContr += +item.contractor || 0;
+        totalTax += (+item.p || 0) * ((+item.taxPrc || 0) / 100);
 
         const rem = getTimeRemaining(item.dl);
         const tr = document.createElement('tr');
@@ -1120,6 +1214,7 @@ function renderActive(){
         if (isSelected) tr.classList.add('row-selected');
 
         const linkIcon = renderLinkControls(item, i, 'active');
+        const paidAmount = Math.round((+item.p || 0) * ((+item.paid || 0) / 100));
 
         tr.innerHTML = `
             <td class="select-col">
@@ -1155,11 +1250,14 @@ function renderActive(){
             <td style="text-align:right;"><div class="price-cell-wrap"><input type="number" value="${item.p||0}" onblur="updVal('active',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td style="text-align:right;"><div class="net-display-wrap">${formatCurrency(item.pr)}<span class="net-prc-val">(${calcMarginPrc(item)}%)</span></div></td>
             
-            <td><select class="paid-select" onchange="updVal('active',${i},'paid',this.value)">
-                <option value="0" ${+item.paid===0?'selected':''}>0%</option>
-                <option value="50" ${+item.paid===50?'selected':''}>50%</option>
-                <option value="100" ${+item.paid===100?'selected':''}>100%</option>
-            </select></td>
+            <td>
+                <select class="paid-select" onchange="updVal('active',${i},'paid',this.value)">
+                    <option value="0" ${+item.paid===0?'selected':''}>0%</option>
+                    <option value="50" ${+item.paid===50?'selected':''}>50%</option>
+                    <option value="100" ${+item.paid===100?'selected':''}>100%</option>
+                </select>
+                <div class="paid-amount">${formatCurrency(paidAmount)}</div>
+            </td>
             
             <td><div class="action-btns">
                 <div class="done-btn action-btn-base" onclick="mv(${i},'active','archive')" title="Выполнено">✓</div>
@@ -1173,7 +1271,7 @@ function renderActive(){
     
     const footer = document.querySelector('#total-row-active');
     footer.innerHTML = `<tr>
-        <td colspan="8">Всего ${DATA.active.length} проектов</td>
+        <td colspan="8">Всего ${DATA.active.length} проектов · Расходы: ${formatCurrency(totalContr)} · Налоги: ${formatCurrency(totalTax)}</td>
         <td style="text-align:right;">${formatCurrency(totalP)}</td>
         <td style="text-align:right;">${formatCurrency(totalPr)}</td>
         <td colspan="2"></td>
@@ -1305,12 +1403,14 @@ function renderPotential(){
 function renderArchive(){
     const tbody = document.querySelector('#t-archive tbody');
     tbody.innerHTML = '';
-    let tP = 0, tPr = 0;
+    let tP = 0, tPr = 0, tContr = 0, tTax = 0;
     const visibleItems = DATA.archive.filter(i => (i.date||'').startsWith(currentMonth));
     visibleItems.forEach((item, i) => {
         const realIdx = DATA.archive.indexOf(item);
         item.pr = calcNet(item);
         tP += +item.p; tPr += +item.pr;
+        tContr += +item.contractor || 0;
+        tTax += (+item.p || 0) * ((+item.taxPrc || 0) / 100);
         const tr = document.createElement('tr');
         tr.dataset.index = realIdx;
 
@@ -1348,9 +1448,9 @@ function renderArchive(){
     });
     const footer = document.querySelector('#total-row-archive');
     footer.innerHTML = `<tr>
-        <td colspan="4">Всего ${visibleItems.length} проектов</td>
+        <td colspan="4">Всего ${visibleItems.length} проектов · Налоги: ${formatCurrency(tTax)}</td>
         <td>${formatCurrency(tP)}</td>
-        <td></td>
+        <td>${formatCurrency(tContr)}</td>
         <td>${formatCurrency(tPr)}</td>
         <td></td>
     </tr>`;
@@ -1421,23 +1521,14 @@ function duplicateRow(type, idx){
 }
 
 function askDel(type, idx){
-    document.getElementById('del-modal-title').innerText = "Удалить в корзину?";
-    document.getElementById('del-modal-desc').innerText = "Объект будет храниться 7 дней.";
-    document.getElementById('deleteConfirmModal').style.display = 'flex';
-    document.getElementById('finalDeleteBtn').style.backgroundColor = 'var(--red)';
-    document.getElementById('finalDeleteBtn').style.borderColor = 'var(--red)';
-    document.getElementById('finalDeleteBtn').innerText = 'Удалить';
-    
-    document.getElementById('finalDeleteBtn').onclick = () => {
-        const itemIndex = DATA[type].findIndex((_, i) => i === idx);
-        if (itemIndex > -1) {
-            const item = DATA[type].splice(itemIndex, 1)[0];
-            item.deletedAt = Date.now();
-            DATA.trash.unshift(item);
-        }
-        document.getElementById('deleteConfirmModal').style.display = 'none';
+    const itemIndex = DATA[type].findIndex((_, i) => i === idx);
+    if (itemIndex > -1) {
+        const item = DATA[type].splice(itemIndex, 1)[0];
+        item.deletedAt = Date.now();
+        DATA.trash.unshift(item);
         save(); upd();
-    };
+        showToast('Перемещено в корзину', 'Перейти', () => switchTab('trash'));
+    }
 }
 
 function deleteForeverCheck(idx) {
@@ -1447,11 +1538,12 @@ function deleteForeverCheck(idx) {
     document.getElementById('finalDeleteBtn').style.backgroundColor = 'var(--red)';
     document.getElementById('finalDeleteBtn').style.borderColor = 'var(--red)';
     document.getElementById('finalDeleteBtn').innerText = 'Удалить навсегда';
-    
+
     document.getElementById('finalDeleteBtn').onclick = () => {
         DATA.trash.splice(idx, 1);
         document.getElementById('deleteConfirmModal').style.display = 'none';
         save(); upd();
+        showToast('Удалено навсегда');
     };
 }
 
@@ -1503,6 +1595,15 @@ function applyDeadlinePreset() {
 
     if (document.activeElement === customInput && select.value !== 'custom') {
         select.value = 'custom';
+    }
+
+    if (select.value === 'custom' && customInput.value.trim() === '') {
+        select.value = '';
+        const fallbackDate = document.getElementById('add-proj-start-val').value || today;
+        document.getElementById('add-proj-dl-val').value = fallbackDate;
+        const currentDl = document.getElementById('add-proj-dl-val').value || fallbackDate;
+        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(currentDl);
+        return;
     }
 
     let days = parseInt(select.value, 10);
@@ -1584,13 +1685,32 @@ function openProjectLink(idx, type) {
 }
 function openLink(type, idx){
     queue = {type, idx};
-    document.getElementById('link-input').value = DATA[type][idx].link || '';
+    const currentLink = DATA[type][idx].link || '';
+    const tgCheckbox = document.getElementById('link-is-telegram');
+    let displayValue = currentLink;
+
+    if (currentLink.match(/t\.me\//)) {
+        tgCheckbox.checked = true;
+        displayValue = currentLink.replace(/^https?:\/\/t\.me\//, '').replace(/^@+/, '');
+    } else {
+        tgCheckbox.checked = false;
+    }
+
+    document.getElementById('link-input').value = displayValue;
     document.getElementById('linkModal').style.display = 'flex';
 }
 function closeLinkModal(){ document.getElementById('linkModal').style.display = 'none'; }
 function saveLink(){
-    let url = document.getElementById('link-input').value.trim();
-    if(url && !url.match(/^(https?:\/\/|mailto:)/)) url = 'https://' + url;
+    const isTelegram = document.getElementById('link-is-telegram').checked;
+    let url = document.getElementById('link-input').value.trim().replace(/^@+/, '');
+
+    if (isTelegram) {
+        url = url.replace(/^https?:\/\/t\.me\//, '').replace(/^@+/, '');
+        url = url ? `https://t.me/${url}` : '';
+    } else if (url && !url.match(/^(https?:\/\/|mailto:)/)) {
+        url = 'https://' + url;
+    }
+
     DATA[queue.type][queue.idx].link = url;
     closeLinkModal(); save(); upd();
 }
@@ -1653,6 +1773,14 @@ function renderMonthSelect(){
 function calcStats(){
     const goal = DATA.monthlyGoals[currentMonth] || 250000;
     let fact = 0, activeFact = 0, plan = 0, totalGross = 0, totalNet = 0;
+    let totalExpenses = 0, totalTaxes = 0;
+
+    ['active','archive','paused','waiting','potential'].forEach(type => {
+        DATA[type].forEach(i => {
+            totalExpenses += +i.contractor || 0;
+            totalTaxes += (+i.p || 0) * ((+i.taxPrc || 0) / 100);
+        });
+    });
     
     const archiveThisMonth = DATA.archive.filter(i=>(i.date||'').startsWith(currentMonth));
     archiveThisMonth.forEach(i => {
@@ -1690,6 +1818,8 @@ function calcStats(){
     document.getElementById('val-margin-prc').innerText = `${totalGrossCombined > 0 ? Math.round((totalMargin/totalGrossCombined)*100) : 0}%`;
     document.getElementById('val-plan').innerText = formatCurrency(plan);
     document.getElementById('val-total').innerText = formatCurrency(forecast);
+    document.getElementById('val-expenses').innerText = formatCurrency(totalExpenses);
+    document.getElementById('val-taxes').innerText = formatCurrency(totalTaxes);
     document.getElementById('goal-text').innerText = `${formatCurrency(totalFact)} / ${formatCurrency(goal)}`;
     document.getElementById('goal-pill').innerText = `Цель: ${formatCurrency(goal)}`;
 
