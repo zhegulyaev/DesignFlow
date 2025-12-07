@@ -327,13 +327,19 @@
   .deadline-presets { display: flex; gap: 10px; align-items: center; flex-wrap: nowrap; }
   .deadline-presets select { min-width: 150px; white-space: nowrap; }
   .deadline-presets input { min-width: 120px; }
-  .date-duo { display: flex; gap: 12px; align-items: stretch; margin-bottom: 15px; flex-wrap: wrap; }
+  .date-duo { display: flex; gap: 12px; align-items: stretch; margin-bottom: 12px; flex-wrap: nowrap; }
   .date-duo .inp-group { margin-bottom: 0; }
   .date-duo-card { flex: 1 1 220px; padding: 12px; border-radius: 14px; border: 1px solid var(--border); background: #10151d; box-shadow: inset 0 0 0 1px rgba(88,166,255,0.06); }
   .date-duo .inp-group label { display: flex; align-items: center; gap: 6px; color: #dce7ff; font-weight: 700; }
   .deadline-presets select { min-width: 140px; }
   .deadline-presets input { min-width: 110px; }
   .date-chip { margin-top: 8px; }
+
+  .deadline-template { margin-bottom: 15px; }
+  .deadline-template .deadline-presets { gap: 8px; flex-wrap: wrap; }
+  .deadline-template .inp-group { margin-bottom: 0; }
+  .deadline-template .deadline-presets select,
+  .deadline-template .deadline-presets input { background: #21262d; border: 1px solid var(--border); }
   
   .close-modal-x { 
       position: absolute; 
@@ -662,7 +668,7 @@ td.date-cell + td.date-cell {
                   <div>
                       <div class="finance-title">Финансы: <span class="text-green" id="dash-month-name">...</span></div>
                       <div class="finance-sub">Дашборд по чистой прибыли и платежам</div>
-                      <div class="stat-scope-note" id="stat-scope-note">Статистика по: В работе</div>
+                      <div class="stat-scope-note" id="stat-scope-note" title="Данные собираются по всем разделам">Срез: все проекты</div>
                   </div>
                   <div class="card-head-actions">
                       <div class="stat-pill" id="goal-pill">Цель: 0 ₽</div>
@@ -845,21 +851,22 @@ td.date-cell + td.date-cell {
                      <input type="hidden" id="add-proj-dl-val" value="">
                 </div>
             </div>
-            <div class="date-duo-card" style="min-width:240px;">
-                <div class="inp-group">
-                    <label>Шаблон срока</label>
-                    <div class="deadline-presets">
-                        <select id="add-proj-dl-days" onchange="applyDeadlinePreset()">
-                            <option value="">Не выбрано</option>
-                            <option value="1">1 день</option>
-                            <option value="2">2 дня</option>
-                            <option value="3">3 дня</option>
-                            <option value="5">5 дней</option>
-                            <option value="7">7 дней</option>
-                            <option value="custom">Свои дни</option>
-                        </select>
-                        <input type="number" id="add-proj-dl-custom" placeholder="Свои дни" style="width:140px" oninput="applyDeadlinePreset()">
-                    </div>
+        </div>
+
+        <div class="deadline-template">
+            <div class="inp-group">
+                <label>Шаблон срока</label>
+                <div class="deadline-presets">
+                    <select id="add-proj-dl-days" onchange="applyDeadlinePreset()">
+                        <option value="">Не выбрано</option>
+                        <option value="1">1 день</option>
+                        <option value="2">2 дня</option>
+                        <option value="3">3 дня</option>
+                        <option value="5">5 дней</option>
+                        <option value="7">7 дней</option>
+                        <option value="custom">Свои дни</option>
+                    </select>
+                    <input type="number" id="add-proj-dl-custom" placeholder="Свои дни" style="width:140px" oninput="applyDeadlinePreset()">
                 </div>
             </div>
         </div>
@@ -973,8 +980,8 @@ const toNumeric = (val) => {
 };
 
 let DATA = {
-    settings: { record: 0 }, 
-    monthlyGoals: { [currentMonth]: 250000 }, 
+    settings: { record: 0 },
+    monthlyGoals: { [currentMonth]: 250000 },
     active: [], archive: [], paused: [], waiting: [], potential: [], trash: []
 };
 
@@ -982,6 +989,7 @@ let SORT = { active: 'dl', archive: 'date', potential: 'p', waiting: 'dl', pause
 let queue = { type: null, idx: null, field: null, targetId: null };
 let previousDeadlineValue = '';
 let toastTimeout = null;
+let lastPermanentDeletion = null;
 
 function showToast(message, actionText = '', actionHandler = null, duration = 3500) {
     const toast = document.getElementById('toast');
@@ -1009,6 +1017,26 @@ function hideToast() {
     toast.classList.remove('show');
     if (toastTimeout) clearTimeout(toastTimeout);
     toastTimeout = null;
+}
+
+function undoPermanentDelete() {
+    if (!lastPermanentDeletion || !Array.isArray(lastPermanentDeletion.items)) return;
+
+    const { type, items } = lastPermanentDeletion;
+    const targetList = DATA[type];
+    if (!Array.isArray(targetList)) return;
+
+    items
+        .slice()
+        .sort((a, b) => a.index - b.index)
+        .forEach(({ item, index }) => {
+            targetList.splice(index, 0, item);
+        });
+
+    lastPermanentDeletion = null;
+    save();
+    upd();
+    showToast('Удаление отменено');
 }
 
 // --- BULK ACTIONS ---
@@ -1121,14 +1149,16 @@ function bulkDelete(type = currentTab, deleteForever = false) {
 
     const indicesToDelete = Array.from(selectedRows[type])
         .map(Number)
-        .sort((a, b) => b - a); 
-    
+        .sort((a, b) => b - a);
+
+    const deletedItems = [];
+
     indicesToDelete.forEach(idx => {
         const itemIndex = DATA[type].findIndex((_, i) => i === idx);
         if (itemIndex > -1) {
             const item = DATA[type].splice(itemIndex, 1)[0];
             if (deleteForever) {
-                // просто удаляем
+                deletedItems.push({ item, index: itemIndex });
             } else {
                 item.deletedAt = Date.now();
                 DATA.trash.unshift(item);
@@ -1136,11 +1166,13 @@ function bulkDelete(type = currentTab, deleteForever = false) {
         }
     });
 
+    lastPermanentDeletion = deleteForever ? { type, items: deletedItems } : null;
+
     selectedRows[type].clear();
     document.getElementById('deleteConfirmModal').style.display = 'none';
     save(); upd();
     if (deleteForever) {
-        showToast('Удалено навсегда');
+        showToast('Удалено навсегда', 'Отмена', undoPermanentDelete);
     } else {
         showToast(`Перемещено в корзину: ${indicesToDelete.length}`, 'Перейти', () => switchTab('trash'));
     }
@@ -1870,6 +1902,7 @@ function askDel(type, idx){
         const item = DATA[type].splice(itemIndex, 1)[0];
         item.deletedAt = Date.now();
         DATA.trash.unshift(item);
+        lastPermanentDeletion = null;
         save(); upd();
         showToast('Перемещено в корзину', 'Перейти', () => switchTab('trash'));
     }
@@ -1884,10 +1917,11 @@ function deleteForeverCheck(idx) {
     document.getElementById('finalDeleteBtn').innerText = 'Удалить навсегда';
 
     document.getElementById('finalDeleteBtn').onclick = () => {
-        DATA.trash.splice(idx, 1);
+        const item = DATA.trash.splice(idx, 1)[0];
+        lastPermanentDeletion = item ? { type: 'trash', items: [{ item, index: idx }] } : null;
         document.getElementById('deleteConfirmModal').style.display = 'none';
         save(); upd();
-        showToast('Удалено навсегда');
+        showToast('Удалено навсегда', 'Отмена', undoPermanentDelete);
     };
 }
 
@@ -2148,28 +2182,13 @@ function renderMonthSelect(){
 }
 
 function getScopedDataForStats() {
-    const scope = { active: [], archive: [], paused: [], waiting: [], potential: [] };
-    switch (currentTab) {
-        case 'active': scope.active = DATA.active; break;
-        case 'archive': scope.archive = DATA.archive; break;
-        case 'paused': scope.paused = DATA.paused; break;
-        case 'waiting': scope.waiting = DATA.waiting; break;
-        case 'potential': scope.potential = DATA.potential; break;
-        case 'all':
-            scope.active = DATA.active;
-            scope.archive = DATA.archive;
-            scope.paused = DATA.paused;
-            scope.waiting = DATA.waiting;
-            scope.potential = DATA.potential;
-            break;
-        default:
-            scope.active = DATA.active;
-            scope.archive = DATA.archive;
-            scope.paused = DATA.paused;
-            scope.waiting = DATA.waiting;
-            scope.potential = DATA.potential;
-    }
-    return scope;
+    return {
+        active: DATA.active,
+        archive: DATA.archive,
+        paused: DATA.paused,
+        waiting: DATA.waiting,
+        potential: DATA.potential,
+    };
 }
 
 function calcStats(){
@@ -2246,11 +2265,13 @@ function calcStats(){
 
     document.getElementById('p-bar').style.width = goal > 0 ? Math.min(100, (totalFact/goal)*100) + '%' : '0%';
     document.getElementById('dash-month-name').innerText = document.getElementById('monthSelect').options[document.getElementById('monthSelect').selectedIndex]?.text || '';
-    const scopeLabel = currentTab === 'all' ? 'Все проекты' : (STATUS_META[currentTab]?.label || 'Раздел');
-    const scopeNote = currentTab === 'all' ? 'Статистика по всем проектам' : `Статистика по разделу: ${scopeLabel}`;
-    const scopeHint = currentTab === 'all' ? '' : ' (только для этой вкладки)';
+    const scopeNote = 'Срез: все проекты';
+    const scopeHint = 'Статистика собирается по всем разделам вне зависимости от выбранной вкладки';
     const scopeEl = document.getElementById('stat-scope-note');
-    if (scopeEl) scopeEl.innerText = scopeNote + scopeHint;
+    if (scopeEl) {
+        scopeEl.innerText = scopeNote;
+        scopeEl.title = scopeHint;
+    }
     updateCharts(totalFact, plan, scope);
 }
 
