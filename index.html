@@ -62,7 +62,7 @@
 
   /* Main Layout & Tables */
   .table-wrap{overflow-x:visible;overflow-y:visible;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:5px; margin-top: 10px; position: relative;}
-  table{width:100%;border-collapse:collapse; min-width: 1320px;}
+  table{width:100%;border-collapse:collapse; min-width: 1400px;}
   th{text-align:left;color:var(--muted);font-size:12px;text-transform:uppercase;padding:12px 10px;border-bottom:1px solid var(--border);user-select:none; white-space: nowrap; cursor: pointer;}
   
   /* Выравнивание заголовков для Active */
@@ -110,15 +110,8 @@
   [contenteditable]:focus { white-space: pre-wrap; -webkit-line-clamp: initial; overflow: visible; text-overflow: unset; }
   
   .date-cell { padding: 0 !important; } 
-<<<<<<< codex/improve-project-creation-modal-ui-7htqhp
-  .date-input-wrap { width: 100%; padding: 8px 10px; cursor: pointer; user-select: none; display: flex; align-items: center; justify-left: flex-start; transition: .2s; border-radius: 10px; gap: 8px; border: 1px solid transparent; background: transparent; }
-  .date-input-wrap:hover { border-color: var(--border); background: #0f141b; }
-  .date-chip { background: linear-gradient(120deg, rgba(88,166,255,0.06), rgba(163,113,247,0.06)); border: 1px solid var(--border); box-shadow: inset 0 0 0 1px rgba(88,166,255,0.08); }
-  .date-chip:hover { background: linear-gradient(120deg, rgba(88,166,255,0.12), rgba(163,113,247,0.12)); border-color: var(--border); }
-=======
   .date-input-wrap { width: 100%; padding: 8px 10px; cursor: pointer; user-select: none; display: flex; align-items: center; justify-left: flex-start; transition: .2s; border-radius: 10px; gap: 8px; border: 1px solid transparent; background: linear-gradient(120deg, rgba(88,166,255,0.06), rgba(163,113,247,0.06)); }
   .date-input-wrap:hover { background: linear-gradient(120deg, rgba(88,166,255,0.12), rgba(163,113,247,0.12)); border-color: var(--border); }
->>>>>>> main
   .date-text-display { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; display: flex; align-items: center; gap: 8px; letter-spacing: -0.1px; }
   .date-icon { display: inline-flex; width: 14px; height: 14px; color: var(--muted); opacity: 0.85; }
   .time-text { color: var(--muted); font-weight: 700; font-size: 12px; }
@@ -171,8 +164,6 @@
   .paid-select, .tax-select { background: transparent; color: var(--text); border: 1px solid transparent; padding: 5px; border-radius: 6px; font-size: 13px; cursor: pointer; outline: none; transition: .2s; text-align: center;}
   .paid-select:hover, .tax-select:hover { background: var(--btn-hover); border-color: var(--border); }
   .paid-select option, .tax-select option { background: var(--card); }
-  .tax-col { text-align: right; }
-  .tax-col select { min-width: 68px; }
 
   /* Actions */
   .client-wrap{display:flex;align-items:center;gap:8px; width: 100%;}
@@ -1387,7 +1378,7 @@ function renderActive(){
             
             <td class="mono"><div class="${rem.cls}">${rem.txt}</div></td>
             
-            <td class="tax-col"><select class="tax-select" onchange="updVal('active',${i},'taxPrc',this.value)">
+            <td><select class="tax-select" onchange="updVal('active',${i},'taxPrc',this.value)">
                 <option value="0" ${+item.taxPrc===0?'selected':''}>0%</option>
                 <option value="4" ${+item.taxPrc===4?'selected':''}>4%</option>
                 <option value="6" ${+item.taxPrc===6?'selected':''}>6%</option>
@@ -2130,14 +2121,8 @@ function updateCharts(fact, plan, scope){
     const labelsL = Array.from({length:daysInM},(_,i)=>i+1);
 
     const dataL = new Array(daysInM).fill(0);
-<<<<<<< codex/improve-project-creation-modal-ui-7htqhp
-    const archiveForChart = (scope.archive && scope.archive.length ? scope.archive : DATA.archive);
-
-    archiveForChart.filter(i=>(i.date||'').startsWith(currentMonth)).forEach(i => {
-=======
 
     scope.archive.filter(i=>(i.date||'').startsWith(currentMonth)).forEach(i => {
->>>>>>> main
         const d = parseInt(i.date.split('-')[2]) - 1;
         if(d>=0 && d<daysInM) dataL[d] += calcNet(i);
     });
