@@ -168,7 +168,11 @@
   .expense-mode { background: #1a1f26; color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 4px 6px; font-size: 12px; cursor: pointer; min-width: 54px; }
   .expense-helper { color: var(--muted); font-size: 11px; margin-top: 2px; text-align: right; line-height: 1.2; }
 
-  .paid-amount { font-size: 12px; color: var(--muted); margin-top: 4px; text-align: center; }
+  .paid-amount { font-size: 12px; color: var(--muted); margin-top: 4px; text-align: right; }
+
+  .paid-cell { text-align: right; }
+  .paid-cell .paid-select { margin-left: auto; display: inline-flex; }
+  .paid-cell .paid-amount { text-align: right; width: 100%; }
 
 
   .paid-select, .tax-select { background: transparent; color: var(--text); border: 1px solid transparent; padding: 5px; border-radius: 6px; font-size: 13px; cursor: pointer; outline: none; transition: .2s; text-align: center;}
@@ -689,7 +693,7 @@ td.date-cell + td.date-cell {
               <th width="7%" data-type="active" data-key="contractor" onclick="sortData('active', 'contractor', 'number')" style="text-align:right;">Расходы <span class="sort-icon"></span></th>
               <th width="8%" data-type="active" data-key="p" onclick="sortData('active', 'p', 'number')" style="text-align:right;">Сумма <span class="sort-icon"></span></th>
               <th width="8%" style="text-align:right;">Чистыми</th>
-              <th width="6%">Оплачено</th>
+              <th width="6%" style="text-align:right;">Оплачено</th>
               <th width="4%"></th>
             </tr>
           </thead>
@@ -1767,7 +1771,7 @@ function renderActive(){
             <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('active',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td style="text-align:right;"><div class="net-display-wrap">${formatCurrency(item.pr)}<span class="net-prc-val">(${calcMarginPrc(item)}%)</span></div></td>
             
-            <td>
+            <td class="paid-cell">
                 <select class="paid-select" onchange="updVal('active',${i},'paid',this.value)">
                     <option value="0" ${+item.paid===0?'selected':''}>0%</option>
                     <option value="50" ${+item.paid===50?'selected':''}>50%</option>
@@ -1809,7 +1813,7 @@ function renderActive(){
             <div class="footer-note">Чистыми</div>
             <div>${formatCurrency(totalPr)}</div>
         </td>
-        <td style="text-align:center;">
+        <td style="text-align:right;">
             <div class="footer-note">Оплачено</div>
             <div>${formatCurrency(totalPaidGross)}</div>
         </td>
