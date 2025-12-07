@@ -283,6 +283,21 @@
   .record-value { font-size: 24px; font-weight: 900; color: var(--gold); text-align: right; }
   .record-remaining { color: var(--muted); font-weight: 700; font-size: 12px; text-align: right; margin-top: 4px; }
   .record-side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  .reputation-strip { margin: 16px 0; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; background: linear-gradient(90deg, rgba(46, 160, 67, 0.06), rgba(250, 204, 21, 0.05)); display: flex; justify-content: space-between; gap: 12px; align-items: center; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02); }
+  .reputation-strip .tag { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); font-weight: 700; }
+  .reputation-strip .headline { font-size: 18px; font-weight: 800; color: var(--text); }
+  .reputation-strip .hint { color: var(--muted); font-size: 13px; }
+  .reputation-strip.good { border-color: rgba(46,160,67,0.4); background: linear-gradient(90deg, rgba(46,160,67,0.08), rgba(46,160,67,0.04)); }
+  .reputation-strip.warn { border-color: rgba(210,153,34,0.5); background: linear-gradient(90deg, rgba(210,153,34,0.1), rgba(210,153,34,0.05)); }
+  .reputation-strip.bad { border-color: rgba(248,81,73,0.4); background: linear-gradient(90deg, rgba(248,81,73,0.08), rgba(248,81,73,0.04)); }
+  .reputation-card { border: 1px solid var(--border); border-radius: 14px; padding: 16px; background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 10px; }
+  .reputation-score { font-size: 26px; font-weight: 900; color: var(--text); }
+  .reputation-grade { font-weight: 700; color: var(--muted); }
+  .reputation-detail { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .rep-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; font-weight: 700; font-size: 12px; }
+  .rep-chip.good { background: rgba(46,160,67,0.15); color: #2ea043; }
+  .rep-chip.warn { background: rgba(210,153,34,0.15); color: #d29922; }
+  .rep-chip.bad { background: rgba(248,81,73,0.15); color: #f85149; }
   /* Bulk Toolbar */
   .bulk-toolbar {
       position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); 
@@ -513,6 +528,14 @@ td.date-cell + td.date-cell {
           </div>
       </div>
       <div class="pace-status" id="pace-status">Критично</div>
+  </div>
+
+  <div class="reputation-strip good" id="reputation-strip">
+      <div>
+          <div class="tag">Репутация</div>
+          <div class="headline" id="reputation-headline">Всё ок — ты держишь сроки</div>
+      </div>
+      <div class="hint" id="reputation-hint">Просроченных дедлайнов нет, продолжай в том же духе.</div>
   </div>
 
   <div class="main-layout">
@@ -767,6 +790,13 @@ td.date-cell + td.date-cell {
                       <div class="record-remaining" id="record-remaining">До рекорда 0 ₽</div>
                       <button class="inline-link-btn" onclick="openRecordSettings()">Редактировать рекорд</button>
                   </div>
+              </div>
+              <div class="reputation-card" id="reputation-card">
+                  <div class="card-head" style="margin-bottom:4px;">Репутация дизайнера</div>
+                  <div class="rep-chip good" id="reputation-chip">🔥 Всё ок</div>
+                  <div class="reputation-score" id="reputation-score">100 / 100</div>
+                  <div class="reputation-grade" id="reputation-grade">Просроченных дедлайнов нет</div>
+                  <div class="reputation-detail" id="reputation-detail">Отсутствие просрочек усиливает доверие клиентов. Держи темп и фиксируй успехи в архиве.</div>
               </div>
           </div>
       </div>
@@ -2207,9 +2237,18 @@ function saveSettings(){
     save(); upd();
 }
 
+function pluralize(num, forms){
+    const n = Math.abs(num) % 100;
+    const n1 = n % 10;
+    if (n > 10 && n < 20) return forms[2];
+    if (n1 > 1 && n1 < 5) return forms[1];
+    if (n1 === 1) return forms[0];
+    return forms[2];
+}
+
 function getTimeRemaining(dl){
     if(!dl) return {txt:'—', cls:'days-normal', days: Infinity};
-    const end = new Date(dl.slice(0, 10) + 'T00:00:00').getTime(); 
+    const end = new Date(dl.slice(0, 10) + 'T00:00:00').getTime();
     const todayNormalized = new Date(today + 'T00:00:00').getTime();
     
     const diff = end - todayNormalized;
@@ -2224,10 +2263,10 @@ function getTimeRemaining(dl){
 function changeMonth(m){ 
     currentMonth = m; 
     if (!DATA.monthlyGoals[currentMonth]) {
-        DATA.monthlyGoals[currentMonth] = 250000; 
+        DATA.monthlyGoals[currentMonth] = 250000;
         save();
     }
-    upd(); 
+    upd();
 }
 function renderMonthSelect(){
     const sel = document.getElementById('monthSelect');
@@ -2248,6 +2287,88 @@ function renderMonthSelect(){
         if(m===currentMonth) opt.selected = true;
         sel.appendChild(opt);
     });
+}
+
+function analyzeReputation(){
+    const projectTypes = ['active', 'waiting', 'paused', 'potential'];
+    const overdue = [];
+    projectTypes.forEach(type => {
+        DATA[type].forEach(item => {
+            const rem = getTimeRemaining(item.dl);
+            if (rem.days < 0) {
+                overdue.push({
+                    name: item.n || 'Без названия',
+                    client: item.c || 'Без клиента',
+                    days: Math.abs(rem.days)
+                });
+            }
+        });
+    });
+
+    const total = overdue.length;
+    const worst = overdue.reduce((acc, cur) => Math.max(acc, cur.days), 0);
+    const score = Math.max(0, Math.min(100, 100 - total * 12 - Math.max(0, worst - 2) * 3));
+
+    let level = 'good';
+    let headline = 'Всё ок — ты держишь сроки';
+    let hint = 'Просроченных дедлайнов нет, продолжай в том же духе.';
+    let chip = '🔥 Всё ок';
+    let detail = 'Отсутствие просрочек усиливает доверие клиентов. Держи темп и фиксируй успехи в архиве.';
+
+    if (total > 0) {
+        const overdueWord = `${total} ${pluralize(total, ['просрочка', 'просрочки', 'просрочек'])}`;
+        const daysWord = `${worst} ${pluralize(worst, ['день', 'дня', 'дней'])}`;
+        if (total <= 2 && worst <= 5) {
+            level = 'warn';
+            headline = 'Есть просрочки — поправь сроки';
+            hint = `${overdueWord} до ${daysWord}. Обнови план и предупреди клиентов.`;
+            chip = '⚠ Поднажми';
+            detail = 'Пара задержек ещё поправима: договорись о новых сроках и закрой задачи, чтобы не терять доверие.';
+        } else {
+            level = 'bad';
+            headline = 'Репутация проседает';
+            hint = `${overdueWord} до ${daysWord} — пора спасать ситуацию.`;
+            chip = '🔥 Жесть';
+            detail = 'Множественные просрочки уже бьют по имени. Наведи порядок в приоритетах и верни сроки под контроль.';
+        }
+    }
+
+    return { level, headline, hint, chip, detail, score, total, worst };
+}
+
+function updateReputationUI(){
+    const state = analyzeReputation();
+    const strip = document.getElementById('reputation-strip');
+    if (strip) {
+        strip.classList.remove('good', 'warn', 'bad');
+        strip.classList.add(state.level);
+    }
+
+    const headline = document.getElementById('reputation-headline');
+    if (headline) headline.innerText = state.headline;
+
+    const hint = document.getElementById('reputation-hint');
+    if (hint) hint.innerText = state.hint;
+
+    const chip = document.getElementById('reputation-chip');
+    if (chip) {
+        chip.classList.remove('good', 'warn', 'bad');
+        chip.classList.add(state.level);
+        chip.innerText = state.chip;
+    }
+
+    const score = document.getElementById('reputation-score');
+    if (score) score.innerText = `${state.score} / 100`;
+
+    const grade = document.getElementById('reputation-grade');
+    if (grade) {
+        grade.innerText = state.total
+            ? `${state.total} ${pluralize(state.total, ['просрочка', 'просрочки', 'просрочек'])} (до ${state.worst} ${pluralize(state.worst, ['дня', 'дней', 'дней'])})`
+            : 'Просроченных дедлайнов нет';
+    }
+
+    const detail = document.getElementById('reputation-detail');
+    if (detail) detail.innerText = state.detail;
 }
 
 function getScopedDataForStats() {
@@ -2341,6 +2462,7 @@ function calcStats(){
         scopeEl.innerText = scopeNote;
         scopeEl.title = scopeHint;
     }
+    updateReputationUI();
     updateCharts(totalFact, plan, scope);
 }
 
