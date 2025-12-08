@@ -12,1030 +12,3119 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
-<script src="https://unpkg.com/feather-icons"></script>
-
 <style>
-  /* MINIMALISTIC DESIGN COLORS */
   :root{
-    /* Core Colors - Softer Dark Theme */
-    --bg:#0f121a;
-    --card:#1a202c;
-    --card-alt:#0d1117;
-    --text:#c9d1d9;
-    --muted:#8b949e;
-    --link:#58a6ff;
-    --link-hover:#6fc1ff;
-    --border:#30363d;
-    --green: #3ecf8e;
-    --yellow: #facc15;
-    --red: #f87171;
-    --blue: #60a5fa;
-    --paid-bg: #1f3531;
-    --paid-text: #4ade80;
-    --red-bg: rgba(248, 113, 113, 0.1);
-    --green-bg: rgba(62, 207, 142, 0.1);
-    --yellow-bg: rgba(250, 204, 55, 0.1);
-    --blue-bg: rgba(96, 165, 250, 0.1);
-    --critical-pace: #ef4444;
+    --bg:#0d1117;--card:#161b22;--card-alt:#0f141b;--text:#c9d1d9;--muted:#8b949e;--accent:#58a6ff;--green:#2ea043;--red:#da3633;
+    --gold:#d29922;--border:#30363d;--blue:#238636;--btn-blue:#2f81f7;--link-blue:#007bff;--purple:#a371f7;--btn-hover:#30363d;
+    --button-bg:#21262d;--row-hover:#1c2128;--table-border:#21262d;--input-bg:#21262d;--chart-bar-bg:#21262d;--date-hover-bg:#161b22;
+    --date-hover-border:#3a3f4b;--tab-hover:#30363d;--pill-bg:#1a1f26;--chip-bg:#121720;--link-go-bg:#1a1f26;--modal-overlay:rgba(0,0,0,0.7);
+    --date-focus-bg:#111722;--help-bg:#121720;--help-hover-bg:#1c2128;--help-border:rgba(255,255,255,0.12);--help-text:var(--muted);
+    --del-hover-bg:#1c2128;--del-hover-border:var(--border);
+    --progress-bg:linear-gradient(90deg,#11151c,#0b1017);
+    --progress-border:rgba(88,166,255,0.2);
+    --progress-shadow:inset 0 1px 0 rgba(255,255,255,0.04),0 0 0 1px rgba(15,20,27,0.65);
+    --progress-fill-start:#2ea043;
+    --progress-fill-end:#3fb950;
+    --progress-fill-shadow:0 0 14px rgba(46,160,67,0.3);
+    --record-bg:linear-gradient(90deg,#1c2128,#11151c);
+    --record-border:rgba(250,204,21,0.25);
+    --record-shadow:inset 0 1px 0 rgba(255,255,255,0.03);
+    --record-fill-start:#facc15;
+    --record-fill-end:#f9a825;
+    --record-fill-shadow:0 0 12px rgba(250,204,21,0.4);
+    --goal-pill-bg:linear-gradient(120deg,rgba(88,166,255,0.22),rgba(163,113,247,0.22));
+    --goal-pill-border:rgba(163,113,247,0.4);
+    --goal-pill-color:#dce7ff;
+    --goal-pill-shadow:0 4px 18px rgba(88,166,255,0.22);
+    --status-bg:var(--pill-bg);
+    --status-border:var(--border);
+    --status-text:var(--muted);
   }
-  .light{
-    --bg: #f8f9fa;
-    --card: #ffffff;
-    --card-alt: #f0f2f5;
-    --text: #1d2024;
-    --muted: #6c757d;
-    --link: #007bff;
-    --link-hover: #0056b3;
-    --border: #dee2e6;
-    --green: #28a745;
-    --yellow: #ffc107;
-    --red: #dc3545;
-    --blue: #007bff;
-    --paid-bg: #e6ffed;
-    --paid-text: #28a745;
-    --red-bg: rgba(220, 53, 69, 0.1);
-    --green-bg: rgba(40, 167, 69, 0.1);
-    --yellow-bg: rgba(255, 193, 7, 0.1);
-    --blue-bg: rgba(0, 123, 255, 0.1);
-    --critical-pace: #dc3545;
+  body.light{
+    --bg:#f8fbff;--card:#ffffff;--card-alt:#f4f7fb;--text:#1f2937;--muted:#56657d;--accent:#3b82f6;--green:#22b46d;--red:#de3f57;
+    --gold:#c48b2e;--border:#d8e1f0;--blue:#3b82f6;--btn-blue:#3b82f6;--link-blue:#3b82f6;--purple:#7c52e4;--btn-hover:#eaf1ff;
+    --button-bg:#f2f6fd;--row-hover:#f5f8ff;--table-border:#e4ebf7;--input-bg:#f6f8fd;--chart-bar-bg:#e9f0fb;--date-hover-bg:#eef3ff;
+    --date-hover-border:#d4dff5;--tab-hover:#eef3ff;--pill-bg:#f1f5fd;--chip-bg:#f1f5fd;--link-go-bg:#e8f0ff;--modal-overlay:rgba(0,0,0,0.35);
+    --date-focus-bg:#e1e9ff;--help-bg:#e8f0ff;--help-hover-bg:#dfe8ff;--help-border:#cbd8f1;--help-text:#43526b;
+    --del-hover-bg:#fde8e8;--del-hover-border:#f3c5c5;
+    --progress-bg:linear-gradient(90deg,#eef3ff,#f8fbff);
+    --progress-border:#d5dff0;
+    --progress-shadow:inset 0 1px 0 rgba(255,255,255,0.92),0 0 0 1px rgba(213,223,240,0.65);
+    --progress-fill-start:#26c06d;
+    --progress-fill-end:#35d691;
+    --progress-fill-shadow:0 0 12px rgba(53,214,145,0.28);
+    --record-bg:linear-gradient(90deg,#fff7e3,#fffaf1);
+    --record-border:#f3dfb5;
+    --record-shadow:inset 0 1px 0 rgba(255,255,255,0.95);
+    --record-fill-start:#f6b21a;
+    --record-fill-end:#ffd45c;
+    --record-fill-shadow:0 0 12px rgba(255,212,92,0.4);
+    --goal-pill-bg:linear-gradient(120deg,#e7f0ff,#f3e9ff);
+    --goal-pill-border:#d3ddf5;
+    --goal-pill-color:#1f3158;
+    --goal-pill-shadow:0 6px 18px rgba(137,170,255,0.26);
+    --status-bg:#f6f8fd;
+    --status-border:#e2e8f5;
+    --status-text:#1f2d45;
   }
+  body.light .reputation-card { background: #fff; box-shadow: 0 8px 26px rgba(17,24,39,0.04); border-color: #e0e7f5; }
+  body.light .record-motiv { color: #1f2937; }
+  body.light .reputation-strip { background: linear-gradient(90deg, rgba(34, 180, 109, 0.08), rgba(210, 153, 34, 0.06)); box-shadow: none; }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;}
   
-  /* RESET */
-  *, *::before, *::after { box-sizing: border-box; }
-  body { 
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    margin: 0; 
-    padding: 0; 
-    background-color: var(--bg); 
-    color: var(--text); 
-    transition: background-color 0.3s, color 0.3s;
-    line-height: 1.6;
-  }
-  a { color: var(--link); text-decoration: none; }
-  a:hover { color: var(--link-hover); text-decoration: underline; }
-  button { 
-    background: none; 
-    border: none; 
-    color: var(--muted); 
-    cursor: pointer; 
-    padding: 6px; 
-    border-radius: 6px; 
-    transition: background-color 0.2s, color 0.2s;
-  }
-  button:hover { 
-    background-color: var(--card-alt); 
-    color: var(--text);
-  }
-  input[type="text"], input[type="number"], textarea, select {
-    background-color: var(--card-alt);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 8px;
-    border-radius: 6px;
-    font-size: 14px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  input:focus, textarea:focus, select:focus {
-    border-color: var(--link);
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.3);
-  }
+  body{background:var(--bg);color:var(--text);padding-bottom:100px;min-height:100vh;display:flex;flex-direction:column;}
+  .c{max-width:1600px;margin:0 auto;padding:20px;width:100%;} 
   
-  /* UTILITY & LAYOUT */
-  .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-  .card {
-    background-color: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  }
-  .flex { display: flex; align-items: center; }
-  .flex-col { display: flex; flex-direction: column; }
-  .justify-between { justify-content: space-between; }
-  .gap-3 { gap: 12px; }
-  .mt-4 { margin-top: 16px; }
-  .text-muted { color: var(--muted); font-size: 14px; }
+  /* Header */
+  h1{font-size:42px;font-weight:800;margin:0;letter-spacing: -1px;}
+  .brand-grad { background:linear-gradient(90deg,#58a6ff,#a371f7,#d29922);-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
+  .brand-white { color: var(--muted); font-weight: 400; letter-spacing: -0.4px; }
   
-  /* HEADER */
-  header {
-    padding: 10px 0;
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--border);
-  }
-  .logo {
-    font-size: 24px;
-    font-weight: 800;
-    color: var(--text);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .logo-icon { width: 30px; height: 30px; }
+  /* Исправлен отступ в шапке */
+  .header-row{display:flex;justify-content:space-between;align-items:center;margin:30px 0 20px;}
+  .month-select{background:var(--card);color:var(--text);border:1px solid var(--border);padding:8px 15px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;outline:none;transition:.2s;}
+  .month-select:hover{border-color:var(--muted);}
+
+  #themeToggle { padding:10px 20px; gap:10px; min-height: 44px; }
+  #themeToggleIcon { font-size: 16px; }
+  #themeToggleLabel { font-weight: 700; font-size: 13px; }
+
+
+      .date-cell:not(:last-child) .date-input-wrap {
+    margin-right: 8px;
+}
+
+  /* Warning Block */
+  .top-panel{background:var(--card);padding:20px;border-radius:12px;border:1px solid var(--border);margin-bottom:30px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+  .backup-info{color:var(--muted);font-size:13px;max-width:650px;line-height:1.5;}
+  .backup-info b{color:#f85149;}
   
-  /* TABS */
-  .tabs {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 20px;
+  .btns{display:flex;gap:15px;flex-wrap:wrap; align-items: center;} 
+  
+  button{padding:10px 20px;background:var(--button-bg);border:1px solid var(--border);color:var(--text);border-radius:8px;cursor:pointer;font-weight:600;font-size:14px;transition:.2s;display:flex;align-items:center;gap:8px;white-space: nowrap;}
+  button:hover{border-color:var(--accent);color:var(--accent);}
+
+  .toast { position: fixed; top: 15px; right: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; display: none; align-items: center; gap: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); z-index: 1200; min-width: 260px; }
+  .toast.show { display: flex; animation: fadeIn .2s ease; }
+  .toast-message { flex: 1; font-weight: 600; color: var(--text); }
+  .toast-action { background: var(--btn-blue); color: #fff; border: 1px solid var(--btn-blue); border-radius: 6px; padding: 6px 10px; font-weight: 700; cursor: pointer; }
+  .toast-close { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 16px; padding: 0 4px; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+  
+  /* Tabs */
+  .tabs-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .tabs{display:flex;gap:10px;overflow-x: auto; padding-bottom: 5px; flex-shrink: 1;}
+  .tab{flex-shrink: 0; padding:8px 15px;border-radius:8px;cursor:pointer;font-size:15px; background:transparent;border:1px solid transparent;transition:.2s; font-weight: 500; color:var(--muted); display: flex; align-items: center; gap: 6px;}
+  .tab svg { width: 14px; height: 14px; opacity: 0.6; transition: opacity .2s; }
+  .tab:hover{background:var(--tab-hover);border-color:var(--tab-hover);color:var(--text);}
+  .tab.active{background:var(--card); border-color:var(--border); font-weight: 600; color: var(--text) !important;}
+  .tab.active svg { opacity: 1; color: var(--text); }
+  .tab.tab-trash { margin-left: auto; }
+
+  /* New Project Button (Notion Style) */
+  #newProjectButton { background: var(--btn-blue); color: #fff; border: 1px solid var(--btn-blue); font-weight: 700; padding: 8px 16px; margin-left: 20px;}
+  #newProjectButton:hover { background: #3c82f6; border-color: #3c82f6; color: #fff; }
+
+  /* Tab Description - Увеличен отступ перед Pace Block */
+  .tab-desc-block { margin-bottom: 15px; } 
+
+  /* Main Layout & Tables */
+  .table-wrap{overflow-x:visible;overflow-y:visible;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:5px; margin-top: 10px; position: relative;}
+  table{width:100%;border-collapse:collapse; min-width: 1400px;}
+  th{text-align:left;color:var(--muted);font-size:12px;text-transform:uppercase;padding:12px 10px;border-bottom:1px solid var(--border);user-select:none; white-space: nowrap; cursor: pointer;}
+  
+  /* Выравнивание заголовков для Active */
+  #t-active th:nth-child(8), /* Расходы */
+  #t-active th:nth-child(9), /* Сумма */
+  #t-active th:nth-child(10) { /* Чистыми */
+      text-align: right;
   }
-  .tab-btn {
-    padding: 10px 20px;
-    color: var(--muted);
-    font-weight: 600;
-    cursor: pointer;
+
+  th:first-child, td:first-child { width: 24px; cursor: default; text-align: center; }
+  td{ padding: 5px 10px; border-bottom:1px solid var(--table-border); vertical-align:middle; font-size:15px; position: relative; }
+  tr:last-child td{border-bottom:none;}
+  tr:hover td{background:var(--row-hover);}
+
+  tr { position: relative; }
+
+  /* Checkbox column */
+  th.select-col { width: 5%; cursor: default; }
+  td.select-col { width: 5%; padding: 0; text-align: center; }
+  
+  /* Контейнер для чекбокса и иконки дублирования - для выравнивания */
+  .select-action-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      height: 100%;
+      padding: 0 5px;
+  }
+  .bulk-checkbox { width: 16px; height: 16px; margin: 0; cursor: pointer; background: transparent; border: 1px solid var(--muted); border-radius: 4px; appearance: none; transition: background .1s, border-color .1s; flex-shrink: 0;}
+  .bulk-checkbox:checked { background: var(--accent); border-color: var(--accent); }
+
+  /* Table Footer (Totals) */
+  tfoot td { padding: 15px 10px; border-top: 1px solid var(--border); background: transparent; font-weight: 600; color: var(--muted); text-align: right; font-size: 14px; white-space: nowrap; }
+  tfoot td:first-child { text-align: left; color: var(--text); font-size: 15px; }
+  tfoot td:nth-last-child(3) { color: var(--gold); } /* Total gross (Archive) */
+  tfoot td:nth-last-child(2) { color: var(--green); } /* Total net (Archive) */
+  /* Active table footer fix */
+  #total-row-active td:nth-child(2) { color: var(--green); } /* Total net (Active) */
+  .footer-total-toggle { cursor: pointer; color: var(--accent); font-weight: 700; }
+  .footer-total-toggle:hover { color: #8ab4ff; }
+
+  
+  /* Inputs & Selects */
+  [contenteditable]{ outline:none; background: transparent; border: 1px solid transparent; padding: 5px 8px; border-radius: 6px; transition:.2s; display:inline-block; width: 100%; white-space: pre-wrap; word-break: break-word; overflow: visible; text-overflow: unset; }
+  [contenteditable]:focus, [contenteditable]:hover { border-color: var(--border); background: var(--input-bg); cursor: text; }
+  [contenteditable]:focus { white-space: pre-wrap; -webkit-line-clamp: initial; overflow: visible; text-overflow: unset; }
+  
+  .date-cell { padding: 0 !important; } 
+  .date-input-wrap { width: 100%; padding: 6px 8px; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: flex-start; transition: .2s; border-radius: 10px; gap: 6px; border: 1px solid var(--border); background: transparent; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .date-input-wrap:hover { background: var(--date-hover-bg); border-color: var(--date-hover-border); }
+  .date-text-display { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; display: flex; align-items: center; gap: 8px; letter-spacing: -0.1px; }
+  .date-icon { display: inline-flex; width: 14px; height: 14px; color: var(--muted); opacity: 0.85; }
+  .time-text { color: var(--muted); font-weight: 700; font-size: 12px; }
+
+  /* Deadline Colors */
+  .days-critical { color: var(--red); font-weight: 700; }
+  .days-warning { color: var(--gold); font-weight: 700; }
+  .days-normal { color: var(--muted); }
+  
+  /* Price/Contractor/Net Styling */
+  .price-cell-wrap { display: flex; align-items: center; justify-content: flex-end; gap: 4px; height: 100%; padding: 2px 0;}
+  .price-cell-wrap input {
+    background: transparent;
     border: none;
-    background: none;
-    border-bottom: 2px solid transparent;
-    transition: color 0.2s, border-bottom-color 0.2s;
-    font-size: 16px;
-    text-align: left;
-  }
-  .tab-btn:hover { color: var(--text); }
-  .tab-btn.active {
-    color: var(--link);
-    border-bottom-color: var(--link);
-  }
-  
-  /* TABLE STYLES */
-  .project-table-wrap {
-    overflow-x: auto;
-  }
-  .project-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 1000px;
-  }
-  .project-table th, .project-table td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
-    font-size: 14px;
-    vertical-align: middle;
-  }
-  .project-table th {
-    color: var(--muted);
-    font-weight: 600;
-    cursor: pointer;
-    user-select: none;
-    position: sticky;
-    top: 0;
-    background-color: var(--card); /* Sticky header background */
-    z-index: 10;
-  }
-  .project-table th:hover { color: var(--text); }
-  .project-table tr:hover:not(.totals-row) {
-    background-color: var(--card-alt);
-  }
-  .row-selected {
-    background-color: rgba(88, 166, 255, 0.1);
-  }
-
-  /* Specific column widths/styles */
-  .t-p, .t-pr, .t-contr { width: 10%; }
-  .t-paid, .t-tax { width: 7%; }
-  .t-dl { width: 12%; }
-  .t-actions { width: 150px; text-align: center; }
-  
-  /* INPUTS IN TABLE */
-  .project-table td input[type="text"], 
-  .project-table td select, 
-  .project-table td [contenteditable] {
-    padding: 4px;
-    margin: -4px 0;
-    border: 1px solid transparent;
-    background-color: transparent;
-    border-radius: 4px;
-    font-size: 14px;
     color: var(--text);
     width: 100%;
-  }
-  .project-table td [contenteditable]:focus {
-    border-color: var(--border);
-    background-color: var(--card-alt);
+    max-width: 110px;
+    min-width: 64px;
+    flex: 1 1 70px;
+    font-family: monospace;
+    font-weight: 600;
     outline: none;
+    text-align: right;
+    padding: 4px 0; /* Добавлен отступ для кликабельности */
+    margin: 0;
+    -moz-appearance: textfield;
   }
-  .project-table td input:focus {
-    border-color: var(--link);
-    box-shadow: 0 0 0 1px var(--link);
-  }
-  
-  /* DATE PICKER */
-  .date-input-wrap {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    padding: 4px 0;
-    border-radius: 4px;
-  }
-  .date-input-wrap:hover {
-    background-color: var(--card-alt);
-  }
-  .date-icon { width: 16px; height: 16px; color: var(--muted); }
-  
-  /* STATUS BADGES */
-  .dl-status {
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-weight: 600;
-    font-size: 12px;
-  }
-  .status-crit { 
-    background-color: var(--red-bg); 
-    color: var(--red); 
-  }
-  .status-warn { 
-    background-color: var(--yellow-bg); 
-    color: var(--yellow); 
-  }
-  .status-ok { 
-    background-color: var(--green-bg); 
-    color: var(--green); 
-  }
-  .status-none { 
-    background: none; 
-    color: var(--muted); 
-    font-weight: normal;
+  .price-cell-wrap:focus-within { border-color: var(--border); background: var(--input-bg); border-radius: 6px; }
+  .price-cell-wrap input::-webkit-outer-spin-button, .price-cell-wrap input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .currency-symbol { color: var(--muted); font-size: 14px; font-weight: 600; font-family: monospace; min-width: 15px; }
+
+  /* Net Column Fix */
+  .net-display-wrap { display: flex; flex-direction: column; align-items: flex-end; padding: 5px 0; }
+  .net-main-val { font-weight: 600; color: var(--text); }
+  .net-prc-val {
+      font-size: 12px;
+      font-weight: 500; /* Не жирный */
+      opacity: 0.6; /* Полупрозрачность */
+      color: var(--muted);
+      margin-top: 2px;
   }
 
-  /* TOTALS ROW */
-  .totals-row {
-    background-color: var(--card-alt);
-    font-weight: 700;
-    position: sticky;
-    bottom: 0;
-    border-top: 2px solid var(--border);
-  }
+  .expense-cell { gap: 4px; }
+  .expense-mode { background: var(--pill-bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 4px 6px; font-size: 12px; cursor: pointer; min-width: 54px; }
+  .expense-helper { color: var(--muted); font-size: 11px; margin-top: 2px; text-align: right; line-height: 1.2; }
+
+  .paid-amount { font-size: 12px; color: var(--muted); margin-top: 4px; text-align: right; }
+
+  .paid-cell { text-align: right; }
+  .paid-cell .paid-select { margin-left: auto; display: inline-flex; }
+  .paid-cell .paid-amount { text-align: right; width: 100%; }
+
+
+  .paid-select, .tax-select { background: transparent; color: var(--text); border: 1px solid transparent; padding: 5px; border-radius: 6px; font-size: 13px; cursor: pointer; outline: none; transition: .2s; text-align: center;}
+  .paid-select:hover, .tax-select:hover { background: var(--btn-hover); border-color: var(--border); }
+  .paid-select option, .tax-select option { background: var(--card); }
+
+  /* Actions */
+  .client-wrap{display:flex;align-items:center;gap:8px; width: 100%;}
+  .client-name, .project-name { display:block; line-height:1.3; white-space:pre-wrap; -webkit-line-clamp:unset; -webkit-box-orient:vertical; overflow:visible; text-overflow:unset; word-break: break-word; }
+  .client-name { max-width: 210px; font-weight:700; color:var(--text); }
+  .project-name-wrap { display: flex; align-items: center; gap: 8px; overflow: visible; }
+  .project-name { max-width: 320px; font-weight:600; }
+
+  .sort-icon { color: var(--muted); font-size: 11px; margin-left: 6px; opacity: 0.5; }
+  th.sorted .sort-icon { opacity: 1; color: var(--text); }
+  th.sorted.asc .sort-icon::after { content: '↑'; }
+  th.sorted.desc .sort-icon::after { content: '↓'; }
+  th .sort-icon::after { content: '↕'; }
   
-  /* TOOLBARS & FOOTER */
-  .toolbar {
-    padding: 10px 0;
+  .dup-icon { opacity: 0; transition: opacity 0.2s; cursor: pointer; color: var(--muted); width: 16px; height: 16px; flex-shrink: 0;}
+  tr:hover .dup-icon { opacity: 1; }
+
+  .select-col { position: relative; }
+  .row-index { color: var(--muted); font-weight: 700; font-size: 12px; text-align: center; }
+  .row-selected .row-index { color: var(--text); }
+
+  .row-controls { position:absolute; left:-60px; top:50%; transform:translateY(-50%); display:flex; gap:12px; align-items:center; opacity:0; transition:opacity .2s; }
+  tr:hover .row-controls, .row-selected .row-controls { opacity:1; }
+  .row-controls .bulk-checkbox { width: 18px; height: 18px; }
+
+  .client-name.has-link { color: var(--link-blue); font-weight: 700; }
+
+
+  .action-btns{display:flex;gap:6px;align-items:center;}
+  .action-btn-base { padding: 6px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; user-select: none; min-width: 32px; text-align: center; }
+  .done-btn:hover { background: var(--green); color: #fff; border-color: var(--green);}
+  .wait-btn:hover { background: var(--purple); color: #fff; border-color: var(--purple);}
+  .pause-btn:hover { background: var(--link-blue); color: #fff; border-color: var(--link-blue);}
+  /* New hover styles for wait and pause in active table */
+  .wait-active-btn:hover { background: var(--purple); color: #fff; border-color: var(--purple);}
+  .pause-active-btn:hover { background: var(--link-blue); color: #fff; border-color: var(--link-blue);}
+
+  .link-btn { padding: 6px; margin: 0; background: var(--chip-bg); border: 1px solid var(--border); color: var(--muted); cursor: pointer; font-size: 12px; flex-shrink: 0; border-radius: 8px; transition: .2s; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
+  .link-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--link-go-bg); box-shadow: 0 4px 10px rgba(59,130,246,0.12); }
+  .link-btn-active { color: var(--accent); border-color: var(--border); background: var(--link-go-bg); border-radius: 8px; box-shadow: 0 4px 12px rgba(17,24,39,0.08); }
+  .link-btn-go { border: 1px solid var(--border); border-radius: 8px; background: var(--link-go-bg); color: var(--accent); font-weight: 700; box-shadow: 0 4px 12px rgba(17,24,39,0.06); }
+  .link-btn-go:hover { border-color: var(--accent); color: var(--accent); background: #f0f4ff; box-shadow: 0 6px 16px rgba(59,130,246,0.18); }
+  
+  .del-btn{color:var(--text);cursor:pointer;opacity:0.7; margin-left: 8px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 6px; border: 1px solid transparent; border-radius: 8px; transition: .2s; background: transparent;}
+  .del-btn svg { width: 16px; height: 16px; }
+  .del-btn:hover{opacity:1; border-color: var(--del-hover-border); background: var(--del-hover-bg); color: var(--red);}
+  
+  /* Pacing Block Updated (Fire) */
+  .pace-block {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 15px 20px;
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  .toolbar button {
-    background-color: var(--link);
-    color: white;
-    padding: 8px 15px;
-    border-radius: 6px;
-    font-weight: 600;
-    transition: background-color 0.2s;
-  }
-  .toolbar button:hover {
-    background-color: var(--link-hover);
-  }
-  .inline-link-btn {
-    color: var(--link);
-    padding: 0;
-    font-weight: normal;
-  }
-  .inline-link-btn:hover {
-    color: var(--link-hover);
-    background: none;
-    text-decoration: underline;
-  }
-  
-  /* MODAL */
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  .modal-content {
-    background: var(--card);
-    padding: 30px;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-  }
-  .modal-content h2 {
-    margin-top: 0;
-    color: var(--text);
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 10px;
     margin-bottom: 20px;
-  }
-  .form-group { margin-bottom: 15px; }
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
-    color: var(--text);
-  }
-  .modal-actions {
-    margin-top: 20px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-  }
-  .modal-actions .cancel-btn {
-    background: var(--card-alt);
-    color: var(--text);
-  }
-  .modal-actions .cancel-btn:hover {
-    background: var(--border);
-  }
-  
-  /* STATS SECTION */
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    margin-top: 15px; /* Дополнительный отступ сверху */
+    transition: background .3s;
     gap: 20px;
   }
-  .stat-card {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .stat-label {
-    color: var(--muted);
-    font-weight: 600;
-    font-size: 14px;
-    margin-bottom: 5px;
-  }
-  .stat-value {
-    font-size: 24px;
-    font-weight: 800;
-    color: var(--text);
-  }
-  
-  /* CHART STYLES */
-  .chart-container {
-    padding: 20px;
-    background-color: var(--card);
-    border-radius: 12px;
-    margin-bottom: 20px;
-    border: 1px solid var(--border);
-  }
-  
-  /* NEW PACE BLOCK */
-  .pace-block {
-    display: none; /* Initially hidden, shown by JS */
-    padding: 15px 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    background-color: var(--card);
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: background-color 0.3s, border-color 0.3s;
-  }
-  .pace-block.critical {
-    background-color: var(--red-bg);
-    border-color: var(--red);
-    box-shadow: 0 0 10px rgba(248, 113, 113, 0.2);
-  }
-  .pace-info {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-  }
-  .pace-icon {
-    font-size: 30px;
-  }
-  .pace-status { 
-    font-weight: 700; 
-    font-size: 14px; 
-    padding: 6px 14px; 
-    border-radius: 8px; 
-    border: 1px solid transparent;
-  }
-  .pace-actions {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-  }
-  /* STATUS CHIP STYLES */
-  .pace-chill { background: rgba(62, 207, 142, 0.1); color: var(--green); border-color: rgba(62, 207, 142, 0.2); }
-  .pace-hurry { background: var(--red); color: white; border-color: var(--red); }
+  .pace-block.critical { background: rgba(218, 54, 51, 0.15); border-color: var(--red); }
+  .pace-info { display: flex; align-items: center; gap: 15px; }
+  .pace-icon { font-size: 24px; }
+  .pace-status { font-weight: 700; font-size: 14px; padding: 5px 12px; border-radius: 6px; }
+  .pace-chill { background: rgba(57, 211, 83, 0.1); color: var(--green); }
+  .pace-hurry { background: var(--red); color: white; }
 
-  /* REPUTATION CHIP */
-  .pace-rep-chip {
-    display: flex;
-    align-items: center;
-    padding: 6px 10px;
-    border-radius: 8px;
-    background-color: var(--card-alt);
-    gap: 8px;
-    font-size: 14px;
-  }
-  .rep-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-  }
-  .rep-dot.good { background-color: var(--green); }
-  .rep-dot.ok { background-color: var(--yellow); }
-  .rep-dot.bad { background-color: var(--red); }
-  .rep-chip-label {
-    color: var(--muted);
-    font-size: 12px;
-  }
-  .rep-chip-score {
-    font-weight: 700;
-    color: var(--text);
-  }
-  
-  /* MONTH SELECT */
-  #month-select {
-    padding: 6px 10px;
-    font-size: 14px;
-    border-radius: 6px;
-  }
-  
-  /* THEME SWITCH */
-  .theme-switch {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--muted);
-    cursor: pointer;
-  }
-  .theme-switch:hover {
-    color: var(--text);
-  }
-  .theme-switch svg {
-    width: 20px;
-    height: 20px;
-  }
-  
-  /* CHECKBOX STYLES */
-  input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 16px;
-    height: 16px;
-    border: 1px solid var(--muted);
-    border-radius: 4px;
-    cursor: pointer;
-    position: relative;
-    margin-right: 0;
-    vertical-align: middle;
-    background-color: var(--card-alt);
-    transition: background-color 0.2s, border-color 0.2s;
-  }
-  input[type="checkbox"]:checked {
-    background-color: var(--link);
-    border-color: var(--link);
-  }
-  input[type="checkbox"]:checked::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 5px;
-    width: 4px;
-    height: 8px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-  }
-  .bulk-checkbox { margin-right: 5px; }
+  body.light .pace-block.critical { background: #fff1f1; border-color: #f3c5c5; box-shadow: 0 8px 24px rgba(218,54,51,0.08); }
+  body.light .pace-hurry { background: #f26b6b; color: #fff; box-shadow: 0 6px 14px rgba(242,107,107,0.25); }
 
-  /* FOOTER SELECT ROW */
-  .footer-select-row {
-      background-color: var(--card-alt);
-      padding: 10px 20px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      bottom: 0;
-      z-index: 20;
+  .pace-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .pace-rep-chip { display: inline-flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 14px; background: var(--chip-bg); border: 1px solid var(--border); color: #e9edf4; font-weight: 700; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); min-height: 44px; }
+  .pace-rep-chip .rep-dot { width: 10px; height: 10px; box-shadow: 0 0 0 4px rgba(88,166,255,0.12); }
+  .pace-rep-chip .rep-chip-text { display: flex; flex-direction: column; gap: 2px; line-height: 1.2; }
+  .pace-rep-chip .rep-chip-label { font-size: 11px; letter-spacing: 0.4px; text-transform: uppercase; color: var(--muted); }
+  .pace-rep-chip .rep-chip-score { font-size: 15px; font-weight: 800; }
+  .pace-rep-chip.good { border-color: rgba(46, 160, 67, 0.35); background: linear-gradient(135deg, rgba(46,160,67,0.14), rgba(15,23,31,0.8)); box-shadow: 0 0 0 1px rgba(46,160,67,0.18); }
+  .pace-rep-chip.warn { border-color: rgba(210, 153, 34, 0.35); background: linear-gradient(135deg, rgba(210,153,34,0.14), rgba(15,23,31,0.8)); box-shadow: 0 0 0 1px rgba(210,153,34,0.16); }
+  .pace-rep-chip.bad { border-color: rgba(218, 54, 51, 0.35); background: linear-gradient(135deg, rgba(248,81,73,0.14), rgba(15,23,31,0.8)); box-shadow: 0 0 0 1px rgba(218,54,51,0.16); }
+  body.light .pace-rep-chip { background: linear-gradient(135deg,#f7fbff,#eef2ff); border-color: #d6e2f5; color: #1f2d4a; box-shadow: 0 6px 20px rgba(17,24,39,0.06); }
+  body.light .pace-rep-chip .rep-chip-label { color: #4b5563; }
+  body.light .pace-rep-chip.good { border-color: rgba(46,160,67,0.3); background: linear-gradient(135deg, rgba(46,160,67,0.1), #f5fbf7); box-shadow: 0 0 0 1px rgba(46,160,67,0.12); color: #1f422c; }
+  body.light .pace-rep-chip.warn { border-color: rgba(210,153,34,0.28); background: linear-gradient(135deg, rgba(210,153,34,0.12), #fdf7ec); box-shadow: 0 0 0 1px rgba(210,153,34,0.12); color: #5a4314; }
+  body.light .pace-rep-chip.bad { border-color: rgba(218,54,51,0.32); background: linear-gradient(135deg, rgba(248,81,73,0.12), #fff1f0); box-shadow: 0 0 0 1px rgba(218,54,51,0.12); color: #6b1c1c; }
+
+  .pace-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+
+      .date-input-wrap:not(:last-child) {
+    margin-right: 10px;
+}
+  
+  /* Stats Dashboard fixes */
+  .stats-full { margin-top: 50px; display: flex; flex-direction: column; gap: 20px; }
+  .stats-two-columns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; align-items: start; }
+  .side-stack { display: flex; flex-direction: column; gap: 16px; }
+  .efficiency-card { padding-bottom: 14px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .card-head { font-size: 18px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+  .finance-title { font-size: 20px; font-weight: 800; color: #fff; }
+  body.light .finance-title { color: #0f172a; }
+  .finance-sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .goal-wrap { margin-bottom: 18px; }
+  .goal-info { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
+  .card-head-actions { display: flex; align-items: center; gap: 10px; }
+  .inline-link-btn { padding: 8px 12px; background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; transition: .2s; }
+  .inline-link-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--button-bg); }
+  body.light .inline-link-btn { color: #2d3a55; border-color: #cbd8f1; background: #f7faff; box-shadow: 0 4px 14px rgba(17,24,39,0.05); }
+  body.light .inline-link-btn:hover { color: #1f4cad; border-color: #3b82f6; background: #eaf2ff; }
+  .progress-bg { height: 14px; background: var(--progress-bg); border-radius: 12px; overflow: hidden; border: 1px solid var(--progress-border); margin-top: 8px; width: 100%; box-shadow: var(--progress-shadow); }
+  .progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--progress-fill-start), var(--progress-fill-end)); transition: width 0.5s; box-shadow: var(--progress-fill-shadow); border-radius: 12px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+  .stat-box { padding: 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--card-alt); }
+  .stat-label-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+  .stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+  .stat-pill { padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; background: rgba(88,166,255,0.12); color: var(--accent); border: 1px solid rgba(88,166,255,0.3); }
+  #goal-pill { background: var(--goal-pill-bg); border-color: var(--goal-pill-border); color: var(--goal-pill-color); padding: 6px 12px; font-size: 13px; box-shadow: var(--goal-pill-shadow); display: inline-flex; gap: 6px; align-items: center; }
+  #goal-pill::before { content: "⚡"; }
+  .stat-val { font-size: 30px; font-weight: 800; }
+  .stat-helper { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .text-green { color: var(--green); }
+  .text-gold { color: var(--gold); }
+  .mono { font-family: monospace; }
+  .stat-scope-note { margin-top: 6px; color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; }
+  .status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: var(--status-bg); border: 1px solid var(--status-border); color: var(--status-text); white-space: nowrap; }
+  .status-pill.active { color: #58ffb3; border-color: rgba(88,255,179,0.25); background: rgba(88,255,179,0.05); }
+  .status-pill.waiting { color: #facc15; border-color: rgba(250,204,21,0.25); background: rgba(250,204,21,0.05); }
+  .status-pill.potential { color: #58a6ff; border-color: rgba(88,166,255,0.25); background: rgba(88,166,255,0.05); }
+  .status-pill.paused { color: #a371f7; border-color: rgba(163,113,247,0.25); background: rgba(163,113,247,0.05); }
+  .status-pill.archive { color: #8b949e; border-color: rgba(139,148,158,0.25); background: rgba(139,148,158,0.08); }
+  body.light .status-pill.active { color: #0f6b3f; border-color: rgba(31,158,76,0.35); background: rgba(31,158,76,0.12); }
+  body.light .status-pill.waiting { color: #a06c00; border-color: rgba(160,108,0,0.35); background: rgba(255,202,58,0.16); }
+  body.light .status-pill.potential { color: #1f65c0; border-color: rgba(31,101,192,0.28); background: rgba(31,101,192,0.12); }
+  body.light .status-pill.paused { color: #5a3ba6; border-color: rgba(90,59,166,0.32); background: rgba(90,59,166,0.12); }
+  body.light .status-pill.archive { color: #5b6575; border-color: rgba(91,101,117,0.35); background: rgba(91,101,117,0.12); }
+  .record-banner { background: linear-gradient(135deg, rgba(250,204,21,0.06), rgba(88,166,255,0.05)); border: 1px solid var(--border); padding: 16px 18px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; gap: 16px; box-shadow: inset 0 0 0 1px rgba(250, 204, 21, 0.05); }
+  .record-texts { flex:1; min-width: 0; }
+  .record-title { color: var(--muted); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .record-motiv { color: #f0f6fc; font-weight: 700; margin-top: 4px; font-size: 15px; }
+  .record-progress-bg { margin-top: 10px; height: 10px; background: var(--record-bg); border-radius: 10px; overflow: hidden; border: 1px solid var(--record-border); width: 100%; box-shadow: var(--record-shadow); }
+  .record-progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--record-fill-start), var(--record-fill-end)); box-shadow: var(--record-fill-shadow); transition: width .4s ease; border-radius: 999px; }
+  .record-value { font-size: 24px; font-weight: 900; color: var(--gold); text-align: right; }
+  .record-remaining { color: var(--muted); font-weight: 700; font-size: 12px; text-align: right; margin-top: 4px; }
+  .record-side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  .reputation-strip { margin: 16px 0; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; background: linear-gradient(90deg, rgba(46, 160, 67, 0.06), rgba(250, 204, 21, 0.05)); display: flex; justify-content: space-between; gap: 12px; align-items: center; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02); }
+  .reputation-strip .tag { font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); font-weight: 700; }
+  .reputation-strip .headline { font-size: 18px; font-weight: 800; color: var(--text); }
+  .reputation-strip .hint { color: var(--muted); font-size: 13px; }
+  .reputation-strip.good { border-color: rgba(46,160,67,0.4); background: linear-gradient(90deg, rgba(46,160,67,0.08), rgba(46,160,67,0.04)); }
+  .reputation-strip.warn { border-color: rgba(210,153,34,0.5); background: linear-gradient(90deg, rgba(210,153,34,0.1), rgba(210,153,34,0.05)); }
+  .reputation-strip.bad { border-color: rgba(248,81,73,0.4); background: linear-gradient(90deg, rgba(248,81,73,0.08), rgba(248,81,73,0.04)); }
+  .reputation-card { border: 1px solid var(--border); border-radius: 14px; padding: 16px; background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02); display: flex; flex-direction: column; gap: 10px; }
+  .reputation-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .reputation-title { display: flex; align-items: center; gap: 8px; font-weight: 700; }
+  .reputation-score { font-size: 26px; font-weight: 900; color: var(--text); }
+  .reputation-grade { font-weight: 700; color: var(--muted); }
+  .reputation-detail { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .reputation-fallout { font-size: 12px; color: #f85149; background: rgba(248,81,73,0.08); border: 1px dashed rgba(248,81,73,0.4); padding: 10px 12px; border-radius: 10px; line-height: 1.5; }
+  .rep-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; font-weight: 700; font-size: 12px; }
+  .rep-chip.good { background: rgba(46,160,67,0.15); color: #2ea043; }
+  .rep-chip.warn { background: rgba(210,153,34,0.15); color: #d29922; }
+  .rep-chip.bad { background: rgba(248,81,73,0.15); color: #f85149; }
+  .reputation-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .rep-metric { padding: 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--card-alt); }
+  .rep-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 800; }
+  .rep-value { font-size: 18px; font-weight: 800; color: #f0f6fc; margin-top: 6px; }
+  .rep-helper { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+  body.light .rep-metric { background: #f6f8fd; border-color: #d8e1f0; }
+  body.light .rep-value { color: #1f2937; }
+  body.light .rep-helper { color: #4b5563; }
+  .reputation-mini { display: grid; grid-template-columns: 1fr 1.1fr; gap: 12px; align-items: stretch; }
+  .rep-chart-box { border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: var(--card-alt); min-height: 140px; display: flex; flex-direction: column; gap: 8px; position: relative; overflow: visible; }
+  .rep-chart-box::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 30% 20%, rgba(88,166,255,0.12), transparent 45%); opacity: 0.5; }
+  .rep-chart-legend { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; gap: 8px; }
+  .rep-chart-legend .legend-title { display: flex; align-items: center; gap: 6px; }
+  .rep-chart-legend .legend-score { display: inline-flex; align-items: center; gap: 6px; font-weight: 800; color: var(--text); background: rgba(46,160,67,0.1); padding: 4px 10px; border-radius: 999px; }
+  .rep-chart-caption { display: flex; gap: 6px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .rep-chart-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,0.02); }
+  .rep-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .rep-dot.good { background: #2ea043; box-shadow: 0 0 0 3px rgba(46,160,67,0.15); }
+  .rep-dot.warn { background: #d29922; box-shadow: 0 0 0 3px rgba(210,153,34,0.15); }
+  .rep-dot.bad { background: #f85149; box-shadow: 0 0 0 3px rgba(248,81,73,0.18); }
+  .rep-tips { border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: var(--card-alt); display: flex; flex-direction: column; gap: 8px; }
+  .rep-tips-title { font-weight: 800; color: #f0f6fc; font-size: 13px; letter-spacing: 0.3px; text-transform: uppercase; }
+  .rep-tip { display: flex; gap: 8px; color: var(--muted); font-size: 13px; line-height: 1.4; }
+  .rep-tip svg { width: 16px; height: 16px; color: #58a6ff; flex-shrink: 0; }
+  body.light .rep-chart-box { background: #f6f8fd; border-color: #d8e1f0; }
+  body.light .rep-chart-box::after { background: radial-gradient(circle at 30% 20%, rgba(59,130,246,0.12), transparent 45%); }
+  body.light .rep-chart-pill { background: #f7faff; border-color: #d8e1f0; color: #374151; }
+  body.light .rep-tips { background: #f6f8fd; border-color: #d8e1f0; }
+  body.light .rep-tips-title { color: #1f2d45; }
+  /* Bulk Toolbar */
+  .bulk-toolbar {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); 
+      background: var(--card); padding: 10px 20px; border-radius: 12px; 
+      border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      display: flex; gap: 15px; z-index: 999; align-items: center;
   }
-  .footer-select-actions button {
-      background-color: var(--link);
-      color: white;
-      padding: 6px 12px;
-      border-radius: 6px;
+  .bulk-action-btn {
+      background: var(--button-bg); border: 1px solid var(--border); color: var(--text);
+      padding: 8px 15px; font-size: 14px; border-radius: 6px; cursor: pointer; 
+      transition: .2s; white-space: nowrap;
   }
-  .footer-select-actions button.secondary {
-      background: var(--card);
+  .bulk-action-btn.delete { color: var(--red); border-color: var(--red); }
+  .bulk-action-btn:hover { background: #30363d; }
+  .bulk-action-btn.delete:hover { background: rgba(218, 54, 51, 0.1); }
+  
+  /* Bulk Move Select */
+  .bulk-move-select {
+      padding: 8px 15px;
+      background: var(--button-bg);
       border: 1px solid var(--border);
       color: var(--text);
-  }
-  .footer-select-actions button.secondary:hover {
-      background: var(--border);
-  }
-  
-  /* CLIENT COLORS */
-  .client-wrap {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-  }
-  .client-wrap span {
-      position: relative;
-      padding-left: 10px;
-  }
-  .client-wrap span::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-  }
-  .client-wrap span.client-color-1::before { background-color: #ff9f1c; } /* Orange */
-  .client-wrap span.client-color-2::before { background-color: #2ec4b6; } /* Cyan */
-  .client-wrap span.client-color-3::before { background-color: #e76f51; } /* Coral */
-  .client-wrap span.client-color-4::before { background-color: #264653; } /* Dark Blue-Green */
-  .client-wrap span.client-color-5::before { background-color: #f77f00; } /* Dark Orange */
-  .client-wrap span.client-color-6::before { background-color: #48bfe3; } /* Light Blue */
-  .client-wrap span.client-color-7::before { background-color: #c084fc; } /* Purple */
-
-  /* LINKS ICON */
-  .link-icon {
-      width: 14px;
-      height: 14px;
-      color: var(--link);
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 14px;
       cursor: pointer;
+      outline: none;
+      transition: .2s;
   }
-  .project-name-wrap {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-  }
-  .project-name {
-      font-weight: 600;
-  }
+  .bulk-move-select:hover { border-color: var(--accent); }
+  .bulk-move-select option { background: var(--card); }
+
+
+  /* Modals */
+  .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:var(--modal-overlay);z-index:1000;justify-content:center;align-items:center;backdrop-filter: blur(4px);}
+  .modal-content{background:var(--card);padding:30px;border-radius:16px;width:460px;max-width:95%;border:1px solid var(--border);text-align:center; position: relative; box-shadow: 0 18px 60px rgba(0,0,0,0.35);}
   
-  /* EXPENSE CELL */
-  .expense-cell {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+  /* Inputs & Selects inside modal */
+  .inp-group{margin-bottom:15px;text-align:left;}
+  .inp-group label{display:block;margin-bottom:5px;font-size:13px;color:var(--muted);font-weight:600;}
+  .inp-group input, .inp-group select {background-color: var(--input-bg);border:1px solid var(--border);padding:10px;width:100%;color:var(--text);border-radius:8px; outline: none; box-sizing: border-box;}
+  .row-inputs{display:flex;gap:12px;margin-bottom:15px;flex-wrap:wrap;}
+  .row-inputs > div {flex: 1 1 180px;}
+  .deadline-presets { display: flex; gap: 10px; align-items: center; flex-wrap: nowrap; }
+  .deadline-presets select { min-width: 150px; white-space: nowrap; }
+  .deadline-presets input { min-width: 120px; }
+  .date-duo { display: flex; gap: 12px; align-items: stretch; margin-bottom: 12px; flex-wrap: nowrap; }
+  .date-duo .inp-group { margin-bottom: 0; }
+  .date-duo-card { flex: 1 1 220px; padding: 0; border-radius: 14px; border: none; background: transparent; box-shadow: none; }
+  .date-duo .inp-group label { display: flex; align-items: center; gap: 6px; color: var(--muted); font-weight: 700; }
+  .deadline-presets select { min-width: 140px; }
+  .deadline-presets input { min-width: 110px; }
+  .date-chip { margin-top: 8px; }
+
+  .deadline-template { margin-bottom: 15px; }
+  .deadline-template .deadline-presets { gap: 8px; flex-wrap: nowrap; }
+  .deadline-template .inp-group { margin-bottom: 0; }
+  .deadline-template .deadline-presets select,
+  .deadline-template .deadline-presets input { background: var(--input-bg); border: 1px solid var(--border); }
+  
+  .close-modal-x { 
+      position: absolute; 
+      top: 10px; 
+      right: 15px; 
+      font-size: 24px; 
+      color: var(--muted); 
+      cursor: pointer; 
+      line-height: 1;
+      opacity: 0.7;
+      transition: opacity 0.2s;
   }
-  .expense-helper {
-      font-size: 10px;
-      color: var(--muted);
+  .close-modal-x:hover { opacity: 1; }
+  .save-stg { width: 100%; margin-top: 20px; color: #fff; font-weight: 800; letter-spacing: 0.1px; }
+  button[style*="var(--btn-blue)"] { color: #fff; }
+  
+  /* Settings Modal specific padding fix */
+  #settingsModal .modal-content {
+      padding: 30px; /* Увеличен отступ для заголовка */
+  }
+  #settingsModal .modal-content h2 { margin-bottom: 15px; }
+
+  .footer-note { color: var(--muted); font-size: 12px; font-weight: 600; }
+  .helper-note { color: var(--muted); font-size: 12px; margin-top: 6px; line-height: 1.4; text-align: left; }
+
+  /* Date/Time Input Styling (Override attempts for dark theme) */
+  .inp-group input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
+  .inp-group input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
+  .inp-group input:focus, .inp-group select:focus { border-color: var(--accent); }
+
+  .date-time-inputs input {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      width: 100%;
+      transition: border-color .2s, background .2s, box-shadow .2s;
   }
 
-  /* NET DISPLAY */
-  .net-display-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
+  .date-time-inputs { display: flex; gap: 15px; width: 100%; }
+  .input-with-icon { position: relative; flex: 1; }
+  .input-with-icon .input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--muted); opacity: 0.9; }
+  .input-with-icon input { padding-left: 38px; }
+  .input-with-icon .flatpickr-input { width: 100%; }
+
+  .flatpickr-alt-input {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      width: 100%;
+      padding-left: 38px;
   }
-  .net-main-val {
+
+  .flatpickr-alt-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(88,166,255,0.15);
+      background: var(--date-focus-bg);
+  }
+
+  .date-time-inputs input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(88,166,255,0.15);
+      background: var(--date-focus-bg);
+  }
+
+  .date-time-inputs input:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+  }
+
+  /* Flatpickr Dark Theme Tweaks */
+  .flatpickr-calendar {
+      background: var(--card-alt);
+      border: 1px solid var(--border);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+      color: var(--text);
+      border-radius: 14px;
+      overflow: hidden;
+  }
+
+  .flatpickr-months,
+  .flatpickr-weekdays,
+  .flatpickr-time {
+      background: var(--card-alt);
+      border-color: var(--border);
+  }
+
+  .flatpickr-months .flatpickr-month {
+      color: var(--text);
+  }
+
+  .flatpickr-monthDropdown-months,
+  .flatpickr-current-month input.cur-year {
+      color: var(--text);
+      background: var(--card-alt);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+  }
+
+  .flatpickr-monthDropdown-months option {
+      background: var(--card-alt);
+      color: var(--text);
+  }
+
+  .flatpickr-day, .flatpickr-weekday {
+      color: var(--text);
+      border-radius: 10px;
+  }
+
+  .flatpickr-day:hover, .flatpickr-day:focus {
+      background: rgba(88,166,255,0.12);
+      border-color: rgba(88,166,255,0.35);
+  }
+
+  .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(88,166,255,0.35);
+  }
+
+  .flatpickr-day.today:not(.selected) {
+      border-color: var(--accent);
+      color: var(--accent);
+  }
+
+  .flatpickr-weekday {
+      color: #d0d7e0;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+  }
+
+  .flatpickr-months .flatpickr-prev-month svg,
+  .flatpickr-months .flatpickr-next-month svg {
+      fill: var(--text);
+  }
+
+  .flatpickr-time {
+      border-top: 1px solid var(--border);
+      padding: 10px 12px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+  }
+
+  .flatpickr-time input, .flatpickr-time .numInputWrapper span {
+      color: #e9edf4;
+  }
+
+  .flatpickr-time .flatpickr-time-separator { color: var(--muted); font-weight: 800; }
+
+  .flatpickr-time .numInputWrapper {
+      border: 1px solid #3a3f4b;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #161b22, #0d1118);
+      overflow: hidden;
+      min-width: 76px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 8px 20px rgba(0,0,0,0.3);
+      transition: border-color .2s, box-shadow .2s, background .2s;
+  }
+
+  .flatpickr-time .numInputWrapper:focus-within {
+      border-color: rgba(88,166,255,0.7);
+      box-shadow: 0 0 0 1px rgba(88,166,255,0.25), 0 10px 30px rgba(0,0,0,0.35);
+      background: linear-gradient(180deg, #111722, #0b1016);
+  }
+
+  .flatpickr-time input {
+      background: transparent;
+      font-weight: 800;
+      font-size: 16px;
+      text-align: center;
+      padding: 10px 12px;
+      letter-spacing: 0.3px;
+  }
+
+  .flatpickr-time input:hover, .flatpickr-time .numInputWrapper span:hover {
+      background: rgba(88,166,255,0.08);
+  }
+
+  .flatpickr-time .numInputWrapper span {
+      background: transparent;
+      transition: background .15s;
+  }
+
+  .flatpickr-time .numInputWrapper span.arrowUp:after,
+  .flatpickr-time .numInputWrapper span.arrowDown:after {
+      border-bottom-color: var(--accent);
+      border-top-color: var(--accent);
+  }
+  body.light .flatpickr-calendar { box-shadow: 0 18px 40px rgba(17,24,39,0.16); }
+  body.light .flatpickr-months,
+  body.light .flatpickr-weekdays,
+  body.light .flatpickr-time { background: #fff; }
+  body.light .flatpickr-time input, body.light .flatpickr-time .numInputWrapper span { color: #111827; }
+  body.light .flatpickr-time .numInputWrapper { background: #f8fbff; border-color: #d8e1f0; box-shadow: inset 0 1px 0 rgba(255,255,255,0.9); }
+  body.light .flatpickr-time .numInputWrapper:focus-within { background: #eef3ff; border-color: #3b82f6; box-shadow: 0 0 0 1px rgba(59,130,246,0.15), 0 10px 30px rgba(17,24,39,0.12); }
+  body.light .flatpickr-time input:hover, body.light .flatpickr-time .numInputWrapper span:hover { background: rgba(59,130,246,0.08); }
+
+  /* Finance Block Percentage */
+  .stat-val-small { font-size: 16px; font-weight: 600; color: var(--muted); margin-left: 10px;}
+  .stat-label-row { display: flex; align-items: center; justify-content: space-between; }
+  .stat-val-margin { font-size: 24px; font-weight: 800; color: var(--text); }
+  .stat-label-with-help { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+  .help-icon { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--help-border); background: var(--help-bg); color: var(--help-text); font-size: 11px; cursor: help; position: relative; transition: border-color .2s, color .2s, background .2s, box-shadow .2s; box-shadow: inset 0 1px 0 rgba(255,255,255,0.15); }
+  .help-icon:hover { color: var(--accent); border-color: var(--accent); background: var(--help-hover-bg); box-shadow: 0 4px 14px rgba(0,0,0,0.08); }
+  .help-icon::after { content: attr(data-tooltip); position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); background: var(--card-alt); color: var(--text); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 8px 30px rgba(0,0,0,0.2); width: 260px; max-width: 70vw; font-size: 12px; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity .15s, visibility .15s; z-index: 10; text-transform: none; }
+  .help-icon:hover::after { opacity: 1; visibility: visible; }
+  .text-red { color: var(--red); }
+  .symbol-select { width: 68px !important; padding: 8px; text-align: center; }
+  
+  /* Link Modal Specific */
+  #linkModal .modal-content { width: 350px; }
+  
+  /* Checkbox styling */
+  .checkbox-wrap { 
+    display: flex; align-items: center; gap: 8px; font-size: 14px; 
+    color: var(--muted); margin-bottom: 15px; cursor: pointer;
+    user-select: none;
+  }
+  .checkbox-wrap input[type="checkbox"] { width: 16px; height: 16px; margin: 0; cursor: pointer; }
+  
+  /* Trash Table Button Fix */
+  .trash-action-btns { display: flex; gap: 10px; align-items: center; }
+  .restore-trash-btn, .delete-forever-text {
+      padding: 6px 12px;
+      font-size: 14px;
+      border-radius: 6px;
+      cursor: pointer;
       font-weight: 600;
-      color: var(--green);
+      transition: background 0.2s, border-color 0.2s;
+      white-space: nowrap;
+      text-decoration: none; /* For delete-forever-text */
+      display: inline-block;
+      text-align: center;
+      min-width: 100px;
   }
-  .net-prc-val {
-      font-size: 10px;
-      color: var(--muted);
+  .restore-trash-btn { 
+      color: var(--green); 
+      border: 1px solid var(--green); 
+      background: transparent; 
   }
-
-  /* DATE REMAINING STYLES */
-  .time-text {
-      font-size: 10px;
-      margin-left: 4px;
-      color: var(--muted);
+  .restore-trash-btn:hover { 
+      background: rgba(46, 160, 67, 0.1);
   }
-  .time-text.red {
+  .delete-forever-text {
       color: var(--red);
-      font-weight: 600;
+      border: 1px solid var(--red);
+      background: transparent;
+      opacity: 1; /* Полная видимость */
   }
-  .time-text.yellow {
-      color: var(--yellow);
-      font-weight: 600;
+  .delete-forever-text:hover {
+       background: rgba(218, 54, 51, 0.1);
   }
-  .time-text.green {
-      color: var(--green);
-      font-weight: 600;
-  }
-  
-  /* MOBILE OPTIMIZATION */
-  @media (max-width: 768px) {
-    .container { padding: 10px; }
-    .tabs { overflow-x: auto; }
-    .tab-btn { flex-shrink: 0; }
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    .pace-block { flex-direction: column; align-items: stretch; }
-    .pace-actions { margin-top: 10px; justify-content: space-between; }
-  }
+
+
+.date-cell:not(:last-child) .date-input-wrap {
+    margin-right: 8px;
+}
+
+
+      .date-cell:first-of-type .date-input-wrap {
+    margin-right: 8px;
+}
+
+
+td.date-cell + td.date-cell {
+    padding-left: 10px !important;
+}
+
 
 </style>
 </head>
 <body>
 
-<svg style="display:none;">
-    <symbol id="icon-light" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></symbol>
-    <symbol id="icon-dark" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></symbol>
-    <symbol id="icon-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></symbol>
-    <symbol id="icon-duplicate" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></symbol>
-    <symbol id="icon-plus" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></symbol>
+<div class="toast" id="toast">
+    <div class="toast-message" id="toast-message"></div>
+    <button class="toast-action" id="toast-action" style="display:none"></button>
+    <button class="toast-close" onclick="hideToast()">×</button>
+</div>
+
+<svg style="display: none;">
+    <symbol id="icon-active" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM3 8a5 5 0 0 1 10 0 5 5 0 0 1-10 0Z"/></symbol>
+    <symbol id="icon-all" viewBox="0 0 16 16"><path fill="currentColor" d="M2.5 2.5A.5.5 0 0 1 3 2h4.5a.5.5 0 0 1 .5.5V7a.5.5 0 0 1-.5.5H3A.5.5 0 0 1 2.5 7Zm6 0A.5.5 0 0 1 9 2h4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-.5.5H9a.5.5 0 0 1-.5-.5Zm-6 6A.5.5 0 0 1 3 8h4.5a.5.5 0 0 1 .5.5V13a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5Zm8 0A.5.5 0 0 1 11 8h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5Z"/></symbol>
+    <symbol id="icon-waiting" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM8 4a1 1 0 0 1 1 1v3.5a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1 0-1H8V5a1 1 0 0 1 1-1Z"/></symbol>
+    <symbol id="icon-potential" viewBox="0 0 16 16"><path fill="currentColor" d="M3 1.5A.5.5 0 0 1 3.5 1h7a.5.5 0 0 1 .4.8L9.6 4l1.3 2.2a.5.5 0 0 1-.43.8H5.5V14a.5.5 0 0 1-1 0z"/></symbol>
+    <symbol id="icon-paused" viewBox="0 0 16 16"><path fill="currentColor" d="M5 2.5a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0V3a.5.5 0 0 1 .5-.5Zm6 0a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0V3a.5.5 0 0 1 .5-.5Z"/></symbol>
+    <symbol id="icon-archive" viewBox="0 0 16 16"><path fill="currentColor" d="M13 1.75a.75.75 0 0 0-.75-.75H3.75a.75.75 0 0 0-.75.75v12.5c0 .414.336.75.75.75h8.5a.75.75 0 0 0 .75-.75Zm-1.5 8.75a.5.5 0 0 1-1 0V6.707L6.464 10.464a.5.5 0 0 1-.708-.708L10.793 6H7.5a.5.5 0 0 1 0-1h4.5a.5.5 0 0 1 .5.5v4.5Z"/></symbol>
+    <symbol id="icon-trash" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M9 3.5 8 5H5.5a1 1 0 0 0 0 2h13a1 1 0 0 0 0-2H16l-1-1.5a1 1 0 0 0-.83-.45H9.83a1 1 0 0 0-.83.45Zm-2 5.5h10l-.6 9.01a1 1 0 0 1-1 .94H7.6a1 1 0 0 1-1-.94L6 9Z"/>
+      <path fill="currentColor" d="M10 11a1 1 0 0 0-1 1v4a1 1 0 1 0 2 0v-4a1 1 0 0 0-1-1Zm4 0a1 1 0 0 0-1 1v4a1 1 0 1 0 2 0v-4a1 1 0 0 0-1-1Z"/>
+    </symbol>
+    <symbol id="icon-duplicate" viewBox="0 0 16 16"><path fill="currentColor" d="M2.25 1.75a.75.75 0 0 1 .75-.75h7.25a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0V2.5h-6.5v8h2a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1-.75-.75Zm4.5 4a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 .75.75v8a.75.75 0 0 1-.75.75h-6a.75.75 0 0 1-.75-.75v-8Z"/></symbol>
+    <symbol id="icon-calendar" viewBox="0 0 16 16"><path fill="currentColor" d="M3 2.75A.75.75 0 0 1 3.75 2h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 3 2.75ZM12.25 2a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5c0-.414.336-.75.75-.75ZM2 5.5a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 5.5Zm12.5 2.25v7.25c0 .414-.336.75-.75.75H2.25a.75.75 0 0 1-.75-.75V7.75c0-.414.336-.75.75-.75h11.5c.414 0 .75.336.75.75Z"/></symbol>
+    <symbol id="icon-clock" viewBox="0 0 16 16"><path fill="currentColor" d="M8 1.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13Zm0 1.5a5 5 0 1 1 0 10a5 5 0 0 1 0-10Zm-.5 1.25c0-.276.224-.5.5-.5s.5.224.5.5v2.6l2 1.2a.5.5 0 1 1-.5.866l-2.25-1.35A.5.5 0 0 1 7.5 7V4.25Z"/></symbol>
+    <symbol id="icon-undo" viewBox="0 0 20 20"><path fill="currentColor" d="M9.5 3a7.5 7.5 0 1 1-5.303 12.803a.75.75 0 0 1 1.06-1.061A6 6 0 1 0 7 5.233V7.5a.75.75 0 0 1-1.28.53l-3-3a.75.75 0 0 1 0-1.06l3-3A.75.75 0 0 1 7 1.97V4.2A7.47 7.47 0 0 1 9.5 3Z"/></symbol>
 </svg>
 
-<div class="container">
-    
-    <header class="flex justify-between">
-        <div class="logo">
-            <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="24" height="24" rx="6" ry="6" fill="#0d1117"/>
-                <path d="M11 2 L5 14 H10 L9 22 L19 8 H13 L14 2 Z" fill="#facc15"/>
-            </svg>
-            DesignFlow
-        </div>
-        <div class="flex gap-3">
-            <div id="theme-switch" class="theme-switch" onclick="toggleTheme()">
-                <svg id="theme-icon"><use href="#icon-dark"></use></svg>
-                <span id="theme-label">Темная тема</span>
-            </div>
-        </div>
-    </header>
+<div class="c">
+  
+  <div class="header-row">
+    <h1><span class="brand-grad">DesignFlow</span> <span class="brand-white">— Трекер проектов</span></h1>
+    <div style="display:flex;gap:15px;align-items:center">
+        <button id="themeToggle" onclick="toggleTheme()" aria-label="Переключить тему">
+            <span id="themeToggleIcon">🌞</span>
+            <span id="themeToggleLabel">Светлая тема</span>
+        </button>
+        <button onclick="openSettings()">⚙ Настройки целей</button>
+        <select id="monthSelect" class="month-select" onchange="changeMonth(this.value)"></select>
+    </div>
+  </div>
 
-    <div id="pace-block" class="pace-block">
-        <div class="pace-info">
-            <span class="pace-icon" id="pace-emoji">🔥</span>
-            <div>
-                <div style="font-size:20px; font-weight:800; color:var(--text);" id="pace-headline">Отлично! Идем по плану.</div>
-                <div style="color:var(--muted); font-size:14px; margin-top:4px;" id="pace-hint">Проекты сдаются вовремя, рейтинг растет. Продолжай в том же духе.</div>
-            </div>
-        </div>
-        <div class="pace-actions">
-            <div class="pace-status" id="pace-status">Критично</div>
-            <div class="pace-rep-chip good" id="pace-rep-chip">
-                <span class="rep-dot good" id="pace-rep-dot"></span>
-                <div class="rep-chip-text">
-                    <div class="rep-chip-label">Репутация</div>
-                    <div class="rep-chip-score" id="pace-rep-text">100 / 100</div>
-                </div>
-            </div>
-            <button class="inline-link-btn" onclick="scrollToReputation()">Подробнее</button>
+
+  <div class="top-panel">
+    <div class="backup-info">
+      <b>⚠ Важно:</b> Данные хранятся только в вашем браузере. <br>
+      Обязательно скачивайте резервную копию перед очисткой кэша или переустановкой системы.
+    </div>
+    <div class="btns">
+      <button onclick="exp()">💾 Скачать базу (Бэкап)</button>
+      <button onclick="document.getElementById('imp').click()">📂 Загрузить базу</button>
+      <input type="file" id="imp" accept=".json" style="display:none" onchange="imp(this.files[0])">
+      <button onclick="expCSV()">📊 Экспорт в CSV</button>
+    </div>
+  </div>
+
+  <div class="tabs-container">
+    <div class="tabs">
+        <div class="tab" id="tab-all" onclick="switchTab('all')"><svg><use href="#icon-all"/></svg> Все проекты</div>
+        <div class="tab active" id="tab-active" onclick="switchTab('active')"><svg><use href="#icon-active"/></svg> В работе</div>
+        <div class="tab" id="tab-waiting" onclick="switchTab('waiting')"><svg><use href="#icon-waiting"/></svg> Ожидает</div>
+        <div class="tab" id="tab-potential" onclick="switchTab('potential')"><svg><use href="#icon-potential"/></svg> Потенциал</div>
+        <div class="tab" id="tab-paused" onclick="switchTab('paused')"><svg><use href="#icon-paused"/></svg> На паузе</div>
+        <div class="tab" id="tab-archive" onclick="switchTab('archive')"><svg><use href="#icon-archive"/></svg> Выполнено</div>
+        <div class="tab tab-trash" id="tab-trash" onclick="switchTab('trash')"><svg><use href="#icon-trash"/></svg> Корзина</div>
+    </div>
+    <button id="newProjectButton" onclick="openAddModal()">＋ Новый проект</button>
+  </div>
+  
+  <div class="tab-desc-block" id="tab-description">Проекты в работе. Следите за дедлайнами и фиксируйте предоплату.</div>
+
+  <div class="pace-block" id="pace-indicator" style="display:none;">
+      <div class="pace-info">
+          <div class="pace-icon" id="pace-icon">🔥</div>
+          <div>
+              <div style="font-weight:700;font-size:16px; color:var(--text);" id="pace-title">Нужно ускориться!</div>
+              <div style="font-size:13px;color:var(--muted)" id="pace-desc">Загрузка...</div>
+          </div>
+      </div>
+      <div class="pace-actions">
+          <div class="pace-rep-chip good" id="pace-rep-chip">
+              <span class="rep-dot good" id="pace-rep-dot"></span>
+              <div class="rep-chip-text">
+                  <div class="rep-chip-label">Репутация</div>
+                  <div class="rep-chip-score" id="pace-rep-text">100 / 100</div>
+              </div>
+          </div>
+          <button class="inline-link-btn" onclick="scrollToReputation()">Подробнее</button>
+          <div class="pace-status" id="pace-status">Критично</div>
+      </div>
+  </div>
+
+  <div class="main-layout">
+    
+    <div id="view-active">
+      <div class="table-wrap">
+        <table id="t-active">
+          <thead>
+            <tr>
+              <th class="select-col">№</th>
+              <th width="15%" data-type="active" data-key="c" onclick="sortData('active', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
+              <th width="20%" data-type="active" data-key="n" onclick="sortData('active', 'n', 'string')">Проект <span class="sort-icon"></span></th>
+              <th width="8%" data-type="active" data-key="start" onclick="sortData('active', 'start', 'date')">Старт <span class="sort-icon"></span></th>
+              <th width="8%" data-type="active" data-key="dl" onclick="sortData('active', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
+              <th width="6%" data-type="active" data-key="rem" onclick="sortData('active', 'rem', 'number')">Осталось <span class="sort-icon"></span></th>
+              <th width="4%" data-type="active" data-key="taxPrc" onclick="sortData('active', 'taxPrc', 'number')">Налог % <span class="sort-icon"></span></th>
+              <th width="7%" data-type="active" data-key="contractor" onclick="sortData('active', 'contractor', 'number')" style="text-align:right;">Расходы <span class="sort-icon"></span></th>
+              <th width="8%" data-type="active" data-key="p" onclick="sortData('active', 'p', 'number')" style="text-align:right;">Сумма <span class="sort-icon"></span></th>
+              <th width="8%" style="text-align:right;">Чистыми</th>
+              <th width="6%" style="text-align:right;">Оплачено</th>
+              <th width="4%"></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+          <tfoot id="total-row-active">
+            <tr><td colspan="8">Итого:</td><td></td><td></td><td></td><td></td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div id="view-waiting" style="display:none">
+        <div class="table-wrap">
+          <table id="t-waiting">
+            <thead>
+              <tr>
+                <th class="select-col">№</th>
+              <th width="20%" data-type="waiting" data-key="c" onclick="sortData('waiting', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
+              <th width="30%" data-type="waiting" data-key="n" onclick="sortData('waiting', 'n', 'string')">Проект <span class="sort-icon"></span></th>
+              <th width="15%" data-type="waiting" data-key="dl" onclick="sortData('waiting', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
+              <th width="15%" data-type="waiting" data-key="p" onclick="sortData('waiting', 'p', 'number')">Сумма <span class="sort-icon"></span></th>
+              <th width="15%"></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot id="total-row-waiting"><tr><td colspan="4">Итого:</td><td></td><td></td></tr></tfoot>
+          </table>
         </div>
     </div>
-    <div class="card">
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchView('active')" id="btn-active">В работе (<span id="active-count">0</span>)</button>
-            <button class="tab-btn" onclick="switchView('waiting')" id="btn-waiting">Ожидание (<span id="waiting-count">0</span>)</button>
-            <button class="tab-btn" onclick="switchView('paused')" id="btn-paused">На паузе (<span id="paused-count">0</span>)</button>
-            <button class="tab-btn" onclick="switchView('potential')" id="btn-potential">Потенциал (<span id="potential-count">0</span>)</button>
-            <button class="tab-btn" onclick="switchView('archive')" id="btn-archive">Выполнено (<span id="archive-count">0</span>)</button>
-            <button class="tab-btn" onclick="switchView('trash')" id="btn-trash">Корзина (<span id="trash-count">0</span>)</button>
+    
+    <div id="view-potential" style="display:none">
+        <div class="table-wrap">
+          <table id="t-potential">
+            <thead>
+              <tr>
+                <th class="select-col">№</th>
+              <th width="25%" data-type="potential" data-key="c" onclick="sortData('potential', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
+              <th width="40%" data-type="potential" data-key="n" onclick="sortData('potential', 'n', 'string')">Проект <span class="sort-icon"></span></th>
+              <th width="15%" data-type="potential" data-key="p" onclick="sortData('potential', 'p', 'number')">Сумма <span class="sort-icon"></span></th>
+              <th width="20%"></th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot id="total-row-potential"><tr><td colspan="3">Итого:</td><td></td><td></td></tr></tfoot>
+          </table>
         </div>
+    </div>
 
-        <div class="toolbar">
-            <div class="flex gap-3">
-                <button onclick="openAddProjectModal()">
-                    <svg style="width:16px; height:16px; margin-right:5px; vertical-align:middle;"><use href="#icon-plus"></use></svg>
-                    Добавить проект
-                </button>
-            </div>
-            <div class="flex gap-3">
-                <select id="month-select" onchange="upd()"></select>
-                <button class="inline-link-btn" onclick="exp()">Экспорт JSON</button>
-                <button class="inline-link-btn" onclick="expCSV()">Экспорт CSV</button>
-            </div>
+    <div id="view-paused" style="display:none">
+      <div class="table-wrap">
+        <table id="t-paused">
+          <thead>
+            <tr>
+              <th class="select-col">№</th>
+              <th width="20%" data-type="paused" data-key="c" onclick="sortData('paused', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
+              <th width="30%" data-type="paused" data-key="n" onclick="sortData('paused', 'n', 'string')">Проект <span class="sort-icon"></span></th>
+              <th width="15%" data-type="paused" data-key="dl" onclick="sortData('paused', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
+              <th width="15%" data-type="paused" data-key="p" onclick="sortData('paused', 'p', 'number')">Сумма <span class="sort-icon"></span></th>
+              <th width="15%"></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+          <tfoot id="total-row-paused"><tr><td colspan="4">Итого:</td><td></td><td></td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div id="view-archive" style="display:none">
+      <div class="table-wrap">
+        <table id="t-archive">
+          <thead>
+            <tr>
+              <th class="select-col">№</th>
+              <th width="15%" data-type="archive" data-key="c" onclick="sortData('archive', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
+              <th width="25%" data-type="archive" data-key="n" onclick="sortData('archive', 'n', 'string')">Проект <span class="sort-icon"></span></th>
+              <th width="15%" data-type="archive" data-key="date" onclick="sortData('archive', 'date', 'date')">Дата сдачи <span class="sort-icon"></span></th>
+              <th width="10%" data-type="archive" data-key="p" onclick="sortData('archive', 'p', 'number')">Сумма <span class="sort-icon"></span></th>
+              <th width="10%" data-type="archive" data-key="contractor" onclick="sortData('archive', 'contractor', 'number')">Расходы <span class="sort-icon"></span></th>
+              <th width="10%">Чистыми</th>
+              <th width="10%"></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+          <tfoot id="total-row-archive"><tr><td colspan="4">Итого:</td><td></td><td></td><td></td><td></td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div id="view-all" style="display:none">
+      <div class="table-wrap">
+        <table id="t-all">
+          <thead>
+            <tr>
+              <th class="select-col">№</th>
+              <th width="12%">Статус</th>
+              <th width="16%">Клиент</th>
+              <th width="24%">Проект</th>
+              <th width="14%">Срок</th>
+              <th width="10%">Сумма</th>
+              <th width="10%">Расходы</th>
+              <th width="8%">Налог</th>
+              <th width="12%">Чистыми</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+          <tfoot id="total-row-all"><tr><td colspan="5">Итого:</td><td></td><td></td><td></td><td></td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+    
+    <div id="view-trash" style="display:none">
+      <div class="table-wrap">
+        <table id="t-trash">
+          <thead>
+            <tr>
+              <th class="select-col">№</th>
+              <th width="20%">Удалено</th>
+              <th width="20%">Клиент</th>
+              <th width="30%">Проект</th>
+              <th width="15%">Сумма</th>
+              <th width="15%">Действия</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+          <tfoot id="total-row-trash"><tr><td colspan="6">Итого</td></tr></tfoot>
+        </table>
+      </div>
+      <div style="text-align:center; padding: 20px; color: var(--muted); font-size: 13px;">
+          Объекты хранятся здесь 7 дней, затем удаляются навсегда.
+      </div>
+    </div>
+  </div> 
+  
+  <div class="dashboard">
+    <div class="stats-full">
+      <div class="stats-two-columns">
+          <div class="card">
+              <div class="card-head">
+                  <div>
+                      <div class="finance-title">Финансы: <span class="text-green" id="dash-month-name">...</span></div>
+                      <div class="finance-sub">Дашборд по чистой прибыли и платежам</div>
+                      <div class="stat-scope-note" id="stat-scope-note" title="Данные собираются по всем разделам">Срез: все проекты</div>
+                  </div>
+                  <div class="card-head-actions">
+                      <div class="stat-pill" id="goal-pill">Цель: 0 ₽</div>
+                      <button class="inline-link-btn" onclick="openGoalSettings()">Редактировать</button>
+                  </div>
+              </div>
+              <div class="goal-wrap">
+                  <div class="goal-info">
+                      <span class="stat-label-with-help">Прогресс цели <span class="help-icon" data-tooltip="Соотношение текущей чистой прибыли к месячной цели. Значение обновляется при изменении статусов проектов и оплат.">?</span></span>
+                      <span id="goal-text">0 / 0 ₽</span>
+                  </div>
+                  <div class="progress-bg"><div class="progress-fill" id="p-bar"></div></div>
+              </div>
+              <div class="stats-grid">
+                  <div class="stat-box">
+                      <div class="stat-label-row">
+                          <div class="stat-label-with-help"><span class="stat-label">ФАКТ</span><span class="help-icon" data-tooltip="Чистая прибыль за выбранный месяц с учётом всех статусов.">?</span></div>
+                          <div class="stat-pill">Чистыми</div>
+                      </div>
+                      <div class="stat-val text-green mono" id="val-fact">0 ₽</div>
+                      <div class="stat-helper" id="val-fact-prc">0%</div>
+                  </div>
+                  <div class="stat-box">
+                      <div class="stat-label-row">
+                          <div class="stat-label-with-help"><span class="stat-label">ПОЛУЧЕНО</span><span class="help-icon" data-tooltip="Чистая сумма, уже поступившая по проектам в работе (статус ‘В работе’).">?</span></div>
+                          <div class="stat-pill">Чистыми (в работе)</div>
+                      </div>
+                      <div class="stat-val text-green mono" id="val-active-fact">0 ₽</div>
+                      <div class="stat-helper">Оплачено в текущих проектах</div>
+                  </div>
+                  <div class="stat-box">
+                      <div class="stat-label-row">
+                          <div class="stat-label-with-help"><span class="stat-label">ОПЛАЧЕНО</span><span class="help-icon" data-tooltip="Все полученные платежи без вычета налогов и расходов (грязными).">?</span></div>
+                          <div class="stat-pill">Все поступления</div>
+                      </div>
+                      <div class="stat-val mono" id="val-paid-gross" style="color:var(--accent)">0 ₽</div>
+                      <div class="stat-helper">Полученные платежи (грязными)</div>
+                  </div>
+                  <div class="stat-box">
+                      <div class="stat-label-row">
+                          <div class="stat-label-with-help"><span class="stat-label">ПЛАН</span><span class="help-icon" data-tooltip="Сколько ещё нужно получить до достижения цели месяца.">?</span></div>
+                          <div class="stat-pill">Остаток до цели</div>
+                      </div>
+                      <div class="stat-val text-gold mono" id="val-plan">0 ₽</div>
+                      <div class="stat-helper">Осталось получить</div>
+                  </div>
+                  <div class="stat-box">
+                      <div class="stat-label-row">
+                          <div class="stat-label-with-help"><span class="stat-label">ПРОГНОЗ ИТОГА</span><span class="help-icon" data-tooltip="Оценка конца месяца: текущий факт + ожидаемые платежи по проектам.">?</span></div>
+                          <div class="stat-pill">Факт + ожидаемое</div>
+                      </div>
+                      <div class="stat-val mono" id="val-total" style="color:var(--accent)">0 ₽</div>
+                      <div class="stat-helper">Маржа: <span id="val-margin">0 ₽</span> (<span id="val-margin-prc">0%</span>)</div>
+                  </div>
+                  <div class="stat-box">
+                      <div class="stat-label-row">
+                          <div class="stat-label-with-help"><span class="stat-label">РАСХОДЫ</span><span class="help-icon" data-tooltip="Совокупные траты по всем проектам, включая архив и паузу.">?</span></div>
+                          <div class="stat-pill">По всем проектам</div>
+                      </div>
+                      <div class="stat-val mono text-red" id="val-expenses">0 ₽</div>
+                      <div class="stat-helper">Сумма затрат</div>
+                  </div>
+                  <div class="stat-box">
+                      <div class="stat-label-row">
+                          <div class="stat-label-with-help"><span class="stat-label">НАЛОГИ</span><span class="help-icon" data-tooltip="Предварительные начисления по указанным ставкам для каждого проекта.">?</span></div>
+                          <div class="stat-pill">К уплате</div>
+                      </div>
+                      <div class="stat-val mono" id="val-taxes">0 ₽</div>
+                      <div class="stat-helper">По указанным ставкам</div>
+                  </div>
+              </div>
+              <div style="position:relative;height:250px;width:100%"><canvas id="lineChart"></canvas></div>
+          </div>
+
+          <div class="side-stack">
+              <div class="card efficiency-card">
+                  <div class="card-head">Эффективность <span class="help-icon" data-tooltip="Визуализация распределения чистой прибыли между уже полученными средствами и оставшимся потенциалом проектов.">?</span></div>
+                  <div style="position:relative;height:170px;width:100%;display:flex;justify-content:center;margin-bottom:14px;"><canvas id="pieChart"></canvas></div>
+                  <div style="border-top:1px solid var(--border); padding-top:16px;">
+                      <div style="font-size:14px;color:var(--muted);margin-bottom:12px;font-weight:600">По месяцам</div>
+                      <div style="height:120px;width:100%"><canvas id="barChart"></canvas></div>
+                  </div>
+              </div>
+              <div class="record-banner">
+                  <div class="record-texts">
+                      <div class="record-title">🏆 Рекордный заработок за месяц <span class="help-icon" data-tooltip="Сравниваем текущий факт по чистой прибыли с твоим личным рекордом. Настрой значение, чтобы видеть прогресс к новой планке.">?</span></div>
+                      <div class="record-motiv" id="record-motiv">Обновим цифры!</div>
+                      <div class="record-progress-bg"><div class="record-progress-fill" id="record-progress"></div></div>
+                  </div>
+                  <div class="record-side">
+                      <div class="record-value mono" id="record-amount">0 ₽</div>
+                      <div class="record-remaining" id="record-remaining">До рекорда 0 ₽</div>
+                      <button class="inline-link-btn" onclick="openRecordSettings()">Редактировать рекорд</button>
+                  </div>
+              </div>
+              <div class="reputation-card" id="reputation-card">
+                  <div class="reputation-heading">
+                      <div class="reputation-title">Репутация дизайнера <span class="help-icon" data-tooltip="Пульс по дедлайнам: учитываем все активные проекты и просрочки, чтобы предупредить потери клиентов.">?</span></div>
+                      <div class="rep-chip good" id="reputation-chip">🔥 Всё ок</div>
+                  </div>
+                  <div class="reputation-score" id="reputation-score">100 / 100</div>
+                  <div class="reputation-grade" id="reputation-grade">Просроченных дедлайнов нет</div>
+                  <div class="reputation-detail" id="reputation-detail">Отсутствие просрочек усиливает доверие клиентов. Держи темп и фиксируй успехи в архиве.</div>
+                  <div class="reputation-fallout" id="reputation-fallout" style="display:none"></div>
+                  <div class="reputation-grid">
+                      <div class="rep-metric">
+                          <div class="rep-label">Активных проектов</div>
+                          <div class="rep-value" id="rep-active-count">0</div>
+                          <div class="rep-helper" id="rep-on-time">Без просрочек</div>
+                      </div>
+                      <div class="rep-metric">
+                          <div class="rep-label">Просрочки</div>
+                          <div class="rep-value" id="rep-overdue">0</div>
+                          <div class="rep-helper" id="rep-delay">Макс 0 дн.</div>
+                      </div>
+                  </div>
+                  <div class="reputation-mini">
+                      <div class="rep-chart-box">
+                          <div class="rep-chart-legend"><span class="legend-title">Общая репутация <span class="help-icon" data-tooltip="Диаграмма показывает, сколько задач вовремя, сколько горят и где уже просрочка.">?</span></span><span class="legend-score" id="rep-score-label">100</span></div>
+                          <div style="flex:1; position:relative; min-height: 120px;"><canvas id="reputationChart"></canvas></div>
+                          <div class="rep-chart-caption">
+                              <div class="rep-chart-pill"><span class="rep-dot good"></span> В срок: <span id="rep-on-time-pill">0</span></div>
+                              <div class="rep-chart-pill"><span class="rep-dot warn"></span> На грани: <span id="rep-near-pill">0</span></div>
+                              <div class="rep-chart-pill"><span class="rep-dot bad"></span> Просрочено: <span id="rep-overdue-pill">0</span></div>
+                          </div>
+                      </div>
+                      <div class="rep-tips">
+                          <div class="rep-tips-title">Что улучшить</div>
+                          <div id="reputation-tips"></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer style="text-align:center; margin-top:50px; padding-top:20px; border-top:1px solid var(--border); color:var(--muted); font-size: 14px;">
+      DesignFlow Tracker by 
+      <a href="https://t.me/r_zhegulyaev" target="_blank" style="color:var(--accent); text-decoration:none; font-weight:600;">Zhegulyaev</a>
+  </footer>
+</div>
+
+<div class="bulk-toolbar" id="bulkToolbar" style="display: none;">
+    <span style="color:var(--text); font-weight: 600;" id="bulkCount">0 выбрано</span>
+    <button class="bulk-action-btn" onclick="clearSelection()">↺ Отменить выделение</button>
+    <button class="bulk-action-btn" onclick="bulkDuplicate()">❐ Дублировать</button>
+
+    <select id="bulkMoveSelect" class="bulk-move-select" onchange="askBulkMove(this.value)">
+        <option value="">Перенести в...</option>
+        <option value="active">В работу</option>
+        <option value="waiting">Ожидает</option>
+        <option value="paused">На паузе</option>
+        <option value="potential">Потенциал</option>
+        <option value="archive">Выполнено (Архив)</option>
+    </select>
+    
+    <button class="bulk-action-btn delete" onclick="askBulkDelete()">× Удалить</button>
+</div>
+
+<div class="modal" id="addProjectModal">
+    <div class="modal-content">
+        <span class="close-modal-x" onclick="document.getElementById('addProjectModal').style.display='none'">×</span>
+        <h2 style="margin-bottom:20px">Новый проект</h2>
+        <div class="inp-group">
+            <label>Название проекта</label>
+            <input type="text" id="add-proj-name" placeholder="Сайт для кофейни">
         </div>
-
-        <div id="view-active" class="project-table-wrap">
-            <table class="project-table" id="t-active">
-                <thead>
-                    <tr class="sort-row">
-                        <th class="select-col"></th>
-                        <th onclick="sortData('c')">Клиент</th>
-                        <th onclick="sortData('n')">Проект</th>
-                        <th onclick="sortData('start')" class="date-cell">Старт</th>
-                        <th onclick="sortData('dl')" class="date-cell">Дедлайн</th>
-                        <th onclick="sortData('p')" class="t-p">Сумма</th>
-                        <th onclick="sortData('pr')" class="t-pr">Чистыми</th>
-                        <th onclick="sortData('paid')" class="t-paid">Оплачено</th>
-                        <th onclick="sortData('taxPrc')" class="t-tax">Налог</th>
-                        <th onclick="sortData('contractor')" class="t-contr">Расходы</th>
-                        <th class="t-actions">Действия</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    </tbody>
-                <tfoot>
-                    <tr class="totals-row">
-                        <td colspan="5" style="text-align: right;">Итого:</td>
-                        <td class="t-p" id="active-p">0 ₽</td>
-                        <td class="t-pr" id="active-pr">0 ₽</td>
-                        <td class="t-paid"></td>
-                        <td class="t-tax" id="active-tax">0 ₽</td>
-                        <td class="t-contr" id="active-contr">0 ₽</td>
-                        <td class="t-actions"></td>
-                    </tr>
-                </tfoot>
-            </table>
+        <div class="inp-group">
+            <label>Имя клиента</label>
+            <input type="text" id="add-proj-client" placeholder="Иван Иванов">
+        </div>
+        <div class="row-inputs">
+             <div class="inp-group" style="flex:1">
+                <label>Сумма (₽)</label>
+                <input type="text" id="add-proj-price" placeholder="50 000" oninput="formatNumberInput(this)">
+            </div>
+             <div class="inp-group" style="flex:1">
+                <label>Расходы</label>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <input type="text" id="add-proj-contractor" placeholder="0" style="flex:1 1 280px" oninput="formatNumberInput(this)">
+                    <select id="add-proj-contractor-mode" class="symbol-select">
+                        <option value="amount">₽</option>
+                        <option value="percent">%</option>
+                    </select>
+                </div>
+            </div>
+             <div class="inp-group" style="flex: 0 0 120px;">
+                <label>Налог</label>
+                <select id="add-proj-tax" class="symbol-select">
+                    <option value="0">0%</option>
+                    <option value="4">4%</option>
+                    <option value="6">6%</option>
+                    <option value="13">13%</option>
+                </select>
+            </div>
         </div>
         
-        <div id="view-waiting" class="project-table-wrap" style="display:none;">
-            <table class="project-table" id="t-waiting">
-                <thead>
-                    <tr class="sort-row">
-                        <th class="select-col"></th>
-                        <th onclick="sortData('c')">Клиент</th>
-                        <th onclick="sortData('n')">Проект</th>
-                        <th onclick="sortData('start')" class="date-cell">Старт</th>
-                        <th onclick="sortData('dl')" class="date-cell">Ожидание до</th>
-                        <th onclick="sortData('p')" class="t-p">Сумма</th>
-                        <th onclick="sortData('pr')" class="t-pr">Чистыми</th>
-                        <th onclick="sortData('paid')" class="t-paid">Оплачено</th>
-                        <th onclick="sortData('taxPrc')" class="t-tax">Налог</th>
-                        <th onclick="sortData('contractor')" class="t-contr">Расходы</th>
-                        <th class="t-actions">Действия</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-                <tfoot>
-                    <tr class="totals-row">
-                        <td colspan="5" style="text-align: right;">Итого:</td>
-                        <td class="t-p" id="waiting-p">0 ₽</td>
-                        <td class="t-pr" id="waiting-pr">0 ₽</td>
-                        <td class="t-paid"></td>
-                        <td class="t-tax" id="waiting-tax">0 ₽</td>
-                        <td class="t-contr" id="waiting-contr">0 ₽</td>
-                        <td class="t-actions"></td>
-                    </tr>
-                </tfoot>
-            </table>
+        <div class="date-duo">
+            <div class="date-duo-card">
+                <div class="inp-group">
+                    <label>⚡ Старт</label>
+                     <div class="date-input-wrap date-chip" id="add-proj-start-display" onclick="openDateInModal('add-proj-start-val')">
+                        <svg class="date-icon"><use href="#icon-calendar"/></svg>
+                        <span class="date-text-display">Сегодня</span>
+                     </div>
+                     <input type="hidden" id="add-proj-start-val" value="">
+                </div>
+            </div>
+            <div class="date-duo-card">
+                <div class="inp-group">
+                     <label>🏁 Дедлайн</label>
+                     <div class="date-input-wrap date-chip" id="add-proj-dl-display" onclick="openDateInModal('add-proj-dl-val')">
+                        <svg class="date-icon"><use href="#icon-calendar"/></svg>
+                        <span class="date-text-display">Сегодня</span>
+                     </div>
+                     <input type="hidden" id="add-proj-dl-val" value="">
+                </div>
+            </div>
         </div>
 
-        <div id="view-paused" class="project-table-wrap" style="display:none;">
-            <table class="project-table" id="t-paused">
-                <thead>
-                    <tr class="sort-row">
-                        <th class="select-col"></th>
-                        <th onclick="sortData('c')">Клиент</th>
-                        <th onclick="sortData('n')">Проект</th>
-                        <th onclick="sortData('start')" class="date-cell">Старт</th>
-                        <th onclick="sortData('dl')" class="date-cell">На паузе с</th>
-                        <th onclick="sortData('p')" class="t-p">Сумма</th>
-                        <th onclick="sortData('pr')" class="t-pr">Чистыми</th>
-                        <th onclick="sortData('paid')" class="t-paid">Оплачено</th>
-                        <th onclick="sortData('taxPrc')" class="t-tax">Налог</th>
-                        <th onclick="sortData('contractor')" class="t-contr">Расходы</th>
-                        <th class="t-actions">Действия</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-                <tfoot>
-                    <tr class="totals-row">
-                        <td colspan="5" style="text-align: right;">Итого:</td>
-                        <td class="t-p" id="paused-p">0 ₽</td>
-                        <td class="t-pr" id="paused-pr">0 ₽</td>
-                        <td class="t-paid"></td>
-                        <td class="t-tax" id="paused-tax">0 ₽</td>
-                        <td class="t-contr" id="paused-contr">0 ₽</td>
-                        <td class="t-actions"></td>
-                    </tr>
-                </tfoot>
-            </table>
+        <div class="deadline-template">
+            <div class="inp-group">
+                <label>Шаблон срока</label>
+                <div class="deadline-presets">
+                    <select id="add-proj-dl-days" onchange="applyDeadlinePreset()">
+                        <option value="">Не выбрано</option>
+                        <option value="1">1 день</option>
+                        <option value="2">2 дня</option>
+                        <option value="3">3 дня</option>
+                        <option value="5">5 дней</option>
+                        <option value="7">7 дней</option>
+                        <option value="custom">Свои дни</option>
+                    </select>
+                    <input type="number" id="add-proj-dl-custom" placeholder="Свои дни" style="width:140px" oninput="applyDeadlinePreset()">
+                </div>
+            </div>
         </div>
 
-        <div id="view-potential" class="project-table-wrap" style="display:none;">
-            <table class="project-table" id="t-potential">
-                <thead>
-                    <tr class="sort-row">
-                        <th class="select-col"></th>
-                        <th onclick="sortData('c')">Клиент</th>
-                        <th onclick="sortData('n')">Проект</th>
-                        <th onclick="sortData('start')" class="date-cell">Дата запроса</th>
-                        <th onclick="sortData('dl')" class="date-cell">Потенциал до</th>
-                        <th onclick="sortData('p')" class="t-p">Сумма</th>
-                        <th onclick="sortData('pr')" class="t-pr">Чистыми</th>
-                        <th onclick="sortData('paid')" class="t-paid">Оплачено</th>
-                        <th onclick="sortData('taxPrc')" class="t-tax">Налог</th>
-                        <th onclick="sortData('contractor')" class="t-contr">Расходы</th>
-                        <th class="t-actions">Действия</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-                <tfoot>
-                    <tr class="totals-row">
-                        <td colspan="5" style="text-align: right;">Итого:</td>
-                        <td class="t-p" id="potential-p">0 ₽</td>
-                        <td class="t-pr" id="potential-pr">0 ₽</td>
-                        <td class="t-paid"></td>
-                        <td class="t-tax" id="potential-tax">0 ₽</td>
-                        <td class="t-contr" id="potential-contr">0 ₽</td>
-                        <td class="t-actions"></td>
-                    </tr>
-                </tfoot>
-            </table>
+        <div class="inp-group">
+            <label>Статус</label>
+            <select id="add-proj-type">
+                <option value="active">В работу</option>
+                <option value="potential">Потенциал</option>
+                <option value="waiting">Ожидает</option>
+                <option value="paused">На паузе</option>
+                <option value="archive">Выполнено (Архив)</option>
+            </select>
         </div>
+        
+        <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveNewProject()">Создать</button>
+    </div>
+</div>
 
-        <div id="view-archive" class="project-table-wrap" style="display:none;">
-            <table class="project-table" id="t-archive">
-                <thead>
-                    <tr class="sort-row">
-                        <th class="select-col"></th>
-                        <th onclick="sortData('c')">Клиент</th>
-                        <th onclick="sortData('n')">Проект</th>
-                        <th onclick="sortData('start')" class="date-cell">Старт</th>
-                        <th onclick="sortData('date')" class="date-cell">Дата сдачи</th>
-                        <th onclick="sortData('p')" class="t-p">Сумма</th>
-                        <th onclick="sortData('pr')" class="t-pr">Чистыми</th>
-                        <th onclick="sortData('paid')" class="t-paid">Оплачено</th>
-                        <th onclick="sortData('taxPrc')" class="t-tax">Налог</th>
-                        <th onclick="sortData('contractor')" class="t-contr">Расходы</th>
-                        <th class="t-actions">Действия</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-                <tfoot>
-                    <tr class="totals-row">
-                        <td colspan="5" style="text-align: right;">Итого:</td>
-                        <td class="t-p" id="archive-p">0 ₽</td>
-                        <td class="t-pr" id="archive-pr">0 ₽</td>
-                        <td class="t-paid"></td>
-                        <td class="t-tax" id="archive-tax">0 ₽</td>
-                        <td class="t-contr" id="archive-contr">0 ₽</td>
-                        <td class="t-actions"></td>
-                    </tr>
-                </tfoot>
-            </table>
+<div class="modal" id="linkModal">
+    <div class="modal-content">
+        <span class="close-modal-x" onclick="closeLinkModal()">×</span>
+        <h3 style="margin-bottom:10px">Ссылка на чат/материалы</h3>
+        <div class="inp-group">
+            <input type="url" id="link-input" placeholder="https://t.me/...">
         </div>
+        <label class="checkbox-wrap" style="margin-top:-5px;">
+            <input type="checkbox" id="link-is-telegram">
+            Открывается в Telegram (чат/канал)
+        </label>
+        <p class="helper-note">Если указать @username, мы уберём @ и превратим его в кликабельную ссылку.</p>
+        <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" id="saveLinkBtn">Сохранить</button>
+    </div>
+</div>
 
-        <div id="view-trash" class="project-table-wrap" style="display:none;">
-            <table class="project-table" id="t-trash">
-                <thead>
-                    <tr class="sort-row">
-                        <th class="select-col"></th>
-                        <th onclick="sortData('c')">Клиент</th>
-                        <th onclick="sortData('n')">Проект</th>
-                        <th onclick="sortData('p')" class="t-p">Сумма</th>
-                        <th onclick="sortData('pr')" class="t-pr">Чистыми</th>
-                        <th onclick="sortData('taxPrc')" class="t-tax">Налог</th>
-                        <th onclick="sortData('contractor')" class="t-contr">Расходы</th>
-                        <th class="t-actions">Действия</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-                <tfoot>
-                    <tr class="totals-row">
-                        <td colspan="3" style="text-align: right;">Итого:</td>
-                        <td class="t-p" id="trash-p">0 ₽</td>
-                        <td class="t-pr" id="trash-pr">0 ₽</td>
-                        <td class="t-tax" id="trash-tax">0 ₽</td>
-                        <td class="t-contr" id="trash-contr">0 ₽</td>
-                        <td class="t-actions"></td>
-                    </tr>
-                </tfoot>
-            </table>
+<div class="modal" id="dateModal">
+    <div class="modal-content date-modal-content">
+        <span class="close-modal-x" onclick="closeDateModal()">×</span>
+        <h3 style="margin-bottom: 0;" id="date-modal-title">Дата</h3>
+        <p style="color:var(--muted); font-size: 13px; margin-bottom: 15px;">Изменить дату или время.</p>
+        
+        <label class="checkbox-wrap">
+            <input type="checkbox" id="date-has-time" onchange="toggleTimeInput()"> 
+            Указать точное время
+        </label>
+        
+        <div class="date-time-inputs">
+            <div class="input-with-icon">
+                <svg class="input-icon"><use href="#icon-calendar"/></svg>
+                <input type="text" id="date-input-val" placeholder="ДД.ММ.ГГГГ">
+            </div>
+            <div class="input-with-icon">
+                <svg class="input-icon"><use href="#icon-clock"/></svg>
+                <input type="text" id="time-input-val" placeholder="ЧЧ:ММ" disabled>
+            </div>
+        </div>
+        <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveDate()">Сохранить</button>
+    </div>
+</div>
+
+<div class="modal" id="settingsModal">
+    <div class="modal-content">
+        <span class="close-modal-x" onclick="document.getElementById('settingsModal').style.display='none'">×</span>
+        <h2>Настройки</h2>
+        <div class="inp-group">
+            <label>Цель на месяц (₽)</label>
+            <input type="text" id="stg-goal" oninput="formatNumberInput(this)">
+        </div>
+        <div class="inp-group">
+            <label>Рекорд (₽)</label>
+            <input type="text" id="stg-rec" oninput="formatNumberInput(this)">
+        </div>
+        <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveSettings()">Сохранить</button>
+    </div>
+</div>
+
+<div class="modal" id="deleteConfirmModal">
+    <div class="modal-content">
+        <span class="close-modal-x" onclick="document.getElementById('deleteConfirmModal').style.display='none'">×</span>
+        <h3 style="color:var(--text); margin-bottom:10px;" id="del-modal-title">Удалить в корзину?</h3>
+        <p style="color:var(--muted); margin-bottom: 20px; font-size:14px;" id="del-modal-desc">Объект будет храниться 7 дней.</p>
+        <div style="display:flex;gap:15px;">
+            <button onclick="document.getElementById('deleteConfirmModal').style.display='none'" style="flex:1">Отмена</button>
+            <button class="confirm-del-btn" style="background:var(--red); border-color:var(--red);" id="finalDeleteBtn" style="flex:1">Удалить</button>
         </div>
     </div>
+</div>
+
+<script>
+const K = 'grok_design_v5';
+const THEME_KEY = 'designflow_theme';
+const now = new Date();
+const today = now.toISOString().slice(0, 10);
+let currentMonth = today.slice(0,7);
+let currentTab = 'active';
+const TAB_DESCRIPTIONS = {
+    active: "Проекты в работе. Следите за дедлайнами и фиксируйте предоплату.",
+    waiting: "Ожидают реакции клиента или материалов.",
+    potential: "Лиды и переговоры. Ещё не начаты.",
+    paused: "Замороженные проекты.",
+    archive: "Успешно завершенные заказы.",
+    all: "Все проекты и архив в одном месте.",
+    trash: "Удаленные объекты. Хранятся 7 дней."
+};
+
+const STATUS_META = {
+    active: { label: 'В работе', cls: 'active' },
+    waiting: { label: 'Ожидает', cls: 'waiting' },
+    potential: { label: 'Потенциал', cls: 'potential' },
+    paused: { label: 'На паузе', cls: 'paused' },
+    archive: { label: 'Выполнено', cls: 'archive' },
+};
+
+const toNumeric = (val) => {
+    const cleaned = String(val || '').replace(/\s+/g, '').replace(',', '.');
+    const num = parseFloat(cleaned);
+    return isNaN(num) ? 0 : num;
+};
+
+function formatPlainNumber(val) {
+    const raw = String(val ?? '').replace(/\s+/g, '').trim();
+    if (raw === '') return '';
+    const isNegative = raw.startsWith('-');
+    const normalized = raw.replace(/[^\d.,]/g, '').replace(/^-/, '');
+    const [intPartRaw, fracRaw] = normalized.split(/[.,]/);
+    const intPart = (intPartRaw || '0').replace(/\D/g, '');
+    const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    const frac = fracRaw ? fracRaw.replace(/\D/g, '') : '';
+    const formatted = frac ? `${formattedInt},${frac}` : formattedInt;
+    return isNegative ? `-${formatted}` : formatted;
+}
+
+function getCssVar(name) {
+    return getComputedStyle(document.body).getPropertyValue(name).trim();
+}
+
+function applyTheme(theme) {
+    const isLight = theme === 'light';
+    document.body.classList.toggle('light', isLight);
+    const icon = document.getElementById('themeToggleIcon');
+    const label = document.getElementById('themeToggleLabel');
+    if (icon) icon.textContent = isLight ? '🌙' : '🌞';
+    if (label) label.textContent = isLight ? 'Тёмная тема' : 'Светлая тема';
+}
+
+function toggleTheme() {
+    const current = localStorage.getItem(THEME_KEY) || 'dark';
+    const next = current === 'light' ? 'dark' : 'light';
+    localStorage.setItem(THEME_KEY, next);
+    applyTheme(next);
+    if (typeof calcStats === 'function') {
+        calcStats();
+    }
+}
+
+function initTheme() {
+    const saved = localStorage.getItem(THEME_KEY) || 'dark';
+    applyTheme(saved);
+}
+
+function formatNumberInput(inputEl) {
+    if (!inputEl) return;
+    inputEl.value = formatPlainNumber(inputEl.value);
+}
+
+let DATA = {
+    settings: { record: 0 },
+    monthlyGoals: { [currentMonth]: 250000 },
+    active: [], archive: [], paused: [], waiting: [], potential: [], trash: []
+};
+
+let SORT = { active: 'dl', archive: 'date', potential: 'p', waiting: 'dl', paused: 'dl' };
+let queue = { type: null, idx: null, field: null, targetId: null };
+let previousDeadlineValue = '';
+let toastTimeout = null;
+let lastPermanentDeletion = null;
+let datePicker = null;
+let timePicker = null;
+
+function showToast(message, actionText = '', actionHandler = null, duration = 3500) {
+    const toast = document.getElementById('toast');
+    const msgEl = document.getElementById('toast-message');
+    const actionBtn = document.getElementById('toast-action');
+
+    msgEl.textContent = message;
+
+    if (actionText && actionHandler) {
+        actionBtn.textContent = actionText;
+        actionBtn.style.display = 'inline-flex';
+        actionBtn.onclick = () => { actionHandler(); hideToast(); };
+    } else {
+        actionBtn.style.display = 'none';
+        actionBtn.onclick = null;
+    }
+
+    toast.classList.add('show');
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => hideToast(), duration);
+}
+
+function hideToast() {
+    const toast = document.getElementById('toast');
+    toast.classList.remove('show');
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = null;
+}
+
+function undoPermanentDelete() {
+    if (!lastPermanentDeletion || !Array.isArray(lastPermanentDeletion.items)) return;
+
+    const { type, items } = lastPermanentDeletion;
+    const targetList = DATA[type];
+    if (!Array.isArray(targetList)) return;
+
+    items
+        .slice()
+        .sort((a, b) => a.index - b.index)
+        .forEach(({ item, index }) => {
+            targetList.splice(index, 0, item);
+        });
+
+    lastPermanentDeletion = null;
+    save();
+    upd();
+    showToast('Удаление отменено');
+}
+
+// --- BULK ACTIONS ---
+let selectedRows = {}; // {active: Set(), waiting: Set(), ...}
+
+function renderLinkControls(item, idx, type) {
+    const hasLink = !!item.link;
+    const editBtn = `<button class="link-btn ${hasLink ? 'link-btn-active' : ''}" onclick="openLink('${type}',${idx})" title="${hasLink ? 'Изменить ссылку' : 'Добавить ссылку'}">🔗</button>`;
+    const goBtn = hasLink ? `<button class="link-btn link-btn-go" onclick="openProjectLink(${idx}, '${type}')" title="Открыть ссылку">↗</button>` : '';
+    return editBtn + goBtn;
+}
+
+function getClientNameClass(item) {
+    return `client-name${item.link ? ' has-link' : ''}`;
+}
+
+function toggleSelect(type, idx, checkbox) {
+    if (!selectedRows[type]) selectedRows[type] = new Set();
+    const indexStr = idx.toString();
+    const row = checkbox.closest('tr');
+
+    if (checkbox.checked) {
+        selectedRows[type].add(indexStr);
+        if (row) row.classList.add('row-selected');
+    } else {
+        selectedRows[type].delete(indexStr);
+        if (row) row.classList.remove('row-selected');
+    }
+    updateBulkToolbar(type);
     
-    <div id="footer-select-bar" class="footer-select-row" style="display:none;">
-        <div class="flex gap-3">
-            <input type="checkbox" id="footer-select-all" onchange="toggleFooterSelection(this)">
-            <label for="footer-select-all" id="footer-select-count" class="text-muted">Выбрано 0</label>
-        </div>
-        <div class="footer-select-actions flex gap-3">
-            <button onclick="mv('archive')" title="Переместить в архив"><i data-feather="archive"></i> В архив</button>
-            <button onclick="mv('waiting')" title="Переместить в ожидание"><i data-feather="clock"></i> Ожидание</button>
-            <button onclick="mv('paused')" title="Переместить на паузу"><i data-feather="pause"></i> Пауза</button>
-            <button onclick="askDel()" title="Удалить навсегда" class="secondary"><i data-feather="trash-2"></i> Удалить</button>
-        </div>
-    </div>
+    const allChecked = selectedRows[type].size === DATA[type].length && DATA[type].length > 0;
+    const selectAllCheckbox = document.getElementById(`selectAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
+    if(selectAllCheckbox) selectAllCheckbox.checked = allChecked;
+}
 
-    <div class="card" id="reputation-section">
-        <h2>📊 Статистика и репутация</h2>
-        <div class="stats-grid">
-            <div class="stat-card">
-                <span class="stat-label">Текущая репутация</span>
-                <span class="stat-value" id="current-rep">100 / 100</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-label">Проектов в месяц</span>
-                <span class="stat-value" id="monthly-count">0</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-label">Факт (чистыми)</span>
-                <span class="stat-value" id="total-fact">0 ₽</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-label">План (чистыми)</span>
-                <span class="stat-value" id="total-plan">0 ₽</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-label">Свободный объем</span>
-                <span class="stat-value" id="total-scope">0 ₽</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-label">Выполнено проектов</span>
-                <span class="stat-value" id="done-count">0</span>
-            </div>
-        </div>
-        <div class="chart-container mt-4">
-            <canvas id="lineChart"></canvas>
-        </div>
-    </div>
+function toggleSelectAll(type) {
+    const selectAllCheckbox = document.getElementById(`selectAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
+    if (!selectAllCheckbox) return;
 
-</div>
+    const isChecked = selectAllCheckbox.checked;
+    const checkboxes = document.querySelectorAll(`#t-${type} tbody .bulk-checkbox`);
+    
+    if (!selectedRows[type]) selectedRows[type] = new Set();
+    
+    checkboxes.forEach((cb, i) => {
+        cb.checked = isChecked;
+        const row = cb.closest('tr');
+        if (row && row.dataset.index) {
+            const indexStr = row.dataset.index;
+            row.classList.toggle('row-selected', isChecked);
+            if (isChecked) {
+                selectedRows[type].add(indexStr);
+            } else {
+                selectedRows[type].delete(indexStr);
+            }
+        }
+    });
+    updateBulkToolbar(type);
+}
 
-<div id="add-project-modal" class="modal-overlay" onclick="closeModalIfOutside(event)">
-    <div class="modal-content">
-        <h2>Добавить/Редактировать проект</h2>
-        <form id="project-form">
-            <input type="hidden" id="modal-status" value="active">
-            <input type="hidden" id="modal-index" value="-1">
+function toggleFooterSelection(type) {
+    if (type !== 'all' && !DATA[type]) return;
+    const rows = document.querySelectorAll(`#t-${type} tbody tr`);
+    const totalRows = rows.length;
+    if (!selectedRows[type]) selectedRows[type] = new Set();
+    if (totalRows === 0) { clearSelection(type); return; }
+
+    const shouldSelectAll = selectedRows[type].size !== totalRows;
+    const checkboxes = document.querySelectorAll(`#t-${type} tbody .bulk-checkbox`);
+
+    if (checkboxes.length > 0) {
+        checkboxes.forEach(cb => {
+            cb.checked = shouldSelectAll;
+            const row = cb.closest('tr');
+            if (row && row.dataset.index) {
+                const indexStr = row.dataset.index;
+                row.classList.toggle('row-selected', shouldSelectAll);
+                if (shouldSelectAll) {
+                    selectedRows[type].add(indexStr);
+                } else {
+                    selectedRows[type].delete(indexStr);
+                }
+            }
+        });
+    } else {
+        rows.forEach(row => {
+            const indexStr = row.dataset.index;
+            row.classList.toggle('row-selected', shouldSelectAll);
+            if (indexStr) {
+                if (shouldSelectAll) {
+                    selectedRows[type].add(indexStr);
+                } else {
+                    selectedRows[type].delete(indexStr);
+                }
+            }
+        });
+    }
+
+    const selectAllCheckbox = document.getElementById(`selectAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
+    if (selectAllCheckbox) selectAllCheckbox.checked = shouldSelectAll;
+    updateBulkToolbar(type);
+}
+
+function updateBulkToolbar(type) {
+    if (type === 'all') {
+        const toolbar = document.getElementById('bulkToolbar');
+        if (toolbar) toolbar.style.display = 'none';
+        return;
+    }
+    const count = selectedRows[type] ? selectedRows[type].size : 0;
+    const toolbar = document.getElementById('bulkToolbar');
+    
+    document.getElementById('bulkCount').textContent = `${count} выбрано`;
+    document.getElementById('bulkMoveSelect').value = ''; 
+
+    toolbar.style.display = count > 0 ? 'flex' : 'none';
+}
+
+function attachRowSelection(tr, type, idx, checkboxId) {
+    tr.addEventListener('click', (e) => {
+        if (e.target.closest('input, select, button, .action-btn-base, .del-btn, .date-input-wrap, .dup-icon, [contenteditable], .trash-action-btns, .link-btn, .inline-link-btn')) return;
+        const checkbox = document.getElementById(checkboxId);
+        if (!checkbox) return;
+        checkbox.checked = !checkbox.checked;
+        toggleSelect(type, idx, checkbox);
+    });
+}
+
+function clearSelection(type = currentTab) {
+    if (!selectedRows[type]) selectedRows[type] = new Set();
+    selectedRows[type].clear();
+
+    document.querySelectorAll(`#t-${type} tbody .bulk-checkbox`).forEach(cb => cb.checked = false);
+    document.querySelectorAll(`#t-${type} tbody tr`).forEach(tr => tr.classList.remove('row-selected'));
+
+    const selectAllCheckbox = document.getElementById(`selectAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
+    if (selectAllCheckbox) selectAllCheckbox.checked = false;
+
+    updateBulkToolbar(type);
+}
+
+function askBulkDelete(type = currentTab) {
+    const count = selectedRows[type] ? selectedRows[type].size : 0;
+    if (count === 0) return;
+
+    const isTrash = type === 'trash';
+    document.getElementById('del-modal-title').innerText = isTrash ? `Удалить ${count} элементов навсегда?` : `Удалить ${count} элементов в корзину?`;
+    document.getElementById('del-modal-desc').innerText = isTrash ? "Элементы будут удалены безвозвратно." : "Объекты будут храниться 7 дней.";
+    document.getElementById('deleteConfirmModal').style.display = 'flex';
+    document.getElementById('finalDeleteBtn').style.backgroundColor = 'var(--red)';
+    document.getElementById('finalDeleteBtn').style.borderColor = 'var(--red)';
+    document.getElementById('finalDeleteBtn').innerText = isTrash ? 'Удалить навсегда' : 'Удалить';
+    document.getElementById('finalDeleteBtn').onclick = () => bulkDelete(type, isTrash);
+}
+
+function bulkDelete(type = currentTab, deleteForever = false) {
+    if (!selectedRows[type] || selectedRows[type].size === 0) return;
+
+    const indicesToDelete = Array.from(selectedRows[type])
+        .map(Number)
+        .sort((a, b) => b - a);
+
+    const deletedItems = [];
+
+    indicesToDelete.forEach(idx => {
+        const itemIndex = DATA[type].findIndex((_, i) => i === idx);
+        if (itemIndex > -1) {
+            const item = DATA[type].splice(itemIndex, 1)[0];
+            if (deleteForever) {
+                deletedItems.push({ item, index: itemIndex });
+            } else {
+                item.deletedAt = Date.now();
+                DATA.trash.unshift(item);
+            }
+        }
+    });
+
+    lastPermanentDeletion = deleteForever ? { type, items: deletedItems } : null;
+
+    selectedRows[type].clear();
+    document.getElementById('deleteConfirmModal').style.display = 'none';
+    save(); upd();
+    if (deleteForever) {
+        showToast('Удалено навсегда', 'Отмена', undoPermanentDelete);
+    } else {
+        showToast(`Перемещено в корзину: ${indicesToDelete.length}`, 'Перейти', () => switchTab('trash'));
+    }
+}
+
+function bulkDuplicate(type = currentTab) {
+    if (!selectedRows[type] || selectedRows[type].size === 0) return;
+    
+    const indicesToDuplicate = Array.from(selectedRows[type])
+        .map(Number)
+        .sort((a, b) => a - b);
+    
+    const newItems = [];
+    
+    indicesToDuplicate.forEach(idx => {
+        const item = JSON.parse(JSON.stringify(DATA[type].find((_, i) => i === idx)));
+        if(item) {
+             item.n = item.n + " (Копия)";
+             newItems.push(item);
+        }
+    });
+    
+    DATA[type].unshift(...newItems);
+    selectedRows[type].clear();
+    save(); upd();
+}
+
+function askBulkMove(targetType) {
+    const currentType = currentTab;
+    const count = selectedRows[currentType] ? selectedRows[currentType].size : 0;
+    
+    if (count === 0 || !targetType) {
+        document.getElementById('bulkMoveSelect').value = '';
+        return;
+    }
+    
+    const targetName = document.querySelector(`#bulkMoveSelect option[value="${targetType}"]`).text;
+    
+    document.getElementById('del-modal-title').innerText = `Перенести ${count} элементов в "${targetName}"?`;
+    document.getElementById('del-modal-desc').innerText = `Проекты будут перемещены из раздела "${document.getElementById(`tab-${currentType}`).textContent.trim()}".`;
+    document.getElementById('deleteConfirmModal').style.display = 'flex';
+    document.getElementById('finalDeleteBtn').style.backgroundColor = 'var(--accent)';
+    document.getElementById('finalDeleteBtn').style.borderColor = 'var(--accent)';
+    document.getElementById('finalDeleteBtn').innerText = 'Перенести';
+    
+    document.getElementById('finalDeleteBtn').onclick = () => bulkMove(currentType, targetType);
+}
+
+function bulkMove(from, to) {
+    if (!selectedRows[from] || selectedRows[from].size === 0) return;
+
+    const indicesToMove = Array.from(selectedRows[from])
+        .map(Number)
+        .sort((a, b) => b - a);
+    
+    indicesToMove.forEach(idx => {
+        const itemIndex = DATA[from].findIndex((_, i) => i === idx);
+        if (itemIndex > -1) {
+            const item = DATA[from].splice(itemIndex, 1)[0];
+            if(to === 'active') { item.start = item.start || today; item.dl = item.dl || today; item.paid = item.paid || 50; delete item.date; }
+            if(to === 'archive') { item.date = today; item.paid = 100; delete item.start; delete item.dl; }
+            if(to === 'potential' || to === 'waiting' || to === 'paused') { delete item.date; delete item.start; delete item.dl; item.paid = 0; }
+            DATA[to].unshift(item);
+        }
+    });
+    
+    selectedRows[from].clear();
+    document.getElementById('deleteConfirmModal').style.display = 'none';
+    document.getElementById('bulkMoveSelect').value = '';
+    save(); 
+    if(from === to) {
+        upd();
+    } else {
+        switchTab(to);
+    }
+}
+
+function init(){
+    let exist = localStorage.getItem(K);
+    if(!exist) { const v4 = localStorage.getItem('grok_design_v4'); if(v4) exist = v4; }
+
+    if (exist) {
+        try { 
+            const parsed = JSON.parse(exist);
+            DATA = { ...DATA, ...parsed };
+            if(!DATA.trash) DATA.trash = [];
+            ['active', 'archive', 'paused', 'waiting', 'potential'].forEach(type => {
+                 DATA[type].forEach(i => {
+                    if(i.contractor === undefined) i.contractor = 0;
+                    if(i.taxPrc === undefined) i.taxPrc = 0;
+                    if(!i.contractorMode) i.contractorMode = 'amount';
+                 });
+            });
+        } catch(e) { console.error("Data load error", e); }
+    }
+
+    initTheme();
+    cleanupTrash();
+    renderMonthSelect();
+    setupModalsBackgroundCheck();
+    setupDatePickers();
+    document.getElementById('saveLinkBtn').onclick = saveLink;
+    document.getElementById('add-proj-start-val').value = today;
+    document.getElementById('add-proj-dl-val').value = today;
+    sortData('active', 'dl', 'date', true);
+    ['active','waiting','potential','paused','archive'].forEach(t => {
+        DATA[t].sortDirection = DATA[t].sortDirection || 1;
+        updateSortIndicators(t);
+    });
+    upd();
+}
+
+function save(){ localStorage.setItem(K, JSON.stringify(DATA)); }
+
+function cleanupTrash(){
+    const sevenDays = 7 * 24 * 60 * 60 * 1000;
+    const nowMs = Date.now();
+    const initLen = DATA.trash.length;
+    DATA.trash = DATA.trash.filter(i => (nowMs - (i.deletedAt || 0)) < sevenDays);
+    if(DATA.trash.length !== initLen) save();
+}
+
+function formatCurrency(n) { return new Intl.NumberFormat('ru-RU').format(Math.round(n)) + ' ₽'; }
+
+function formatDateDisplay(str) {
+    if (!str || str.startsWith('0000')) return '—';
+    const hasTime = str.includes('T') && str.length > 10;
+    const dateObj = new Date(str.replace(' ', 'T'));
+    if(isNaN(dateObj.getTime())) return '—';
+    const d = dateObj.toLocaleDateString('ru', { day: 'numeric', month: 'short' }).replace('.', '');
+    if(hasTime) {
+        const t = dateObj.toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'});
+        return `${d} <span class="time-text">${t}</span>`;
+    }
+    return d;
+}
+
+function calcContractorAmount(item) {
+    const gross = toNumeric(item.p);
+    const mode = item.contractorMode || 'amount';
+    const raw = toNumeric(item.contractor);
+    return mode === 'percent' ? gross * (raw / 100) : raw;
+}
+
+function calcNet(item){
+    const gross = toNumeric(item.p);
+    const contr = calcContractorAmount(item);
+    const tax = toNumeric(item.taxPrc);
+    const taxAmt = gross * (tax / 100);
+    return Math.round(gross - taxAmt - contr);
+}
+function calcMarginPrc(item) {
+    const gross = toNumeric(item.p);
+    if (gross === 0) return 0;
+    const net = calcNet(item);
+    return Math.round((net / gross) * 100);
+}
+
+function setupModalsBackgroundCheck() {
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+        }
+    }
+}
+
+function switchTab(t){
+    currentTab = t;
+    document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+    document.getElementById(`tab-${t}`).classList.add('active');
+    ['active','waiting','potential','paused','archive','all','trash'].forEach(k => {
+        const el = document.getElementById(`view-${k}`);
+        if(el) el.style.display = (k === t) ? 'block' : 'none';
+        const cb = document.getElementById(`selectAll${k.charAt(0).toUpperCase() + k.slice(1)}`);
+        if(cb) cb.checked = false;
+        if(selectedRows[k]) selectedRows[k].clear();
+    });
+
+    const desc = document.getElementById('tab-description');
+    desc.innerHTML = getTabSummary(t, TAB_DESCRIPTIONS[t]);
+    const dashboard = document.querySelector('.dashboard');
+    if (dashboard) dashboard.style.display = t === 'trash' ? 'none' : 'block';
+    updateSortIndicators(t);
+    updateBulkToolbar(t);
+    upd();
+}
+
+function getTabSummary(type, baseText) {
+    if (type === 'trash') {
+        return `${baseText} · Статистика скрыта в корзине.`;
+    }
+    return baseText;
+}
+
+function sortData(type, key, dataType, initial = false) {
+    if (!DATA[type]) return;
+    let direction = 1;
+    if (SORT[type] === key && !initial) {
+        direction = DATA[type].sortDirection === 1 ? -1 : 1; 
+    }
+    DATA[type].sort((a, b) => {
+        let va = a[key], vb = b[key];
+        if (type === 'active' && (key === 'dl' || initial)) {
+             const remA = getTimeRemaining(a.dl).days || Infinity;
+             const remB = getTimeRemaining(b.dl).days || Infinity;
+             if (remA !== remB) return direction * (remA - remB);
+        }
+        if (dataType === 'date') return direction * (new Date((va || '9999').replace(' ', 'T')) - new Date((vb || '9999').replace(' ', 'T')));
+        if (dataType === 'number') return direction * (toNumeric(va) - toNumeric(vb));
+        return direction * String(va).localeCompare(String(vb));
+    });
+    DATA[type].sortDirection = direction;
+    SORT[type] = key;
+    save();
+    updateSortIndicators(type);
+    if(!initial) upd();
+}
+
+function updateSortIndicators(type) {
+    const activeKey = SORT[type];
+    const dir = DATA[type].sortDirection || 1;
+    document.querySelectorAll(`th[data-type="${type}"]`).forEach(th => th.classList.remove('sorted', 'asc', 'desc'));
+    const activeTh = document.querySelector(`th[data-type="${type}"][data-key="${activeKey}"]`);
+    if (activeTh) {
+        activeTh.classList.add('sorted');
+        activeTh.classList.add(dir === 1 ? 'asc' : 'desc');
+    }
+}
+
+function upd(){
+    renderActive();
+    renderSimple('waiting');
+    renderSimple('paused');
+    renderPotential();
+    renderArchive();
+    renderAll();
+    renderTrash();
+    calcStats();
+    const desc = document.getElementById('tab-description');
+    if (desc) desc.innerHTML = getTabSummary(currentTab, TAB_DESCRIPTIONS[currentTab]);
+    updateBulkToolbar(currentTab);
+}
+
+function renderActive(){
+    const tbody = document.querySelector('#t-active tbody');
+    tbody.innerHTML = '';
+    let totalP = 0, totalPr = 0, totalContr = 0, totalTax = 0, totalPaidGross = 0;
+    
+    DATA.active.forEach((item, i) => {
+        item.pr = calcNet(item);
+        const gross = toNumeric(item.p);
+        totalP += gross; totalPr += item.pr || 0;
+        const contractorAmount = calcContractorAmount(item);
+        totalContr += contractorAmount;
+        totalTax += gross * ((toNumeric(item.taxPrc) || 0) / 100);
+
+        const rem = getTimeRemaining(item.dl);
+        const tr = document.createElement('tr');
+        tr.dataset.index = i;
+
+        const isSelected = selectedRows.active?.has(i.toString());
+        if (isSelected) tr.classList.add('row-selected');
+
+        const linkIcon = renderLinkControls(item, i, 'active');
+        const paidAmount = Math.round(gross * ((toNumeric(item.paid) || 0) / 100));
+        totalPaidGross += paidAmount;
+        const contractorSymbol = item.contractorMode === 'percent' ? '%' : '₽';
+
+        tr.innerHTML = `
+            <td class="select-col">
+                <div class="row-index">${i + 1}</div>
+                <div class="row-controls">
+                    <svg class="dup-icon" onclick="duplicateRow('active',${i})" title="Дублировать"><use href="#icon-duplicate"/></svg>
+                    <input type="checkbox" class="bulk-checkbox" id="check-active-${i}" onchange="toggleSelect('active', ${i}, this)" ${selectedRows.active?.has(i.toString()) ? 'checked' : ''}>
+                    <label for="check-active-${i}" style="display:none;"></label>
+                </div>
+            </td>
+            <td><div class="client-wrap">
+                <span contenteditable onblur="updVal('active',${i},'c',this.innerText)" class="${getClientNameClass(item)}">${item.c}</span>
+                ${linkIcon}
+            </div></td>
+            <td class="project-name-wrap">
+                <span class="project-name" contenteditable onblur="updVal('active',${i},'n',this.innerText)">${item.n}</span>
+            </td>
             
-            <div class="form-group">
-                <label for="modal-n">Название проекта</label>
-                <input type="text" id="modal-n" required>
-            </div>
-            <div class="form-group">
-                <label for="modal-c">Клиент</label>
-                <input type="text" id="modal-c" required>
-            </div>
+            <td class="date-cell"><div class="date-input-wrap" onclick="openDate('active',${i},'start')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.start)}</span></div></td>
+            <td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('active',${i},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.dl)}</span></div></td>
             
-            <div class="flex gap-3">
-                <div class="form-group" style="flex:1;">
-                    <label for="modal-p">Сумма (₽)</label>
-                    <input type="text" id="modal-p" inputmode="numeric" oninput="formatNumberInput(this)">
-                </div>
-                <div class="form-group" style="flex:1;">
-                    <label for="modal-link">Ссылка (Trello, Figma и т.д.)</label>
-                    <input type="text" id="modal-link">
-                </div>
-            </div>
-
-            <div class="flex gap-3">
-                <div class="form-group" style="flex:1;">
-                    <label for="modal-start">Дата старта</label>
-                    <input type="text" id="modal-start" placeholder="ДД.ММ.ГГГГ">
-                </div>
-                <div class="form-group" style="flex:1;">
-                    <label for="modal-dl">Дедлайн</label>
-                    <input type="text" id="modal-dl" placeholder="ДД.ММ.ГГГГ">
-                </div>
-            </div>
-
-            <div class="flex gap-3">
-                <div class="form-group" style="flex:1;">
-                    <label for="modal-paid">Оплачено (%)</label>
-                    <input type="number" id="modal-paid" min="0" max="100" value="0">
-                </div>
-                <div class="form-group" style="flex:1;">
-                    <label for="modal-taxPrc">Налог (%)</label>
-                    <select id="modal-taxPrc"></select>
-                </div>
-            </div>
+            <td class="mono"><div class="${rem.cls}">${rem.txt}</div></td>
             
-            <div class="form-group">
-                <label for="modal-contractor">Расходы на подрядчика</label>
-                <input type="text" id="modal-contractor" placeholder="Сумма или процент" inputmode="numeric">
-            </div>
-
-            <div class="flex justify-between mt-4">
-                <div class="flex gap-3">
-                    <input type="checkbox" id="modal-contr-mode">
-                    <label for="modal-contr-mode">Процент от суммы</label>
+            <td><select class="tax-select" onchange="updVal('active',${i},'taxPrc',this.value)">
+                <option value="0" ${+item.taxPrc===0?'selected':''}>0%</option>
+                <option value="4" ${+item.taxPrc===4?'selected':''}>4%</option>
+                <option value="6" ${+item.taxPrc===6?'selected':''}>6%</option>
+                <option value="13" ${+item.taxPrc===13?'selected':''}>13%</option>
+            </select></td>
+            
+            <td style="text-align:right;">
+                <div class="price-cell-wrap expense-cell">
+                    <input type="text" value="${formatPlainNumber(item.contractor ?? 0)}" oninput="formatNumberInput(this)" onblur="updateContractorValue('active',${i},this.value)">
+                    <span class="currency-symbol">${contractorSymbol}</span>
+                    <select class="expense-mode" onchange="updateContractorMode('active',${i},this.value)">
+                        <option value="amount" ${item.contractorMode!=='percent'?'selected':''}>₽</option>
+                        <option value="percent" ${item.contractorMode==='percent'?'selected':''}>%</option>
+                    </select>
                 </div>
+                <div class="expense-helper">≈ ${formatCurrency(contractorAmount)}</div>
+            </td>
+
+            <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('active',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
+            <td style="text-align:right;"><div class="net-display-wrap">${formatCurrency(item.pr)}<span class="net-prc-val">(${calcMarginPrc(item)}%)</span></div></td>
+            
+            <td class="paid-cell">
+                <select class="paid-select" onchange="updVal('active',${i},'paid',this.value)">
+                    <option value="0" ${+item.paid===0?'selected':''}>0%</option>
+                    <option value="50" ${+item.paid===50?'selected':''}>50%</option>
+                    <option value="100" ${+item.paid===100?'selected':''}>100%</option>
+                </select>
+                <div class="paid-amount">${formatCurrency(paidAmount)}</div>
+            </td>
+            
+            <td><div class="action-btns">
+                <div class="done-btn action-btn-base" onclick="mv(${i},'active','archive')" title="Выполнено">✓</div>
+                <div class="wait-active-btn action-btn-base" onclick="mv(${i},'active','waiting')" title="В ожидании">...</div>
+                <div class="pause-active-btn action-btn-base" onclick="mv(${i},'active','paused')" title="На паузе">||</div>
+                <button class="del-btn" onclick="askDel('active',${i})" title="Удалить" aria-label="Удалить в корзину">
+                    <svg><use href="#icon-trash"/></svg>
+                </button>
+            </div></td>
+        `;
+        attachRowSelection(tr, 'active', i, `check-active-${i}`);
+        tbody.appendChild(tr);
+    });
+    
+    const footer = document.querySelector('#total-row-active');
+    const repState = analyzeReputation();
+    footer.innerHTML = `<tr>
+        <td colspan="6" class="footer-total-toggle" onclick="toggleFooterSelection('active')">Всего ${DATA.active.length} проектов</td>
+        <td style="text-align:right;">
+            <div class="footer-note">Налоги</div>
+            <div>${formatCurrency(totalTax)}</div>
+        </td>
+        <td style="text-align:right;">
+            <div class="footer-note">Расходы</div>
+            <div>${formatCurrency(totalContr)}</div>
+        </td>
+        <td style="text-align:right;">
+            <div class="footer-note">Сумма</div>
+            <div>${formatCurrency(totalP)}</div>
+        </td>
+        <td style="text-align:right;">
+            <div class="footer-note">Чистыми</div>
+            <div>${formatCurrency(totalPr)}</div>
+        </td>
+        <td style="text-align:right;">
+            <div class="footer-note">Оплачено</div>
+            <div>${formatCurrency(totalPaidGross)}</div>
+        </td>
+        <td></td>
+    </tr>`;
+
+    updatePaceReputation(repState);
+
+    const paceBlock = document.getElementById('pace-indicator');
+    const urgent = DATA.active.filter(x => getTimeRemaining(x.dl).cls.includes('critical')).length;
+    
+    if (currentTab === 'active') {
+        if (urgent > 0) {
+            paceBlock.style.display = 'flex';
+            paceBlock.classList.add('critical');
+            document.getElementById('pace-icon').innerHTML = '🔥';
+            document.getElementById('pace-title').innerText = 'Нужно ускориться!';
+            document.getElementById('pace-desc').innerText = `Горит дедлайнов: ${urgent}. Поднажми, чтобы успеть!`;
+            document.getElementById('pace-status').className='pace-status pace-hurry'; 
+            document.getElementById('pace-status').innerText='Критично';
+        } else if (DATA.active.length > 0) {
+            paceBlock.style.display = 'flex';
+            paceBlock.classList.remove('critical');
+            document.getElementById('pace-icon').innerHTML = '🚦';
+            document.getElementById('pace-title').innerText = 'Анализ';
+            document.getElementById('pace-desc').innerText = `Все спокойно.`;
+            document.getElementById('pace-status').className='pace-status pace-chill'; 
+            document.getElementById('pace-status').innerText='Норма';
+        } else {
+            paceBlock.style.display = 'none';
+        }
+    } else {
+        paceBlock.style.display = 'none';
+    }
+}
+
+function renderSimple(type){
+    const tbody = document.querySelector(`#t-${type} tbody`);
+    tbody.innerHTML = '';
+    let tot = 0;
+    DATA[type].forEach((item, i) => {
+        tot += toNumeric(item.p);
+        const tr = document.createElement('tr');
+        tr.dataset.index = i;
+
+        const isSelected = selectedRows[type]?.has(i.toString());
+        if (isSelected) tr.classList.add('row-selected');
+        
+        const linkIcon = renderLinkControls(item, i, type);
+                                      
+        const rem = getTimeRemaining(item.dl);
+        
+        tr.innerHTML = `
+            <td class="select-col">
+                <div class="row-index">${i + 1}</div>
+                <div class="row-controls">
+                    <svg class="dup-icon" onclick="duplicateRow('${type}',${i})" title="Дублировать"><use href="#icon-duplicate"/></svg>
+                    <input type="checkbox" class="bulk-checkbox" id="check-${type}-${i}" onchange="toggleSelect('${type}', ${i}, this)" ${selectedRows[type]?.has(i.toString()) ? 'checked' : ''}>
+                    <label for="check-${type}-${i}" style="display:none;"></label>
+                </div>
+            </td>
+            <td><div class="client-wrap">
+                <span contenteditable onblur="updVal('${type}',${i},'c',this.innerText)" class="${getClientNameClass(item)}">${item.c}</span>
+                ${linkIcon}
+            </div></td>
+            <td class="project-name-wrap">
+                <span class="project-name" contenteditable onblur="updVal('${type}',${i},'n',this.innerText)">${item.n}</span>
+            </td>
+            <td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('${type}',${i},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.dl)} (${rem.txt})</span></div></td>
+            <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('${type}',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
+            <td><div class="action-btns" style="justify-content:flex-end">
+                <div class="action-btn-base" onclick="mv(${i},'${type}','active')" title="В работу">▶️</div>
+                <button class="del-btn" onclick="askDel('${type}',${i})" aria-label="Удалить в корзину">
+                    <svg><use href="#icon-trash"/></svg>
+                </button>
+            </div></td>
+        `;
+        attachRowSelection(tr, type, i, `check-${type}-${i}`);
+        tbody.appendChild(tr);
+    });
+    const footer = document.querySelector(`#total-row-${type}`);
+    footer.innerHTML = `<tr>
+        <td colspan="4" class="footer-total-toggle" onclick="toggleFooterSelection('${type}')">Всего ${DATA[type].length} проектов</td>
+        <td>
+            <div class="footer-note">Сумма</div>
+            <div>${formatCurrency(tot)}</div>
+        </td>
+        <td></td>
+    </tr>`;
+}
+
+function renderPotential(){
+    const tbody = document.querySelector('#t-potential tbody');
+    tbody.innerHTML = '';
+    let tot = 0;
+    DATA.potential.forEach((item, i) => {
+        tot += toNumeric(item.p);
+        const tr = document.createElement('tr');
+        tr.dataset.index = i;
+
+        const isSelected = selectedRows.potential?.has(i.toString());
+        if (isSelected) tr.classList.add('row-selected');
+        
+        const linkIcon = renderLinkControls(item, i, 'potential');
+                                      
+        tr.innerHTML = `
+            <td class="select-col">
+                <div class="row-index">${i + 1}</div>
+                <div class="row-controls">
+                    <svg class="dup-icon" onclick="duplicateRow('potential',${i})" title="Дублировать"><use href="#icon-duplicate"/></svg>
+                    <input type="checkbox" class="bulk-checkbox" id="check-potential-${i}" onchange="toggleSelect('potential', ${i}, this)" ${selectedRows.potential?.has(i.toString()) ? 'checked' : ''}>
+                    <label for="check-potential-${i}" style="display:none;"></label>
+                </div>
+            </td>
+            <td><div class="client-wrap">
+                <span contenteditable onblur="updVal('potential',${i},'c',this.innerText)" class="${getClientNameClass(item)}">${item.c}</span>
+                ${linkIcon}
+            </div></td>
+            <td class="project-name-wrap">
+                <span class="project-name" contenteditable onblur="updVal('potential',${i},'n',this.innerText)">${item.n}</span>
+            </td>
+            <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('potential',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
+            <td><div class="action-btns" style="justify-content:flex-end">
+                <div class="done-btn action-btn-base" onclick="mv(${i},'potential','active')" title="В работу">✅ В работу</div>
+                <button class="del-btn" onclick="askDel('potential',${i})" aria-label="Удалить в корзину">
+                    <svg><use href="#icon-trash"/></svg>
+                </button>
+            </div></td>
+        `;
+        attachRowSelection(tr, 'potential', i, `check-potential-${i}`);
+        tbody.appendChild(tr);
+    });
+    const footer = document.querySelector('#total-row-potential');
+    footer.innerHTML = `<tr>
+        <td colspan="3" class="footer-total-toggle" onclick="toggleFooterSelection('potential')">Всего ${DATA.potential.length} лидов</td>
+        <td>
+            <div class="footer-note">Сумма</div>
+            <div>${formatCurrency(tot)}</div>
+        </td>
+        <td></td>
+    </tr>`;
+}
+
+function renderArchive(){
+    const tbody = document.querySelector('#t-archive tbody');
+    tbody.innerHTML = '';
+    let tP = 0, tPr = 0, tContr = 0, tTax = 0;
+    const visibleItems = DATA.archive.filter(i => (i.date||'').startsWith(currentMonth));
+    visibleItems.forEach((item, i) => {
+        const realIdx = DATA.archive.indexOf(item);
+        item.pr = calcNet(item);
+        tP += toNumeric(item.p); tPr += +item.pr || 0;
+        const contractorAmount = calcContractorAmount(item);
+        tContr += contractorAmount;
+        tTax += toNumeric(item.p) * ((toNumeric(item.taxPrc) || 0) / 100);
+        const tr = document.createElement('tr');
+        tr.dataset.index = realIdx;
+
+        const isSelected = selectedRows.archive?.has(realIdx.toString());
+        if (isSelected) tr.classList.add('row-selected');
+        
+        const linkIcon = renderLinkControls(item, realIdx, 'archive');
+                                      
+        const contractorSymbol = item.contractorMode === 'percent' ? '%' : '₽';
+
+        tr.innerHTML = `
+            <td class="select-col">
+                <div class="row-index">${i + 1}</div>
+                <div class="row-controls">
+                    <svg class="dup-icon" onclick="duplicateRow('archive',${realIdx})" title="Дублировать"><use href="#icon-duplicate"/></svg>
+                    <input type="checkbox" class="bulk-checkbox" id="check-archive-${realIdx}" onchange="toggleSelect('archive', ${realIdx}, this)" ${selectedRows.archive?.has(realIdx.toString()) ? 'checked' : ''}>
+                    <label for="check-archive-${realIdx}" style="display:none;"></label>
+                </div>
+            </td>
+            <td><div class="client-wrap">
+                <span contenteditable onblur="updVal('archive',${realIdx},'c',this.innerText)" class="${getClientNameClass(item)}">${item.c}</span>
+                ${linkIcon}
+            </div></td>
+            <td class="project-name-wrap">
+                <span class="project-name" contenteditable onblur="updVal('archive',${realIdx},'n',this.innerText)">${item.n}</span>
+            </td>
+            <td class="date-cell"><div class="date-input-wrap" onclick="openDate('archive',${realIdx},'date')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.date)}</span></div></td>
+            <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('archive',${realIdx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
+            <td>
+                <div class="price-cell-wrap expense-cell">
+                    <input type="text" value="${formatPlainNumber(item.contractor ?? 0)}" oninput="formatNumberInput(this)" onblur="updateContractorValue('archive',${realIdx},this.value)">
+                    <span class="currency-symbol">${contractorSymbol}</span>
+                    <select class="expense-mode" onchange="updateContractorMode('archive',${realIdx},this.value)">
+                        <option value="amount" ${item.contractorMode!=='percent'?'selected':''}>₽</option>
+                        <option value="percent" ${item.contractorMode==='percent'?'selected':''}>%</option>
+                    </select>
+                </div>
+                <div class="expense-helper">≈ ${formatCurrency(contractorAmount)}</div>
+            </td>
+            <td><div class="net-display-wrap">${formatCurrency(item.pr)}<span class="net-prc-val">(${calcMarginPrc(item)}%)</span></div></td>
+            <td><div class="action-btns" style="justify-content:flex-end">
+                <div class="action-btn-base" title="Вернуть" onclick="mv(${realIdx},'archive','active')">
+                    <svg style="width:16px;height:16px;"><use href="#icon-undo"/></svg>
+                </div>
+                <button class="del-btn" onclick="askDel('archive',${realIdx})" aria-label="Удалить в корзину">
+                    <svg><use href="#icon-trash"/></svg>
+                </button>
+            </div></td>
+        `;
+        attachRowSelection(tr, 'archive', realIdx, `check-archive-${realIdx}`);
+        tbody.appendChild(tr);
+    });
+    const footer = document.querySelector('#total-row-archive');
+    footer.innerHTML = `<tr>
+        <td colspan="4" class="footer-total-toggle" onclick="toggleFooterSelection('archive')">Всего ${visibleItems.length} проектов</td>
+        <td style="text-align:right;">
+            <div class="footer-note">Сумма</div>
+            <div>${formatCurrency(tP)}</div>
+        </td>
+        <td style="text-align:right;">
+            <div class="footer-note">Расходы</div>
+            <div>${formatCurrency(tContr)}</div>
+        </td>
+        <td style="text-align:right;">
+            <div class="footer-note">Чистыми</div>
+            <div>${formatCurrency(tPr)}</div>
+            <div class="footer-note">Налоги: ${formatCurrency(tTax)}</div>
+        </td>
+        <td></td>
+    </tr>`;
+}
+
+function renderAll(){
+    const tbody = document.querySelector('#t-all tbody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    const allItems = [];
+    ['active','waiting','paused','archive'].forEach(type => {
+        DATA[type].forEach((item, idx) => allItems.push({ item, __type: type, idx }));
+    });
+
+    let totalGross = 0, totalNet = 0, totalExp = 0, totalTax = 0;
+
+    allItems.forEach((wrap, i) => {
+        const item = wrap.item;
+        const status = STATUS_META[wrap.__type] || { label: wrap.__type, cls: '' };
+        const contractorAmount = calcContractorAmount(item);
+        const net = calcNet(item);
+        const gross = toNumeric(item.p);
+        const taxAmount = gross * ((toNumeric(item.taxPrc) || 0) / 100);
+        totalGross += gross;
+        totalNet += net;
+        totalExp += contractorAmount;
+        totalTax += taxAmount;
+
+        const tr = document.createElement('tr');
+        const deadlineValue = wrap.__type === 'archive' ? item.date : (item.dl || item.date || item.start);
+        const rem = wrap.__type === 'archive' ? { cls: '', txt: '' } : getTimeRemaining(deadlineValue);
+        const remText = wrap.__type === 'archive' || rem.txt === '—' ? '' : ` (${rem.txt})`;
+        const dateDisplay = deadlineValue ? formatDateDisplay(deadlineValue) : '—';
+        const dateCls = wrap.__type === 'archive' ? '' : rem.cls;
+
+        tr.innerHTML = `
+            <td class="select-col"><div class="row-index">${i + 1}</div></td>
+            <td><span class="status-pill ${status.cls}">${status.label}</span></td>
+            <td><div class="client-wrap">${item.c || '—'}</div></td>
+            <td class="project-name-wrap">${item.n || '—'}</td>
+            <td class="date-cell"><div class="date-input-wrap ${dateCls}"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${dateDisplay}${remText}</span></div></td>
+            <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(gross)}" oninput="formatNumberInput(this)" onblur="updVal('${wrap.__type}',${wrap.idx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
+            <td style="text-align:right;">
+                <div class="price-cell-wrap expense-cell">
+                    <input type="text" value="${formatPlainNumber(item.contractor ?? 0)}" oninput="formatNumberInput(this)" onblur="updateContractorValue('${wrap.__type}',${wrap.idx},this.value)">
+                    <span class="currency-symbol">${item.contractorMode==='percent'?'%':'₽'}</span>
+                </div>
+                <div class="expense-helper">≈ ${formatCurrency(contractorAmount)}</div>
+            </td>
+            <td style="text-align:right;">${item.taxPrc || 0}%</td>
+            <td style="text-align:right;"><div class="net-display-wrap">${formatCurrency(net)}</div></td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    const footer = document.querySelector('#total-row-all');
+    if (footer) {
+        footer.innerHTML = `<tr>
+            <td colspan="5" class="footer-total-toggle" onclick="toggleFooterSelection('all')">Всего ${allItems.length} проектов</td>
+            <td style="text-align:right;">
+                <div class="footer-note">Сумма</div>
+                <div>${formatCurrency(totalGross)}</div>
+            </td>
+            <td style="text-align:right;">
+                <div class="footer-note">Расходы</div>
+                <div>${formatCurrency(totalExp)}</div>
+            </td>
+            <td style="text-align:right;">
+                <div class="footer-note">Налоги</div>
+                <div>${formatCurrency(totalTax)}</div>
+            </td>
+            <td style="text-align:right;">
+                <div class="footer-note">Чистыми</div>
+                <div>${formatCurrency(totalNet)}</div>
+            </td>
+        </tr>`;
+    }
+}
+
+function renderTrash(){
+    const tbody = document.querySelector('#t-trash tbody');
+    tbody.innerHTML = '';
+    DATA.trash.forEach((item, i) => {
+        const tr = document.createElement('tr');
+        tr.dataset.index = i;
+
+        const isSelected = selectedRows.trash?.has(i.toString());
+        if (isSelected) tr.classList.add('row-selected');
+        const delDate = item.deletedAt ? new Date(item.deletedAt).toLocaleDateString() : '?';
+        tr.innerHTML = `
+            <td class="select-col">
+                <div class="row-index">${i + 1}</div>
+                <div class="row-controls">
+                    <svg class="dup-icon" onclick="duplicateRow('trash',${i})" title="Дублировать"><use href="#icon-duplicate"/></svg>
+                    <input type="checkbox" class="bulk-checkbox" id="check-trash-${i}" onchange="toggleSelect('trash', ${i}, this)" ${selectedRows.trash?.has(i.toString()) ? 'checked' : ''}>
+                    <label for="check-trash-${i}" style="display:none;"></label>
+                </div>
+            </td>
+            <td style="color:var(--red); font-size:12px">${delDate}</td>
+            <td>${item.c}</td>
+            <td>${item.n}</td>
+            <td>${formatCurrency(item.p)}</td>
+            <td>
+                <div class="trash-action-btns">
+                    <div class="restore-trash-btn" onclick="restoreFromTrash(${i})">Восстановить</div>
+                    <div class="delete-forever-text" onclick="deleteForeverCheck(${i})" title="Удалить навсегда">Удалить</div>
+                </div>
+            </td>
+        `;
+        attachRowSelection(tr, 'trash', i, `check-trash-${i}`);
+        tbody.appendChild(tr);
+    });
+    const footer = document.querySelector('#t-trash tfoot td:first-child');
+    if (footer) {
+        footer.className = 'footer-total-toggle';
+        footer.onclick = () => toggleFooterSelection('trash');
+        footer.innerText = `Всего ${DATA.trash.length} элементов`;
+    }
+}
+
+function updVal(type, idx, key, val){
+    if(key==='p' || key==='contractor' || key==='paid' || key==='taxPrc') val = toNumeric(val);
+    DATA[type][idx][key] = val;
+    sortData('active', 'dl', 'date', true);
+    save(); upd();
+}
+
+function updateContractorValue(type, idx, val) {
+    DATA[type][idx].contractor = toNumeric(val);
+    sortData('active', 'dl', 'date', true);
+    save(); upd();
+}
+
+function updateContractorMode(type, idx, mode) {
+    DATA[type][idx].contractorMode = mode;
+    sortData('active', 'dl', 'date', true);
+    save(); upd();
+}
+
+function mv(idx, from, to){
+    const item = DATA[from][idx];
+    DATA[from].splice(idx, 1);
+    if(to === 'active') { item.start = item.start || today; item.dl = item.dl || today; item.paid = item.paid || 50; delete item.date; }
+    if(to === 'archive') { item.date = today; item.paid = 100; delete item.start; delete item.dl; }
+    if(to === 'potential' || to === 'waiting' || to === 'paused') { delete item.date; delete item.start; delete item.dl; item.paid = 0; }
+    
+    DATA[to].unshift(item);
+    sortData('active', 'dl', 'date', true);
+    save(); 
+    setTimeout(() => { switchTab(to); }, 10);
+}
+
+function duplicateRow(type, idx){
+    const item = JSON.parse(JSON.stringify(DATA[type].find((_, i) => i === idx)));
+    if(!item) return;
+    item.n = item.n + " (Копия)";
+    DATA[type].unshift(item);
+    save(); upd();
+}
+
+function askDel(type, idx){
+    const itemIndex = DATA[type].findIndex((_, i) => i === idx);
+    if (itemIndex > -1) {
+        const item = DATA[type].splice(itemIndex, 1)[0];
+        item.deletedAt = Date.now();
+        DATA.trash.unshift(item);
+        lastPermanentDeletion = null;
+        save(); upd();
+        showToast('Перемещено в корзину', 'Перейти', () => switchTab('trash'));
+    }
+}
+
+function deleteForeverCheck(idx) {
+    document.getElementById('del-modal-title').innerText = "Подтвердите действие";
+    document.getElementById('del-modal-desc').innerText = "Удалить навсегда?";
+    document.getElementById('deleteConfirmModal').style.display = 'flex';
+    document.getElementById('finalDeleteBtn').style.backgroundColor = 'var(--red)';
+    document.getElementById('finalDeleteBtn').style.borderColor = 'var(--red)';
+    document.getElementById('finalDeleteBtn').innerText = 'Удалить навсегда';
+
+    document.getElementById('finalDeleteBtn').onclick = () => {
+        const item = DATA.trash.splice(idx, 1)[0];
+        lastPermanentDeletion = item ? { type: 'trash', items: [{ item, index: idx }] } : null;
+        document.getElementById('deleteConfirmModal').style.display = 'none';
+        save(); upd();
+        showToast('Удалено навсегда', 'Отмена', undoPermanentDelete);
+    };
+}
+
+function restoreFromTrash(idx){
+    const item = DATA.trash.splice(idx, 1)[0];
+    delete item.deletedAt;
+    DATA.active.unshift(item);
+    save(); switchTab('active');
+}
+
+function openAddModal(){
+    ['name','client','price','contractor'].forEach(id => document.getElementById(`add-proj-${id}`).value = '');
+    document.getElementById('add-proj-tax').value = '0';
+    document.getElementById('add-proj-contractor-mode').value = 'amount';
+    document.getElementById('add-proj-start-val').value = today;
+    document.getElementById('add-proj-dl-val').value = today;
+    previousDeadlineValue = today;
+    document.getElementById('add-proj-dl-days').value = '';
+    document.getElementById('add-proj-dl-custom').value = '';
+    document.getElementById('add-proj-start-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
+    document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
+    document.getElementById('addProjectModal').style.display = 'flex';
+}
+function saveNewProject(){
+    const name = document.getElementById('add-proj-name').value;
+    const client = document.getElementById('add-proj-client').value;
+    const price = toNumeric(document.getElementById('add-proj-price').value);
+    const contr = toNumeric(document.getElementById('add-proj-contractor').value);
+    const contrMode = document.getElementById('add-proj-contractor-mode').value || 'amount';
+    const tax = +document.getElementById('add-proj-tax').value || 0;
+    const type = document.getElementById('add-proj-type').value;
+    const start = document.getElementById('add-proj-start-val').value || today;
+    const dl = document.getElementById('add-proj-dl-val').value || today;
+    
+    const item = {
+        n: name, c: client, p: price, contractor: contr, contractorMode: contrMode, taxPrc: tax, link: '',
+        start: type==='active'? start : undefined,
+        dl: type==='active' || type==='waiting' || type==='paused' ? dl : undefined, 
+        paid: (type==='active'||type==='archive'? (type==='archive'?100:50) : 0),
+        date: type==='archive' ? today : undefined
+    };
+    
+    DATA[type].unshift(item);
+    document.getElementById('addProjectModal').style.display = 'none';
+    sortData('active', 'dl', 'date', true);
+    save(); switchTab(type);
+}
+
+function applyDeadlinePreset() {
+    const select = document.getElementById('add-proj-dl-days');
+    const customInput = document.getElementById('add-proj-dl-custom');
+    const currentDl = document.getElementById('add-proj-dl-val').value || document.getElementById('add-proj-start-val').value || today;
+
+    if (!previousDeadlineValue) {
+        previousDeadlineValue = currentDl;
+    }
+
+    if (document.activeElement === customInput && select.value !== 'custom') {
+        select.value = 'custom';
+    }
+
+    if (select.value === '') {
+        const restoreVal = previousDeadlineValue || currentDl;
+        document.getElementById('add-proj-dl-val').value = restoreVal;
+        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(restoreVal);
+        customInput.value = '';
+        previousDeadlineValue = '';
+        return;
+    }
+
+    if (select.value === 'custom' && customInput.value.trim() === '') {
+        select.value = '';
+        document.getElementById('add-proj-dl-val').value = previousDeadlineValue || currentDl;
+        const restoredDl = document.getElementById('add-proj-dl-val').value || currentDl;
+        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(restoredDl);
+        previousDeadlineValue = '';
+        return;
+    }
+
+    let days = parseInt(select.value, 10);
+    if (select.value === 'custom') {
+        days = parseInt(customInput.value, 10);
+    }
+
+    if (!days || days <= 0) return;
+    const startRaw = document.getElementById('add-proj-start-val').value || today;
+    const baseDate = new Date(startRaw);
+    if (isNaN(baseDate)) return;
+    const dlDate = new Date(baseDate);
+    dlDate.setDate(dlDate.getDate() + days);
+    const iso = dlDate.toISOString().slice(0, 10);
+    document.getElementById('add-proj-dl-val').value = iso;
+    document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(iso);
+}
+
+function openDate(type, idx, field){
+    queue = {type, idx, field, targetId: null};
+    const val = DATA[type][idx][field];
+    openDateBase(val);
+}
+function openDateInModal(targetInputId){
+    const val = document.getElementById(targetInputId).value;
+    queue = {type: null, idx: null, field: null, targetId: targetInputId};
+    openDateBase(val);
+}
+function setupDatePickers(){
+    if (typeof flatpickr !== 'function') return;
+
+    datePicker = flatpickr('#date-input-val', {
+        dateFormat: 'Y-m-d',
+        altInput: true,
+        altFormat: 'j M',
+        defaultDate: today,
+        locale: flatpickr.l10ns.ru,
+        disableMobile: true,
+    });
+
+    timePicker = flatpickr('#time-input-val', {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: 'H:i',
+        defaultDate: '12:00',
+        time_24hr: true,
+        minuteIncrement: 5,
+        disableMobile: true,
+    });
+}
+function openDateBase(val) {
+    const hasTime = val && val.includes('T') && val.length > 10;
+    document.getElementById('date-has-time').checked = hasTime;
+
+    const dateVal = val ? val.slice(0, 10) : today;
+    const timeVal = hasTime ? val.slice(11, 16) : '12:00';
+
+    if (datePicker) datePicker.setDate(dateVal, true);
+    else document.getElementById('date-input-val').value = dateVal;
+
+    if (timePicker) timePicker.setDate(timeVal, true, 'H:i');
+    else document.getElementById('time-input-val').value = timeVal;
+
+    toggleTimeInput();
+    document.getElementById('dateModal').style.display = 'flex';
+}
+function toggleTimeInput(){
+    const chk = document.getElementById('date-has-time');
+    const baseInput = document.getElementById('time-input-val');
+    const inputs = [baseInput, timePicker?.input, timePicker?.altInput].filter(Boolean);
+
+    inputs.forEach(inp => {
+        inp.disabled = !chk.checked;
+        inp.style.opacity = chk.checked ? '1' : '0.3';
+    });
+
+    if (timePicker) {
+        timePicker.set('clickOpens', chk.checked);
+    }
+}
+function closeDateModal(){ document.getElementById('dateModal').style.display = 'none'; }
+function saveDate(){
+    const d = document.getElementById('date-input-val').value;
+    const t = document.getElementById('time-input-val').value;
+    const useTime = document.getElementById('date-has-time').checked;
+    if(!d) return;
+    const result = useTime ? `${d}T${t}` : d;
+
+    if (queue.targetId) {
+        document.getElementById(queue.targetId).value = result;
+        const displayId = queue.targetId.replace('-val', '-display');
+        document.getElementById(displayId).querySelector('.date-text-display').innerHTML = formatDateDisplay(result);
+        if (queue.targetId === 'add-proj-start-val') {
+            const presetDays = parseInt(document.getElementById('add-proj-dl-days').value, 10);
+            if (presetDays) applyDeadlinePreset();
+        }
+    } else {
+        DATA[queue.type][queue.idx][queue.field] = result;
+        sortData('active', 'dl', 'date', true);
+    }
+    
+    closeDateModal(); save(); upd();
+}
+
+function openProjectLink(idx, type) {
+    const link = DATA[type][idx].link;
+    if (link) {
+        window.open(link, '_blank');
+    } else {
+        openLink(type, idx);
+    }
+}
+function openLink(type, idx){
+    queue = {type, idx};
+    const currentLink = DATA[type][idx].link || '';
+    const tgCheckbox = document.getElementById('link-is-telegram');
+    let displayValue = currentLink;
+
+    if (currentLink.match(/t\.me\//)) {
+        tgCheckbox.checked = true;
+        displayValue = currentLink.replace(/^https?:\/\/t\.me\//, '').replace(/^@+/, '');
+    } else {
+        tgCheckbox.checked = false;
+    }
+
+    document.getElementById('link-input').value = displayValue;
+    document.getElementById('linkModal').style.display = 'flex';
+}
+function closeLinkModal(){ document.getElementById('linkModal').style.display = 'none'; }
+function saveLink(){
+    const isTelegram = document.getElementById('link-is-telegram').checked;
+    let url = document.getElementById('link-input').value.trim().replace(/^@+/, '');
+
+    if (isTelegram) {
+        url = url.replace(/^https?:\/\/t\.me\//, '').replace(/^@+/, '');
+        url = url ? `https://t.me/${url}` : '';
+    } else if (url && !url.match(/^(https?:\/\/|mailto:)/)) {
+        url = 'https://' + url;
+    }
+
+    DATA[queue.type][queue.idx].link = url;
+    closeLinkModal(); save(); upd();
+}
+
+function openSettings(){
+    document.getElementById('stg-goal').value = formatPlainNumber(DATA.monthlyGoals[currentMonth] || 250000);
+    document.getElementById('stg-rec').value = formatPlainNumber(DATA.settings.record || 0);
+    document.getElementById('settingsModal').style.display = 'flex';
+}
+function openGoalSettings(){
+    openSettings();
+    const goalInput = document.getElementById('stg-goal');
+    if (goalInput) {
+        goalInput.focus();
+        goalInput.select();
+    }
+}
+function openRecordSettings(){
+    openSettings();
+    const recordInput = document.getElementById('stg-rec');
+    if (recordInput) {
+        recordInput.focus();
+        recordInput.select();
+    }
+}
+function saveSettings(){
+    DATA.monthlyGoals[currentMonth] = toNumeric(document.getElementById('stg-goal').value);
+    DATA.settings.record = toNumeric(document.getElementById('stg-rec').value);
+    document.getElementById('settingsModal').style.display = 'none';
+    save(); upd();
+}
+
+function pluralize(num, forms){
+    const n = Math.abs(num) % 100;
+    const n1 = n % 10;
+    if (n > 10 && n < 20) return forms[2];
+    if (n1 > 1 && n1 < 5) return forms[1];
+    if (n1 === 1) return forms[0];
+    return forms[2];
+}
+
+function getTimeRemaining(dl){
+    if(!dl) return {txt:'—', cls:'days-normal', days: Infinity};
+    const end = new Date(dl.slice(0, 10) + 'T00:00:00').getTime();
+    const todayNormalized = new Date(today + 'T00:00:00').getTime();
+    
+    const diff = end - todayNormalized;
+    const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+    
+    if(days < 0) return {txt:'Просрочено', cls:'days-critical', days: -1};
+    if(days === 0) return {txt:'Сегодня', cls:'days-critical', days: 0};
+    if(days <= 3) return {txt: days + ' дн.', cls:'days-warning', days: days};
+    return {txt: days + ' дн.', cls:'days-normal', days: days};
+}
+
+function changeMonth(m){ 
+    currentMonth = m; 
+    if (!DATA.monthlyGoals[currentMonth]) {
+        DATA.monthlyGoals[currentMonth] = 250000;
+        save();
+    }
+    upd();
+}
+function renderMonthSelect(){
+    const sel = document.getElementById('monthSelect');
+    const months = new Set([today.slice(0,7)]);
+    [...DATA.archive, ...DATA.active].forEach(i => {
+        if(i.date) months.add(i.date.slice(0,7));
+        if(i.start) months.add(i.start.slice(0,7));
+    });
+    Object.keys(DATA.monthlyGoals).forEach(m => months.add(m));
+
+    sel.innerHTML = '';
+    Array.from(months).sort().reverse().forEach(m => {
+        const d = new Date(m + '-01');
+        const name = d.toLocaleString('ru', {month:'long', year:'numeric'});
+        const opt = document.createElement('option');
+        opt.value = m;
+        opt.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+        if(m===currentMonth) opt.selected = true;
+        sel.appendChild(opt);
+    });
+}
+
+const repCenterText = {
+    id: 'repCenterText',
+    afterDraw(chart, args, opts) {
+        const { ctx, chartArea: { width, height } } = chart;
+        const styles = getComputedStyle(document.body);
+        const textColor = (styles.getPropertyValue('--text') || '#f0f6fc').trim();
+        const mutedColor = (styles.getPropertyValue('--muted') || '#8b949e').trim();
+        ctx.save();
+        ctx.font = '900 22px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif';
+        ctx.fillStyle = textColor;
+        ctx.textAlign = 'center';
+        ctx.fillText(opts.text || '', width / 2, height / 2 + 6);
+        ctx.font = '600 12px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif';
+        ctx.fillStyle = mutedColor;
+        ctx.fillText(opts.subText || '', width / 2, height / 2 + 22);
+        ctx.restore();
+    }
+};
+
+function analyzeReputation(){
+    const projectTypes = ['active', 'waiting', 'paused', 'potential'];
+    const overdue = [];
+    projectTypes.forEach(type => {
+        DATA[type].forEach(item => {
+            const rem = getTimeRemaining(item.dl);
+            if (rem.days < 0) {
+                overdue.push({
+                    name: item.n || 'Без названия',
+                    client: item.c || 'Без клиента',
+                    days: Math.abs(rem.days)
+                });
+            }
+        });
+    });
+
+    const total = overdue.length;
+    const worst = overdue.reduce((acc, cur) => Math.max(acc, cur.days), 0);
+    const avg = total ? Math.round(overdue.reduce((acc, cur) => acc + cur.days, 0) / total) : 0;
+    const activeCount = DATA.active.length;
+    const nearDeadline = DATA.active.filter(item => {
+        const rem = getTimeRemaining(item.dl);
+        return rem.days >= 0 && rem.days <= 2;
+    }).length;
+    const onTime = Math.max(activeCount - total - nearDeadline, 0);
+    const score = Math.max(0, Math.min(100, 100 - total * 12 - Math.max(0, worst - 2) * 3 - nearDeadline * 2));
+
+    let level = 'good';
+    let headline = 'Всё ок — ты держишь сроки';
+    let hint = 'Просроченных дедлайнов нет, продолжай в том же духе.';
+    let chip = '🔥 Всё ок';
+    let detail = 'Отсутствие просрочек усиливает доверие клиентов. Держи темп и фиксируй успехи в архиве.';
+    let fallout = 'Сохраняй привычку опережать дедлайны — это личный бренд и поток рекомендаций.';
+    let tips = [
+        'Фиксируй дедлайны при постановке задач, чтобы контролировать загрузку.',
+        'Закрывай готовые проекты в архив — это повышает итоговый рейтинг.',
+    ];
+
+    if (total > 0) {
+        const overdueWord = `${total} ${pluralize(total, ['просрочка', 'просрочки', 'просрочек'])}`;
+        const daysWord = `${worst} ${pluralize(worst, ['день', 'дня', 'дней'])}`;
+        if (total <= 2 && worst <= 5) {
+            level = 'warn';
+            headline = 'Есть просрочки — поправь сроки';
+            hint = `${overdueWord} до ${daysWord}. Обнови план и предупреди клиентов.`;
+            chip = '⚠ Поднажми';
+            detail = 'Пара задержек ещё поправима: договорись о новых сроках и закрой задачи, чтобы не терять доверие.';
+            fallout = 'Если так тянуть и дальше, клиенты начнут замораживать платежи и уйдут к тем, кто держит сроки.';
+            tips = [
+                'Договорись с клиентами о новых сроках и отметь их в таблице.',
+                'Сконцентрируйся на задачах с максимальной просрочкой, чтобы снять красные индикаторы.',
+                'Отложи новые брони до закрытия текущих хвостов.',
+            ];
+        } else {
+            level = 'bad';
+            headline = 'Репутация проседает';
+            hint = `${overdueWord} до ${daysWord} — пора спасать ситуацию.`;
+            chip = '🤯 Жесть';
+            detail = 'Множественные просрочки уже бьют по имени. Наведи порядок в приоритетах и верни сроки под контроль.';
+            fallout = 'Продолжение срывов = штрафы, возвраты и жёсткие отзывы. Лиды будут обходить тебя стороной.';
+            tips = [
+                'Составь антикризисный список: сначала закрывай самые старые и дорогие проекты.',
+                'Разбей объём на краткие чекпоинты и ежедневно отмечай прогресс.',
+                'Оповести клиентов о статусе — прозрачность снижает негатив по просрочкам.',
+            ];
+        }
+    } else if (nearDeadline > 0) {
+        fallout = 'Если проморгать задачи на ближайшие 2 дня — они уйдут в красную зону и потянут рейтинг вниз.';
+        tips.push('На радаре есть задачи с дедлайном в ближайшие 2 дня — выдели под них фиксированные слоты.');
+    }
+
+    return { level, headline, hint, chip, detail, fallout, score, total, worst, avg, activeCount, nearDeadline, tips, onTime };
+}
+
+function updateReputationUI(){
+    const state = analyzeReputation();
+    const strip = document.getElementById('reputation-strip');
+    if (strip) {
+        strip.classList.remove('good', 'warn', 'bad');
+        strip.classList.add(state.level);
+    }
+
+    const headline = document.getElementById('reputation-headline');
+    if (headline) headline.innerText = state.headline;
+
+    const hint = document.getElementById('reputation-hint');
+    if (hint) hint.innerText = state.hint;
+
+    const chip = document.getElementById('reputation-chip');
+    if (chip) {
+        chip.classList.remove('good', 'warn', 'bad');
+        chip.classList.add(state.level);
+        chip.innerText = state.chip;
+    }
+
+    const score = document.getElementById('reputation-score');
+    if (score) score.innerText = `${state.score} / 100`;
+    const scoreLabel = document.getElementById('rep-score-label');
+    if (scoreLabel) scoreLabel.innerText = state.score;
+
+    const grade = document.getElementById('reputation-grade');
+    if (grade) {
+        grade.innerText = state.total
+            ? `${state.total} ${pluralize(state.total, ['просрочка', 'просрочки', 'просрочек'])} (до ${state.worst} ${pluralize(state.worst, ['дня', 'дней', 'дней'])})`
+            : 'Просроченных дедлайнов нет';
+    }
+
+    const detail = document.getElementById('reputation-detail');
+    if (detail) detail.innerText = state.detail;
+
+    const fallout = document.getElementById('reputation-fallout');
+    if (fallout) {
+        fallout.style.display = state.level === 'good' ? 'none' : 'block';
+        fallout.innerText = state.level === 'good' ? '' : state.fallout;
+    }
+
+    const activeCount = document.getElementById('rep-active-count');
+    if (activeCount) activeCount.innerText = state.activeCount;
+
+    const repOnTime = document.getElementById('rep-on-time');
+    if (repOnTime) {
+        const onTime = Math.max(state.onTime, 0);
+        repOnTime.innerText = onTime > 0 ? `${onTime} без просрочек` : 'Все задачи просрочены';
+    }
+
+    const repOverdue = document.getElementById('rep-overdue');
+    if (repOverdue) repOverdue.innerText = state.total;
+
+    const repDelay = document.getElementById('rep-delay');
+    if (repDelay) repDelay.innerText = state.total ? `Макс ${state.worst} дн. · Ср ${state.avg} дн.` : 'Просрочек нет';
+
+    const tipsEl = document.getElementById('reputation-tips');
+    if (tipsEl) {
+        tipsEl.innerHTML = state.tips.map(tip => `
+            <div class="rep-tip">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3v4"/><path d="M6.5 7.5l2.5 2.5"/><path d="M17.5 7.5L15 10"/><path d="M12 17v4"/><path d="M6 13l-2 2"/><path d="M18 13l2 2"/><circle cx="12" cy="12" r="4"/>
+                </svg>
+                <span>${tip}</span>
             </div>
+        `).join('');
+    }
 
-            <div class="modal-actions">
-                <button type="button" class="cancel-btn" onclick="closeModal('add-project-modal')">Отмена</button>
-                <button type="submit" class="primary-btn" id="modal-save-btn">Сохранить</button>
-            </div>
-        </form>
-    </div>
-</div>
+    updatePaceReputation(state);
 
-<div id="delete-confirm-modal" class="modal-overlay" onclick="closeModalIfOutside(event)">
-    <div class="modal-content">
-        <h2>Подтверждение удаления</h2>
-        <p id="delete-message">Вы уверены, что хотите удалить выбранные проекты навсегда? Это действие необратимо.</p>
-        <div class="modal-actions">
-            <button type="button" class="cancel-btn" onclick="closeModal('delete-confirm-modal')">Отмена</button>
-            <button type="button" class="primary-btn" style="background-color: var(--red);" id="confirm-delete-btn" onclick="del()">Удалить</button>
-        </div>
-    </div>
-</div>
+    const repOnTimePill = document.getElementById('rep-on-time-pill');
+    if (repOnTimePill) repOnTimePill.innerText = Math.max(state.onTime, 0);
 
-<div id="clear-data-modal" class="modal-overlay" onclick="closeModalIfOutside(event)">
-    <div class="modal-content">
-        <h2>Очистка данных</h2>
-        <p>Вы уверены, что хотите полностью очистить все данные DesignFlow? Все проекты будут удалены навсегда.</p>
-        <div class="modal-actions">
-            <button type="button" class="cancel-btn" onclick="closeModal('clear-data-modal')">Отмена</button>
-            <button type="button" class="primary-btn" style="background-color: var(--red);" onclick="clearData()">Очистить все</button>
-        </div>
-    </div>
-</div>
+    const repNearPill = document.getElementById('rep-near-pill');
+    if (repNearPill) repNearPill.innerText = state.nearDeadline;
 
+    const repOverduePill = document.getElementById('rep-overdue-pill');
+    if (repOverduePill) repOverduePill.innerText = state.total;
 
-<script src="script.js"></script>
+    const repChartEl = document.getElementById('reputationChart');
+    if (repChartEl) {
+        if (chRep) chRep.destroy();
+        const onTimeVal = Math.max(state.onTime, 0);
+        const nearVal = state.nearDeadline;
+        const overdueVal = state.total;
+        const totalVal = onTimeVal + nearVal + overdueVal;
+        const hasData = totalVal > 0;
+        const labels = hasData ? ['В срок', 'На грани', 'Просрочки'] : ['Репутация'];
+        const data = hasData ? [onTimeVal, nearVal, overdueVal] : [1];
+        const colors = hasData ? ['#2ea043', '#d29922', '#f85149'] : ['#2ea043'];
+        chRep = new Chart(repChartEl.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels,
+                datasets: [{
+                    data,
+                    backgroundColor: colors,
+                    borderWidth: 0,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '72%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => `${ctx.label}: ${hasData ? ctx.parsed : 0}`
+                        }
+                    },
+                    repCenterText: {
+                        text: `${state.score} / 100`,
+                        subText: state.level === 'good' ? 'Доверие стабильно' : 'Нужно ускориться'
+                    }
+                }
+            },
+            plugins: [repCenterText]
+        });
+    }
+}
 
+function updatePaceReputation(state){
+    const chip = document.getElementById('pace-rep-chip');
+    const text = document.getElementById('pace-rep-text');
+    const dot = document.getElementById('pace-rep-dot');
+
+    if (chip) {
+        chip.classList.remove('good', 'warn', 'bad');
+        chip.classList.add(state.level);
+    }
+
+    if (text) text.innerText = `${state.score} / 100`;
+    if (dot) dot.className = `rep-dot ${state.level}`;
+}
+
+function scrollToReputation(){
+    const card = document.getElementById('reputation-card');
+    if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function getScopedDataForStats() {
+    return {
+        active: DATA.active,
+        archive: DATA.archive,
+        paused: DATA.paused,
+        waiting: DATA.waiting,
+        potential: DATA.potential,
+    };
+}
+
+function calcStats(){
+    const scope = getScopedDataForStats();
+    const goal = toNumeric(DATA.monthlyGoals[currentMonth]) || 250000;
+    let fact = 0, activeFact = 0, plan = 0, totalGross = 0, totalNet = 0;
+    let totalExpenses = 0, totalTaxes = 0, totalPaidGross = 0;
+
+    ['active','archive','paused','waiting','potential'].forEach(type => {
+        scope[type].forEach(i => {
+            totalExpenses += calcContractorAmount(i);
+            totalTaxes += toNumeric(i.p) * ((toNumeric(i.taxPrc) || 0) / 100);
+        });
+    });
+
+    const archiveThisMonth = scope.archive.filter(i=>(i.date||'').startsWith(currentMonth));
+    archiveThisMonth.forEach(i => {
+        const net = calcNet(i);
+        fact += net;
+        totalGross += toNumeric(i.p);
+        totalNet += net;
+        totalPaidGross += toNumeric(i.p);
+    });
+
+    scope.active.forEach(i => {
+        const net = calcNet(i);
+        const gross = toNumeric(i.p);
+        const paidPrc = (toNumeric(i.paid)||0)/100;
+        const paidGross = gross * paidPrc;
+        activeFact += net * paidPrc;
+        plan += net * (1 - paidPrc);
+        totalGross += gross;
+        totalNet += net;
+        totalPaidGross += paidGross;
+    });
+
+    scope.paused.forEach(i => plan += calcNet(i));
+    scope.waiting.forEach(i => plan += calcNet(i));
+    scope.potential.forEach(i => plan += calcNet(i));
+
+    const totalFact = fact + activeFact;
+    const forecast = totalFact + plan;
+    
+    const totalMargin = totalNet;
+    const totalGrossCombined = totalGross;
+    const goalProgress = goal ? Math.round((totalFact/goal)*100) : 0;
+
+    document.getElementById('val-fact').innerText = formatCurrency(totalFact);
+    document.getElementById('val-fact-prc').innerText = `${goalProgress}% от цели`;
+    document.getElementById('val-active-fact').innerText = formatCurrency(activeFact);
+    document.getElementById('val-margin').innerText = formatCurrency(totalMargin);
+    document.getElementById('val-margin-prc').innerText = `${totalGrossCombined > 0 ? Math.round((totalMargin/totalGrossCombined)*100) : 0}%`;
+    document.getElementById('val-plan').innerText = formatCurrency(plan);
+    document.getElementById('val-total').innerText = formatCurrency(forecast);
+    document.getElementById('val-expenses').innerText = formatCurrency(totalExpenses);
+    document.getElementById('val-taxes').innerText = formatCurrency(totalTaxes);
+    document.getElementById('val-paid-gross').innerText = formatCurrency(totalPaidGross);
+    document.getElementById('goal-text').innerText = `${formatCurrency(totalFact)} / ${formatCurrency(goal)}`;
+    document.getElementById('goal-pill').innerText = `Цель: ${formatCurrency(goal)}`;
+
+    const record = DATA.settings.record || 0;
+    const recordProgress = record > 0 ? Math.min(100, (totalFact/record)*100) : 0;
+    const recordRemaining = Math.max(0, record - totalFact);
+    let motivText = 'Обновим цифры!';
+    if (!record) motivText = 'Задай цель и забери рекорд.';
+    else if (recordRemaining <= 0) motivText = 'Новый рекорд! Так держать.';
+    else if (recordProgress >= 70) motivText = 'Чуть-чуть до рекорда!';
+    else motivText = 'Движемся к рекорду каждый день.';
+
+    document.getElementById('record-motiv').innerText = motivText;
+    document.getElementById('record-remaining').innerText = record ? (recordRemaining > 0 ? `До рекорда ${formatCurrency(recordRemaining)}` : 'Рекорд побит!') : 'Задайте рекорд в настройках';
+    document.getElementById('record-amount').innerText = formatCurrency(record);
+    document.getElementById('record-progress').style.width = record ? Math.min(100, (totalFact/record)*100) + '%' : '0%';
+
+    document.getElementById('p-bar').style.width = goal > 0 ? Math.min(100, (totalFact/goal)*100) + '%' : '0%';
+    document.getElementById('dash-month-name').innerText = document.getElementById('monthSelect').options[document.getElementById('monthSelect').selectedIndex]?.text || '';
+    const scopeNote = 'Срез: все проекты';
+    const scopeHint = 'Статистика собирается по всем разделам вне зависимости от выбранной вкладки';
+    const scopeEl = document.getElementById('stat-scope-note');
+    if (scopeEl) {
+        scopeEl.innerText = scopeNote;
+        scopeEl.title = scopeHint;
+    }
+    updateReputationUI();
+    updateCharts(totalFact, plan, scope);
+}
+
+let chL = null, chP = null, chB = null, chRep = null;
+function updateCharts(fact, plan, scope){
+    const ctxL = document.getElementById('lineChart').getContext('2d');
+    const ctxP = document.getElementById('pieChart').getContext('2d');
+    const ctxB = document.getElementById('barChart').getContext('2d');
+    const daysInM = new Date(currentMonth.split('-')[0], currentMonth.split('-')[1], 0).getDate();
+    const labelsL = Array.from({length:daysInM},(_,i)=>i+1);
+
+    const dataL = new Array(daysInM).fill(0);
+
+    scope.archive.filter(i=>(i.date||'').startsWith(currentMonth)).forEach(i => {
+        const d = parseInt(i.date.split('-')[2]) - 1;
+        if(d>=0 && d<daysInM) dataL[d] += calcNet(i);
+    });
+    
+    let acc = 0; 
+    const dataAcc = dataL.map(v => acc+=v);
+    
+    if(chL) chL.destroy();
+    chL = new Chart(ctxL, {
+        type: 'line',
+        data: { labels: labelsL, datasets: [{label:'Факт', data:dataAcc, borderColor:'#2ea043', backgroundColor:'rgba(46,160,67,0.1)', fill:true, tension:0.3, pointRadius:0}] },
+        options: {responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{display:false}, y:{grid:{color:'#30363d'}}}}
+    });
+    
+    if(chP) chP.destroy();
+    chP = new Chart(ctxP, {
+        type: 'doughnut',
+        data: { labels: ['Факт (Оплачено)', 'План (Остаток/Лиды)'], datasets: [{data:[fact, plan], backgroundColor:['#2ea043','#d29922'], borderWidth:0}] },
+        options: {responsive:true, maintainAspectRatio:false, cutout:'75%', plugins:{legend:{position:'bottom', labels:{color:'#8b949e'}}}}
+    });
+    
+    const h = {};
+    scope.archive.forEach(i => { const m = (i.date||'').slice(0,7); if(m) h[m] = (h[m]||0) + calcNet(i); });
+    const allMonths = Object.keys(h);
+    allMonths.sort();
+    const keys = allMonths.slice(-6); 
+
+    if(chB) chB.destroy();
+    chB = new Chart(ctxB, {
+        type: 'bar',
+        data: { labels: keys.map(m => new Date(m + '-01').toLocaleString('ru', {month:'short'})), datasets: [{data: keys.map(k=>h[k]), backgroundColor: keys.map(k=>k===currentMonth?'#58a6ff':getCssVar('--chart-bar-bg')||'#21262d'), borderRadius:4}] },
+        options: {responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}, y:{display:false, ticks:{beginAtZero:true}}}}
+    });
+}
+
+function exp(){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([localStorage.getItem(K)],{type:'application/json'}));
+  a.download=`DesignFlow-Backup-${today}.json`;
+  a.click();
+}
+function expCSV(){
+    const escape = v => `"${(v || '').toString().replace(/"/g, '""')}"`;
+    let csv = ['Статус', 'Клиент', 'Проект', 'Сумма', 'Чистыми', 'Оплачено (%)', 'Налог (%)', 'Расходы', 'Дата Старта', 'Дедлайн/Сдачи', 'Ссылка'].map(escape).join(';') + '\n';
+    const addRows = (list, status) => list.forEach(i => csv += [status, i.c, i.n, i.p, calcNet(i), i.paid||0, i.taxPrc||0, calcContractorAmount(i), i.start||'', i.dl||i.date||'', i.link||''].map(escape).join(';') + '\n');
+    addRows(DATA.active, 'В работе'); addRows(DATA.waiting, 'Ожидает'); addRows(DATA.potential, 'Потенциал');
+    addRows(DATA.paused, 'На паузе'); addRows(DATA.archive, 'Выполнено');
+    const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], {type: 'text/csv;charset=utf-8;'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `DesignFlow-Export-${today}.csv`; a.click();
+}
+function imp(f){
+  if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{ localStorage.setItem(K,e.target.result); location.reload(); };
+  r.readAsText(f);
+}
+
+window.onload = init;
+</script>
 </body>
 </html>
