@@ -331,12 +331,15 @@
   .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
   .card-head { font-size: 18px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
   .finance-title { font-size: 20px; font-weight: 800; color: #fff; }
+  body.light .finance-title { color: #0f172a; }
   .finance-sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
   .goal-wrap { margin-bottom: 18px; }
   .goal-info { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
   .card-head-actions { display: flex; align-items: center; gap: 10px; }
   .inline-link-btn { padding: 8px 12px; background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; transition: .2s; }
   .inline-link-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--button-bg); }
+  body.light .inline-link-btn { color: #2d3a55; border-color: #cbd8f1; background: #f7faff; box-shadow: 0 4px 14px rgba(17,24,39,0.05); }
+  body.light .inline-link-btn:hover { color: #1f4cad; border-color: #3b82f6; background: #eaf2ff; }
   .progress-bg { height: 14px; background: var(--progress-bg); border-radius: 12px; overflow: hidden; border: 1px solid var(--progress-border); margin-top: 8px; width: 100%; box-shadow: var(--progress-shadow); }
   .progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--progress-fill-start), var(--progress-fill-end)); transition: width 0.5s; box-shadow: var(--progress-fill-shadow); border-radius: 12px; }
   .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
@@ -395,6 +398,9 @@
   .rep-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; font-weight: 800; }
   .rep-value { font-size: 18px; font-weight: 800; color: #f0f6fc; margin-top: 6px; }
   .rep-helper { font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+  body.light .rep-metric { background: #f6f8fd; border-color: #d8e1f0; }
+  body.light .rep-value { color: #1f2937; }
+  body.light .rep-helper { color: #4b5563; }
   .reputation-mini { display: grid; grid-template-columns: 1fr 1.1fr; gap: 12px; align-items: stretch; }
   .rep-chart-box { border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: var(--card-alt); min-height: 140px; display: flex; flex-direction: column; gap: 8px; position: relative; overflow: visible; }
   .rep-chart-box::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 30% 20%, rgba(88,166,255,0.12), transparent 45%); opacity: 0.5; }
@@ -411,6 +417,11 @@
   .rep-tips-title { font-weight: 800; color: #f0f6fc; font-size: 13px; letter-spacing: 0.3px; text-transform: uppercase; }
   .rep-tip { display: flex; gap: 8px; color: var(--muted); font-size: 13px; line-height: 1.4; }
   .rep-tip svg { width: 16px; height: 16px; color: #58a6ff; flex-shrink: 0; }
+  body.light .rep-chart-box { background: #f6f8fd; border-color: #d8e1f0; }
+  body.light .rep-chart-box::after { background: radial-gradient(circle at 30% 20%, rgba(59,130,246,0.12), transparent 45%); }
+  body.light .rep-chart-pill { background: #f7faff; border-color: #d8e1f0; color: #374151; }
+  body.light .rep-tips { background: #f6f8fd; border-color: #d8e1f0; }
+  body.light .rep-tips-title { color: #1f2d45; }
   /* Bulk Toolbar */
   .bulk-toolbar {
       position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); 
@@ -804,7 +815,7 @@ td.date-cell + td.date-cell {
         <div class="tab" id="tab-archive" onclick="switchTab('archive')"><svg><use href="#icon-archive"/></svg> Выполнено</div>
         <div class="tab tab-trash" id="tab-trash" onclick="switchTab('trash')"><svg><use href="#icon-trash"/></svg> Корзина</div>
     </div>
-    <button id="newProjectButton" onclick="openAddModal()">＋ новый проект</button>
+    <button id="newProjectButton" onclick="openAddModal()">＋ Новый проект</button>
   </div>
   
   <div class="tab-desc-block" id="tab-description">Проекты в работе. Следите за дедлайнами и фиксируйте предоплату.</div>
@@ -2700,13 +2711,16 @@ const repCenterText = {
     id: 'repCenterText',
     afterDraw(chart, args, opts) {
         const { ctx, chartArea: { width, height } } = chart;
+        const styles = getComputedStyle(document.body);
+        const textColor = (styles.getPropertyValue('--text') || '#f0f6fc').trim();
+        const mutedColor = (styles.getPropertyValue('--muted') || '#8b949e').trim();
         ctx.save();
         ctx.font = '900 22px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif';
-        ctx.fillStyle = '#f0f6fc';
+        ctx.fillStyle = textColor;
         ctx.textAlign = 'center';
         ctx.fillText(opts.text || '', width / 2, height / 2 + 6);
         ctx.font = '600 12px -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif';
-        ctx.fillStyle = '#8b949e';
+        ctx.fillStyle = mutedColor;
         ctx.fillText(opts.subText || '', width / 2, height / 2 + 22);
         ctx.restore();
     }
