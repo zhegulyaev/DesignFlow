@@ -81,7 +81,7 @@
   .brand-white { color: var(--muted); font-weight: 400; letter-spacing: -0.4px; }
   
   /* Исправлен отступ в шапке */
-  .header-row{display:flex;justify-content:space-between;align-items:center;margin:20px 0 16px; gap: 16px; padding: 12px 18px; border-radius: 16px; background: linear-gradient(120deg, rgba(124,82,228,0.08), rgba(124,82,228,0.02)); border: 1px solid rgba(124,82,228,0.25); box-shadow: 0 16px 42px rgba(0,0,0,0.16);}
+  .header-row{display:flex;justify-content:space-between;align-items:center;margin:20px 0 16px; gap: 16px; padding: 12px 18px; border-radius: 16px; background: transparent; border: none; box-shadow: none;}
   .brand-wrap { display: flex; align-items: center; gap: 12px; }
   .brand-logo { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; background: #7c52e4; border: 2px solid rgba(255,255,255,0.18); font-size: 22px; color: #f5f1ff; font-weight: 900; box-shadow: 0 10px 28px rgba(124,82,228,0.35); }
   .brand-text { display: flex; flex-direction: column; line-height: 1.05; }
@@ -761,6 +761,18 @@
   .trash-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0 6px; }
   .trash-clean-btn { padding: 12px 16px; border-radius: 10px; background: var(--button-bg); border: 1px solid var(--border); color: var(--text); font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
   .trash-clean-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .trash-date-cell { display: flex; flex-direction: column; gap: 4px; }
+  .trash-deleted-label { font-weight: 800; color: var(--text); font-size: 13px; }
+
+  .template-manager { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+  .template-manager-title { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; }
+  .template-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .template-pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; background: var(--pill-bg); border: 1px solid var(--border); font-weight: 700; color: var(--text); }
+  .template-pill button { border: none; background: transparent; color: var(--muted); padding: 0 4px; cursor: pointer; font-weight: 800; }
+  .template-pill button:hover { color: var(--red); }
+  .contractor-helper { color: var(--muted); font-size: 12px; font-weight: 700; margin-top: 6px; }
+  .is-hidden { display: none !important; }
+  .expense-cell input:disabled { background: var(--input-bg); color: var(--muted); cursor: not-allowed; }
 
 
 .date-cell:not(:last-child) .date-input-wrap {
@@ -1061,8 +1073,7 @@ td.date-cell + td.date-cell {
       </div>
       <div class="trash-toolbar">
           <div style="color: var(--muted); font-size: 13px;">Объекты хранятся здесь 7 дней, затем удаляются навсегда.</div>
-          <button class="trash-clean-btn" onclick="clearTrashForever()">Удалить все проекты</button>
-          <button class="trash-clean-btn" onclick="clearTrashForever()">🗑 Очистить корзину навсегда</button>
+          <button class="trash-clean-btn" onclick="clearTrashForever()">🗑 Очистить корзину</button>
       </div>
     </div>
   </div>
@@ -1257,8 +1268,12 @@ td.date-cell + td.date-cell {
                 <select id="add-proj-template-select" onchange="applyNameTemplate(this.value)" style="min-width:170px;">
                     <option value="">Шаблоны</option>
                 </select>
-                <button class="inline-link-btn" type="button" onclick="saveNameTemplate()">Сохранить шаблон</button>
+                <button class="inline-link-btn" type="button" onclick="saveNameTemplate()">Создать свой шаблон</button>
                 <datalist id="project-name-templates"></datalist>
+            </div>
+            <div class="template-manager">
+                <div class="template-manager-title">Мои шаблоны</div>
+                <div class="template-pills" id="saved-template-pills"></div>
             </div>
         </div>
         <div class="inp-group">
@@ -1271,14 +1286,16 @@ td.date-cell + td.date-cell {
                 <input type="text" id="add-proj-price" placeholder="50 000" oninput="formatNumberInput(this)">
             </div>
              <div class="inp-group" style="flex:1">
-                <label>Расходы</label>
-                <div style="display:flex; gap:10px; align-items:center;">
-                    <input type="text" id="add-proj-contractor" placeholder="0" style="flex:1 1 280px" oninput="formatNumberInput(this)">
-                    <select id="add-proj-contractor-mode" class="symbol-select">
-                        <option value="amount">₽</option>
-                        <option value="percent">%</option>
+                <label>Подрядчик (расходы)</label>
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap: wrap;">
+                    <select id="add-proj-contractor-mode" class="symbol-select" onchange="handleNewContractorModeChange(this.value)">
+                        <option value="none">Нет</option>
+                        <option value="percent">Процент (%)</option>
+                        <option value="amount">Фикс. сумма (₽)</option>
                     </select>
+                    <input type="text" id="add-proj-contractor" placeholder="0" style="flex:1 1 260px; min-width: 180px;" oninput="formatNumberInput(this)" class="is-hidden">
                 </div>
+                <div class="contractor-helper" id="add-contractor-helper">Выберите тип расходов, чтобы указать сумму.</div>
             </div>
              <div class="inp-group" style="flex: 0 0 120px;">
                 <label>Налог</label>
@@ -1485,12 +1502,11 @@ function formatNumberInput(inputEl) {
 }
 
 const DEFAULT_NAME_TEMPLATES = [
-    'Лендинг',
-    'Корпоративный сайт',
-    'Интернет-магазин',
-    'Мобильное приложение',
-    'UX/UI аудит',
-    'Brandbook'
+    'Дизайн группы ВКонтакте',
+    'Дизайн баннера',
+    'Дизайн карточки ВБ',
+    'Дизайн логотипа',
+    'Дизайн лендинга'
 ];
 
 let NAME_TEMPLATES = [...DEFAULT_NAME_TEMPLATES];
@@ -1512,6 +1528,29 @@ function refreshTemplateSelects() {
     if (!select || !list) return;
     select.innerHTML = '<option value="">Шаблоны</option>' + NAME_TEMPLATES.map(t=>`<option value="${t}">${t}</option>`).join('');
     list.innerHTML = NAME_TEMPLATES.map(t=>`<option value="${t}">`).join('');
+    renderTemplatePills();
+}
+
+function persistNameTemplates() {
+    localStorage.setItem(NAME_TEMPLATES_KEY, JSON.stringify(NAME_TEMPLATES.slice(0, 20)));
+}
+
+function renderTemplatePills() {
+    const pills = document.getElementById('saved-template-pills');
+    if (!pills) return;
+    if (!NAME_TEMPLATES.length) {
+        pills.innerHTML = '<span style="color: var(--muted);">Шаблонов пока нет</span>';
+        return;
+    }
+    pills.innerHTML = NAME_TEMPLATES.map(t => {
+        const safe = t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        const safeArg = t.replace(/'/g,"\\'");
+        return `
+        <span class="template-pill">
+            <span>${safe}</span>
+            <button aria-label="Удалить шаблон" onclick="deleteNameTemplate('${safeArg}')">×</button>
+        </span>`;
+    }).join('');
 }
 
 function applyNameTemplate(val) {
@@ -1527,10 +1566,34 @@ function saveNameTemplate() {
     if (!val) return;
     if (!NAME_TEMPLATES.includes(val)) {
         NAME_TEMPLATES.unshift(val);
-        localStorage.setItem(NAME_TEMPLATES_KEY, JSON.stringify(NAME_TEMPLATES.slice(0, 20)));
+        persistNameTemplates();
         refreshTemplateSelects();
         showToast('Шаблон сохранен');
     }
+}
+
+function deleteNameTemplate(val) {
+    NAME_TEMPLATES = NAME_TEMPLATES.filter(t => t !== val);
+    persistNameTemplates();
+    refreshTemplateSelects();
+}
+
+function handleNewContractorModeChange(mode) {
+    const input = document.getElementById('add-proj-contractor');
+    const helper = document.getElementById('add-contractor-helper');
+    if (!input || !helper) return;
+    const showInput = mode !== 'none';
+    input.classList.toggle('is-hidden', !showInput);
+    input.disabled = !showInput;
+    if (!showInput) {
+        input.value = '';
+        helper.textContent = 'Расходы не учитываются для этого проекта.';
+        return;
+    }
+    helper.textContent = mode === 'percent'
+        ? 'Укажите процент расходов от общей суммы.'
+        : 'Укажите фиксированную сумму расходов.';
+    input.placeholder = mode === 'percent' ? 'Например, 20' : 'Например, 30 000';
 }
 
 let DATA = {
@@ -1868,7 +1931,7 @@ function init(){
                  DATA[type].forEach(i => {
                     if(i.contractor === undefined) i.contractor = 0;
                     if(i.taxPrc === undefined) i.taxPrc = 0;
-                    if(!i.contractorMode) i.contractorMode = 'amount';
+                    if(!i.contractorMode) i.contractorMode = i.contractor ? 'amount' : 'none';
                  });
             });
         } catch(e) { console.error("Data load error", e); }
@@ -1920,6 +1983,7 @@ function calcContractorAmount(item) {
     const gross = toNumeric(item.p);
     const mode = item.contractorMode || 'amount';
     const raw = toNumeric(item.contractor);
+    if (mode === 'none') return 0;
     return mode === 'percent' ? gross * (raw / 100) : raw;
 }
 
@@ -2064,7 +2128,9 @@ function renderActive(){
         const linkIcon = renderLinkControls(item, i, 'active');
         const paidAmount = Math.round(gross * ((toNumeric(item.paid) || 0) / 100));
         totalPaidGross += paidAmount;
-        const contractorSymbol = item.contractorMode === 'percent' ? '%' : '₽';
+        const contractorSymbol = item.contractorMode === 'percent' ? '%' : item.contractorMode === 'none' ? '—' : '₽';
+        const contractorValue = item.contractorMode === 'none' ? '' : formatPlainNumber(item.contractor ?? 0);
+        const contractorHelper = item.contractorMode === 'none' ? 'Расходы не учитываются' : `≈ ${formatCurrency(contractorAmount)}`;
 
         tr.innerHTML = `
             <td class="select-col">
@@ -2097,14 +2163,15 @@ function renderActive(){
             
             <td style="text-align:right;">
                 <div class="price-cell-wrap expense-cell">
-                    <input type="text" value="${formatPlainNumber(item.contractor ?? 0)}" oninput="formatNumberInput(this)" onblur="updateContractorValue('active',${i},this.value)">
+                    <input type="text" value="${contractorValue}" ${item.contractorMode === 'none' ? 'disabled' : ''} oninput="formatNumberInput(this)" onblur="updateContractorValue('active',${i},this.value)">
                     <span class="currency-symbol">${contractorSymbol}</span>
                     <select class="expense-mode" onchange="updateContractorMode('active',${i},this.value)">
+                        <option value="none" ${item.contractorMode==='none'?'selected':''}>Нет</option>
                         <option value="amount" ${item.contractorMode!=='percent'?'selected':''}>₽</option>
                         <option value="percent" ${item.contractorMode==='percent'?'selected':''}>%</option>
                     </select>
                 </div>
-                <div class="expense-helper">≈ ${formatCurrency(contractorAmount)}</div>
+                <div class="expense-helper">${contractorHelper}</div>
             </td>
 
             <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('active',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
@@ -2352,7 +2419,7 @@ function deleteRequest(idx) {
 function convertRequestToPotential(idx) {
     const req = DATA.requests.splice(idx, 1)[0];
     if (!req) return;
-    DATA.potential.unshift({ n: req.note || req.name || 'Новый лид', c: req.name || '—', p: req.budget || 0, contractor: 0, contractorMode: 'amount', taxPrc: 0, paid: 0, link: '' });
+    DATA.potential.unshift({ n: req.note || req.name || 'Новый лид', c: req.name || '—', p: req.budget || 0, contractor: 0, contractorMode: 'none', taxPrc: 0, paid: 0, link: '' });
     save();
     showToast('Перенесено в потенциал');
     switchTab('potential');
@@ -2378,7 +2445,9 @@ function renderArchive(){
         
         const linkIcon = renderLinkControls(item, realIdx, 'archive');
                                       
-        const contractorSymbol = item.contractorMode === 'percent' ? '%' : '₽';
+        const contractorSymbol = item.contractorMode === 'percent' ? '%' : item.contractorMode === 'none' ? '—' : '₽';
+        const contractorValue = item.contractorMode === 'none' ? '' : formatPlainNumber(item.contractor ?? 0);
+        const contractorHelper = item.contractorMode === 'none' ? 'Расходы не учитываются' : `≈ ${formatCurrency(contractorAmount)}`;
 
         tr.innerHTML = `
             <td class="select-col">
@@ -2400,14 +2469,15 @@ function renderArchive(){
             <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('archive',${realIdx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td>
                 <div class="price-cell-wrap expense-cell">
-                    <input type="text" value="${formatPlainNumber(item.contractor ?? 0)}" oninput="formatNumberInput(this)" onblur="updateContractorValue('archive',${realIdx},this.value)">
+                    <input type="text" value="${contractorValue}" ${item.contractorMode === 'none' ? 'disabled' : ''} oninput="formatNumberInput(this)" onblur="updateContractorValue('archive',${realIdx},this.value)">
                     <span class="currency-symbol">${contractorSymbol}</span>
                     <select class="expense-mode" onchange="updateContractorMode('archive',${realIdx},this.value)">
+                        <option value="none" ${item.contractorMode==='none'?'selected':''}>Нет</option>
                         <option value="amount" ${item.contractorMode!=='percent'?'selected':''}>₽</option>
                         <option value="percent" ${item.contractorMode==='percent'?'selected':''}>%</option>
                     </select>
                 </div>
-                <div class="expense-helper">≈ ${formatCurrency(contractorAmount)}</div>
+                <div class="expense-helper">${contractorHelper}</div>
             </td>
             <td><div class="net-display-wrap">${formatCurrency(item.pr)}<span class="net-prc-val">(${calcMarginPrc(item)}%)</span></div></td>
             <td><div class="action-btns" style="justify-content:flex-end">
@@ -2474,6 +2544,10 @@ function renderAll(){
         const dateCls = wrap.__type === 'archive' ? '' : rem.cls;
         const linkIcon = renderLinkControls(item, wrap.idx, wrap.__type);
 
+        const contractorSymbol = item.contractorMode === 'percent' ? '%' : item.contractorMode === 'none' ? '—' : '₽';
+        const contractorValue = item.contractorMode === 'none' ? '' : formatPlainNumber(item.contractor ?? 0);
+        const contractorHelper = item.contractorMode === 'none' ? 'Расходы не учитываются' : `≈ ${formatCurrency(contractorAmount)}`;
+
         tr.innerHTML = `
             <td class="select-col"><div class="row-index">${i + 1}</div></td>
             <td><span class="status-pill ${status.cls}">${status.label}</span></td>
@@ -2483,10 +2557,10 @@ function renderAll(){
             <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(gross)}" oninput="formatNumberInput(this)" onblur="updVal('${wrap.__type}',${wrap.idx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td style="text-align:right;">
                 <div class="price-cell-wrap expense-cell">
-                    <input type="text" value="${formatPlainNumber(item.contractor ?? 0)}" oninput="formatNumberInput(this)" onblur="updateContractorValue('${wrap.__type}',${wrap.idx},this.value)">
-                    <span class="currency-symbol">${item.contractorMode==='percent'?'%':'₽'}</span>
+                    <input type="text" value="${contractorValue}" ${item.contractorMode === 'none' ? 'disabled' : ''} oninput="formatNumberInput(this)" onblur="updateContractorValue('${wrap.__type}',${wrap.idx},this.value)">
+                    <span class="currency-symbol">${contractorSymbol}</span>
                 </div>
-                <div class="expense-helper">≈ ${formatCurrency(contractorAmount)}</div>
+                <div class="expense-helper">${contractorHelper}</div>
             </td>
             <td style="text-align:right;">${item.taxPrc || 0}%</td>
             <td style="text-align:right;"><div class="net-display-wrap">${formatCurrency(net)}</div></td>
@@ -2527,10 +2601,8 @@ function formatTrashExpire(item) {
     const days = Math.floor(remainingMs / (24 * 60 * 60 * 1000));
     const hours = Math.floor((remainingMs % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
     const absolute = expiresAt.toLocaleString('ru-RU', { hour12: false });
-    if (days > 0) {
-        return `Удалится через ${days} д. ${hours} ч. · ${absolute}`;
-    }
-    return `Удалится через ${hours} ч. · ${absolute}`;
+    const relative = days > 0 ? `${days} д. ${hours} ч.` : `${hours} ч.`;
+    return `Исчезнет через ${relative} (до ${absolute})`;
 }
 
 function renderTrash(){
@@ -2542,7 +2614,7 @@ function renderTrash(){
 
         const isSelected = selectedRows.trash?.has(i.toString());
         if (isSelected) tr.classList.add('row-selected');
-        const delDate = item.deletedAt ? new Date(item.deletedAt).toLocaleDateString() : '?';
+        const delDate = item.deletedAt ? new Date(item.deletedAt).toLocaleString('ru-RU', { hour12: false }) : '?';
         const expireText = formatTrashExpire(item);
         tr.innerHTML = `
             <td class="select-col">
@@ -2553,8 +2625,8 @@ function renderTrash(){
                     <label for="check-trash-${i}" style="display:none;"></label>
                 </div>
             </td>
-            <td style="color:var(--red); font-size:12px">
-                <div>${delDate}</div>
+            <td class="trash-date-cell">
+                <div class="trash-deleted-label">Удалено: ${delDate}</div>
                 <div class="trash-expire">${expireText}</div>
             </td>
             <td>${item.c}</td>
@@ -2593,6 +2665,7 @@ function updateContractorValue(type, idx, val) {
 
 function updateContractorMode(type, idx, mode) {
     DATA[type][idx].contractorMode = mode;
+    if (mode === 'none') DATA[type][idx].contractor = 0;
     sortData('active', 'dl', 'date', true);
     save(); upd();
 }
@@ -2675,7 +2748,8 @@ function restoreFromTrash(idx){
 function openAddModal(){
     ['name','client','price','contractor'].forEach(id => document.getElementById(`add-proj-${id}`).value = '');
     document.getElementById('add-proj-tax').value = '0';
-    document.getElementById('add-proj-contractor-mode').value = 'amount';
+    document.getElementById('add-proj-contractor-mode').value = 'none';
+    handleNewContractorModeChange('none');
     document.getElementById('add-proj-type').value = 'active';
     document.getElementById('add-proj-start-val').value = today;
     document.getElementById('add-proj-dl-val').value = today;
@@ -2691,8 +2765,8 @@ function saveNewProject(){
     const name = document.getElementById('add-proj-name').value;
     const client = document.getElementById('add-proj-client').value;
     const price = toNumeric(document.getElementById('add-proj-price').value);
-    const contr = toNumeric(document.getElementById('add-proj-contractor').value);
-    const contrMode = document.getElementById('add-proj-contractor-mode').value || 'amount';
+    const contrMode = document.getElementById('add-proj-contractor-mode').value || 'none';
+    const contr = contrMode === 'none' ? 0 : toNumeric(document.getElementById('add-proj-contractor').value);
     const tax = +document.getElementById('add-proj-tax').value || 0;
     const type = document.getElementById('add-proj-type').value;
     const start = document.getElementById('add-proj-start-val').value || today;
