@@ -865,21 +865,26 @@
   .template-secondary-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--button-bg); border: 1px solid var(--border); color: var(--text); border-radius: 10px; font-weight: 800; font-size: 14px; cursor: pointer; }
   .template-secondary-btn:hover { border-color: var(--accent); color: var(--accent); }
   .template-manager-modal { max-height: 80vh; overflow: hidden; }
+  .modal.modal-centered { align-items: center; }
   .template-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; max-height: 60vh; overflow: auto; padding-right: 6px; }
   .template-empty { color: var(--muted); font-weight: 700; font-size: 14px; padding: 12px; border: 1px dashed var(--border); border-radius: 12px; background: var(--pill-bg); }
-  .template-row { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--pill-bg); cursor: grab; }
+  .template-row { display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--pill-bg); cursor: grab; transition: border-color .15s, box-shadow .15s, background .15s; }
   .template-row:active { cursor: grabbing; }
   .template-row.drag-over { box-shadow: 0 0 0 2px var(--accent); }
+  .template-row.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); background: linear-gradient(120deg, rgba(88,166,255,0.08), rgba(163,113,247,0.04)); }
   .template-drag-handle { width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; color: var(--muted); }
   .template-row input { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); font-weight: 800; }
   .template-row input:focus { border-color: var(--accent); outline: none; }
   .template-row .template-delete-btn { border: none; background: transparent; color: var(--muted); padding: 4px 6px; cursor: pointer; font-weight: 800; font-size: 18px; }
   .template-row .template-delete-btn:hover { color: var(--red); }
+  .template-select-btn { width: 32px; height: 32px; border-radius: 9px; border: 1px solid var(--border); background: var(--button-bg); color: var(--muted); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: .15s; font-weight: 900; }
+  .template-select-btn:hover { color: var(--text); border-color: var(--accent); }
+  .template-select-btn.is-active { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: 0 10px 24px rgba(88,166,255,0.28); }
   .template-inline-block { border-top: 1px solid var(--border); padding-top: 12px; margin-top: 6px; }
   .template-pills { display: flex; gap: 8px; overflow-y: auto; overflow-x: hidden; padding: 6px 4px 10px 2px; scrollbar-width: none; margin-top: 0; max-width: 100%; position: relative; flex: 1; flex-wrap: wrap; align-content: flex-start; }
   .template-pills::-webkit-scrollbar { display: none; }
   .template-pills::after, .template-pills::before { display: none; }
-  .template-helper { font-size: 12px; font-weight: 700; color: var(--muted); }
+  .template-helper { font-size: 12px; font-weight: 700; color: var(--muted); margin-top: 8px; }
   .template-helper.error { color: var(--red); }
   .template-helper.success { color: var(--green); }
   .template-pill { display: inline-flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 10px; background: var(--pill-bg); border: 1px solid var(--border); font-weight: 700; color: var(--text); white-space: nowrap; cursor: grab; user-select: none; }
@@ -890,16 +895,19 @@
   .template-pill .template-delete-btn { border: none; background: transparent; color: var(--muted); padding: 0 4px; cursor: pointer; font-weight: 800; }
   .template-pill .template-delete-btn:hover { color: var(--red); }
   .template-add-btn { align-self: flex-start; margin-top: 0; }
+  .template-modal-add { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: end; margin: 12px 0 4px; }
+  .template-modal-input { margin-bottom: 0; }
+  .template-modal-input label { margin-bottom: 6px; }
   .contractor-layout { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
   .contractor-group { align-self: stretch; min-width: 0; }
   .tax-group { flex: 0 0 130px; }
   .contractor-mode-select { width: 100%; padding: 10px; border-radius: 10px; font-weight: 700; min-height: 44px; min-width: 0; }
-  .contractor-amount { display: flex; flex-direction: column; gap: 8px; background: var(--pill-bg); border: 1px solid var(--border); padding: 12px; border-radius: 12px; width: 100%; }
+  .contractor-amount { display: flex; flex-direction: column; gap: 8px; background: var(--pill-bg); border: 1px solid transparent; padding: 14px; border-radius: 12px; width: 100%; box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
   .contractor-amount-row { margin-top: 2px; }
   .input-with-suffix { display: grid; grid-template-columns: 1fr auto; align-items: stretch; gap: 0; width: 100%; }
-  .input-with-suffix input { border-radius: 10px 0 0 10px; min-width: 0; }
-  .input-with-suffix input:focus { z-index: 1; }
-  .input-suffix { display: inline-flex; align-items: center; justify-content: center; padding: 0 14px; background: var(--card-alt); border: 1px solid var(--border); border-left: none; border-radius: 0 10px 10px 0; font-weight: 800; color: var(--muted); min-width: 52px; }
+  .input-with-suffix input { border-radius: 10px 0 0 10px; min-width: 0; padding: 11px 14px; border: 1px solid var(--border); background: var(--card); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .input-with-suffix input:focus { z-index: 1; border-color: var(--accent); }
+  .input-suffix { display: inline-flex; align-items: center; justify-content: center; padding: 0 14px; background: var(--card-alt); border: 1px solid var(--border); border-left: none; border-radius: 0 10px 10px 0; font-weight: 800; color: var(--muted); min-width: 52px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
   .contractor-helper { color: var(--muted); font-size: 12px; font-weight: 700; line-height: 1.4; }
   .contractor-input { width: 100%; }
   .tax-group { align-self: flex-end; }
@@ -1507,11 +1515,19 @@ td.date-cell + td.date-cell {
     </div>
 </div>
 
-<div class="modal" id="templateManagerModal">
+<div class="modal modal-centered" id="templateManagerModal">
     <div class="modal-content modal-wide template-manager-modal">
         <span class="close-modal-x" onclick="closeTemplateManagerModal()">×</span>
         <h3 style="margin-bottom: 8px;">Мои шаблоны</h3>
         <p class="helper-note">Перетаскивайте строки, чтобы менять порядок. Нажмите на текст, чтобы отредактировать.</p>
+        <div class="template-modal-add">
+            <div class="inp-group template-modal-input">
+                <label>Создать шаблон</label>
+                <input type="text" id="template-manager-input" placeholder="Например, Дизайн лендинга">
+            </div>
+            <button class="save-stg template-add-btn" type="button" onclick="addTemplateFromModal()">+ Добавить</button>
+        </div>
+        <div class="template-helper" id="template-manager-helper">Добавьте новый шаблон или выберите его ниже.</div>
         <div class="template-list" id="template-manager-list"></div>
     </div>
 </div>
@@ -1676,6 +1692,7 @@ const TEMPLATE_HELPER_DEFAULT = 'Введите название проекта,
 let NAME_TEMPLATES = [...DEFAULT_NAME_TEMPLATES];
 let draggedTemplate = null;
 let draggedTemplateIndex = null;
+let activeTemplateSelection = '';
 
 function loadNameTemplates() {
     try {
@@ -1715,6 +1732,14 @@ function setTemplateHelper(message, state = '', autoReset = false) {
     }
 }
 
+function setTemplateManagerHelper(message, state = '') {
+    const helper = document.getElementById('template-manager-helper');
+    if (!helper) return;
+    helper.textContent = message;
+    helper.classList.remove('error', 'success');
+    if (state) helper.classList.add(state);
+}
+
 function renderTemplatePills() {
     const pills = document.getElementById('saved-template-pills');
     if (!pills) return;
@@ -1748,17 +1773,22 @@ function renderTemplateManagerList() {
         list.innerHTML = '<div class="template-empty">Шаблонов пока нет. Создайте первый через кнопку «Создать шаблон».</div>';
         return;
     }
+    const currentName = (document.getElementById('add-proj-name')?.value || '').trim();
     list.innerHTML = NAME_TEMPLATES.map((t, idx) => {
         const safe = t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
         const safeArg = t.replace(/'/g,"\\'");
+        const isSelected = currentName === t || activeTemplateSelection === t;
+        const rowClass = isSelected ? 'template-row selected' : 'template-row';
+        const selectBtnClass = isSelected ? 'template-select-btn is-active' : 'template-select-btn';
         return `
-        <div class="template-row" draggable="true"
+        <div class="${rowClass}" draggable="true"
             ondragstart="templateRowDragStart(${idx})"
             ondragover="templateRowDragOver(event, ${idx})"
             ondragleave="templateRowDragLeave(event)"
             ondrop="templateRowDrop(event, ${idx})"
             ondragend="templateRowDragEnd()">
             <span class="template-drag-handle">≡</span>
+            <button class="${selectBtnClass}" type="button" onclick="selectTemplateFromManager('${safeArg}')">✓</button>
             <input type="text" value="${safe}" onblur="commitTemplateEdit(${idx}, this)" aria-label="Название шаблона">
             <button aria-label="Удалить шаблон" class="template-delete-btn" onclick="deleteNameTemplate('${safeArg}')">×</button>
         </div>`;
@@ -1788,6 +1818,8 @@ function applyNameTemplate(val) {
         input.value = val;
         input.focus();
         toggleProjectNameClear();
+        activeTemplateSelection = val;
+        setTemplateHelper('Шаблон подставлен в поле.', 'success', true);
     }
 }
 
@@ -1807,13 +1839,37 @@ function saveNameTemplate() {
         refreshTemplateSelects();
         showToast('Шаблон сохранен');
         setTemplateHelper('Шаблон сохранен и добавлен в список.', 'success', true);
+        setTemplateManagerHelper('Шаблон добавлен в список.', 'success');
     } else {
         setTemplateHelper('Такой шаблон уже есть в списке.', '');
     }
 }
 
+function addTemplateFromModal() {
+    const input = document.getElementById('template-manager-input');
+    if (!input) return;
+    const val = input.value.trim();
+    if (!val) {
+        setTemplateManagerHelper('Введите название, чтобы сохранить шаблон.', 'error');
+        input.focus();
+        return;
+    }
+    if (!NAME_TEMPLATES.includes(val)) {
+        NAME_TEMPLATES.unshift(val);
+        persistNameTemplates();
+        refreshTemplateSelects();
+        setTemplateManagerHelper('Шаблон сохранен и добавлен в список.', 'success');
+    } else {
+        setTemplateManagerHelper('Такой шаблон уже есть в списке.', 'error');
+    }
+    applyNameTemplate(val);
+    renderTemplateManagerList();
+    input.value = '';
+}
+
 function deleteNameTemplate(val) {
     NAME_TEMPLATES = NAME_TEMPLATES.filter(t => t !== val);
+    if (activeTemplateSelection === val) activeTemplateSelection = '';
     persistNameTemplates();
     refreshTemplateSelects();
 }
@@ -1898,12 +1954,25 @@ function commitTemplateEdit(idx, inputEl) {
 }
 
 function openTemplateManagerModal() {
-    document.getElementById('templateManagerModal').style.display = 'block';
+    const modal = document.getElementById('templateManagerModal');
+    if (!modal) return;
+    modal.style.display = 'flex';
+    const inlineInput = document.getElementById('add-proj-name');
+    const modalInput = document.getElementById('template-manager-input');
+    if (modalInput && inlineInput) modalInput.value = inlineInput.value.trim();
+    setTemplateManagerHelper('Добавьте новый шаблон или выберите его ниже.');
     renderTemplateManagerList();
 }
 
 function closeTemplateManagerModal() {
     document.getElementById('templateManagerModal').style.display = 'none';
+}
+
+function selectTemplateFromManager(val) {
+    applyNameTemplate(val);
+    closeTemplateManagerModal();
+    renderTemplateManagerList();
+    setTemplateManagerHelper('Шаблон выбран.', 'success');
 }
 
 function attachTemplateScrollHandler(pills) {
