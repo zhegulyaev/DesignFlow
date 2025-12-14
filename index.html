@@ -356,6 +356,14 @@
   .goal-wrap { margin-bottom: 18px; }
   .goal-info { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
   .card-head-actions { display: flex; align-items: center; gap: 10px; }
+  .top-clients-card { margin-top: 24px; overflow: hidden; position: relative; }
+  .top-clients-card::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 12% 20%, rgba(88,166,255,0.05), transparent 32%), radial-gradient(circle at 92% 8%, rgba(163,113,247,0.08), transparent 28%); pointer-events: none; }
+  .top-clients-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .top-clients-title { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; color: var(--text); }
+  .top-clients-sub { color: var(--muted); font-weight: 600; font-size: 14px; }
+  .top-clients-legend { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; font-weight: 700; background: var(--pill-bg); border: 1px solid var(--border); padding: 8px 10px; border-radius: 10px; }
+  .top-clients-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--purple); box-shadow: 0 0 0 4px rgba(163,113,247,0.12); }
+  .top-clients-chart { height: 260px; margin-top: 12px; }
   .inline-link-btn { padding: 8px 12px; background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; transition: .2s; }
   .inline-link-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--button-bg); }
   body.light .inline-link-btn { color: #2d3a55; border-color: #cbd8f1; background: #f7faff; box-shadow: 0 4px 14px rgba(17,24,39,0.05); }
@@ -1369,8 +1377,19 @@ td.date-cell + td.date-cell {
           </div>
       </div>
     </div>
+
+    <div class="card top-clients-card">
+      <div class="top-clients-header">
+        <div>
+          <div class="top-clients-title">Топ 5 клиентов · Чистая прибыль</div>
+          <div class="top-clients-sub">Суммируем маржу по всем проектам и статусам</div>
+        </div>
+        <div class="top-clients-legend"><span class="top-clients-dot"></span> Чистая прибыль</div>
+      </div>
+      <div class="top-clients-chart"><canvas id="topClientsChart"></canvas></div>
+    </div>
   </div>
-  
+
   <footer style="text-align:center; margin-top:50px; padding-top:20px; border-top:1px solid var(--border); color:var(--muted); font-size: 14px;">
       DesignFlow Tracker by 
       <a href="https://t.me/r_zhegulyaev" target="_blank" style="color:var(--accent); text-decoration:none; font-weight:600;">Zhegulyaev</a>
@@ -3907,9 +3926,10 @@ function calcStats(){
     }
     updateReputationUI();
     updateCharts(totalFact, plan, scope);
+    updateTopClientsChart(scope);
 }
 
-let chL = null, chP = null, chB = null, chRep = null;
+let chL = null, chP = null, chB = null, chRep = null, chTopClients = null;
 function updateCharts(fact, plan, scope){
     const ctxL = document.getElementById('lineChart').getContext('2d');
     const ctxP = document.getElementById('pieChart').getContext('2d');
@@ -3952,6 +3972,70 @@ function updateCharts(fact, plan, scope){
         type: 'bar',
         data: { labels: keys.map(m => new Date(m + '-01').toLocaleString('ru', {month:'short'})), datasets: [{data: keys.map(k=>h[k]), backgroundColor: keys.map(k=>k===currentMonth?'#58a6ff':getCssVar('--chart-bar-bg')||'#21262d'), borderRadius:4}] },
         options: {responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}, y:{display:false, ticks:{beginAtZero:true}}}}
+    });
+}
+
+function updateTopClientsChart(scope) {
+    const canvas = document.getElementById('topClientsChart');
+    if (!canvas) return;
+
+    const totals = {};
+    ['active','archive','paused','waiting','potential'].forEach(type => {
+        (scope[type] || []).forEach(item => {
+            const client = (item.c || 'Без имени').trim() || 'Без имени';
+            const net = calcNet(item);
+            totals[client] = (totals[client] || 0) + net;
+        });
+    });
+
+    const entries = Object.entries(totals)
+        .filter(([,val]) => val > 0)
+        .sort((a,b) => b[1] - a[1])
+        .slice(0, 5);
+
+    const labels = entries.length ? entries.map(([name]) => name) : ['Нет данных'];
+    const data = entries.length ? entries.map(([,val]) => val) : [0];
+
+    if (chTopClients) chTopClients.destroy();
+
+    chTopClients = new Chart(canvas.getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [{
+                data,
+                backgroundColor: getCssVar('--purple') || '#a371f7',
+                borderRadius: 10,
+                barThickness: 18,
+                hoverBackgroundColor: '#c084fc'
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => formatCurrency(ctx.parsed.x)
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { color: 'rgba(255,255,255,0.06)' },
+                    ticks: {
+                        color: getCssVar('--muted') || '#8b949e',
+                        callback: value => formatCurrency(value)
+                    }
+                },
+                y: {
+                    grid: { display: false },
+                    ticks: { color: getCssVar('--text') || '#c9d1d9' }
+                }
+            }
+        }
     });
 }
 
