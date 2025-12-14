@@ -347,7 +347,6 @@
   .stats-full { margin-top: 50px; display: flex; flex-direction: column; gap: 20px; }
   .stats-two-columns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; align-items: start; }
   .side-stack { display: flex; flex-direction: column; gap: 16px; }
-  .reputation-area { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 14px; align-items: stretch; }
   .efficiency-card { padding-bottom: 14px; }
   .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
   .card-head { font-size: 18px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
@@ -357,16 +356,14 @@
   .goal-wrap { margin-bottom: 18px; }
   .goal-info { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 8px; font-weight: 600; }
   .card-head-actions { display: flex; align-items: center; gap: 10px; }
-  .top-clients-card { margin-top: 0; overflow: hidden; position: relative; background: var(--card-alt); border-color: rgba(48,54,61,0.9); box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
-  .top-clients-card::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 12% 20%, rgba(88,166,255,0.03), transparent 32%), radial-gradient(circle at 92% 8%, rgba(163,113,247,0.05), transparent 28%); pointer-events: none; }
-  .top-clients-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
-  .top-clients-title { font-size: 17px; font-weight: 800; letter-spacing: -0.2px; color: var(--text); }
-  .top-clients-sub { color: var(--muted); font-weight: 600; font-size: 13px; }
-  .top-clients-legend { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; font-weight: 700; background: rgba(26,31,38,0.7); border: 1px solid var(--border); padding: 7px 10px; border-radius: 10px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
-  .top-clients-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--purple); box-shadow: 0 0 0 3px rgba(163,113,247,0.12); }
-  .top-clients-chart { height: 230px; margin-top: 8px; }
-  body.light .top-clients-card { background: #f7faff; border-color: #d8e1f0; box-shadow: 0 6px 18px rgba(17,24,39,0.05); }
-  body.light .top-clients-legend { background: #eef3ff; border-color: #d8e1f0; color: #4b5563; }
+  .top-clients-card { margin-top: 24px; overflow: hidden; position: relative; }
+  .top-clients-card::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 12% 20%, rgba(88,166,255,0.05), transparent 32%), radial-gradient(circle at 92% 8%, rgba(163,113,247,0.08), transparent 28%); pointer-events: none; }
+  .top-clients-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .top-clients-title { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; color: var(--text); }
+  .top-clients-sub { color: var(--muted); font-weight: 600; font-size: 14px; }
+  .top-clients-legend { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; font-weight: 700; background: var(--pill-bg); border: 1px solid var(--border); padding: 8px 10px; border-radius: 10px; }
+  .top-clients-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--purple); box-shadow: 0 0 0 4px rgba(163,113,247,0.12); }
+  .top-clients-chart { height: 260px; margin-top: 12px; }
   .inline-link-btn { padding: 8px 12px; background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; transition: .2s; }
   .inline-link-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--button-bg); }
   body.light .inline-link-btn { color: #2d3a55; border-color: #cbd8f1; background: #f7faff; box-shadow: 0 4px 14px rgba(17,24,39,0.05); }
@@ -381,10 +378,6 @@
   #goal-pill { background: var(--goal-pill-bg); border-color: var(--goal-pill-border); color: var(--goal-pill-color); padding: 6px 12px; font-size: 13px; box-shadow: var(--goal-pill-shadow); display: inline-flex; gap: 6px; align-items: center; }
   #goal-pill::before { content: "⚡"; }
   .stat-val { font-size: 30px; font-weight: 800; }
-  @media (max-width: 1200px) {
-    .stats-two-columns { grid-template-columns: 1fr; }
-    .reputation-area { grid-template-columns: 1fr; }
-  }
   .stat-helper { font-size: 12px; color: var(--muted); margin-top: 4px; }
   .text-green { color: var(--green); }
   .text-gold { color: var(--gold); }
@@ -1323,79 +1316,79 @@ td.date-cell + td.date-cell {
               <div style="position:relative;height:250px;width:100%"><canvas id="lineChart"></canvas></div>
           </div>
 
-            <div class="side-stack">
-                <div class="card efficiency-card">
-                    <div class="card-head">Эффективность <span class="help-icon" data-tooltip="Визуализация распределения чистой прибыли между уже полученными средствами и оставшимся потенциалом проектов.">?</span></div>
-                    <div style="position:relative;height:170px;width:100%;display:flex;justify-content:center;margin-bottom:14px;"><canvas id="pieChart"></canvas></div>
-                    <div style="border-top:1px solid var(--border); padding-top:16px;">
-                        <div style="font-size:14px;color:var(--muted);margin-bottom:12px;font-weight:600">По месяцам</div>
-                        <div style="height:120px;width:100%"><canvas id="barChart"></canvas></div>
-                    </div>
-                </div>
-                <div class="record-banner">
-                    <div class="record-texts">
-                        <div class="record-title">🏆 Рекордный заработок за месяц <span class="help-icon" data-tooltip="Сравниваем текущий факт по чистой прибыли с твоим личным рекордом. Настрой значение, чтобы видеть прогресс к новой планке.">?</span></div>
-                        <div class="record-motiv" id="record-motiv">Обновим цифры!</div>
-                        <div class="record-progress-bg"><div class="record-progress-fill" id="record-progress"></div></div>
-                    </div>
-                    <div class="record-side">
-                        <div class="record-value mono" id="record-amount">0 ₽</div>
-                        <div class="record-remaining" id="record-remaining">До рекорда 0 ₽</div>
-                        <button class="inline-link-btn" onclick="openRecordSettings()">Редактировать рекорд</button>
-                    </div>
-                </div>
-                <div class="reputation-area">
-                    <div class="reputation-card" id="reputation-card">
-                        <div class="reputation-heading">
-                            <div class="reputation-title">Репутация дизайнера <span class="help-icon" data-tooltip="Пульс по дедлайнам: учитываем все активные проекты и просрочки, чтобы предупредить потери клиентов.">?</span></div>
-                            <div class="rep-chip good" id="reputation-chip">🔥 Всё ок</div>
-                        </div>
-                        <div class="reputation-score" id="reputation-score">100 / 100</div>
-                        <div class="reputation-grade" id="reputation-grade">Просроченных дедлайнов нет</div>
-                        <div class="reputation-detail" id="reputation-detail">Отсутствие просрочек усиливает доверие клиентов. Держи темп и фиксируй успехи в архиве.</div>
-                        <div class="reputation-fallout" id="reputation-fallout" style="display:none"></div>
-                        <div class="reputation-grid">
-                            <div class="rep-metric">
-                                <div class="rep-label">Активных проектов</div>
-                                <div class="rep-value" id="rep-active-count">0</div>
-                                <div class="rep-helper" id="rep-on-time">Без просрочек</div>
-                            </div>
-                            <div class="rep-metric">
-                                <div class="rep-label">Просрочки</div>
-                                <div class="rep-value" id="rep-overdue">0</div>
-                                <div class="rep-helper" id="rep-delay">Макс 0 дн.</div>
-                            </div>
-                        </div>
-                        <div class="reputation-mini">
-                            <div class="rep-chart-box">
-                                <div class="rep-chart-legend"><span class="legend-title">Общая репутация <span class="help-icon" data-tooltip="Диаграмма показывает, сколько задач вовремя, сколько горят и где уже просрочка.">?</span></span><span class="legend-score" id="rep-score-label">100</span></div>
-                                <div style="flex:1; position:relative; min-height: 120px;"><canvas id="reputationChart"></canvas></div>
-                                <div class="rep-chart-caption">
-                                    <div class="rep-chart-pill"><span class="rep-dot good"></span> В срок: <span id="rep-on-time-pill">0</span></div>
-                                    <div class="rep-chart-pill"><span class="rep-dot warn"></span> На грани: <span id="rep-near-pill">0</span></div>
-                                    <div class="rep-chart-pill"><span class="rep-dot bad"></span> Просрочено: <span id="rep-overdue-pill">0</span></div>
-                                </div>
-                            </div>
-                            <div class="rep-tips">
-                                <div class="rep-tips-title">Что улучшить</div>
-                                <div id="reputation-tips"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card top-clients-card">
-                        <div class="top-clients-header">
-                          <div>
-                            <div class="top-clients-title">Топ 5 клиентов · Чистая прибыль</div>
-                            <div class="top-clients-sub">Суммируем маржу по всем проектам и статусам</div>
+          <div class="side-stack">
+              <div class="card efficiency-card">
+                  <div class="card-head">Эффективность <span class="help-icon" data-tooltip="Визуализация распределения чистой прибыли между уже полученными средствами и оставшимся потенциалом проектов.">?</span></div>
+                  <div style="position:relative;height:170px;width:100%;display:flex;justify-content:center;margin-bottom:14px;"><canvas id="pieChart"></canvas></div>
+                  <div style="border-top:1px solid var(--border); padding-top:16px;">
+                      <div style="font-size:14px;color:var(--muted);margin-bottom:12px;font-weight:600">По месяцам</div>
+                      <div style="height:120px;width:100%"><canvas id="barChart"></canvas></div>
+                  </div>
+              </div>
+              <div class="record-banner">
+                  <div class="record-texts">
+                      <div class="record-title">🏆 Рекордный заработок за месяц <span class="help-icon" data-tooltip="Сравниваем текущий факт по чистой прибыли с твоим личным рекордом. Настрой значение, чтобы видеть прогресс к новой планке.">?</span></div>
+                      <div class="record-motiv" id="record-motiv">Обновим цифры!</div>
+                      <div class="record-progress-bg"><div class="record-progress-fill" id="record-progress"></div></div>
+                  </div>
+                  <div class="record-side">
+                      <div class="record-value mono" id="record-amount">0 ₽</div>
+                      <div class="record-remaining" id="record-remaining">До рекорда 0 ₽</div>
+                      <button class="inline-link-btn" onclick="openRecordSettings()">Редактировать рекорд</button>
+                  </div>
+              </div>
+              <div class="reputation-card" id="reputation-card">
+                  <div class="reputation-heading">
+                      <div class="reputation-title">Репутация дизайнера <span class="help-icon" data-tooltip="Пульс по дедлайнам: учитываем все активные проекты и просрочки, чтобы предупредить потери клиентов.">?</span></div>
+                      <div class="rep-chip good" id="reputation-chip">🔥 Всё ок</div>
+                  </div>
+                  <div class="reputation-score" id="reputation-score">100 / 100</div>
+                  <div class="reputation-grade" id="reputation-grade">Просроченных дедлайнов нет</div>
+                  <div class="reputation-detail" id="reputation-detail">Отсутствие просрочек усиливает доверие клиентов. Держи темп и фиксируй успехи в архиве.</div>
+                  <div class="reputation-fallout" id="reputation-fallout" style="display:none"></div>
+                  <div class="reputation-grid">
+                      <div class="rep-metric">
+                          <div class="rep-label">Активных проектов</div>
+                          <div class="rep-value" id="rep-active-count">0</div>
+                          <div class="rep-helper" id="rep-on-time">Без просрочек</div>
+                      </div>
+                      <div class="rep-metric">
+                          <div class="rep-label">Просрочки</div>
+                          <div class="rep-value" id="rep-overdue">0</div>
+                          <div class="rep-helper" id="rep-delay">Макс 0 дн.</div>
+                      </div>
+                  </div>
+                  <div class="reputation-mini">
+                      <div class="rep-chart-box">
+                          <div class="rep-chart-legend"><span class="legend-title">Общая репутация <span class="help-icon" data-tooltip="Диаграмма показывает, сколько задач вовремя, сколько горят и где уже просрочка.">?</span></span><span class="legend-score" id="rep-score-label">100</span></div>
+                          <div style="flex:1; position:relative; min-height: 120px;"><canvas id="reputationChart"></canvas></div>
+                          <div class="rep-chart-caption">
+                              <div class="rep-chart-pill"><span class="rep-dot good"></span> В срок: <span id="rep-on-time-pill">0</span></div>
+                              <div class="rep-chart-pill"><span class="rep-dot warn"></span> На грани: <span id="rep-near-pill">0</span></div>
+                              <div class="rep-chart-pill"><span class="rep-dot bad"></span> Просрочено: <span id="rep-overdue-pill">0</span></div>
                           </div>
-                          <div class="top-clients-legend"><span class="top-clients-dot"></span> Чистая прибыль</div>
-                        </div>
-                        <div class="top-clients-chart"><canvas id="topClientsChart"></canvas></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                      </div>
+                      <div class="rep-tips">
+                          <div class="rep-tips-title">Что улучшить</div>
+                          <div id="reputation-tips"></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
       </div>
+    </div>
+
+    <div class="card top-clients-card">
+      <div class="top-clients-header">
+        <div>
+          <div class="top-clients-title">Топ 5 клиентов · Чистая прибыль</div>
+          <div class="top-clients-sub">Суммируем маржу по всем проектам и статусам</div>
+        </div>
+        <div class="top-clients-legend"><span class="top-clients-dot"></span> Чистая прибыль</div>
+      </div>
+      <div class="top-clients-chart"><canvas id="topClientsChart"></canvas></div>
+    </div>
+  </div>
 
   <footer style="text-align:center; margin-top:50px; padding-top:20px; border-top:1px solid var(--border); color:var(--muted); font-size: 14px;">
       DesignFlow Tracker by 
