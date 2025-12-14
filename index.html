@@ -137,9 +137,9 @@
   .tab-desc-block { margin-bottom: 15px; } 
 
   /* Main Layout & Tables */
-  .table-wrap{overflow:visible;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:5px 16px 5px 28px; margin-top: 10px; position: relative;}
-  table{width:100%;border-collapse:collapse; min-width: 1400px;}
-  th{text-align:left;color:var(--muted);font-size:12px;text-transform:uppercase;padding:12px 10px;border-bottom:1px solid var(--border);user-select:none; white-space: nowrap; cursor: pointer;}
+  .table-wrap{overflow:visible;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:5px 12px 5px 18px; margin-top: 10px; position: relative;}
+  table{width:100%;border-collapse:collapse; min-width: 1380px;}
+  th{text-align:left;color:var(--muted);font-size:12px;text-transform:uppercase;padding:11px 8px;border-bottom:1px solid var(--border);user-select:none; white-space: nowrap; cursor: pointer;}
   
   /* Выравнивание заголовков для Active */
   #t-active th:nth-child(8), /* Расходы */
@@ -152,7 +152,7 @@
 
   th:first-child, td:first-child { width: 24px; cursor: default; text-align: center; }
   td.select-col { position: relative; }
-  td{ padding: 5px 10px; border-bottom:1px solid var(--table-border); vertical-align:middle; font-size:15px; position: relative; }
+  td{ padding: 5px 8px; border-bottom:1px solid var(--table-border); vertical-align:middle; font-size:15px; position: relative; }
   tr:last-child td{border-bottom:none;}
   tr:hover td{background:var(--row-hover);}
 
@@ -490,7 +490,7 @@
   /* Inputs & Selects inside modal */
   .inp-group{margin-bottom:15px;text-align:left;}
   .inp-group label{display:block;margin-bottom:5px;font-size:13px;color:var(--muted);font-weight:600;}
-  .inp-group input, .inp-group select {background-color: var(--input-bg);border:1px solid var(--border);padding:10px;width:100%;color:var(--text);border-radius:8px; outline: none; box-sizing: border-box;}
+  .inp-group input, .inp-group select {background-color: var(--input-bg);border:1px solid var(--border);padding:9px 10px;width:100%;color:var(--text);border-radius:8px; outline: none; box-sizing: border-box;}
   .row-inputs{display:flex;gap:14px;margin-bottom:15px;flex-wrap:wrap; align-items:flex-start;}
   .row-inputs > div {flex: 1 1 180px;}
   .contractor-row { align-items: flex-end; column-gap: 14px; }
@@ -499,9 +499,9 @@
   .requests-row { align-items: flex-end; }
   .requests-row .inp-group { margin-bottom: 0; }
   .input-with-clear { position: relative; flex: 1 1 260px; display: flex; align-items: center; }
-  .input-with-clear input { padding-right: 44px; width: 100%; }
-  .clear-input-btn { position: absolute; right: 8px; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--border); background: var(--button-bg); color: var(--muted); cursor: pointer; transition: .15s; }
-  .clear-input-btn:hover { color: var(--text); border-color: var(--accent); }
+  .input-with-clear input { padding-right: 40px; width: 100%; }
+  .clear-input-btn { position: absolute; right: 8px; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 7px; border: 1px solid transparent; background: var(--button-bg); color: var(--muted); cursor: pointer; transition: .12s; box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
+  .clear-input-btn:hover { color: var(--text); border-color: transparent; background: var(--input-bg); }
   .clear-input-btn.hidden { opacity: 0; pointer-events: none; }
   .input-error { border-color: var(--red) !important; box-shadow: 0 0 0 2px rgba(218,54,51,0.12); }
   .deadline-presets { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
@@ -515,7 +515,8 @@
   .deadline-presets input { min-width: 110px; }
   .date-chip { margin-top: 8px; }
 
-  .timeline-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 10px; align-items: start; }
+  .timeline-row { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 12px; margin-bottom: 10px; align-items: start; }
+  .timeline-pair { display: grid; grid-template-columns: repeat(2, minmax(200px, 1fr)); gap: 12px; }
   .timeline-row .inp-group { margin-bottom: 0; }
   .timeline-row .deadline-presets { justify-content: flex-start; }
   .timeline-row .deadline-presets select, .timeline-row .deadline-presets input { background: var(--input-bg); border: 1px solid var(--border); }
@@ -530,12 +531,19 @@
   .add-modal-card h3 { margin: 0 0 14px; font-size: 15px; color: var(--muted); letter-spacing: 0.1px; }
   .add-modal-stack { display: flex; flex-direction: column; gap: 6px; }
   .add-modal-stack > * { padding: 8px 0; }
+  .add-modal-stack > *:not(:first-child) { border-top: 1px solid var(--border); padding-top: 14px; }
   .add-modal-compact { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; align-items: start; }
+  .add-modal-compact.price-tax-row { grid-template-columns: minmax(0, 1fr) minmax(150px, 180px); }
   .add-modal-compact .inp-group { margin-bottom: 0; }
   @media(max-width: 980px) {
     .add-modal-grid { grid-template-columns: 1fr; }
     .add-modal-compact { grid-template-columns: 1fr; }
     .modal-content.modal-wide { width: 96%; }
+  }
+
+  @media(max-width: 900px) {
+    .timeline-row { grid-template-columns: 1fr; }
+    .timeline-pair { grid-template-columns: 1fr; }
   }
 
   .currency-symbol { pointer-events: none; }
@@ -814,7 +822,7 @@
   .trash-clean-btn:hover { border-color: var(--accent); color: var(--accent); }
   .trash-date-cell { display: flex; flex-direction: column; gap: 4px; }
   .trash-deleted-label { font-weight: 800; color: var(--text); font-size: 13px; }
-  #view-trash .table-wrap { padding: 5px 18px 5px 28px; }
+  #view-trash .table-wrap { padding: 5px 14px 5px 18px; }
   #t-trash { border-collapse: collapse; border-spacing: 0; min-width: 1200px; width: 100%; }
   #t-trash thead th { background: transparent; border-bottom: 1px solid var(--border); padding: 12px 10px; border-radius: 0; }
   #t-trash tbody tr { background: transparent; border: none; box-shadow: none; position: relative; }
@@ -837,9 +845,9 @@
   .template-manager-title { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; padding-top: 6px; margin-bottom: 0; }
   .template-pills { display: flex; gap: 8px; overflow-x: auto; padding: 6px 28px 2px 2px; scrollbar-width: none; margin-top: 0; max-width: 100%; position: relative; }
   .template-pills::-webkit-scrollbar { display: none; }
-  .template-pills::after, .template-pills::before { content: ''; position: absolute; top: 0; bottom: 0; width: 26px; pointer-events: none; opacity: 0; transition: opacity .2s; }
-  .template-pills::after { right: 2px; background: linear-gradient(90deg, transparent, var(--card)); box-shadow: inset -1px 0 0 var(--border); }
-  .template-pills::before { left: 0; background: linear-gradient(270deg, transparent, var(--card)); box-shadow: inset 1px 0 0 var(--border); }
+  .template-pills::after, .template-pills::before { content: ''; position: absolute; top: 2px; bottom: 2px; width: 18px; pointer-events: none; opacity: 0; transition: opacity .2s; }
+  .template-pills::after { right: 2px; background: linear-gradient(90deg, transparent, var(--card)); box-shadow: inset -1px 0 0 rgba(0,0,0,0.04); }
+  .template-pills::before { left: 0; background: linear-gradient(270deg, transparent, var(--card)); box-shadow: inset 1px 0 0 rgba(0,0,0,0.04); }
   .template-pills.can-scroll::after { opacity: 1; }
   .template-pills.scrolled::before { opacity: 1; }
   .template-pills.scroll-end::after { opacity: 0; }
@@ -942,7 +950,6 @@ td.date-cell + td.date-cell {
       <button onclick="document.getElementById('imp').click()">📂 Загрузить базу</button>
       <input type="file" id="imp" accept=".json" style="display:none" onchange="imp(this.files[0])">
       <button onclick="expCSV()">📊 Экспорт в CSV</button>
-      <button style="color: var(--red); border-color: var(--red);" onclick="wipeAllData()">🧹 Стереть всю базу</button>
     </div>
   </div>
 
@@ -991,13 +998,13 @@ td.date-cell + td.date-cell {
           <thead>
             <tr>
               <th class="select-col">№</th>
-              <th width="15%" data-type="active" data-key="c" onclick="sortData('active', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
-              <th width="20%" data-type="active" data-key="n" onclick="sortData('active', 'n', 'string')">Проект <span class="sort-icon"></span></th>
+              <th width="18%" data-type="active" data-key="c" onclick="sortData('active', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
+              <th width="19%" data-type="active" data-key="n" onclick="sortData('active', 'n', 'string')">Проект <span class="sort-icon"></span></th>
               <th width="8%" data-type="active" data-key="start" onclick="sortData('active', 'start', 'date')">Старт <span class="sort-icon"></span></th>
               <th width="8%" data-type="active" data-key="dl" onclick="sortData('active', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
               <th width="6%" data-type="active" data-key="rem" onclick="sortData('active', 'rem', 'number')">Осталось <span class="sort-icon"></span></th>
               <th width="4%" data-type="active" data-key="taxPrc" onclick="sortData('active', 'taxPrc', 'number')">Налог % <span class="sort-icon"></span></th>
-              <th width="7%" data-type="active" data-key="contractor" onclick="sortData('active', 'contractor', 'number')" style="text-align:right;">Расходы <span class="sort-icon"></span></th>
+              <th width="6%" data-type="active" data-key="contractor" onclick="sortData('active', 'contractor', 'number')" style="text-align:right;">Расходы <span class="sort-icon"></span></th>
               <th width="8%" data-type="active" data-key="p" onclick="sortData('active', 'p', 'number')" style="text-align:right;">Сумма <span class="sort-icon"></span></th>
               <th width="8%" style="text-align:right;">Чистыми</th>
               <th width="6%" style="text-align:right;">Оплачено</th>
@@ -1385,7 +1392,7 @@ td.date-cell + td.date-cell {
                 </div>
             </div>
             <div class="add-modal-card add-modal-stack">
-                <div class="add-modal-compact">
+                <div class="add-modal-compact price-tax-row">
                      <div class="inp-group" style="flex:1">
                         <label>Сумма (₽)</label>
                         <input type="text" id="add-proj-price" placeholder="50 000" oninput="formatNumberInput(this)">
@@ -1419,24 +1426,26 @@ td.date-cell + td.date-cell {
                 </div>
 
                 <div class="timeline-row">
-                    <div class="date-duo-card">
-                        <div class="inp-group">
-                            <label>⚡ Старт</label>
-                             <div class="date-input-wrap date-chip" id="add-proj-start-display" onclick="openDateInModal('add-proj-start-val')">
-                                <svg class="date-icon"><use href="#icon-calendar"/></svg>
-                                <span class="date-text-display">Сегодня</span>
-                             </div>
-                             <input type="hidden" id="add-proj-start-val" value="">
+                    <div class="timeline-pair">
+                        <div class="date-duo-card">
+                            <div class="inp-group">
+                                <label>⚡ Старт</label>
+                                 <div class="date-input-wrap date-chip" id="add-proj-start-display" onclick="openDateInModal('add-proj-start-val')">
+                                    <svg class="date-icon"><use href="#icon-calendar"/></svg>
+                                    <span class="date-text-display">Сегодня</span>
+                                 </div>
+                                 <input type="hidden" id="add-proj-start-val" value="">
+                            </div>
                         </div>
-                    </div>
-                    <div class="date-duo-card">
-                        <div class="inp-group">
-                             <label>🏁 Дедлайн</label>
-                             <div class="date-input-wrap date-chip" id="add-proj-dl-display" onclick="openDateInModal('add-proj-dl-val')">
-                                <svg class="date-icon"><use href="#icon-calendar"/></svg>
-                                <span class="date-text-display">Сегодня</span>
-                             </div>
-                            <input type="hidden" id="add-proj-dl-val" value="">
+                        <div class="date-duo-card">
+                            <div class="inp-group">
+                                 <label>🏁 Дедлайн</label>
+                                 <div class="date-input-wrap date-chip" id="add-proj-dl-display" onclick="openDateInModal('add-proj-dl-val')">
+                                    <svg class="date-icon"><use href="#icon-calendar"/></svg>
+                                    <span class="date-text-display">Сегодня</span>
+                                 </div>
+                                <input type="hidden" id="add-proj-dl-val" value="">
+                            </div>
                         </div>
                     </div>
                     <div class="date-duo-card">
@@ -2870,6 +2879,14 @@ function formatTrashExpire(item) {
     return { text: relative, tone };
 }
 
+function formatTrashDate(ts) {
+    if (!ts) return '?';
+    const d = new Date(ts);
+    const day = d.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' }).replace('.', '');
+    const time = d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', hour12: false });
+    return `${day}, ${time}`;
+}
+
 function renderTrash(){
     const tbody = document.querySelector('#t-trash tbody');
     tbody.innerHTML = '';
@@ -2880,7 +2897,7 @@ function renderTrash(){
 
         const isSelected = selectedRows.trash?.has(i.toString());
         if (isSelected) tr.classList.add('row-selected');
-        const delDate = item.deletedAt ? new Date(item.deletedAt).toLocaleString('ru-RU', { hour12: false }) : '?';
+        const delDate = formatTrashDate(item.deletedAt);
         const expireInfo = formatTrashExpire(item);
         tr.innerHTML = `
             <td class="select-col">
