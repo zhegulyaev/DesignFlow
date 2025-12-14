@@ -477,7 +477,7 @@
   .inp-group{margin-bottom:15px;text-align:left;}
   .inp-group label{display:block;margin-bottom:5px;font-size:13px;color:var(--muted);font-weight:600;}
   .inp-group input, .inp-group select {background-color: var(--input-bg);border:1px solid var(--border);padding:10px;width:100%;color:var(--text);border-radius:8px; outline: none; box-sizing: border-box;}
-  .row-inputs{display:flex;gap:12px;margin-bottom:15px;flex-wrap:wrap;}
+  .row-inputs{display:flex;gap:12px;margin-bottom:15px;flex-wrap:wrap; align-items:flex-start;}
   .row-inputs > div {flex: 1 1 180px;}
   .deadline-presets { display: flex; gap: 10px; align-items: center; flex-wrap: nowrap; }
   .deadline-presets select { min-width: 150px; white-space: nowrap; }
@@ -728,6 +728,10 @@
   
   /* Trash Table Button Fix */
   .trash-action-btns { display: flex; gap: 10px; align-items: center; }
+  #t-trash tbody td { vertical-align: top; }
+  #t-trash tbody td:nth-child(5) { text-align: right; }
+  #t-trash tbody td:nth-child(6) { text-align: right; }
+  .trash-action-btns { justify-content: flex-end; }
   .restore-trash-btn, .delete-forever-text {
       padding: 6px 12px;
       font-size: 14px;
@@ -790,8 +794,11 @@
   .template-pills::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
   .template-pills::-webkit-scrollbar-track { background: transparent; }
   .template-pill { display: inline-flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 10px; background: var(--pill-bg); border: 1px solid var(--border); font-weight: 700; color: var(--text); white-space: nowrap; }
-  .template-pill button { border: none; background: transparent; color: var(--muted); padding: 0 4px; cursor: pointer; font-weight: 800; }
-  .template-pill button:hover { color: var(--red); }
+  .template-pill .template-fill-btn { border: none; background: transparent; color: var(--text); padding: 0; cursor: pointer; font-weight: 800; }
+  .template-pill .template-fill-btn:hover { color: var(--accent); }
+  .template-pill .template-delete-btn { border: none; background: transparent; color: var(--muted); padding: 0 4px; cursor: pointer; font-weight: 800; }
+  .template-pill .template-delete-btn:hover { color: var(--red); }
+  .template-add-btn { align-self: flex-start; margin-top: 4px; }
   .contractor-layout { display: flex; flex-direction: column; gap: 10px; }
   .contractor-group { align-self: stretch; }
   .contractor-mode-select { width: 100%; padding: 10px; border-radius: 10px; font-weight: 700; }
@@ -1295,15 +1302,12 @@ td.date-cell + td.date-cell {
             <label>Название проекта</label>
             <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
                 <input type="text" id="add-proj-name" list="project-name-templates" placeholder="Сайт для кофейни" style="flex:1 1 260px;">
-                <select id="add-proj-template-select" onchange="applyNameTemplate(this.value)" style="min-width:170px;">
-                    <option value="">Шаблоны</option>
-                </select>
-                <button class="inline-link-btn" type="button" onclick="saveNameTemplate()">Создать свой шаблон</button>
                 <datalist id="project-name-templates"></datalist>
             </div>
             <div class="template-manager">
                 <div class="template-manager-title">Мои шаблоны</div>
                 <div class="template-pills" id="saved-template-pills"></div>
+                <button class="inline-link-btn template-add-btn" type="button" onclick="saveNameTemplate()">Создать свой шаблон</button>
             </div>
         </div>
         <div class="inp-group">
@@ -1537,10 +1541,10 @@ function formatNumberInput(inputEl) {
 }
 
 const DEFAULT_NAME_TEMPLATES = [
-    'Дизайн группы ВКонтакте',
     'Дизайн баннера',
-    'Дизайн карточки ВБ',
+    'Дизайн карточки товара ВБ',
     'Дизайн логотипа',
+    'Дизайн превью',
     'Дизайн лендинга'
 ];
 
@@ -1558,10 +1562,8 @@ function loadNameTemplates() {
 }
 
 function refreshTemplateSelects() {
-    const select = document.getElementById('add-proj-template-select');
     const list = document.getElementById('project-name-templates');
-    if (!select || !list) return;
-    select.innerHTML = '<option value="">Шаблоны</option>' + NAME_TEMPLATES.map(t=>`<option value="${t}">${t}</option>`).join('');
+    if (!list) return;
     list.innerHTML = NAME_TEMPLATES.map(t=>`<option value="${t}">`).join('');
     renderTemplatePills();
 }
@@ -1582,8 +1584,8 @@ function renderTemplatePills() {
         const safeArg = t.replace(/'/g,"\\'");
         return `
         <span class="template-pill">
-            <span>${safe}</span>
-            <button aria-label="Удалить шаблон" onclick="deleteNameTemplate('${safeArg}')">×</button>
+            <button class="template-fill-btn" type="button" onclick="applyNameTemplate('${safeArg}')">${safe}</button>
+            <button aria-label="Удалить шаблон" class="template-delete-btn" onclick="deleteNameTemplate('${safeArg}')">×</button>
         </span>`;
     }).join('');
 }
@@ -1591,7 +1593,10 @@ function renderTemplatePills() {
 function applyNameTemplate(val) {
     if (!val) return;
     const input = document.getElementById('add-proj-name');
-    if (input) input.value = val;
+    if (input) {
+        input.value = val;
+        input.focus();
+    }
 }
 
 function saveNameTemplate() {
