@@ -524,7 +524,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 18px;
-    align-items: start;
+    align-items: stretch;
   }
   .add-modal-card { padding: 8px 0; border: none; border-radius: 0; background: transparent; box-shadow: none; }
   .add-modal-card h3 { margin: 0 0 14px; font-size: 15px; color: var(--muted); letter-spacing: 0.1px; }
@@ -532,7 +532,9 @@
   .add-modal-stack > * { padding: 8px 0; }
   .add-modal-stack > *:not(:first-child) { border-top: 1px solid var(--border); padding-top: 14px; }
   .add-modal-compact { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; align-items: start; }
-  .add-modal-compact.price-tax-row { grid-template-columns: minmax(200px, 0.9fr) minmax(130px, 0.55fr) minmax(190px, 0.9fr); align-items: stretch; }
+  .add-modal-compact.price-tax-row { grid-template-columns: minmax(200px, 0.9fr) minmax(190px, 0.9fr) minmax(130px, 0.55fr); align-items: start; }
+  .price-tax-row .inp-group { display: flex; flex-direction: column; gap: 8px; margin: 0; }
+  .price-tax-row .tax-group select { min-height: 44px; }
   .price-group { max-width: 240px; }
   .contractor-inline label { margin-bottom: 6px; }
   .contractor-inline select { min-height: 44px; }
@@ -844,13 +846,14 @@
   .trash-expire.warn { color: var(--gold); }
   .trash-expire.danger { color: var(--red); }
 
-  .template-manager { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 8px; margin-bottom: 4px; padding-bottom: 2px; position: relative; }
-  .template-manager-title { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; padding-top: 0; margin-bottom: 0; }
+  .template-card { display: flex; flex-direction: column; height: 100%; }
+  .template-manager { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 0; margin-bottom: 4px; padding-bottom: 2px; position: relative; flex: 1; }
+  .template-manager-title { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; padding-top: 0; margin-bottom: 4px; }
   .template-wide { grid-column: 1 / -1; }
   .template-wide .template-manager { margin-top: 0; padding-top: 10px; }
   .template-create-inline { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: none; color: var(--accent); font-weight: 800; padding: 6px 0 0; cursor: pointer; font-size: 14px; }
   .template-create-inline:hover { color: #8ab4ff; }
-  .template-pills { display: flex; gap: 8px; overflow-x: auto; padding: 6px 4px 2px 2px; scrollbar-width: none; margin-top: 0; max-width: 100%; position: relative; }
+  .template-pills { display: flex; gap: 8px; overflow-y: auto; overflow-x: hidden; padding: 6px 4px 10px 2px; scrollbar-width: none; margin-top: 0; max-width: 100%; position: relative; flex: 1; flex-wrap: wrap; align-content: flex-start; }
   .template-pills::-webkit-scrollbar { display: none; }
   .template-pills::after, .template-pills::before { display: none; }
   .template-helper { font-size: 12px; font-weight: 700; color: var(--muted); }
@@ -1395,6 +1398,14 @@ td.date-cell + td.date-cell {
                         <label>Сумма (₽)</label>
                         <input type="text" id="add-proj-price" placeholder="50 000" oninput="formatNumberInput(this)">
                     </div>
+                    <div class="inp-group contractor-group contractor-inline">
+                        <label>Расходы</label>
+                        <select id="add-proj-contractor-mode" class="contractor-mode-select" onchange="handleNewContractorModeChange(this.value)">
+                            <option value="none">Нет расходов</option>
+                            <option value="percent">Процент (%)</option>
+                            <option value="amount">Фикс. сумма (₽)</option>
+                        </select>
+                    </div>
                      <div class="inp-group tax-group" style="flex: 0 0 150px;">
                         <label>Налог</label>
                         <select id="add-proj-tax" class="symbol-select">
@@ -1402,14 +1413,6 @@ td.date-cell + td.date-cell {
                             <option value="4">4%</option>
                             <option value="6">6%</option>
                             <option value="13">13%</option>
-                        </select>
-                    </div>
-                    <div class="inp-group contractor-group contractor-inline">
-                        <label>Расходы</label>
-                        <select id="add-proj-contractor-mode" class="contractor-mode-select" onchange="handleNewContractorModeChange(this.value)">
-                            <option value="none">Нет расходов</option>
-                            <option value="percent">Процент (%)</option>
-                            <option value="amount">Фикс. сумма (₽)</option>
                         </select>
                     </div>
                 </div>
@@ -1463,7 +1466,7 @@ td.date-cell + td.date-cell {
                     </div>
                 </div>
             </div>
-            <div class="add-modal-card">
+            <div class="add-modal-card template-card">
                 <div class="template-manager">
                     <div class="template-manager-title">Мои шаблоны</div>
                     <div class="template-pills" id="saved-template-pills"></div>
