@@ -515,7 +515,7 @@
   .deadline-presets input { min-width: 110px; }
   .date-chip { margin-top: 8px; }
 
-  .timeline-row { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 12px; margin-bottom: 10px; align-items: start; }
+  .timeline-row { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 10px; align-items: start; }
   .timeline-pair { display: grid; grid-template-columns: repeat(2, minmax(200px, 1fr)); gap: 12px; }
   .timeline-row .inp-group { margin-bottom: 0; }
   .timeline-row .deadline-presets { justify-content: flex-start; }
@@ -542,7 +542,6 @@
   }
 
   @media(max-width: 900px) {
-    .timeline-row { grid-template-columns: 1fr; }
     .timeline-pair { grid-template-columns: 1fr; }
   }
 
@@ -841,16 +840,13 @@
   .trash-expire.warn { color: var(--gold); }
   .trash-expire.danger { color: var(--red); }
 
-  .template-manager { display: flex; flex-direction: column; gap: 6px; width: 100%; margin-top: 12px; margin-bottom: 4px; padding-bottom: 6px; position: relative; }
-  .template-manager-title { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; padding-top: 6px; margin-bottom: 0; }
-  .template-pills { display: flex; gap: 8px; overflow-x: auto; padding: 6px 28px 2px 2px; scrollbar-width: none; margin-top: 0; max-width: 100%; position: relative; }
+  .template-manager { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 18px; margin-bottom: 4px; padding-bottom: 2px; position: relative; }
+  .template-manager-title { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; padding-top: 0; margin-bottom: 0; }
+  .template-create-inline { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: none; color: var(--accent); font-weight: 800; padding: 6px 0 0; cursor: pointer; font-size: 14px; }
+  .template-create-inline:hover { color: #8ab4ff; }
+  .template-pills { display: flex; gap: 8px; overflow-x: auto; padding: 6px 4px 2px 2px; scrollbar-width: none; margin-top: 0; max-width: 100%; position: relative; }
   .template-pills::-webkit-scrollbar { display: none; }
-  .template-pills::after, .template-pills::before { content: ''; position: absolute; top: 2px; bottom: 2px; width: 18px; pointer-events: none; opacity: 0; transition: opacity .2s; }
-  .template-pills::after { right: 2px; background: linear-gradient(90deg, transparent, var(--card)); box-shadow: inset -1px 0 0 rgba(0,0,0,0.04); }
-  .template-pills::before { left: 0; background: linear-gradient(270deg, transparent, var(--card)); box-shadow: inset 1px 0 0 rgba(0,0,0,0.04); }
-  .template-pills.can-scroll::after { opacity: 1; }
-  .template-pills.scrolled::before { opacity: 1; }
-  .template-pills.scroll-end::after { opacity: 0; }
+  .template-pills::after, .template-pills::before { display: none; }
   .template-helper { font-size: 12px; font-weight: 700; color: var(--muted); }
   .template-helper.error { color: var(--red); }
   .template-helper.success { color: var(--green); }
@@ -1371,6 +1367,10 @@ td.date-cell + td.date-cell {
                     </select>
                 </div>
                 <div class="inp-group">
+                    <label>Имя клиента</label>
+                    <input type="text" id="add-proj-client" placeholder="Иван Иванов">
+                </div>
+                <div class="inp-group">
                     <label>Название проекта</label>
                     <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
                         <div class="input-with-clear">
@@ -1379,16 +1379,12 @@ td.date-cell + td.date-cell {
                         </div>
                         <datalist id="project-name-templates"></datalist>
                     </div>
+                    <button class="template-create-inline" type="button" onclick="saveNameTemplate()">+ Создать шаблон</button>
                     <div class="template-manager">
                         <div class="template-manager-title">Мои шаблоны</div>
                         <div class="template-pills" id="saved-template-pills"></div>
-                        <button class="inline-link-btn template-add-btn" type="button" onclick="saveNameTemplate()">Создать свой шаблон</button>
                         <div class="template-helper" id="template-helper">Введите название проекта, затем сохраните как шаблон.</div>
                     </div>
-                </div>
-                <div class="inp-group">
-                    <label>Имя клиента</label>
-                    <input type="text" id="add-proj-client" placeholder="Иван Иванов">
                 </div>
             </div>
             <div class="add-modal-card add-modal-stack">
