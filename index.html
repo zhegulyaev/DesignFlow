@@ -532,10 +532,10 @@
   .add-modal-stack > * { padding: 8px 0; }
   .add-modal-stack > *:not(:first-child) { border-top: 1px solid var(--border); padding-top: 14px; }
   .add-modal-compact { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; align-items: start; }
-  .add-modal-compact.price-tax-row { grid-template-columns: minmax(180px, 0.8fr) minmax(170px, 0.8fr) minmax(170px, 0.65fr); align-items: start; }
+  .add-modal-compact.price-tax-row { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); align-items: end; }
   .price-tax-row .inp-group { display: flex; flex-direction: column; gap: 8px; margin: 0; }
   .price-tax-row .tax-group select { min-height: 44px; }
-  .price-group { max-width: 220px; }
+  .price-group { max-width: 100%; }
   .price-tax-row .inp-group input,
   .price-tax-row .inp-group select { min-height: 44px; }
   .contractor-inline label { margin-bottom: 6px; }
@@ -855,6 +855,7 @@
   .template-wide .template-manager { margin-top: 0; padding-top: 10px; }
   .template-create-inline { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: none; color: var(--accent); font-weight: 800; padding: 6px 0 0; cursor: pointer; font-size: 14px; }
   .template-create-inline:hover { color: #8ab4ff; }
+  .template-inline-block { border-top: 1px solid var(--border); padding-top: 12px; margin-top: 6px; }
   .template-pills { display: flex; gap: 8px; overflow-y: auto; overflow-x: hidden; padding: 6px 4px 10px 2px; scrollbar-width: none; margin-top: 0; max-width: 100%; position: relative; flex: 1; flex-wrap: wrap; align-content: flex-start; }
   .template-pills::-webkit-scrollbar { display: none; }
   .template-pills::after, .template-pills::before { display: none; }
@@ -1392,6 +1393,13 @@ td.date-cell + td.date-cell {
                         <datalist id="project-name-templates"></datalist>
                     </div>
                     <button class="template-create-inline" type="button" onclick="saveNameTemplate()">+ Создать шаблон</button>
+                    <div class="template-inline-block template-card">
+                        <div class="template-manager">
+                            <div class="template-manager-title">Мои шаблоны</div>
+                            <div class="template-pills" id="saved-template-pills"></div>
+                            <div class="template-helper" id="template-helper">Введите название проекта, затем сохраните как шаблон.</div>
+                        </div>
+                    </div>
                 </div>
             </div>
                 <div class="add-modal-card add-modal-stack">
@@ -1466,13 +1474,6 @@ td.date-cell + td.date-cell {
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="add-modal-card template-card">
-                <div class="template-manager">
-                    <div class="template-manager-title">Мои шаблоны</div>
-                    <div class="template-pills" id="saved-template-pills"></div>
-                    <div class="template-helper" id="template-helper">Введите название проекта, затем сохраните как шаблон.</div>
                 </div>
             </div>
         </div>
