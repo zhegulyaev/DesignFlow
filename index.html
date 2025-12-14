@@ -271,7 +271,7 @@
   .row-index { color: var(--muted); font-weight: 700; font-size: 12px; text-align: center; }
   .row-selected .row-index { color: var(--text); }
 
-  .row-controls { position:absolute; left:-8px; top:50%; transform:translate(-110%,-50%); display:flex; gap:10px; align-items:center; opacity:0; transition:opacity .2s; }
+  .row-controls { position:absolute; left:-28px; top:50%; transform:translate(-140%,-50%); display:flex; gap:10px; align-items:center; opacity:0; transition:opacity .2s; }
   tr:hover .row-controls, .row-selected .row-controls { opacity:1; }
   .row-controls .bulk-checkbox { width: 18px; height: 18px; }
 
@@ -527,10 +527,12 @@
     gap: 20px;
     align-items: start;
   }
-  .add-modal-card { padding: 18px; border: 1px solid var(--border); border-radius: 14px; background: var(--pill-bg); box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
+  .add-modal-card { padding: 8px 0; border: none; border-radius: 0; background: transparent; box-shadow: none; }
   .add-modal-card h3 { margin: 0 0 14px; font-size: 15px; color: var(--muted); letter-spacing: 0.1px; }
-  .add-modal-divider { margin: 14px 0 20px; height: 1px; background: var(--border); opacity: 0.7; }
-  .add-modal-stack { display: flex; flex-direction: column; gap: 14px; }
+  .add-modal-divider { margin: 6px 0 16px; height: 1px; background: var(--border); opacity: 0.6; }
+  .add-modal-stack { display: flex; flex-direction: column; gap: 0; }
+  .add-modal-stack > * { padding: 10px 0; }
+  .add-modal-stack > * + * { border-top: 1px solid var(--border); }
   .add-modal-compact { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; align-items: start; }
   .add-modal-compact .inp-group { margin-bottom: 0; }
   @media(max-width: 980px) {
@@ -833,14 +835,22 @@
   .trash-expire.warn { color: var(--gold); }
   .trash-expire.danger { color: var(--red); }
 
-  .template-manager { display: flex; flex-direction: column; gap: 6px; width: 100%; margin-top: 12px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .template-manager { display: flex; flex-direction: column; gap: 6px; width: 100%; margin-top: 12px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); position: relative; }
   .template-manager-title { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; padding-top: 6px; margin-bottom: 0; }
-  .template-pills { display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px 2px; scrollbar-width: none; margin-top: 0; max-width: 100%; }
+  .template-pills { display: flex; gap: 8px; overflow-x: auto; padding: 6px 28px 2px 2px; scrollbar-width: none; margin-top: 0; max-width: 100%; position: relative; }
   .template-pills::-webkit-scrollbar { display: none; }
+  .template-pills::after, .template-pills::before { content: ''; position: absolute; top: 0; bottom: 0; width: 26px; pointer-events: none; opacity: 0; transition: opacity .2s; }
+  .template-pills::after { right: 2px; background: linear-gradient(90deg, transparent, var(--card)); box-shadow: inset -1px 0 0 var(--border); }
+  .template-pills::before { left: 0; background: linear-gradient(270deg, transparent, var(--card)); box-shadow: inset 1px 0 0 var(--border); }
+  .template-pills.can-scroll::after { opacity: 1; }
+  .template-pills.scrolled::before { opacity: 1; }
+  .template-pills.scroll-end::after { opacity: 0; }
   .template-helper { font-size: 12px; font-weight: 700; color: var(--muted); }
   .template-helper.error { color: var(--red); }
   .template-helper.success { color: var(--green); }
-  .template-pill { display: inline-flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 10px; background: var(--pill-bg); border: 1px solid var(--border); font-weight: 700; color: var(--text); white-space: nowrap; }
+  .template-pill { display: inline-flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 10px; background: var(--pill-bg); border: 1px solid var(--border); font-weight: 700; color: var(--text); white-space: nowrap; cursor: grab; user-select: none; }
+  .template-pill:active { cursor: grabbing; }
+  .template-pill.drag-over { box-shadow: 0 0 0 2px var(--accent); }
   .template-pill .template-fill-btn { border: none; background: transparent; color: var(--text); padding: 0; cursor: pointer; font-weight: 800; }
   .template-pill .template-fill-btn:hover { color: var(--accent); }
   .template-pill .template-delete-btn { border: none; background: transparent; color: var(--muted); padding: 0 4px; cursor: pointer; font-weight: 800; }
@@ -1619,6 +1629,7 @@ const DEFAULT_NAME_TEMPLATES = [
 const TEMPLATE_HELPER_DEFAULT = 'Введите название проекта, затем сохраните как шаблон.';
 
 let NAME_TEMPLATES = [...DEFAULT_NAME_TEMPLATES];
+let draggedTemplate = null;
 
 function loadNameTemplates() {
     try {
@@ -1662,17 +1673,25 @@ function renderTemplatePills() {
     if (!pills) return;
     if (!NAME_TEMPLATES.length) {
         pills.innerHTML = '<span style="color: var(--muted);">Шаблонов пока нет</span>';
+        pills.classList.remove('can-scroll', 'scrolled', 'scroll-end');
         return;
     }
     pills.innerHTML = NAME_TEMPLATES.map(t => {
         const safe = t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
         const safeArg = t.replace(/'/g,"\\'");
         return `
-        <span class="template-pill">
+        <span class="template-pill" draggable="true"
+            ondragstart="onTemplateDragStart('${safeArg}')"
+            ondragover="onTemplateDragOver(event, '${safeArg}')"
+            ondragleave="onTemplateDragLeave(event)"
+            ondrop="onTemplateDrop(event, '${safeArg}')"
+            ondragend="onTemplateDragEnd()">
             <button class="template-fill-btn" type="button" onclick="applyNameTemplate('${safeArg}')">${safe}</button>
             <button aria-label="Удалить шаблон" class="template-delete-btn" onclick="deleteNameTemplate('${safeArg}')">×</button>
         </span>`;
     }).join('');
+    attachTemplateScrollHandler(pills);
+    updateTemplateScrollState(pills);
 }
 
 function toggleProjectNameClear() {
@@ -1726,6 +1745,54 @@ function deleteNameTemplate(val) {
     NAME_TEMPLATES = NAME_TEMPLATES.filter(t => t !== val);
     persistNameTemplates();
     refreshTemplateSelects();
+}
+
+function onTemplateDragStart(val) {
+    draggedTemplate = val;
+}
+
+function onTemplateDragOver(event, targetVal) {
+    event.preventDefault();
+    if (!draggedTemplate || draggedTemplate === targetVal) return;
+    event.currentTarget.classList.add('drag-over');
+}
+
+function onTemplateDragLeave(event) {
+    event.currentTarget.classList.remove('drag-over');
+}
+
+function onTemplateDrop(event, targetVal) {
+    event.preventDefault();
+    const fromIdx = NAME_TEMPLATES.indexOf(draggedTemplate);
+    const toIdx = NAME_TEMPLATES.indexOf(targetVal);
+    if (fromIdx === -1 || toIdx === -1 || fromIdx === toIdx) return;
+    NAME_TEMPLATES.splice(fromIdx, 1);
+    NAME_TEMPLATES.splice(toIdx, 0, draggedTemplate);
+    persistNameTemplates();
+    refreshTemplateSelects();
+}
+
+function onTemplateDragEnd() {
+    draggedTemplate = null;
+    document.querySelectorAll('.template-pill.drag-over').forEach(el => el.classList.remove('drag-over'));
+}
+
+function attachTemplateScrollHandler(pills) {
+    if (!pills || pills.dataset.scrollBound) return;
+    const handler = () => updateTemplateScrollState(pills);
+    pills.addEventListener('scroll', handler, { passive: true });
+    window.addEventListener('resize', handler);
+    pills.dataset.scrollBound = '1';
+}
+
+function updateTemplateScrollState(pills) {
+    if (!pills) return;
+    const hasOverflow = pills.scrollWidth > pills.clientWidth + 2;
+    const atStart = pills.scrollLeft <= 4;
+    const atEnd = pills.scrollLeft + pills.clientWidth >= pills.scrollWidth - 4;
+    pills.classList.toggle('can-scroll', hasOverflow);
+    pills.classList.toggle('scrolled', hasOverflow && !atStart);
+    pills.classList.toggle('scroll-end', hasOverflow && atEnd);
 }
 
 function handleNewContractorModeChange(mode) {
