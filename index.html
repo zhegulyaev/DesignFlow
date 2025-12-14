@@ -653,6 +653,19 @@
   .scroll-toggle { position: fixed; right: 18px; bottom: 18px; width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--border); background: var(--button-bg); color: var(--text); display: grid; place-items: center; font-size: 20px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 28px rgba(0,0,0,0.25); z-index: 1200; opacity: 0.92; }
   .scroll-toggle:hover { background: var(--btn-hover); border-color: var(--accent); color: var(--accent); }
 
+  /* Layout edit mode */
+  .edit-controls, .edit-hint { display: none; }
+  .layout-edit [data-editable] { position: relative; outline: 1px dashed var(--border); border-radius: 12px; }
+  .layout-edit [data-editable].is-hidden { display: none !important; }
+  .layout-edit .edit-controls { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 5; }
+  .layout-edit .edit-hint { display: inline-flex; }
+  .layout-edit .edit-handle { width: 30px; height: 30px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; background: var(--button-bg); border: 1px solid var(--border); color: var(--muted); cursor: grab; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .layout-edit [draggable="true"] .edit-handle { cursor: grab; }
+  .layout-edit .edit-remove { width: 30px; height: 30px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; background: rgba(218,54,51,0.12); border: 1px solid var(--red); color: var(--red); font-weight: 900; cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .layout-edit .edit-remove:hover { background: rgba(218,54,51,0.2); }
+  .layout-edit .drag-over { outline-color: var(--accent); box-shadow: 0 0 0 2px rgba(88,166,255,0.35); }
+  .layout-edit .edit-hint { position: absolute; bottom: 10px; right: 10px; background: var(--pill-bg); color: var(--muted); padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; border: 1px solid var(--border); }
+
   .footer-note { color: var(--muted); font-size: 12px; font-weight: 600; }
   .helper-note { color: var(--muted); font-size: 12px; margin-top: 6px; line-height: 1.4; text-align: left; }
 
@@ -1042,13 +1055,14 @@ td.date-cell + td.date-cell {
             <span id="themeToggleIcon">🌞</span>
             <span id="themeToggleLabel">Светлая тема</span>
         </button>
+        <button id="layoutEditBtn" onclick="toggleLayoutEditMode()">✏️ Редактировать блоки</button>
         <button onclick="openSettings()">⚙ Настройки</button>
         <select id="monthSelect" class="month-select" onchange="changeMonth(this.value)"></select>
     </div>
   </div>
 
 
-  <div class="top-panel" id="backup-panel">
+  <div class="top-panel" id="backup-panel" data-editable data-block-key="backup">
     <div class="backup-info">
       <b>⚠ Важно:</b> Данные хранятся только в вашем браузере. <br>
       Обязательно скачивайте резервную копию перед очисткой кэша или переустановкой системы.
@@ -1074,7 +1088,7 @@ td.date-cell + td.date-cell {
   
   <div class="tab-desc-block" id="tab-description">Проекты в работе. Следите за дедлайнами и фиксируйте предоплату.</div>
 
-  <div class="pace-block" id="pace-indicator" style="display:none;">
+  <div class="pace-block" id="pace-indicator" style="display:none;" data-editable data-block-key="pace">
       <div class="pace-info">
           <div class="pace-icon" id="pace-icon">🔥</div>
           <div>
@@ -1314,7 +1328,7 @@ td.date-cell + td.date-cell {
                   <div class="progress-bg"><div class="progress-fill" id="p-bar"></div></div>
               </div>
               <div class="stats-grid">
-                  <div class="stat-box" data-stat="fact">
+                  <div class="stat-box" data-stat="fact" data-editable="stat">
                       <div class="stat-label-row">
                           <div class="stat-label-with-help"><span class="stat-label">ФАКТ</span><span class="help-icon" data-tooltip="Чистая прибыль за выбранный месяц с учётом всех статусов.">?</span></div>
                           <div class="stat-pill">Чистыми</div>
@@ -1322,7 +1336,7 @@ td.date-cell + td.date-cell {
                       <div class="stat-val text-green mono" id="val-fact">0 ₽</div>
                       <div class="stat-helper" id="val-fact-prc">0%</div>
                   </div>
-                  <div class="stat-box" data-stat="active-fact">
+                  <div class="stat-box" data-stat="active-fact" data-editable="stat">
                       <div class="stat-label-row">
                           <div class="stat-label-with-help"><span class="stat-label">ПОЛУЧЕНО</span><span class="help-icon" data-tooltip="Чистая сумма, уже поступившая по проектам в работе (статус ‘В работе’).">?</span></div>
                           <div class="stat-pill">Чистыми (в работе)</div>
@@ -1330,7 +1344,7 @@ td.date-cell + td.date-cell {
                       <div class="stat-val text-green mono" id="val-active-fact">0 ₽</div>
                       <div class="stat-helper">Оплачено в текущих проектах</div>
                   </div>
-                  <div class="stat-box" data-stat="paid-gross">
+                  <div class="stat-box" data-stat="paid-gross" data-editable="stat">
                       <div class="stat-label-row">
                           <div class="stat-label-with-help"><span class="stat-label">ОПЛАЧЕНО</span><span class="help-icon" data-tooltip="Все полученные платежи без вычета налогов и расходов (грязными).">?</span></div>
                           <div class="stat-pill">Все поступления</div>
@@ -1338,7 +1352,7 @@ td.date-cell + td.date-cell {
                       <div class="stat-val mono" id="val-paid-gross" style="color:var(--accent)">0 ₽</div>
                       <div class="stat-helper">Полученные платежи (грязными)</div>
                   </div>
-                  <div class="stat-box" data-stat="plan">
+                  <div class="stat-box" data-stat="plan" data-editable="stat">
                       <div class="stat-label-row">
                           <div class="stat-label-with-help"><span class="stat-label">ПЛАН</span><span class="help-icon" data-tooltip="Сколько ещё нужно получить до достижения цели месяца.">?</span></div>
                           <div class="stat-pill">Остаток до цели</div>
@@ -1346,7 +1360,7 @@ td.date-cell + td.date-cell {
                       <div class="stat-val text-gold mono" id="val-plan">0 ₽</div>
                       <div class="stat-helper">Осталось получить</div>
                   </div>
-                  <div class="stat-box" data-stat="forecast">
+                  <div class="stat-box" data-stat="forecast" data-editable="stat">
                       <div class="stat-label-row">
                           <div class="stat-label-with-help"><span class="stat-label">ПРОГНОЗ ИТОГА</span><span class="help-icon" data-tooltip="Оценка конца месяца: текущий факт + ожидаемые платежи по проектам.">?</span></div>
                           <div class="stat-pill">Факт + ожидаемое</div>
@@ -1354,7 +1368,7 @@ td.date-cell + td.date-cell {
                       <div class="stat-val mono" id="val-total" style="color:var(--accent)">0 ₽</div>
                       <div class="stat-helper">Маржа: <span id="val-margin">0 ₽</span> (<span id="val-margin-prc">0%</span>)</div>
                   </div>
-                  <div class="stat-box" data-stat="expenses">
+                  <div class="stat-box" data-stat="expenses" data-editable="stat">
                       <div class="stat-label-row">
                           <div class="stat-label-with-help"><span class="stat-label">РАСХОДЫ</span><span class="help-icon" data-tooltip="Совокупные траты по всем проектам, включая архив и паузу.">?</span></div>
                           <div class="stat-pill">По всем проектам</div>
@@ -1362,7 +1376,7 @@ td.date-cell + td.date-cell {
                       <div class="stat-val mono text-red" id="val-expenses">0 ₽</div>
                       <div class="stat-helper">Сумма затрат</div>
                   </div>
-                  <div class="stat-box" data-stat="taxes">
+                  <div class="stat-box" data-stat="taxes" data-editable="stat">
                       <div class="stat-label-row">
                           <div class="stat-label-with-help"><span class="stat-label">НАЛОГИ</span><span class="help-icon" data-tooltip="Предварительные начисления по указанным ставкам для каждого проекта.">?</span></div>
                           <div class="stat-pill">К уплате</div>
@@ -1373,7 +1387,7 @@ td.date-cell + td.date-cell {
               </div>
               <div style="position:relative;height:250px;width:100%"><canvas id="lineChart"></canvas></div>
           </div>
-              <div class="card top-clients-card" id="top-clients-card">
+              <div class="card top-clients-card" id="top-clients-card" data-editable data-block-key="topClients">
                 <div class="top-clients-header">
                   <div>
                     <div class="top-clients-title">Топ 5 клиентов · Чистая прибыль</div>
@@ -1386,7 +1400,7 @@ td.date-cell + td.date-cell {
           </div>
 
           <div class="side-stack">
-              <div class="card efficiency-card" id="efficiency-card">
+              <div class="card efficiency-card" id="efficiency-card" data-editable data-block-key="efficiency">
                   <div class="card-head">Эффективность <span class="help-icon" data-tooltip="Визуализация распределения чистой прибыли между уже полученными средствами и оставшимся потенциалом проектов.">?</span></div>
                   <div style="position:relative;height:170px;width:100%;display:flex;justify-content:center;margin-bottom:14px;"><canvas id="pieChart"></canvas></div>
                   <div style="border-top:1px solid var(--border); padding-top:16px;">
@@ -1394,7 +1408,7 @@ td.date-cell + td.date-cell {
                       <div style="height:120px;width:100%"><canvas id="barChart"></canvas></div>
                   </div>
               </div>
-              <div class="record-banner" id="record-banner">
+              <div class="record-banner" id="record-banner" data-editable data-block-key="record">
                   <div class="record-texts">
                       <div class="record-title">🏆 Рекордный заработок за месяц <span class="help-icon" data-tooltip="Сравниваем текущий факт по чистой прибыли с твоим личным рекордом. Настрой значение, чтобы видеть прогресс к новой планке.">?</span></div>
                       <div class="record-motiv" id="record-motiv">Обновим цифры!</div>
@@ -1406,7 +1420,7 @@ td.date-cell + td.date-cell {
                       <button class="inline-link-btn" onclick="openRecordSettings()">Редактировать рекорд</button>
                   </div>
               </div>
-              <div class="reputation-card" id="reputation-card">
+              <div class="reputation-card" id="reputation-card" data-editable data-block-key="reputation">
                   <div class="reputation-heading">
                       <div class="reputation-title">Репутация дизайнера <span class="help-icon" data-tooltip="Пульс по дедлайнам: учитываем все активные проекты и просрочки, чтобы предупредить потери клиентов.">?</span></div>
                       <div class="rep-chip good" id="reputation-chip">🔥 Всё ок</div>
@@ -1989,6 +2003,8 @@ const K = 'grok_design_v5';
 const THEME_KEY = 'designflow_theme';
 const NAME_TEMPLATES_KEY = 'designflow_name_templates';
 const UI_PREFS_KEY = 'designflow_ui_prefs';
+const STAT_KEYS = ['fact','active-fact','paid-gross','plan','forecast','expenses','taxes'];
+const SIDE_BLOCK_KEYS = ['efficiency','record','reputation'];
 const DEFAULT_UI_PREFS = {
     themeMode: 'dark',
     blockVisibility: {
@@ -2014,7 +2030,9 @@ const DEFAULT_UI_PREFS = {
         forecast: true,
         expenses: true,
         taxes: true
-    }
+    },
+    statOrder: [...STAT_KEYS],
+    sideOrder: [...SIDE_BLOCK_KEYS]
 };
 let UI_PREFS = JSON.parse(JSON.stringify(DEFAULT_UI_PREFS));
 let autoThemeInterval = null;
@@ -2064,8 +2082,22 @@ function getCssVar(name) {
     return getComputedStyle(document.body).getPropertyValue(name).trim();
 }
 
+function normalizeOrder(order, defaults) {
+    const fallback = Array.isArray(defaults) ? defaults : [];
+    const incoming = Array.isArray(order) ? order.filter(Boolean) : [];
+    const seen = new Set();
+    const result = [];
+    [...incoming, ...fallback].forEach(key => {
+        if (!key || seen.has(key)) return;
+        seen.add(key);
+        result.push(key);
+    });
+    return result;
+}
+
 function loadUiPrefs() {
     try {
+        const storedTheme = localStorage.getItem(THEME_KEY);
         const stored = JSON.parse(localStorage.getItem(UI_PREFS_KEY));
         if (stored) {
             UI_PREFS = {
@@ -2082,16 +2114,26 @@ function loadUiPrefs() {
                 statVisibility: {
                     ...DEFAULT_UI_PREFS.statVisibility,
                     ...(stored.statVisibility || {})
-                }
+                },
+                statOrder: normalizeOrder(stored.statOrder, STAT_KEYS),
+                sideOrder: normalizeOrder(stored.sideOrder, SIDE_BLOCK_KEYS)
             };
             if (stored?.blockVisibility?.reputation === false && stored?.blockVisibility?.record === undefined) {
                 UI_PREFS.blockVisibility.record = false;
+            }
+        } else {
+            UI_PREFS = { ...DEFAULT_UI_PREFS };
+            if (storedTheme === 'light' || storedTheme === 'dark') {
+                UI_PREFS.themeMode = storedTheme;
             }
         }
     } catch (e) {
         console.warn('UI prefs load failed', e);
     }
+    UI_PREFS.statOrder = normalizeOrder(UI_PREFS.statOrder, STAT_KEYS);
+    UI_PREFS.sideOrder = normalizeOrder(UI_PREFS.sideOrder, SIDE_BLOCK_KEYS);
     if (!UI_PREFS.themeMode) UI_PREFS.themeMode = 'dark';
+    persistUiPrefs();
 }
 
 function persistUiPrefs() {
@@ -2202,6 +2244,141 @@ function applyStatVisibility() {
     const goalPill = document.getElementById('goal-pill');
     if (goal) goal.classList.toggle('is-hidden', visibility.goal === false);
     if (goalPill) goalPill.classList.toggle('is-hidden', visibility.goal === false);
+}
+
+function applyStatOrder() {
+    const grid = document.querySelector('.stats-grid');
+    if (!grid) return;
+    UI_PREFS.statOrder = normalizeOrder(UI_PREFS.statOrder, STAT_KEYS);
+    const map = Object.fromEntries([...grid.children].map(el => [el.getAttribute('data-stat'), el]));
+    UI_PREFS.statOrder.forEach(key => {
+        if (map[key]) grid.appendChild(map[key]);
+    });
+}
+
+function applySideOrder() {
+    const stack = document.querySelector('.side-stack');
+    if (!stack) return;
+    UI_PREFS.sideOrder = normalizeOrder(UI_PREFS.sideOrder, SIDE_BLOCK_KEYS);
+    const map = Object.fromEntries([...stack.children].map(el => [el.getAttribute('data-block-key'), el]));
+    UI_PREFS.sideOrder.forEach(key => {
+        if (map[key]) stack.appendChild(map[key]);
+    });
+}
+
+let layoutEditMode = false;
+let draggingStat = null;
+
+function createEditControls(type, key) {
+    const wrap = document.createElement('div');
+    wrap.className = 'edit-controls';
+    const handle = document.createElement('span');
+    handle.className = 'edit-handle';
+    handle.title = 'Переместить блок';
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.className = 'edit-remove';
+    remove.title = 'Скрыть блок';
+    remove.innerHTML = '×';
+    remove.onclick = (e) => {
+        e.stopPropagation();
+        hideEditableBlock(type, key);
+    };
+    wrap.appendChild(handle);
+    wrap.appendChild(remove);
+    return wrap;
+}
+
+function hideEditableBlock(type, key) {
+    if (type === 'stat') {
+        UI_PREFS.statVisibility[key] = false;
+        applyStatVisibility();
+    } else {
+        UI_PREFS.blockVisibility[key] = false;
+        applyBlockVisibility();
+    }
+    persistUiPrefs();
+}
+
+function setupEditableBlocks() {
+    document.querySelectorAll('[data-stat]').forEach(el => {
+        const key = el.getAttribute('data-stat');
+        el.setAttribute('draggable', layoutEditMode ? 'true' : 'false');
+        el.removeEventListener('dragstart', onStatDragStart);
+        el.removeEventListener('dragover', onStatDragOver);
+        el.removeEventListener('dragleave', onStatDragLeave);
+        el.removeEventListener('drop', onStatDrop);
+        if (layoutEditMode) {
+            el.addEventListener('dragstart', onStatDragStart);
+            el.addEventListener('dragover', onStatDragOver);
+            el.addEventListener('dragleave', onStatDragLeave);
+            el.addEventListener('drop', onStatDrop);
+        }
+        if (!el.dataset.controlsReady) {
+            const controls = createEditControls('stat', key);
+            el.appendChild(controls);
+            const hint = document.createElement('div');
+            hint.className = 'edit-hint';
+            hint.textContent = 'Тяни, чтобы переставить';
+            el.appendChild(hint);
+            el.dataset.controlsReady = '1';
+        }
+    });
+
+    document.querySelectorAll('[data-block-key]').forEach(el => {
+        const key = el.getAttribute('data-block-key');
+        el.dataset.editable = el.dataset.editable || 'block';
+        if (!el.dataset.controlsReady) {
+            const controls = createEditControls('block', key);
+            el.appendChild(controls);
+            el.dataset.controlsReady = '1';
+        }
+    });
+
+    document.body.classList.toggle('layout-edit', layoutEditMode);
+    const btn = document.getElementById('layoutEditBtn');
+    if (btn) btn.textContent = layoutEditMode ? '✅ Готово' : '✏️ Редактировать блоки';
+}
+
+function onStatDragStart(e) {
+    if (!layoutEditMode) return e.preventDefault();
+    draggingStat = e.currentTarget.getAttribute('data-stat');
+    e.dataTransfer.effectAllowed = 'move';
+}
+
+function onStatDragOver(e) {
+    if (!layoutEditMode || !draggingStat) return;
+    e.preventDefault();
+    e.currentTarget.classList.add('drag-over');
+}
+
+function onStatDragLeave(e) {
+    e.currentTarget.classList.remove('drag-over');
+}
+
+function onStatDrop(e) {
+    if (!layoutEditMode || !draggingStat) return;
+    e.preventDefault();
+    const targetKey = e.currentTarget.getAttribute('data-stat');
+    e.currentTarget.classList.remove('drag-over');
+    if (draggingStat === targetKey) return;
+    const order = normalizeOrder(UI_PREFS.statOrder, STAT_KEYS);
+    const fromIdx = order.indexOf(draggingStat);
+    const toIdx = order.indexOf(targetKey);
+    if (fromIdx === -1 || toIdx === -1) return;
+    order.splice(fromIdx, 1);
+    order.splice(toIdx, 0, draggingStat);
+    UI_PREFS.statOrder = order;
+    applyStatOrder();
+    persistUiPrefs();
+}
+
+function toggleLayoutEditMode() {
+    layoutEditMode = !layoutEditMode;
+    setupEditableBlocks();
+    if (!layoutEditMode) {
+        document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+    }
 }
 
 function activateSettingsPane(pane) {
@@ -3026,7 +3203,10 @@ function init(){
     applyBlockVisibility();
     updateSettingsPreviewStates();
     applyStatVisibility();
+    applyStatOrder();
+    applySideOrder();
     applyTableVisibility();
+    setupEditableBlocks();
     renderMonthSelect();
     setupModalsBackgroundCheck();
     setupDatePickers();
