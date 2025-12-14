@@ -346,6 +346,7 @@
   /* Stats Dashboard fixes */
   .stats-full { margin-top: 50px; display: flex; flex-direction: column; gap: 20px; }
   .stats-two-columns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; align-items: start; }
+  .main-stack { display: flex; flex-direction: column; gap: 16px; }
   .side-stack { display: flex; flex-direction: column; gap: 16px; }
   .efficiency-card { padding-bottom: 14px; }
   .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
@@ -1236,84 +1237,98 @@ td.date-cell + td.date-cell {
   <div class="dashboard">
     <div class="stats-full">
       <div class="stats-two-columns">
-          <div class="card">
-              <div class="card-head">
+          <div class="main-stack">
+              <div class="card">
+                  <div class="card-head">
+                      <div>
+                          <div class="finance-title">Финансы: <span class="text-green" id="dash-month-name">...</span></div>
+                          <div class="finance-sub">Дашборд по чистой прибыли и платежам</div>
+                          <div class="stat-scope-note" id="stat-scope-note" title="Данные собираются по всем разделам">Срез: все проекты</div>
+                      </div>
+                      <div class="card-head-actions">
+                          <div class="stat-pill" id="goal-pill">Цель: 0 ₽</div>
+                          <button class="inline-link-btn" onclick="openGoalSettings()">Редактировать</button>
+                      </div>
+                  </div>
+                  <div class="goal-wrap">
+                      <div class="goal-info">
+                          <span class="stat-label-with-help">Прогресс цели <span class="help-icon" data-tooltip="Соотношение текущей чистой прибыли к месячной цели. Значение обновляется при изменении статусов проектов и оплат.">?</span></span>
+                          <span id="goal-text">0 / 0 ₽</span>
+                      </div>
+                      <div class="progress-bg"><div class="progress-fill" id="p-bar"></div></div>
+                  </div>
+                  <div class="stats-grid">
+                      <div class="stat-box">
+                          <div class="stat-label-row">
+                              <div class="stat-label-with-help"><span class="stat-label">ФАКТ</span><span class="help-icon" data-tooltip="Чистая прибыль за выбранный месяц с учётом всех статусов.">?</span></div>
+                              <div class="stat-pill">Чистыми</div>
+                          </div>
+                          <div class="stat-val text-green mono" id="val-fact">0 ₽</div>
+                          <div class="stat-helper" id="val-fact-prc">0%</div>
+                      </div>
+                      <div class="stat-box">
+                          <div class="stat-label-row">
+                              <div class="stat-label-with-help"><span class="stat-label">ПОЛУЧЕНО</span><span class="help-icon" data-tooltip="Чистая сумма, уже поступившая по проектам в работе (статус ‘В работе’).">?</span></div>
+                              <div class="stat-pill">Чистыми (в работе)</div>
+                          </div>
+                          <div class="stat-val text-green mono" id="val-active-fact">0 ₽</div>
+                          <div class="stat-helper">Оплачено в текущих проектах</div>
+                      </div>
+                      <div class="stat-box">
+                          <div class="stat-label-row">
+                              <div class="stat-label-with-help"><span class="stat-label">ОПЛАЧЕНО</span><span class="help-icon" data-tooltip="Все полученные платежи без вычета налогов и расходов (грязными).">?</span></div>
+                              <div class="stat-pill">Все поступления</div>
+                          </div>
+                          <div class="stat-val mono" id="val-paid-gross" style="color:var(--accent)">0 ₽</div>
+                          <div class="stat-helper">Полученные платежи (грязными)
+                          </div>
+                      </div>
+                      <div class="stat-box">
+                          <div class="stat-label-row">
+                              <div class="stat-label-with-help"><span class="stat-label">ПЛАН</span><span class="help-icon" data-tooltip="Сколько ещё нужно получить до достижения цели месяца.">?</span></div>
+                              <div class="stat-pill">Остаток до цели</div>
+                          </div>
+                          <div class="stat-val text-gold mono" id="val-plan">0 ₽</div>
+                          <div class="stat-helper">Осталось получить</div>
+                      </div>
+                      <div class="stat-box">
+                          <div class="stat-label-row">
+                              <div class="stat-label-with-help"><span class="stat-label">ПРОГНОЗ ИТОГА</span><span class="help-icon" data-tooltip="Оценка конца месяца: текущий факт + ожидаемые платежи по проектам.">?</span></div>
+                              <div class="stat-pill">Факт + ожидаемое</div>
+                          </div>
+                          <div class="stat-val mono" id="val-total" style="color:var(--accent)">0 ₽</div>
+                          <div class="stat-helper">Маржа: <span id="val-margin">0 ₽</span> (<span id="val-margin-prc">0%</span>)</div>
+                      </div>
+                      <div class="stat-box">
+                          <div class="stat-label-row">
+                              <div class="stat-label-with-help"><span class="stat-label">РАСХОДЫ</span><span class="help-icon" data-tooltip="Совокупные траты по всем проектам, включая архив и паузу.">?</span></div>
+                              <div class="stat-pill">По всем проектам</div>
+                          </div>
+                          <div class="stat-val mono text-red" id="val-expenses">0 ₽</div>
+                          <div class="stat-helper">Сумма затрат</div>
+                      </div>
+                      <div class="stat-box">
+                          <div class="stat-label-row">
+                              <div class="stat-label-with-help"><span class="stat-label">НАЛОГИ</span><span class="help-icon" data-tooltip="Предварительные начисления по указанным ставкам для каждого проекта.">?</span></div>
+                              <div class="stat-pill">К уплате</div>
+                          </div>
+                          <div class="stat-val mono" id="val-taxes">0 ₽</div>
+                          <div class="stat-helper">По указанным ставкам</div>
+                      </div>
+                  </div>
+                  <div style="position:relative;height:250px;width:100%"><canvas id="lineChart"></canvas></div>
+              </div>
+
+              <div class="card top-clients-card">
+                <div class="top-clients-header">
                   <div>
-                      <div class="finance-title">Финансы: <span class="text-green" id="dash-month-name">...</span></div>
-                      <div class="finance-sub">Дашборд по чистой прибыли и платежам</div>
-                      <div class="stat-scope-note" id="stat-scope-note" title="Данные собираются по всем разделам">Срез: все проекты</div>
+                    <div class="top-clients-title">Топ 5 клиентов · Чистая прибыль</div>
+                    <div class="top-clients-sub">Маржа по активным, архивным, на паузе и в ожидании</div>
                   </div>
-                  <div class="card-head-actions">
-                      <div class="stat-pill" id="goal-pill">Цель: 0 ₽</div>
-                      <button class="inline-link-btn" onclick="openGoalSettings()">Редактировать</button>
-                  </div>
+                  <div class="top-clients-legend"><span class="top-clients-dot"></span> Чистая прибыль</div>
+                </div>
+                <div class="top-clients-chart"><canvas id="topClientsChart"></canvas></div>
               </div>
-              <div class="goal-wrap">
-                  <div class="goal-info">
-                      <span class="stat-label-with-help">Прогресс цели <span class="help-icon" data-tooltip="Соотношение текущей чистой прибыли к месячной цели. Значение обновляется при изменении статусов проектов и оплат.">?</span></span>
-                      <span id="goal-text">0 / 0 ₽</span>
-                  </div>
-                  <div class="progress-bg"><div class="progress-fill" id="p-bar"></div></div>
-              </div>
-              <div class="stats-grid">
-                  <div class="stat-box">
-                      <div class="stat-label-row">
-                          <div class="stat-label-with-help"><span class="stat-label">ФАКТ</span><span class="help-icon" data-tooltip="Чистая прибыль за выбранный месяц с учётом всех статусов.">?</span></div>
-                          <div class="stat-pill">Чистыми</div>
-                      </div>
-                      <div class="stat-val text-green mono" id="val-fact">0 ₽</div>
-                      <div class="stat-helper" id="val-fact-prc">0%</div>
-                  </div>
-                  <div class="stat-box">
-                      <div class="stat-label-row">
-                          <div class="stat-label-with-help"><span class="stat-label">ПОЛУЧЕНО</span><span class="help-icon" data-tooltip="Чистая сумма, уже поступившая по проектам в работе (статус ‘В работе’).">?</span></div>
-                          <div class="stat-pill">Чистыми (в работе)</div>
-                      </div>
-                      <div class="stat-val text-green mono" id="val-active-fact">0 ₽</div>
-                      <div class="stat-helper">Оплачено в текущих проектах</div>
-                  </div>
-                  <div class="stat-box">
-                      <div class="stat-label-row">
-                          <div class="stat-label-with-help"><span class="stat-label">ОПЛАЧЕНО</span><span class="help-icon" data-tooltip="Все полученные платежи без вычета налогов и расходов (грязными).">?</span></div>
-                          <div class="stat-pill">Все поступления</div>
-                      </div>
-                      <div class="stat-val mono" id="val-paid-gross" style="color:var(--accent)">0 ₽</div>
-                      <div class="stat-helper">Полученные платежи (грязными)</div>
-                  </div>
-                  <div class="stat-box">
-                      <div class="stat-label-row">
-                          <div class="stat-label-with-help"><span class="stat-label">ПЛАН</span><span class="help-icon" data-tooltip="Сколько ещё нужно получить до достижения цели месяца.">?</span></div>
-                          <div class="stat-pill">Остаток до цели</div>
-                      </div>
-                      <div class="stat-val text-gold mono" id="val-plan">0 ₽</div>
-                      <div class="stat-helper">Осталось получить</div>
-                  </div>
-                  <div class="stat-box">
-                      <div class="stat-label-row">
-                          <div class="stat-label-with-help"><span class="stat-label">ПРОГНОЗ ИТОГА</span><span class="help-icon" data-tooltip="Оценка конца месяца: текущий факт + ожидаемые платежи по проектам.">?</span></div>
-                          <div class="stat-pill">Факт + ожидаемое</div>
-                      </div>
-                      <div class="stat-val mono" id="val-total" style="color:var(--accent)">0 ₽</div>
-                      <div class="stat-helper">Маржа: <span id="val-margin">0 ₽</span> (<span id="val-margin-prc">0%</span>)</div>
-                  </div>
-                  <div class="stat-box">
-                      <div class="stat-label-row">
-                          <div class="stat-label-with-help"><span class="stat-label">РАСХОДЫ</span><span class="help-icon" data-tooltip="Совокупные траты по всем проектам, включая архив и паузу.">?</span></div>
-                          <div class="stat-pill">По всем проектам</div>
-                      </div>
-                      <div class="stat-val mono text-red" id="val-expenses">0 ₽</div>
-                      <div class="stat-helper">Сумма затрат</div>
-                  </div>
-                  <div class="stat-box">
-                      <div class="stat-label-row">
-                          <div class="stat-label-with-help"><span class="stat-label">НАЛОГИ</span><span class="help-icon" data-tooltip="Предварительные начисления по указанным ставкам для каждого проекта.">?</span></div>
-                          <div class="stat-pill">К уплате</div>
-                      </div>
-                      <div class="stat-val mono" id="val-taxes">0 ₽</div>
-                      <div class="stat-helper">По указанным ставкам</div>
-                  </div>
-              </div>
-              <div style="position:relative;height:250px;width:100%"><canvas id="lineChart"></canvas></div>
           </div>
 
           <div class="side-stack">
@@ -1374,17 +1389,6 @@ td.date-cell + td.date-cell {
                       </div>
                   </div>
               </div>
-          </div>
-
-          <div class="card top-clients-card">
-            <div class="top-clients-header">
-              <div>
-                <div class="top-clients-title">Топ 5 клиентов · Чистая прибыль</div>
-                <div class="top-clients-sub">Маржа по активным, архивным, на паузе и в ожидании</div>
-              </div>
-              <div class="top-clients-legend"><span class="top-clients-dot"></span> Чистая прибыль</div>
-            </div>
-            <div class="top-clients-chart"><canvas id="topClientsChart"></canvas></div>
           </div>
       </div>
     </div>
