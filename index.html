@@ -522,7 +522,7 @@
 
   .add-modal-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 18px;
     align-items: stretch;
   }
@@ -532,10 +532,12 @@
   .add-modal-stack > * { padding: 8px 0; }
   .add-modal-stack > *:not(:first-child) { border-top: 1px solid var(--border); padding-top: 14px; }
   .add-modal-compact { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; align-items: start; }
-  .add-modal-compact.price-tax-row { grid-template-columns: minmax(200px, 0.9fr) minmax(190px, 0.9fr) minmax(130px, 0.55fr); align-items: start; }
+  .add-modal-compact.price-tax-row { grid-template-columns: minmax(180px, 0.8fr) minmax(170px, 0.8fr) minmax(170px, 0.65fr); align-items: start; }
   .price-tax-row .inp-group { display: flex; flex-direction: column; gap: 8px; margin: 0; }
   .price-tax-row .tax-group select { min-height: 44px; }
-  .price-group { max-width: 240px; }
+  .price-group { max-width: 220px; }
+  .price-tax-row .inp-group input,
+  .price-tax-row .inp-group select { min-height: 44px; }
   .contractor-inline label { margin-bottom: 6px; }
   .contractor-inline select { min-height: 44px; }
   .add-modal-compact .inp-group { margin-bottom: 0; }
@@ -566,7 +568,7 @@
   }
   .close-modal-x:hover { opacity: 1; }
   .save-stg { padding: 12px 16px; border-radius: 12px; font-weight: 800; letter-spacing: 0.1px; background: var(--btn-blue); border: 1px solid var(--btn-blue); color: #fff; transition: transform .1s, box-shadow .1s, background .1s; cursor: pointer; }
-  .save-stg:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(0,0,0,0.14); color: #fff; background: #2f81f7; }
+  .save-stg:hover { transform: translateY(-1px); box-shadow: none; color: #fff; background: #2f81f7; }
   .modal .save-stg { width: 100%; margin-top: 20px; }
   .request-add-btn { width: auto; align-self: flex-end; min-width: 140px; height: 46px; margin-top: 0; }
   .request-add-btn:hover { box-shadow: none; transform: none; }
@@ -846,7 +848,7 @@
   .trash-expire.warn { color: var(--gold); }
   .trash-expire.danger { color: var(--red); }
 
-  .template-card { display: flex; flex-direction: column; height: 100%; }
+  .template-card { display: flex; flex-direction: column; height: 100%; align-self: start; }
   .template-manager { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 0; margin-bottom: 4px; padding-bottom: 2px; position: relative; flex: 1; }
   .template-manager-title { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; padding-top: 0; margin-bottom: 4px; }
   .template-wide { grid-column: 1 / -1; }
@@ -3097,9 +3099,10 @@ function saveNewProject(){
         delete item.start;
         delete item.dl;
     }
-    
+
     DATA[type].unshift(item);
     document.getElementById('addProjectModal').style.display = 'none';
+    showToast('Проект создан');
     sortData('active', 'dl', 'date', true);
     save(); switchTab(type);
 }
