@@ -2161,7 +2161,6 @@ function renderActive(){
 
         const rem = getTimeRemaining(item.dl);
         const tr = document.createElement('tr');
-        tr.classList.add('trash-row');
         tr.dataset.index = i;
 
         const isSelected = selectedRows.active?.has(i.toString());
@@ -2305,7 +2304,6 @@ function renderSimple(type){
     DATA[type].forEach((item, i) => {
         tot += toNumeric(item.p);
         const tr = document.createElement('tr');
-        tr.classList.add('trash-row');
         tr.dataset.index = i;
 
         const isSelected = selectedRows[type]?.has(i.toString());
@@ -2361,7 +2359,6 @@ function renderPotential(){
     DATA.potential.forEach((item, i) => {
         tot += toNumeric(item.p);
         const tr = document.createElement('tr');
-        tr.classList.add('trash-row');
         tr.dataset.index = i;
 
         const isSelected = selectedRows.potential?.has(i.toString());
