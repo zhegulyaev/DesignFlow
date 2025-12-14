@@ -591,19 +591,19 @@
   
   /* Settings Modal specific padding fix */
   #settingsModal .modal-content {
-      padding: 30px; /* Увеличен отступ для заголовка */
+      padding: 32px; /* Увеличен отступ для заголовка */
   }
   #settingsModal .modal-content h2 { margin-bottom: 15px; }
 
-  .settings-modal { max-width: 1120px; }
-  .settings-header { display:flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 10px; }
+  .settings-modal { max-width: 1280px; width: 96vw; }
+  .settings-header { display:flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 14px; }
   .settings-title { font-size: 24px; font-weight: 900; letter-spacing: -0.5px; }
   .settings-sub { color: var(--muted); font-size: 14px; font-weight: 600; }
   .settings-pill { padding: 6px 10px; background: var(--pill-bg); border:1px solid var(--border); border-radius: 10px; font-weight: 800; color: var(--muted); font-size: 12px; }
   .settings-grid { display: grid; gap: 14px; }
-  .settings-layout { display: flex; flex-direction: column; gap: 12px; margin-top: 6px; }
-  .settings-tabs { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 8px; }
-  .settings-nav-btn { width: 100%; justify-content: center; padding: 12px; border-radius: 12px; font-weight: 800; color: var(--muted); background: transparent; border: 1px solid transparent; }
+  .settings-layout { display: grid; grid-template-columns: 280px 1fr; gap: 14px; margin-top: 10px; align-items: start; }
+  .settings-tabs { display: grid; grid-template-columns: 1fr; gap: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 10px; position: sticky; top: 16px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .settings-nav-btn { width: 100%; justify-content: flex-start; padding: 12px; border-radius: 12px; font-weight: 800; color: var(--muted); background: transparent; border: 1px solid transparent; gap: 10px; }
   .settings-nav-btn.active { background: var(--card-alt); border-color: var(--border); color: var(--text); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
   .settings-content { display: flex; flex-direction: column; gap: 14px; }
   .settings-pane { display: none; flex-direction: column; gap: 14px; }
@@ -613,7 +613,7 @@
   .settings-section-title { font-weight: 800; font-size: 16px; display:flex; align-items:center; justify-content: space-between; gap: 10px; }
   .settings-section-sub { color: var(--muted); font-size: 13px; margin-top: 4px; font-weight: 600; }
   .settings-options { display: grid; gap: 12px; margin-top: 12px; }
-  .settings-row { display:flex; justify-content: space-between; align-items: center; gap: 14px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--card-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .settings-row { display:flex; justify-content: space-between; align-items: center; gap: 14px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--card-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); transition: border-color .2s, background .2s; }
   .settings-row-title { font-weight: 800; }
   .settings-row-sub { color: var(--muted); font-size: 13px; font-weight: 600; margin-top: 4px; max-width: 520px; }
   .toggle-switch { position: relative; display: inline-block; width: 46px; height: 26px; }
@@ -627,13 +627,20 @@
   .radio-card-title { font-weight: 800; }
   .radio-card-sub { color: var(--muted); font-size: 13px; font-weight: 600; }
   .radio-grid { display:grid; gap:10px; margin-top: 10px; }
-  .block-preview { border: 1px dashed var(--border); border-radius: 12px; padding: 12px; background: var(--pill-bg); display: grid; gap: 10px; }
-  .preview-banner { background: linear-gradient(90deg, rgba(88,166,255,0.15), rgba(163,113,247,0.15)); border: 1px solid rgba(88,166,255,0.35); padding: 10px; border-radius: 10px; font-weight: 700; color: var(--text); display: flex; gap: 10px; align-items: center; }
-  .preview-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 10px; background: var(--card); border:1px solid var(--border); font-size: 12px; font-weight: 800; color: var(--text); }
-  .preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
-  .preview-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px; min-height: 70px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
-  .preview-bar { height: 8px; border-radius: 999px; background: var(--border); overflow: hidden; }
-  .preview-bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--btn-blue), var(--purple)); width: 70%; }
+  .block-setting { display: grid; gap: 12px; border: 1px solid var(--border); border-radius: 14px; padding: 12px; background: var(--card); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); position: relative; }
+  .block-setting.is-off .settings-row { border-color: rgba(255,255,255,0.08); }
+  .block-setting.is-off .block-preview { filter: grayscale(1); opacity: 0.5; }
+  .block-setting.is-off .preview-state { opacity: 1; transform: translateY(0); }
+  .block-preview { border: 1px solid var(--border); border-radius: 12px; padding: 14px; background: linear-gradient(135deg, rgba(88,166,255,0.08), rgba(163,113,247,0.08)); display: grid; gap: 10px; position: relative; overflow: hidden; }
+  .block-preview--neutral { background: linear-gradient(135deg, rgba(17,23,34,0.9), rgba(16,20,28,0.96)); }
+  .preview-banner { background: linear-gradient(90deg, rgba(248,81,73,0.2), rgba(88,166,255,0.15)); border: 1px solid rgba(248,81,73,0.35); padding: 10px; border-radius: 10px; font-weight: 700; color: var(--text); display: flex; gap: 10px; align-items: center; justify-content: space-between; }
+  .preview-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 10px; background: var(--card); border:1px solid var(--border); font-size: 12px; font-weight: 800; color: var(--text); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+  .preview-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px; min-height: 70px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); position: relative; }
+  .preview-card.small { min-height: 52px; }
+  .preview-bar { height: 10px; border-radius: 999px; background: var(--border); overflow: hidden; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
+  .preview-bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--btn-blue), var(--purple)); width: 70%; box-shadow: 0 6px 18px rgba(163,113,247,0.25); }
+  .preview-state { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.55); color: #fff; border-radius: 10px; padding: 6px 10px; font-size: 11px; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase; opacity: 0; transform: translateY(-4px); transition: opacity .2s, transform .2s; }
   .settings-actions { display:flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
   .settings-actions button { flex: 1; justify-content: center; min-width: 180px; }
   .settings-footer-note { color: var(--muted); font-size: 12px; font-weight: 600; margin-top: 8px; line-height: 1.5; }
@@ -1702,7 +1709,7 @@ td.date-cell + td.date-cell {
                         <div class="settings-section-title">Отображение блоков</div>
                         <div class="settings-section-sub">Скройте элементы, которые мешают фокусу. Превью ниже покажут, как выглядят блоки.</div>
                         <div class="settings-options settings-columns">
-                            <div>
+                            <div class="block-setting" data-block="backup">
                                 <div class="settings-row">
                                     <div>
                                         <div class="settings-row-title">Предупреждение и бэкап</div>
@@ -1713,11 +1720,12 @@ td.date-cell + td.date-cell {
                                         <span class="toggle-slider"></span>
                                     </label>
                                 </div>
-                                <div class="block-preview">
-                                    <div class="preview-banner">⚠ Важно: данные хранятся локально.</div>
+                                <div class="block-preview block-preview--neutral">
+                                    <div class="preview-banner">⚠ Важно: данные хранятся локально.<span style="color: var(--muted); font-weight: 700; font-size: 12px;">Сделайте бэкап</span></div>
+                                    <div class="preview-state">Скрыто</div>
                                 </div>
                             </div>
-                            <div>
+                            <div class="block-setting" data-block="pace">
                                 <div class="settings-row">
                                     <div>
                                         <div class="settings-row-title">Индикатор темпа</div>
@@ -1729,11 +1737,12 @@ td.date-cell + td.date-cell {
                                     </label>
                                 </div>
                                 <div class="block-preview">
-                                    <div class="preview-card"><div class="preview-bar"><span style="width: 62%"></span></div><div class="settings-row-sub" style="margin-top:8px">Темп на неделе</div></div>
-                                    <div class="preview-card"><div class="preview-bar"><span style="width: 38%"></span></div><div class="settings-row-sub" style="margin-top:8px">Репутация</div></div>
+                                    <div class="preview-card small"><div class="settings-row-title">Темп недели</div><div class="preview-bar" style="margin-top:8px"><span style="width: 62%"></span></div></div>
+                                    <div class="preview-card small"><div class="settings-row-title">Репутация</div><div class="preview-bar" style="margin-top:8px"><span style="width: 38%"></span></div></div>
+                                    <div class="preview-state">Скрыто</div>
                                 </div>
                             </div>
-                            <div>
+                            <div class="block-setting" data-block="dashboard">
                                 <div class="settings-row">
                                     <div>
                                         <div class="settings-row-title">Дашборд и графики</div>
@@ -1751,9 +1760,10 @@ td.date-cell + td.date-cell {
                                         <div class="preview-card"><div class="settings-row-title">Прогноз</div><div class="preview-bar"style="margin-top:8px"><span style="width:54%"></span></div></div>
                                         <div class="preview-card"><div class="settings-row-title">Расходы</div><div class="preview-bar"style="margin-top:8px"><span style="width:42%"></span></div></div>
                                     </div>
+                                    <div class="preview-state">Скрыто</div>
                                 </div>
                             </div>
-                            <div>
+                            <div class="block-setting" data-block="efficiency">
                                 <div class="settings-row">
                                     <div>
                                         <div class="settings-row-title">Эффективность</div>
@@ -1765,11 +1775,12 @@ td.date-cell + td.date-cell {
                                     </label>
                                 </div>
                                 <div class="block-preview">
-                                    <div class="preview-card"><div class="settings-row-title">Pie</div><div class="preview-bar" style="margin-top:8px"><span style="width: 58%"></span></div></div>
-                                    <div class="preview-card"><div class="settings-row-title">Бар-чарт</div><div class="preview-bar" style="margin-top:8px"><span style="width: 44%"></span></div></div>
+                                    <div class="preview-card"><div class="settings-row-title">Получено</div><div class="preview-bar" style="margin-top:8px"><span style="width: 58%"></span></div></div>
+                                    <div class="preview-card"><div class="settings-row-title">Динамика</div><div class="preview-bar" style="margin-top:8px"><span style="width: 44%"></span></div></div>
+                                    <div class="preview-state">Скрыто</div>
                                 </div>
                             </div>
-                            <div>
+                            <div class="block-setting" data-block="topClients">
                                 <div class="settings-row">
                                     <div>
                                         <div class="settings-row-title">Топ клиентов</div>
@@ -1781,10 +1792,11 @@ td.date-cell + td.date-cell {
                                     </label>
                                 </div>
                                 <div class="block-preview">
-                                    <div class="preview-card"><div class="settings-row-title">Top 5</div><div class="preview-bar" style="margin-top:8px"><span style="width: 65%"></span></div></div>
+                                    <div class="preview-card"><div class="settings-row-title">Top 5</div><div class="preview-bar" style="margin-top:8px"><span style="width: 65%"></span></div><div class="settings-row-sub" style="margin-top:8px">Лучшие клиенты месяца</div></div>
+                                    <div class="preview-state">Скрыто</div>
                                 </div>
                             </div>
-                            <div>
+                            <div class="block-setting" data-block="record">
                                 <div class="settings-row">
                                     <div>
                                         <div class="settings-row-title">Рекорд месяца</div>
@@ -1797,9 +1809,11 @@ td.date-cell + td.date-cell {
                                 </div>
                                 <div class="block-preview">
                                     <div class="preview-banner">🏆 Прогресс к рекорду</div>
+                                    <div class="preview-bar" style="margin-top:8px"><span style="width:72%"></span></div>
+                                    <div class="preview-state">Скрыто</div>
                                 </div>
                             </div>
-                            <div>
+                            <div class="block-setting" data-block="reputation">
                                 <div class="settings-row">
                                     <div>
                                         <div class="settings-row-title">Репутация</div>
@@ -1815,6 +1829,7 @@ td.date-cell + td.date-cell {
                                         <div class="preview-card"><div class="settings-row-title">Репутация</div><div class="settings-row-sub" style="margin-top:6px">100 / 100</div></div>
                                         <div class="preview-card"><div class="settings-row-title">Просрочки</div><div class="settings-row-sub" style="margin-top:6px">0 задач</div></div>
                                     </div>
+                                    <div class="preview-state">Скрыто</div>
                                 </div>
                             </div>
                         </div>
@@ -2166,6 +2181,14 @@ function applyBlockVisibility() {
     if (record) record.classList.toggle('is-hidden', hideAnalytics || visibility.record === false);
     if (reputation) reputation.classList.toggle('is-hidden', hideAnalytics || visibility.reputation === false);
     if (paceDetails) paceDetails.classList.toggle('is-hidden', visibility.reputation === false || hideAnalytics);
+}
+
+function updateSettingsPreviewStates() {
+    document.querySelectorAll('.block-setting').forEach(block => {
+        const toggle = block.querySelector('input[type="checkbox"]');
+        const enabled = toggle ? toggle.checked !== false : true;
+        block.classList.toggle('is-off', !enabled);
+    });
 }
 
 function applyStatVisibility() {
@@ -2621,6 +2644,16 @@ let newProjectLink = '';
 let datePicker = null;
 let timePicker = null;
 
+function buildBackupSnapshot() {
+    return {
+        version: 2,
+        data: DATA,
+        uiPrefs: UI_PREFS,
+        nameTemplates: NAME_TEMPLATES,
+        theme: UI_PREFS.themeMode
+    };
+}
+
 function showToast(message, actionText = '', actionHandler = null, duration = 3500) {
     const toast = document.getElementById('toast');
     const msgEl = document.getElementById('toast-message');
@@ -2951,7 +2984,8 @@ function init(){
     if (exist) {
         try {
             const parsed = JSON.parse(exist);
-            DATA = { ...DATA, ...parsed };
+            const payload = parsed?.data ? parsed : { data: parsed };
+            DATA = { ...DATA, ...(payload.data || {}) };
             if(!DATA.trash) DATA.trash = [];
             if(!DATA.requests) DATA.requests = [];
             ['active', 'archive', 'paused', 'waiting', 'potential'].forEach(type => {
@@ -2961,6 +2995,17 @@ function init(){
                     if(!i.contractorMode) i.contractorMode = i.contractor ? 'amount' : 'none';
                  });
             });
+            if (payload.uiPrefs) {
+                localStorage.setItem(UI_PREFS_KEY, JSON.stringify(payload.uiPrefs));
+            }
+            if (Array.isArray(payload.nameTemplates)) {
+                NAME_TEMPLATES = payload.nameTemplates;
+                localStorage.setItem(NAME_TEMPLATES_KEY, JSON.stringify(NAME_TEMPLATES));
+            }
+            if (!payload.uiPrefs && payload.theme) {
+                const themed = { ...UI_PREFS, themeMode: payload.theme };
+                localStorage.setItem(UI_PREFS_KEY, JSON.stringify(themed));
+            }
         } catch(e) { console.error("Data load error", e); }
     }
 
@@ -2979,6 +3024,7 @@ function init(){
     }
     cleanupTrash();
     applyBlockVisibility();
+    updateSettingsPreviewStates();
     applyStatVisibility();
     applyTableVisibility();
     renderMonthSelect();
@@ -3000,7 +3046,10 @@ function init(){
     upd();
 }
 
-function save(){ localStorage.setItem(K, JSON.stringify(DATA)); }
+function save(){
+    persistUiPrefs();
+    localStorage.setItem(K, JSON.stringify(buildBackupSnapshot()));
+}
 
 function cleanupTrash(){
     const sevenDays = 7 * 24 * 60 * 60 * 1000;
@@ -4143,7 +4192,13 @@ function openSettings(){
     ];
     toggleMap.forEach(([id, key]) => {
         const el = document.getElementById(id);
-        if (el) el.checked = visibility[key] !== false;
+        if (el) {
+            el.checked = visibility[key] !== false;
+            if (!el.dataset.previewBound) {
+                el.addEventListener('change', updateSettingsPreviewStates);
+                el.dataset.previewBound = '1';
+            }
+        }
     });
     const tableVisibility = UI_PREFS.tableVisibility || {};
     [
@@ -4168,6 +4223,7 @@ function openSettings(){
         const el = document.getElementById(id);
         if (el) el.checked = statVisibility[key] !== false;
     });
+    updateSettingsPreviewStates();
     document.getElementById('settingsModal').style.display = 'flex';
 }
 function openGoalSettings(){
@@ -4736,8 +4792,9 @@ function updateTopClientsChart(scope) {
 }
 
 function exp(){
+  const payload = buildBackupSnapshot();
   const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([localStorage.getItem(K)],{type:'application/json'}));
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(payload, null, 2)],{type:'application/json'}));
   a.download=`DesignFlow-Backup-${today}.json`;
   a.click();
 }
@@ -4753,7 +4810,25 @@ function expCSV(){
 function imp(f){
   if(!f)return;
   const r=new FileReader();
-  r.onload=e=>{ localStorage.setItem(K,e.target.result); location.reload(); };
+  r.onload=e=>{
+    try {
+      const parsed = JSON.parse(e.target.result);
+      const payload = parsed?.data ? parsed : { data: parsed };
+      const normalized = {
+        version: payload.version || 2,
+        data: { ...DATA, ...(payload.data || {}) },
+        uiPrefs: payload.uiPrefs || UI_PREFS,
+        nameTemplates: Array.isArray(payload.nameTemplates) ? payload.nameTemplates : NAME_TEMPLATES,
+        theme: (payload.uiPrefs || UI_PREFS).themeMode || payload.theme
+      };
+      localStorage.setItem(K, JSON.stringify(normalized));
+      if (payload.uiPrefs) localStorage.setItem(UI_PREFS_KEY, JSON.stringify(payload.uiPrefs));
+      if (Array.isArray(normalized.nameTemplates)) localStorage.setItem(NAME_TEMPLATES_KEY, JSON.stringify(normalized.nameTemplates));
+    } catch(err) {
+      localStorage.setItem(K, e.target.result);
+    }
+    location.reload();
+  };
   r.readAsText(f);
 }
 
