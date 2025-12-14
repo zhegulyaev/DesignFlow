@@ -81,13 +81,7 @@
   .brand-white { color: var(--muted); font-weight: 400; letter-spacing: -0.4px; }
   
   /* Исправлен отступ в шапке */
-  .header-row{display:flex;justify-content:space-between;align-items:center;margin:20px 0 16px; gap: 16px; padding: 12px 18px; border-radius: 16px; background: transparent; border: none; box-shadow: none;}
-  .brand-wrap { display: flex; align-items: center; gap: 12px; }
-  .brand-logo { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; background: #7c52e4; border: 2px solid rgba(255,255,255,0.18); font-size: 22px; color: #f5f1ff; font-weight: 900; box-shadow: 0 10px 28px rgba(124,82,228,0.35); }
-  .brand-text { display: flex; flex-direction: column; line-height: 1.05; }
-  .brand-title { display: flex; align-items: baseline; gap: 8px; font-size: 30px; font-weight: 900; letter-spacing: -0.8px; color: #7c52e4; }
-  .brand-version { font-size: 14px; font-weight: 800; color: #9aa3b8; letter-spacing: -0.3px; }
-  .brand-sub { font-size: 14px; color: var(--muted); font-weight: 700; }
+  .header-row{display:flex;justify-content:space-between;align-items:center;margin:30px 0 20px;}
   .month-select{background:var(--card);color:var(--text);border:1px solid var(--border);padding:8px 15px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;outline:none;transition:.2s;}
   .month-select:hover{border-color:var(--muted);}
 
@@ -120,14 +114,12 @@
   /* Tabs */
   .tabs-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
   .tabs{display:flex;gap:10px;overflow-x: auto; padding-bottom: 5px; flex-shrink: 1;}
-  .tab{flex-shrink: 0; padding:8px 14px;border-radius:10px;cursor:pointer;font-size:15px; background:transparent;border:1px solid transparent;transition:.2s; font-weight: 600; color:var(--muted); display: flex; align-items: center; gap: 8px; letter-spacing: -0.2px;}
-  .tab svg { width: 14px; height: 14px; opacity: 0.7; transition: opacity .2s; }
+  .tab{flex-shrink: 0; padding:8px 15px;border-radius:8px;cursor:pointer;font-size:15px; background:transparent;border:1px solid transparent;transition:.2s; font-weight: 500; color:var(--muted); display: flex; align-items: center; gap: 6px;}
+  .tab svg { width: 14px; height: 14px; opacity: 0.6; transition: opacity .2s; }
   .tab:hover{background:var(--tab-hover);border-color:var(--tab-hover);color:var(--text);}
-  .tab.active{background:var(--card); border-color:var(--border); font-weight: 700; color: var(--text) !important;}
+  .tab.active{background:var(--card); border-color:var(--border); font-weight: 600; color: var(--text) !important;}
   .tab.active svg { opacity: 1; color: var(--text); }
   .tab.tab-trash { margin-left: auto; }
-  .tab-count { min-width: 22px; height: 22px; border-radius: 8px; background: var(--button-bg); border: 1px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: var(--text); padding: 0 6px; }
-  .tab.active .tab-count { background: var(--accent); border-color: var(--accent); color: #fff; }
 
   /* New Project Button (Notion Style) */
   #newProjectButton { background: var(--btn-blue); color: #fff; border: 1px solid var(--btn-blue); font-weight: 700; padding: 8px 16px; margin-left: 20px;}
@@ -137,7 +129,7 @@
   .tab-desc-block { margin-bottom: 15px; } 
 
   /* Main Layout & Tables */
-  .table-wrap{overflow:visible;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:5px 5px 5px 55px; margin-top: 10px; position: relative;}
+  .table-wrap{overflow-x:visible;overflow-y:visible;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:5px; margin-top: 10px; position: relative;}
   table{width:100%;border-collapse:collapse; min-width: 1400px;}
   th{text-align:left;color:var(--muted);font-size:12px;text-transform:uppercase;padding:12px 10px;border-bottom:1px solid var(--border);user-select:none; white-space: nowrap; cursor: pointer;}
   
@@ -147,11 +139,8 @@
   #t-active th:nth-child(10) { /* Чистыми */
       text-align: right;
   }
-  #t-active th:nth-child(6),
-  #t-active td:nth-child(6) { text-align: center; }
 
   th:first-child, td:first-child { width: 24px; cursor: default; text-align: center; }
-  td.select-col { position: relative; }
   td{ padding: 5px 10px; border-bottom:1px solid var(--table-border); vertical-align:middle; font-size:15px; position: relative; }
   tr:last-child td{border-bottom:none;}
   tr:hover td{background:var(--row-hover);}
@@ -223,7 +212,6 @@
   .price-cell-wrap:focus-within { border-color: var(--border); background: var(--input-bg); border-radius: 6px; }
   .price-cell-wrap input::-webkit-outer-spin-button, .price-cell-wrap input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
   .currency-symbol { color: var(--muted); font-size: 14px; font-weight: 600; font-family: monospace; min-width: 15px; }
-  .currency-symbol.symbol-empty { font-size: 12px; font-weight: 800; color: var(--muted); text-transform: lowercase; }
 
   /* Net Column Fix */
   .net-display-wrap { display: flex; flex-direction: column; align-items: flex-end; padding: 5px 0; }
@@ -271,7 +259,7 @@
   .row-index { color: var(--muted); font-weight: 700; font-size: 12px; text-align: center; }
   .row-selected .row-index { color: var(--text); }
 
-  .row-controls { position:absolute; left:-45px; top:50%; transform:translateY(-50%); display:flex; gap:12px; align-items:center; opacity:0; transition:opacity .2s; }
+  .row-controls { position:absolute; left:-60px; top:50%; transform:translateY(-50%); display:flex; gap:12px; align-items:center; opacity:0; transition:opacity .2s; }
   tr:hover .row-controls, .row-selected .row-controls { opacity:1; }
   .row-controls .bulk-checkbox { width: 18px; height: 18px; }
 
@@ -481,19 +469,8 @@
   .inp-group{margin-bottom:15px;text-align:left;}
   .inp-group label{display:block;margin-bottom:5px;font-size:13px;color:var(--muted);font-weight:600;}
   .inp-group input, .inp-group select {background-color: var(--input-bg);border:1px solid var(--border);padding:10px;width:100%;color:var(--text);border-radius:8px; outline: none; box-sizing: border-box;}
-  .row-inputs{display:flex;gap:12px;margin-bottom:15px;flex-wrap:wrap; align-items:flex-start;}
+  .row-inputs{display:flex;gap:12px;margin-bottom:15px;flex-wrap:wrap;}
   .row-inputs > div {flex: 1 1 180px;}
-  .contractor-row { align-items: flex-end; column-gap: 14px; }
-  .contractor-row .contractor-group { min-width: 260px; display: flex; flex-direction: column; gap: 10px; }
-  .contractor-row .tax-group { min-width: 140px; }
-  .requests-row { align-items: flex-end; }
-  .requests-row .inp-group { margin-bottom: 0; }
-  .input-with-clear { position: relative; flex: 1 1 260px; display: flex; align-items: center; }
-  .input-with-clear input { padding-right: 44px; width: 100%; }
-  .clear-input-btn { position: absolute; right: 8px; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--border); background: var(--button-bg); color: var(--muted); cursor: pointer; transition: .15s; }
-  .clear-input-btn:hover { color: var(--text); border-color: var(--accent); }
-  .clear-input-btn.hidden { opacity: 0; pointer-events: none; }
-  .input-error { border-color: var(--red) !important; box-shadow: 0 0 0 2px rgba(218,54,51,0.12); }
   .deadline-presets { display: flex; gap: 10px; align-items: center; flex-wrap: nowrap; }
   .deadline-presets select { min-width: 150px; white-space: nowrap; }
   .deadline-presets input { min-width: 120px; }
@@ -523,11 +500,8 @@
       transition: opacity 0.2s;
   }
   .close-modal-x:hover { opacity: 1; }
-  .save-stg { padding: 12px 16px; border-radius: 12px; font-weight: 800; letter-spacing: 0.1px; background: var(--btn-blue); border: 1px solid var(--btn-blue); color: #fff; transition: transform .1s, box-shadow .1s, background .1s; cursor: pointer; }
-  .save-stg:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(0,0,0,0.14); color: #fff; background: #2f81f7; }
-  .modal .save-stg { width: 100%; margin-top: 20px; }
-  .request-add-btn { width: auto; align-self: flex-end; min-width: 140px; height: 46px; margin-top: 0; }
-  .request-add-btn:hover { box-shadow: none; transform: none; }
+  .save-stg { width: 100%; margin-top: 20px; color: #fff; font-weight: 800; letter-spacing: 0.1px; }
+  button[style*="var(--btn-blue)"] { color: #fff; }
   
   /* Settings Modal specific padding fix */
   #settingsModal .modal-content {
@@ -744,10 +718,6 @@
   
   /* Trash Table Button Fix */
   .trash-action-btns { display: flex; gap: 10px; align-items: center; }
-  #t-trash tbody td { vertical-align: top; }
-  #t-trash tbody td:nth-child(5) { text-align: right; }
-  #t-trash tbody td:nth-child(6) { text-align: right; }
-  .trash-action-btns { justify-content: flex-end; }
   .restore-trash-btn, .delete-forever-text {
       padding: 6px 12px;
       font-size: 14px;
@@ -778,57 +748,6 @@
   .delete-forever-text:hover {
        background: rgba(218, 54, 51, 0.1);
   }
-
-  .trash-expire { color: var(--muted); font-size: 12px; font-weight: 700; }
-  .trash-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0 6px; }
-  .trash-clean-btn { padding: 12px 16px; border-radius: 10px; background: var(--button-bg); border: 1px solid var(--border); color: var(--text); font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
-  .trash-clean-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .trash-date-cell { display: flex; flex-direction: column; gap: 4px; }
-  .trash-deleted-label { font-weight: 800; color: var(--text); font-size: 13px; }
-  #view-trash .table-wrap { padding: 5px 5px 5px 55px; }
-  #t-trash { border-collapse: collapse; border-spacing: 0; min-width: 1200px; width: 100%; }
-  #t-trash thead th { background: transparent; border-bottom: 1px solid var(--border); padding: 12px 10px; border-radius: 0; }
-  #t-trash tbody tr { background: transparent; border: none; box-shadow: none; position: relative; }
-  #t-trash tbody td { border-bottom: 1px solid var(--table-border); padding: 12px 10px; }
-  #t-trash tbody tr:hover td { background: var(--row-hover); }
-  .trash-label { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 4px; }
-  .trash-client { font-weight: 800; color: var(--text); }
-  .trash-project { font-weight: 800; color: var(--accent); }
-  .trash-amount { font-size: 17px; font-weight: 900; color: var(--text); }
-  .trash-row-meta { display: flex; flex-direction: column; gap: 6px; }
-  .trash-row::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(218, 54, 51, 0.08), rgba(218, 54, 51, 0)); pointer-events: none; opacity: 0.9; }
-  .trash-row .row-controls { position: absolute; z-index: 2; }
-  .trash-row-meta, .trash-action-btns, .trash-date-cell { position: relative; z-index: 1; }
-  .trash-expire.neutral { color: var(--muted); }
-  .trash-expire.warn { color: var(--gold); }
-  .trash-expire.danger { color: var(--red); }
-
-  .template-manager { display: flex; flex-direction: column; gap: 6px; width: 100%; margin-top: 12px; }
-  .template-manager-title { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; padding-top: 6px; margin-bottom: 0; }
-  .template-pills { display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px 2px; scrollbar-width: none; margin-top: 0; }
-  .template-pills::-webkit-scrollbar { display: none; }
-  .template-helper { font-size: 12px; font-weight: 700; color: var(--muted); }
-  .template-helper.error { color: var(--red); }
-  .template-helper.success { color: var(--green); }
-  .template-pill { display: inline-flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 10px; background: var(--pill-bg); border: 1px solid var(--border); font-weight: 700; color: var(--text); white-space: nowrap; }
-  .template-pill .template-fill-btn { border: none; background: transparent; color: var(--text); padding: 0; cursor: pointer; font-weight: 800; }
-  .template-pill .template-fill-btn:hover { color: var(--accent); }
-  .template-pill .template-delete-btn { border: none; background: transparent; color: var(--muted); padding: 0 4px; cursor: pointer; font-weight: 800; }
-  .template-pill .template-delete-btn:hover { color: var(--red); }
-  .template-add-btn { align-self: flex-start; margin-top: 0; }
-  .contractor-layout { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
-  .contractor-group { align-self: stretch; }
-  .contractor-mode-select { width: 100%; padding: 10px; border-radius: 10px; font-weight: 700; min-height: 44px; }
-  .contractor-amount { display: flex; flex-direction: column; gap: 8px; background: var(--pill-bg); border: 1px solid var(--border); padding: 12px; border-radius: 12px; width: 100%; }
-  .input-with-suffix { display: grid; grid-template-columns: 1fr auto; align-items: stretch; gap: 0; width: 100%; }
-  .input-with-suffix input { border-radius: 10px 0 0 10px; min-width: 0; }
-  .input-with-suffix input:focus { z-index: 1; }
-  .input-suffix { display: inline-flex; align-items: center; justify-content: center; padding: 0 14px; background: var(--card-alt); border: 1px solid var(--border); border-left: none; border-radius: 0 10px 10px 0; font-weight: 800; color: var(--muted); min-width: 52px; }
-  .contractor-helper { color: var(--muted); font-size: 12px; font-weight: 700; line-height: 1.4; }
-  .contractor-input { width: 100%; }
-  .tax-group { align-self: flex-end; }
-  .is-hidden { display: none !important; }
-  .expense-cell input:disabled { background: var(--input-bg); color: var(--muted); cursor: not-allowed; }
 
 
 .date-cell:not(:last-child) .date-input-wrap {
@@ -876,13 +795,7 @@ td.date-cell + td.date-cell {
 <div class="c">
   
   <div class="header-row">
-    <div class="brand-wrap">
-      <div class="brand-logo" aria-hidden="true">⚡</div>
-      <div class="brand-text">
-        <div class="brand-title">DesignFlow <span class="brand-version">v0.8</span></div>
-        <div class="brand-sub">Трекер проектов и бюджета</div>
-      </div>
-    </div>
+    <h1><span class="brand-grad">DesignFlow</span> <span class="brand-white">— Трекер проектов</span></h1>
     <div style="display:flex;gap:15px;align-items:center">
         <button id="themeToggle" onclick="toggleTheme()" aria-label="Переключить тему">
             <span id="themeToggleIcon">🌞</span>
@@ -909,14 +822,13 @@ td.date-cell + td.date-cell {
 
   <div class="tabs-container">
     <div class="tabs">
-        <div class="tab" id="tab-all" onclick="switchTab('all')"><svg><use href="#icon-all"/></svg> Все проекты <span class="tab-count" id="count-all">0</span></div>
-        <div class="tab active" id="tab-active" onclick="switchTab('active')"><svg><use href="#icon-active"/></svg> В работе <span class="tab-count" id="count-active">0</span></div>
-        <div class="tab" id="tab-waiting" onclick="switchTab('waiting')"><svg><use href="#icon-waiting"/></svg> Ожидает <span class="tab-count" id="count-waiting">0</span></div>
-        <div class="tab" id="tab-potential" onclick="switchTab('potential')"><svg><use href="#icon-potential"/></svg> Потенциал <span class="tab-count" id="count-potential">0</span></div>
-        <div class="tab" id="tab-requests" onclick="switchTab('requests')"><svg><use href="#icon-all"/></svg> Заявки <span class="tab-count" id="count-requests">0</span></div>
-        <div class="tab" id="tab-paused" onclick="switchTab('paused')"><svg><use href="#icon-paused"/></svg> На паузе <span class="tab-count" id="count-paused">0</span></div>
-        <div class="tab" id="tab-archive" onclick="switchTab('archive')"><svg><use href="#icon-archive"/></svg> Выполнено <span class="tab-count" id="count-archive">0</span></div>
-        <div class="tab tab-trash" id="tab-trash" onclick="switchTab('trash')"><svg><use href="#icon-trash"/></svg> Корзина <span class="tab-count" id="count-trash">0</span></div>
+        <div class="tab" id="tab-all" onclick="switchTab('all')"><svg><use href="#icon-all"/></svg> Все проекты</div>
+        <div class="tab active" id="tab-active" onclick="switchTab('active')"><svg><use href="#icon-active"/></svg> В работе</div>
+        <div class="tab" id="tab-waiting" onclick="switchTab('waiting')"><svg><use href="#icon-waiting"/></svg> Ожидает</div>
+        <div class="tab" id="tab-potential" onclick="switchTab('potential')"><svg><use href="#icon-potential"/></svg> Потенциал</div>
+        <div class="tab" id="tab-paused" onclick="switchTab('paused')"><svg><use href="#icon-paused"/></svg> На паузе</div>
+        <div class="tab" id="tab-archive" onclick="switchTab('archive')"><svg><use href="#icon-archive"/></svg> Выполнено</div>
+        <div class="tab tab-trash" id="tab-trash" onclick="switchTab('trash')"><svg><use href="#icon-trash"/></svg> Корзина</div>
     </div>
     <button id="newProjectButton" onclick="openAddModal()">＋ Новый проект</button>
   </div>
@@ -1005,52 +917,9 @@ td.date-cell + td.date-cell {
               </tr>
             </thead>
             <tbody></tbody>
-          <tfoot id="total-row-potential"><tr><td colspan="3">Итого:</td><td></td><td></td></tr></tfoot>
-        </table>
-      </div>
-    </div>
-
-    <div id="view-requests" style="display:none">
-      <div class="table-wrap">
-        <div class="row-inputs requests-row" style="padding: 15px; gap: 10px;">
-            <div class="inp-group" style="flex:1">
-                <label>Кто обращается</label>
-                <input type="text" id="req-name" placeholder="Имя или компания">
-            </div>
-            <div class="inp-group" style="flex:1">
-                <label>Источник</label>
-                <input type="text" id="req-source" placeholder="Телеграм, сайт, рекомендация">
-            </div>
-            <div class="inp-group" style="flex:1">
-                <label>Описание</label>
-                <input type="text" id="req-note" placeholder="Что нужно сделать">
-            </div>
-            <div class="inp-group" style="flex:1">
-                <label>Ссылка</label>
-                <input type="text" id="req-link" placeholder="Ссылка на ТЗ или профиль">
-            </div>
-            <div class="inp-group" style="flex:0 0 140px">
-                <label>Бюджет</label>
-                <input type="text" id="req-budget" placeholder="0" oninput="formatNumberInput(this)">
-            </div>
-            <button class="save-stg request-add-btn" onclick="addRequest()">Добавить</button>
+            <tfoot id="total-row-potential"><tr><td colspan="3">Итого:</td><td></td><td></td></tr></tfoot>
+          </table>
         </div>
-        <table id="t-requests">
-            <thead>
-                <tr>
-                    <th class="select-col">№</th>
-                    <th width="17%">Клиент</th>
-                    <th width="17%">Источник</th>
-                    <th width="30%">Описание</th>
-                    <th width="12%">Ссылка</th>
-                    <th width="12%">Бюджет</th>
-                    <th width="12%">Действия</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-            <tfoot id="total-row-requests"><tr><td colspan="5">Всего заявок</td><td></td><td></td></tr></tfoot>
-        </table>
-      </div>
     </div>
 
     <div id="view-paused" style="display:none">
@@ -1132,12 +1001,11 @@ td.date-cell + td.date-cell {
           <tfoot id="total-row-trash"><tr><td colspan="6">Итого</td></tr></tfoot>
         </table>
       </div>
-      <div class="trash-toolbar">
-          <div style="color: var(--muted); font-size: 13px;">Объекты хранятся здесь 7 дней, затем удаляются навсегда.</div>
-          <button class="trash-clean-btn" onclick="clearTrashForever()">🗑 Очистить корзину</button>
+      <div style="text-align:center; padding: 20px; color: var(--muted); font-size: 13px;">
+          Объекты хранятся здесь 7 дней, затем удаляются навсегда.
       </div>
     </div>
-  </div>
+  </div> 
   
   <div class="dashboard">
     <div class="stats-full">
@@ -1313,41 +1181,29 @@ td.date-cell + td.date-cell {
         <span class="close-modal-x" onclick="document.getElementById('addProjectModal').style.display='none'">×</span>
         <h2 style="margin-bottom:20px">Новый проект</h2>
         <div class="inp-group">
-            <label>Статус</label>
-            <select id="add-proj-type" onchange="handleStatusChange(this.value)">
-                <option value="active">В работу</option>
-                <option value="potential">Потенциал</option>
-                <option value="waiting">Ожидает</option>
-                <option value="paused">На паузе</option>
-                <option value="archive">Выполнено (Архив)</option>
-            </select>
-        </div>
-        <div class="inp-group">
             <label>Название проекта</label>
-            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-                <div class="input-with-clear">
-                    <input type="text" id="add-proj-name" list="project-name-templates" placeholder="Сайт для кофейни">
-                    <button type="button" class="clear-input-btn hidden" id="project-name-clear" onclick="clearProjectName()" aria-label="Очистить название">×</button>
-                </div>
-                <datalist id="project-name-templates"></datalist>
-            </div>
-            <div class="template-manager">
-                <div class="template-manager-title">Мои шаблоны</div>
-                <div class="template-pills" id="saved-template-pills"></div>
-                <button class="inline-link-btn template-add-btn" type="button" onclick="saveNameTemplate()">Создать свой шаблон</button>
-                <div class="template-helper" id="template-helper">Введите название проекта, затем сохраните как шаблон.</div>
-            </div>
+            <input type="text" id="add-proj-name" placeholder="Сайт для кофейни">
         </div>
         <div class="inp-group">
             <label>Имя клиента</label>
             <input type="text" id="add-proj-client" placeholder="Иван Иванов">
         </div>
-        <div class="row-inputs contractor-row">
+        <div class="row-inputs">
              <div class="inp-group" style="flex:1">
                 <label>Сумма (₽)</label>
                 <input type="text" id="add-proj-price" placeholder="50 000" oninput="formatNumberInput(this)">
             </div>
-             <div class="inp-group tax-group" style="flex: 0 0 160px;">
+             <div class="inp-group" style="flex:1">
+                <label>Расходы</label>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <input type="text" id="add-proj-contractor" placeholder="0" style="flex:1 1 280px" oninput="formatNumberInput(this)">
+                    <select id="add-proj-contractor-mode" class="symbol-select">
+                        <option value="amount">₽</option>
+                        <option value="percent">%</option>
+                    </select>
+                </div>
+            </div>
+             <div class="inp-group" style="flex: 0 0 120px;">
                 <label>Налог</label>
                 <select id="add-proj-tax" class="symbol-select">
                     <option value="0">0%</option>
@@ -1357,25 +1213,8 @@ td.date-cell + td.date-cell {
                 </select>
             </div>
         </div>
-        <div class="inp-group contractor-group" style="flex:1">
-            <label>Расходы</label>
-            <div class="contractor-layout">
-                <select id="add-proj-contractor-mode" class="contractor-mode-select" onchange="handleNewContractorModeChange(this.value)">
-                    <option value="none">Нет расходов</option>
-                    <option value="percent">Процент (%)</option>
-                    <option value="amount">Фикс. сумма (₽)</option>
-                </select>
-                <div class="contractor-amount is-hidden" id="contractor-amount-wrap">
-                    <div class="input-with-suffix">
-                        <input type="text" class="contractor-input" id="add-proj-contractor" placeholder="Например, 30 000" oninput="formatNumberInput(this)" disabled>
-                        <span class="input-suffix" id="contractor-suffix"></span>
-                    </div>
-                    <div class="contractor-helper" id="add-contractor-helper">Выберите тип расходов, чтобы указать сумму.</div>
-                </div>
-            </div>
-        </div>
         
-        <div class="date-duo status-dates">
+        <div class="date-duo">
             <div class="date-duo-card">
                 <div class="inp-group">
                     <label>⚡ Старт</label>
@@ -1398,7 +1237,7 @@ td.date-cell + td.date-cell {
             </div>
         </div>
 
-        <div class="deadline-template status-dates">
+        <div class="deadline-template">
             <div class="inp-group">
                 <label>Шаблон срока</label>
                 <div class="deadline-presets">
@@ -1416,6 +1255,17 @@ td.date-cell + td.date-cell {
             </div>
         </div>
 
+        <div class="inp-group">
+            <label>Статус</label>
+            <select id="add-proj-type">
+                <option value="active">В работу</option>
+                <option value="potential">Потенциал</option>
+                <option value="waiting">Ожидает</option>
+                <option value="paused">На паузе</option>
+                <option value="archive">Выполнено (Архив)</option>
+            </select>
+        </div>
+        
         <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveNewProject()">Создать</button>
     </div>
 </div>
@@ -1492,7 +1342,6 @@ td.date-cell + td.date-cell {
 <script>
 const K = 'grok_design_v5';
 const THEME_KEY = 'designflow_theme';
-const NAME_TEMPLATES_KEY = 'designflow_name_templates';
 const now = new Date();
 const today = now.toISOString().slice(0, 10);
 let currentMonth = today.slice(0,7);
@@ -1501,7 +1350,6 @@ const TAB_DESCRIPTIONS = {
     active: "Проекты в работе. Следите за дедлайнами и фиксируйте предоплату.",
     waiting: "Ожидают реакции клиента или материалов.",
     potential: "Лиды и переговоры. Ещё не начаты.",
-    requests: "Новые заявки и обращения с каналов.",
     paused: "Замороженные проекты.",
     archive: "Успешно завершенные заказы.",
     all: "Все проекты и архив в одном месте.",
@@ -1568,147 +1416,13 @@ function formatNumberInput(inputEl) {
     inputEl.value = formatPlainNumber(inputEl.value);
 }
 
-const DEFAULT_NAME_TEMPLATES = [
-    'Дизайн баннеров',
-    'Дизайн карточки ВБ',
-    'Дизайн логотипа',
-    'Дизайн лендинга'
-];
-
-let NAME_TEMPLATES = [...DEFAULT_NAME_TEMPLATES];
-
-function loadNameTemplates() {
-    try {
-        const raw = localStorage.getItem(NAME_TEMPLATES_KEY);
-        if (raw) {
-            const parsed = JSON.parse(raw);
-            if (Array.isArray(parsed)) NAME_TEMPLATES = parsed;
-        }
-    } catch(e) { console.warn('Template load failed', e); }
-    refreshTemplateSelects();
-}
-
-function refreshTemplateSelects() {
-    const list = document.getElementById('project-name-templates');
-    if (!list) return;
-    list.innerHTML = NAME_TEMPLATES.map(t=>`<option value="${t}">`).join('');
-    renderTemplatePills();
-}
-
-function persistNameTemplates() {
-    localStorage.setItem(NAME_TEMPLATES_KEY, JSON.stringify(NAME_TEMPLATES.slice(0, 20)));
-}
-
-function setTemplateHelper(message, state = '') {
-    const helper = document.getElementById('template-helper');
-    if (!helper) return;
-    helper.textContent = message;
-    helper.classList.remove('error', 'success');
-    if (state) helper.classList.add(state);
-}
-
-function renderTemplatePills() {
-    const pills = document.getElementById('saved-template-pills');
-    if (!pills) return;
-    if (!NAME_TEMPLATES.length) {
-        pills.innerHTML = '<span style="color: var(--muted);">Шаблонов пока нет</span>';
-        return;
-    }
-    pills.innerHTML = NAME_TEMPLATES.map(t => {
-        const safe = t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-        const safeArg = t.replace(/'/g,"\\'");
-        return `
-        <span class="template-pill">
-            <button class="template-fill-btn" type="button" onclick="applyNameTemplate('${safeArg}')">${safe}</button>
-            <button aria-label="Удалить шаблон" class="template-delete-btn" onclick="deleteNameTemplate('${safeArg}')">×</button>
-        </span>`;
-    }).join('');
-}
-
-function toggleProjectNameClear() {
-    const input = document.getElementById('add-proj-name');
-    const btn = document.getElementById('project-name-clear');
-    if (!input || !btn) return;
-    const hasValue = !!input.value.trim();
-    btn.classList.toggle('hidden', !hasValue);
-}
-
-function clearProjectName() {
-    const input = document.getElementById('add-proj-name');
-    if (!input) return;
-    input.value = '';
-    toggleProjectNameClear();
-    input.focus();
-}
-
-function applyNameTemplate(val) {
-    if (!val) return;
-    const input = document.getElementById('add-proj-name');
-    if (input) {
-        input.value = val;
-        input.focus();
-        toggleProjectNameClear();
-    }
-}
-
-function saveNameTemplate() {
-    const input = document.getElementById('add-proj-name');
-    if (!input) return;
-    const val = input.value.trim();
-    if (!val) {
-        input.classList.add('input-error');
-        setTemplateHelper('Введите название, чтобы сохранить шаблон.', 'error');
-        input.focus();
-        return;
-    }
-    if (!NAME_TEMPLATES.includes(val)) {
-        NAME_TEMPLATES.unshift(val);
-        persistNameTemplates();
-        refreshTemplateSelects();
-        showToast('Шаблон сохранен');
-        setTemplateHelper('Шаблон сохранен и добавлен в список.', 'success');
-    } else {
-        setTemplateHelper('Такой шаблон уже есть в списке.', '');
-    }
-}
-
-function deleteNameTemplate(val) {
-    NAME_TEMPLATES = NAME_TEMPLATES.filter(t => t !== val);
-    persistNameTemplates();
-    refreshTemplateSelects();
-}
-
-function handleNewContractorModeChange(mode) {
-    const input = document.getElementById('add-proj-contractor');
-    const helper = document.getElementById('add-contractor-helper');
-    const wrapper = document.getElementById('contractor-amount-wrap');
-    const suffix = document.getElementById('contractor-suffix');
-    if (!input || !helper || !wrapper || !suffix) return;
-    const showInput = mode !== 'none';
-    wrapper.classList.toggle('is-hidden', !showInput);
-    input.disabled = !showInput;
-    if (!showInput) {
-        input.value = '';
-        suffix.textContent = '';
-        helper.textContent = 'Выберите тип расходов, чтобы добавить сумму.';
-        return;
-    }
-    const isPercent = mode === 'percent';
-    helper.textContent = isPercent
-        ? 'Укажите процент расходов от общей суммы.'
-        : 'Укажите фиксированную сумму расходов.';
-    input.placeholder = isPercent ? 'Например, 20' : 'Например, 30 000';
-    suffix.textContent = isPercent ? '%' : '₽';
-    input.focus();
-}
-
 let DATA = {
     settings: { record: 0 },
     monthlyGoals: { [currentMonth]: 250000 },
-    active: [], archive: [], paused: [], waiting: [], potential: [], requests: [], trash: []
+    active: [], archive: [], paused: [], waiting: [], potential: [], trash: []
 };
 
-let SORT = { active: 'dl', archive: 'date', potential: 'p', waiting: 'dl', paused: 'dl', requests: 'created' };
+let SORT = { active: 'dl', archive: 'date', potential: 'p', waiting: 'dl', paused: 'dl' };
 let queue = { type: null, idx: null, field: null, targetId: null };
 let previousDeadlineValue = '';
 let toastTimeout = null;
@@ -1772,22 +1486,6 @@ function renderLinkControls(item, idx, type) {
     const editBtn = `<button class="link-btn ${hasLink ? 'link-btn-active' : ''}" onclick="openLink('${type}',${idx})" title="${hasLink ? 'Изменить ссылку' : 'Добавить ссылку'}">🔗</button>`;
     const goBtn = hasLink ? `<button class="link-btn link-btn-go" onclick="openProjectLink(${idx}, '${type}')" title="Открыть ссылку">↗</button>` : '';
     return editBtn + goBtn;
-}
-
-function normalizeLinkValue(raw, isTelegram = false) {
-    let url = (raw || '').trim();
-    const isTg = isTelegram || url.startsWith('@') || url.match(/t\.me\//);
-
-    if (isTg) {
-        url = url.replace(/^https?:\/\/t\.me\//, '').replace(/^@+/, '');
-        return url ? `https://t.me/${url}` : '';
-    }
-
-    if (url && !url.match(/^(https?:\/\/|mailto:)/)) {
-        url = 'https://' + url;
-    }
-
-    return url;
 }
 
 function getClientNameClass(item) {
@@ -2044,33 +1742,21 @@ function init(){
     if(!exist) { const v4 = localStorage.getItem('grok_design_v4'); if(v4) exist = v4; }
 
     if (exist) {
-        try {
+        try { 
             const parsed = JSON.parse(exist);
             DATA = { ...DATA, ...parsed };
             if(!DATA.trash) DATA.trash = [];
-            if(!DATA.requests) DATA.requests = [];
             ['active', 'archive', 'paused', 'waiting', 'potential'].forEach(type => {
                  DATA[type].forEach(i => {
                     if(i.contractor === undefined) i.contractor = 0;
                     if(i.taxPrc === undefined) i.taxPrc = 0;
-                    if(!i.contractorMode) i.contractorMode = i.contractor ? 'amount' : 'none';
+                    if(!i.contractorMode) i.contractorMode = 'amount';
                  });
             });
         } catch(e) { console.error("Data load error", e); }
     }
 
     initTheme();
-    loadNameTemplates();
-    setTemplateHelper('Введите название проекта, затем сохраните как шаблон.');
-    const nameInput = document.getElementById('add-proj-name');
-    if (nameInput) {
-        nameInput.addEventListener('input', () => {
-            nameInput.classList.remove('input-error');
-            setTemplateHelper('Введите название проекта, затем сохраните как шаблон.');
-            toggleProjectNameClear();
-        });
-        toggleProjectNameClear();
-    }
     cleanupTrash();
     renderMonthSelect();
     setupModalsBackgroundCheck();
@@ -2115,7 +1801,6 @@ function calcContractorAmount(item) {
     const gross = toNumeric(item.p);
     const mode = item.contractorMode || 'amount';
     const raw = toNumeric(item.contractor);
-    if (mode === 'none') return 0;
     return mode === 'percent' ? gross * (raw / 100) : raw;
 }
 
@@ -2145,7 +1830,7 @@ function switchTab(t){
     currentTab = t;
     document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
     document.getElementById(`tab-${t}`).classList.add('active');
-    ['active','waiting','potential','requests','paused','archive','all','trash'].forEach(k => {
+    ['active','waiting','potential','paused','archive','all','trash'].forEach(k => {
         const el = document.getElementById(`view-${k}`);
         if(el) el.style.display = (k === t) ? 'block' : 'none';
         const cb = document.getElementById(`selectAll${k.charAt(0).toUpperCase() + k.slice(1)}`);
@@ -2167,23 +1852,6 @@ function getTabSummary(type, baseText) {
         return `${baseText} · Статистика скрыта в корзине.`;
     }
     return baseText;
-}
-
-function updateTabCounts() {
-    const counts = {
-        active: DATA.active.length,
-        waiting: DATA.waiting.length,
-        potential: DATA.potential.length,
-        requests: DATA.requests.length,
-        paused: DATA.paused.length,
-        archive: DATA.archive.length,
-        all: DATA.active.length + DATA.waiting.length + DATA.potential.length + DATA.paused.length + DATA.archive.length,
-        trash: DATA.trash.length
-    };
-    Object.entries(counts).forEach(([key, val]) => {
-        const el = document.getElementById(`count-${key}`);
-        if (el) el.innerText = val;
-    });
 }
 
 function sortData(type, key, dataType, initial = false) {
@@ -2226,7 +1894,6 @@ function upd(){
     renderSimple('waiting');
     renderSimple('paused');
     renderPotential();
-    renderRequests();
     renderArchive();
     renderAll();
     renderTrash();
@@ -2234,7 +1901,6 @@ function upd(){
     const desc = document.getElementById('tab-description');
     if (desc) desc.innerHTML = getTabSummary(currentTab, TAB_DESCRIPTIONS[currentTab]);
     updateBulkToolbar(currentTab);
-    updateTabCounts();
 }
 
 function renderActive(){
@@ -2260,11 +1926,7 @@ function renderActive(){
         const linkIcon = renderLinkControls(item, i, 'active');
         const paidAmount = Math.round(gross * ((toNumeric(item.paid) || 0) / 100));
         totalPaidGross += paidAmount;
-        const contractorMode = item.contractorMode || 'none';
-        const contractorSymbol = contractorMode === 'percent' ? '%' : contractorMode === 'none' ? '' : '₽';
-        const contractorSymbolClass = contractorSymbol ? '' : 'symbol-empty';
-        const contractorValue = contractorMode === 'none' ? '' : formatPlainNumber(item.contractor ?? 0);
-        const contractorHelper = contractorMode === 'none' ? 'Расходы не учитываются' : `≈ ${formatCurrency(contractorAmount)}`;
+        const contractorSymbol = item.contractorMode === 'percent' ? '%' : '₽';
 
         tr.innerHTML = `
             <td class="select-col">
@@ -2297,15 +1959,14 @@ function renderActive(){
             
             <td style="text-align:right;">
                 <div class="price-cell-wrap expense-cell">
-                    <input type="text" value="${contractorValue}" ${contractorMode === 'none' ? 'disabled' : ''} oninput="formatNumberInput(this)" onblur="updateContractorValue('active',${i},this.value)">
-                    <span class="currency-symbol ${contractorSymbolClass}">${contractorSymbol || 'нет'}</span>
+                    <input type="text" value="${formatPlainNumber(item.contractor ?? 0)}" oninput="formatNumberInput(this)" onblur="updateContractorValue('active',${i},this.value)">
+                    <span class="currency-symbol">${contractorSymbol}</span>
                     <select class="expense-mode" onchange="updateContractorMode('active',${i},this.value)">
-                        <option value="none" ${contractorMode==='none'?'selected':''}>Нет</option>
-                        <option value="amount" ${contractorMode!=='percent'?'selected':''}>₽</option>
-                        <option value="percent" ${contractorMode==='percent'?'selected':''}>%</option>
+                        <option value="amount" ${item.contractorMode!=='percent'?'selected':''}>₽</option>
+                        <option value="percent" ${item.contractorMode==='percent'?'selected':''}>%</option>
                     </select>
                 </div>
-                <div class="expense-helper">${contractorHelper}</div>
+                <div class="expense-helper">≈ ${formatCurrency(contractorAmount)}</div>
             </td>
 
             <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('active',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
@@ -2497,75 +2158,6 @@ function renderPotential(){
     </tr>`;
 }
 
-function renderRequests(){
-    const tbody = document.querySelector('#t-requests tbody');
-    if (!tbody) return;
-    tbody.innerHTML = '';
-    let total = 0;
-    DATA.requests.forEach((item, i) => {
-        const budget = toNumeric(item.budget);
-        total += budget;
-        const tr = document.createElement('tr');
-        const linkBtns = renderLinkControls(item, i, 'requests');
-        tr.innerHTML = `
-            <td class="select-col"><div class="row-index">${i + 1}</div></td>
-            <td><span contenteditable onblur="updateRequestField(${i},'name',this.innerText)">${item.name || '—'}</span></td>
-            <td><span contenteditable onblur="updateRequestField(${i},'source',this.innerText)">${item.source || '—'}</span></td>
-            <td><span contenteditable onblur="updateRequestField(${i},'note',this.innerText)">${item.note || '—'}</span></td>
-            <td><div class="trash-action-btns">${linkBtns}</div></td>
-            <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(budget)}" oninput="formatNumberInput(this)" onblur="updateRequestField(${i},'budget',this.value)"><span class="currency-symbol">₽</span></div></td>
-            <td>
-                <div class="trash-action-btns">
-                    <div class="restore-trash-btn" onclick="convertRequestToPotential(${i})">В потенциал</div>
-                    <div class="delete-forever-text" onclick="deleteRequest(${i})" title="Удалить">Удалить</div>
-                </div>
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
-    const footer = document.querySelector('#total-row-requests');
-    if (footer) {
-        footer.innerHTML = `<tr><td colspan="5" class="footer-total-toggle">Всего ${DATA.requests.length} заявок</td><td style="text-align:right;">${formatCurrency(total)}</td><td></td></tr>`;
-    }
-}
-
-function addRequest() {
-    const name = document.getElementById('req-name').value.trim();
-    const source = document.getElementById('req-source').value.trim();
-    const note = document.getElementById('req-note').value.trim();
-    const link = document.getElementById('req-link').value.trim();
-    const budget = toNumeric(document.getElementById('req-budget').value);
-    if (!name && !note) return;
-    DATA.requests.unshift({ name, source, note, link: normalizeLinkValue(link), budget, created: new Date().toISOString() });
-    ['req-name','req-source','req-note','req-link','req-budget'].forEach(id => document.getElementById(id).value = '');
-    save(); upd();
-    showToast('Заявка добавлена');
-}
-
-function updateRequestField(idx, key, val) {
-    if (!DATA.requests[idx]) return;
-    DATA.requests[idx][key] = key === 'budget'
-        ? toNumeric(val)
-        : key === 'link'
-            ? normalizeLinkValue(val)
-            : val;
-    save(); upd();
-}
-
-function deleteRequest(idx) {
-    DATA.requests.splice(idx, 1);
-    save(); upd();
-}
-
-function convertRequestToPotential(idx) {
-    const req = DATA.requests.splice(idx, 1)[0];
-    if (!req) return;
-    DATA.potential.unshift({ n: req.note || req.name || 'Новый лид', c: req.name || '—', p: req.budget || 0, contractor: 0, contractorMode: 'none', taxPrc: 0, paid: 0, link: req.link || '' });
-    save();
-    showToast('Перенесено в потенциал');
-    switchTab('potential');
-}
-
 function renderArchive(){
     const tbody = document.querySelector('#t-archive tbody');
     tbody.innerHTML = '';
@@ -2585,12 +2177,8 @@ function renderArchive(){
         if (isSelected) tr.classList.add('row-selected');
         
         const linkIcon = renderLinkControls(item, realIdx, 'archive');
-
-        const contractorMode = item.contractorMode || 'none';
-        const contractorSymbol = contractorMode === 'percent' ? '%' : contractorMode === 'none' ? '' : '₽';
-        const contractorSymbolClass = contractorSymbol ? '' : 'symbol-empty';
-        const contractorValue = contractorMode === 'none' ? '' : formatPlainNumber(item.contractor ?? 0);
-        const contractorHelper = contractorMode === 'none' ? 'Расходы не учитываются' : `≈ ${formatCurrency(contractorAmount)}`;
+                                      
+        const contractorSymbol = item.contractorMode === 'percent' ? '%' : '₽';
 
         tr.innerHTML = `
             <td class="select-col">
@@ -2612,15 +2200,14 @@ function renderArchive(){
             <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('archive',${realIdx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td>
                 <div class="price-cell-wrap expense-cell">
-                    <input type="text" value="${contractorValue}" ${contractorMode === 'none' ? 'disabled' : ''} oninput="formatNumberInput(this)" onblur="updateContractorValue('archive',${realIdx},this.value)">
-                    <span class="currency-symbol ${contractorSymbolClass}">${contractorSymbol || 'нет'}</span>
+                    <input type="text" value="${formatPlainNumber(item.contractor ?? 0)}" oninput="formatNumberInput(this)" onblur="updateContractorValue('archive',${realIdx},this.value)">
+                    <span class="currency-symbol">${contractorSymbol}</span>
                     <select class="expense-mode" onchange="updateContractorMode('archive',${realIdx},this.value)">
-                        <option value="none" ${contractorMode==='none'?'selected':''}>Нет</option>
-                        <option value="amount" ${contractorMode!=='percent'?'selected':''}>₽</option>
-                        <option value="percent" ${contractorMode==='percent'?'selected':''}>%</option>
+                        <option value="amount" ${item.contractorMode!=='percent'?'selected':''}>₽</option>
+                        <option value="percent" ${item.contractorMode==='percent'?'selected':''}>%</option>
                     </select>
                 </div>
-                <div class="expense-helper">${contractorHelper}</div>
+                <div class="expense-helper">≈ ${formatCurrency(contractorAmount)}</div>
             </td>
             <td><div class="net-display-wrap">${formatCurrency(item.pr)}<span class="net-prc-val">(${calcMarginPrc(item)}%)</span></div></td>
             <td><div class="action-btns" style="justify-content:flex-end">
@@ -2680,32 +2267,24 @@ function renderAll(){
 
         const tr = document.createElement('tr');
         const deadlineValue = wrap.__type === 'archive' ? item.date : (item.dl || item.date || item.start);
-        const dateField = wrap.__type === 'archive' ? 'date' : 'dl';
         const rem = wrap.__type === 'archive' ? { cls: '', txt: '' } : getTimeRemaining(deadlineValue);
         const remText = wrap.__type === 'archive' || rem.txt === '—' ? '' : ` (${rem.txt})`;
         const dateDisplay = deadlineValue ? formatDateDisplay(deadlineValue) : '—';
         const dateCls = wrap.__type === 'archive' ? '' : rem.cls;
-        const linkIcon = renderLinkControls(item, wrap.idx, wrap.__type);
-
-        const contractorMode = item.contractorMode || 'none';
-        const contractorSymbol = contractorMode === 'percent' ? '%' : contractorMode === 'none' ? '' : '₽';
-        const contractorSymbolClass = contractorSymbol ? '' : 'symbol-empty';
-        const contractorValue = contractorMode === 'none' ? '' : formatPlainNumber(item.contractor ?? 0);
-        const contractorHelper = contractorMode === 'none' ? 'Расходы не учитываются' : `≈ ${formatCurrency(contractorAmount)}`;
 
         tr.innerHTML = `
             <td class="select-col"><div class="row-index">${i + 1}</div></td>
             <td><span class="status-pill ${status.cls}">${status.label}</span></td>
-            <td><div class="client-wrap">${item.c || '—'}${linkIcon}</div></td>
+            <td><div class="client-wrap">${item.c || '—'}</div></td>
             <td class="project-name-wrap">${item.n || '—'}</td>
-            <td class="date-cell"><div class="date-input-wrap ${dateCls}" onclick="openDate('${wrap.__type}',${wrap.idx},'${dateField}')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${dateDisplay}${remText}</span></div></td>
+            <td class="date-cell"><div class="date-input-wrap ${dateCls}"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${dateDisplay}${remText}</span></div></td>
             <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(gross)}" oninput="formatNumberInput(this)" onblur="updVal('${wrap.__type}',${wrap.idx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td style="text-align:right;">
                 <div class="price-cell-wrap expense-cell">
-                    <input type="text" value="${contractorValue}" ${contractorMode === 'none' ? 'disabled' : ''} oninput="formatNumberInput(this)" onblur="updateContractorValue('${wrap.__type}',${wrap.idx},this.value)">
-                    <span class="currency-symbol ${contractorSymbolClass}">${contractorSymbol || 'нет'}</span>
+                    <input type="text" value="${formatPlainNumber(item.contractor ?? 0)}" oninput="formatNumberInput(this)" onblur="updateContractorValue('${wrap.__type}',${wrap.idx},this.value)">
+                    <span class="currency-symbol">${item.contractorMode==='percent'?'%':'₽'}</span>
                 </div>
-                <div class="expense-helper">${contractorHelper}</div>
+                <div class="expense-helper">≈ ${formatCurrency(contractorAmount)}</div>
             </td>
             <td style="text-align:right;">${item.taxPrc || 0}%</td>
             <td style="text-align:right;"><div class="net-display-wrap">${formatCurrency(net)}</div></td>
@@ -2737,33 +2316,16 @@ function renderAll(){
     }
 }
 
-function formatTrashExpire(item) {
-    const fallback = { text: 'Удалится в течение часа', tone: 'danger' };
-    if (!item.deletedAt) return fallback;
-    const sevenDays = 7 * 24 * 60 * 60 * 1000;
-    const expiresAt = new Date(item.deletedAt + sevenDays);
-    const remainingMs = expiresAt - Date.now();
-    if (remainingMs <= 0) return fallback;
-    const days = Math.floor(remainingMs / (24 * 60 * 60 * 1000));
-    const hours = Math.floor((remainingMs % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
-    const absolute = expiresAt.toLocaleString('ru-RU', { hour12: false });
-    const relative = days > 0 ? `${days} д. ${hours} ч.` : `${hours} ч.`;
-    const tone = remainingMs <= 24 * 60 * 60 * 1000 ? 'danger' : remainingMs <= 3 * 24 * 60 * 60 * 1000 ? 'warn' : 'neutral';
-    return { text: `Исчезнет через ${relative} (до ${absolute})`, tone };
-}
-
 function renderTrash(){
     const tbody = document.querySelector('#t-trash tbody');
     tbody.innerHTML = '';
     DATA.trash.forEach((item, i) => {
         const tr = document.createElement('tr');
-        tr.classList.add('trash-row');
         tr.dataset.index = i;
 
         const isSelected = selectedRows.trash?.has(i.toString());
         if (isSelected) tr.classList.add('row-selected');
-        const delDate = item.deletedAt ? new Date(item.deletedAt).toLocaleString('ru-RU', { hour12: false }) : '?';
-        const expireInfo = formatTrashExpire(item);
+        const delDate = item.deletedAt ? new Date(item.deletedAt).toLocaleDateString() : '?';
         tr.innerHTML = `
             <td class="select-col">
                 <div class="row-index">${i + 1}</div>
@@ -2773,28 +2335,10 @@ function renderTrash(){
                     <label for="check-trash-${i}" style="display:none;"></label>
                 </div>
             </td>
-            <td class="trash-date-cell">
-                <div class="trash-deleted-label">Удалено: ${delDate}</div>
-                <div class="trash-expire ${expireInfo.tone}">${expireInfo.text}</div>
-            </td>
-            <td>
-                <div class="trash-row-meta">
-                    <div class="trash-label">Клиент</div>
-                    <div class="trash-client">${item.c}</div>
-                </div>
-            </td>
-            <td>
-                <div class="trash-row-meta">
-                    <div class="trash-label">Проект</div>
-                    <div class="trash-project">${item.n}</div>
-                </div>
-            </td>
-            <td>
-                <div class="trash-row-meta">
-                    <div class="trash-label">Сумма</div>
-                    <div class="trash-amount">${formatCurrency(item.p)}</div>
-                </div>
-            </td>
+            <td style="color:var(--red); font-size:12px">${delDate}</td>
+            <td>${item.c}</td>
+            <td>${item.n}</td>
+            <td>${formatCurrency(item.p)}</td>
             <td>
                 <div class="trash-action-btns">
                     <div class="restore-trash-btn" onclick="restoreFromTrash(${i})">Восстановить</div>
@@ -2828,7 +2372,6 @@ function updateContractorValue(type, idx, val) {
 
 function updateContractorMode(type, idx, mode) {
     DATA[type][idx].contractorMode = mode;
-    if (mode === 'none') DATA[type][idx].contractor = 0;
     sortData('active', 'dl', 'date', true);
     save(); upd();
 }
@@ -2872,7 +2415,7 @@ function deleteForeverCheck(idx) {
     document.getElementById('deleteConfirmModal').style.display = 'flex';
     document.getElementById('finalDeleteBtn').style.backgroundColor = 'var(--red)';
     document.getElementById('finalDeleteBtn').style.borderColor = 'var(--red)';
-        document.getElementById('finalDeleteBtn').innerText = 'Удалить навсегда';
+    document.getElementById('finalDeleteBtn').innerText = 'Удалить навсегда';
 
     document.getElementById('finalDeleteBtn').onclick = () => {
         const item = DATA.trash.splice(idx, 1)[0];
@@ -2880,24 +2423,6 @@ function deleteForeverCheck(idx) {
         document.getElementById('deleteConfirmModal').style.display = 'none';
         save(); upd();
         showToast('Удалено навсегда', 'Отмена', undoPermanentDelete);
-    };
-}
-
-function clearTrashForever() {
-    if (!DATA.trash.length) return;
-    document.getElementById('del-modal-title').innerText = "Очистить корзину";
-    document.getElementById('del-modal-desc').innerText = `Удалить ${DATA.trash.length} проектов без возможности восстановления?`;
-    document.getElementById('deleteConfirmModal').style.display = 'flex';
-    document.getElementById('finalDeleteBtn').style.backgroundColor = 'var(--red)';
-    document.getElementById('finalDeleteBtn').style.borderColor = 'var(--red)';
-    document.getElementById('finalDeleteBtn').innerText = 'Очистить корзину';
-
-    document.getElementById('finalDeleteBtn').onclick = () => {
-        lastPermanentDeletion = { type: 'trash', items: DATA.trash.map((item, index) => ({ item, index })) };
-        DATA.trash = [];
-        document.getElementById('deleteConfirmModal').style.display = 'none';
-        save(); upd();
-        showToast('Корзина очищена', 'Отмена', undoPermanentDelete);
     };
 }
 
@@ -2910,11 +2435,8 @@ function restoreFromTrash(idx){
 
 function openAddModal(){
     ['name','client','price','contractor'].forEach(id => document.getElementById(`add-proj-${id}`).value = '');
-    toggleProjectNameClear();
     document.getElementById('add-proj-tax').value = '0';
-    document.getElementById('add-proj-contractor-mode').value = 'none';
-    handleNewContractorModeChange('none');
-    document.getElementById('add-proj-type').value = 'active';
+    document.getElementById('add-proj-contractor-mode').value = 'amount';
     document.getElementById('add-proj-start-val').value = today;
     document.getElementById('add-proj-dl-val').value = today;
     previousDeadlineValue = today;
@@ -2922,15 +2444,14 @@ function openAddModal(){
     document.getElementById('add-proj-dl-custom').value = '';
     document.getElementById('add-proj-start-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
     document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
-    handleStatusChange('active');
     document.getElementById('addProjectModal').style.display = 'flex';
 }
 function saveNewProject(){
     const name = document.getElementById('add-proj-name').value;
     const client = document.getElementById('add-proj-client').value;
     const price = toNumeric(document.getElementById('add-proj-price').value);
-    const contrMode = document.getElementById('add-proj-contractor-mode').value || 'none';
-    const contr = contrMode === 'none' ? 0 : toNumeric(document.getElementById('add-proj-contractor').value);
+    const contr = toNumeric(document.getElementById('add-proj-contractor').value);
+    const contrMode = document.getElementById('add-proj-contractor-mode').value || 'amount';
     const tax = +document.getElementById('add-proj-tax').value || 0;
     const type = document.getElementById('add-proj-type').value;
     const start = document.getElementById('add-proj-start-val').value || today;
@@ -2939,15 +2460,10 @@ function saveNewProject(){
     const item = {
         n: name, c: client, p: price, contractor: contr, contractorMode: contrMode, taxPrc: tax, link: '',
         start: type==='active'? start : undefined,
-        dl: type==='active' || type==='waiting' || type==='paused' ? dl : undefined,
+        dl: type==='active' || type==='waiting' || type==='paused' ? dl : undefined, 
         paid: (type==='active'||type==='archive'? (type==='archive'?100:50) : 0),
         date: type==='archive' ? today : undefined
     };
-
-    if (type === 'potential') {
-        delete item.start;
-        delete item.dl;
-    }
     
     DATA[type].unshift(item);
     document.getElementById('addProjectModal').style.display = 'none';
@@ -3000,15 +2516,6 @@ function applyDeadlinePreset() {
     const iso = dlDate.toISOString().slice(0, 10);
     document.getElementById('add-proj-dl-val').value = iso;
     document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(iso);
-}
-
-function handleStatusChange(status) {
-    const dateBlocks = document.querySelectorAll('.status-dates');
-    dateBlocks.forEach(block => block.style.display = status === 'potential' ? 'none' : '');
-    if (status === 'potential') {
-        document.getElementById('add-proj-dl-days').value = '';
-        document.getElementById('add-proj-dl-custom').value = '';
-    }
 }
 
 function openDate(type, idx, field){
@@ -3124,8 +2631,16 @@ function openLink(type, idx){
 function closeLinkModal(){ document.getElementById('linkModal').style.display = 'none'; }
 function saveLink(){
     const isTelegram = document.getElementById('link-is-telegram').checked;
-    const raw = document.getElementById('link-input').value;
-    DATA[queue.type][queue.idx].link = normalizeLinkValue(raw, isTelegram);
+    let url = document.getElementById('link-input').value.trim().replace(/^@+/, '');
+
+    if (isTelegram) {
+        url = url.replace(/^https?:\/\/t\.me\//, '').replace(/^@+/, '');
+        url = url ? `https://t.me/${url}` : '';
+    } else if (url && !url.match(/^(https?:\/\/|mailto:)/)) {
+        url = 'https://' + url;
+    }
+
+    DATA[queue.type][queue.idx].link = url;
     closeLinkModal(); save(); upd();
 }
 
@@ -3168,23 +2683,16 @@ function pluralize(num, forms){
 
 function getTimeRemaining(dl){
     if(!dl) return {txt:'—', cls:'days-normal', days: Infinity};
-    const targetDay = new Date(dl.slice(0, 10) + 'T00:00:00');
-    const todayNormalized = new Date(today + 'T00:00:00');
-
-    if (isNaN(targetDay.getTime())) return {txt:'—', cls:'days-normal', days: Infinity};
-
-    const dayDiff = Math.ceil((targetDay.getTime() - todayNormalized.getTime()) / (1000 * 60 * 60 * 24));
-    const targetExact = dl.includes('T') ? new Date(dl.replace(' ', 'T')) : new Date(dl + 'T23:59:59');
-    if (isNaN(targetExact.getTime())) return {txt:'—', cls:'days-normal', days: Infinity};
-    const msLeft = targetExact.getTime() - Date.now();
-
-    if(msLeft < 0) return {txt:'Просрочено', cls:'days-critical', days: -1};
-    if(dayDiff === 0) {
-        const hours = Math.max(1, Math.ceil(msLeft / (1000 * 60 * 60)));
-        return {txt:`${hours} ч.`, cls:'days-critical', days: 0};
-    }
-    if(dayDiff <= 3) return {txt: dayDiff + ' дн.', cls:'days-warning', days: dayDiff};
-    return {txt: dayDiff + ' дн.', cls:'days-normal', days: dayDiff};
+    const end = new Date(dl.slice(0, 10) + 'T00:00:00').getTime();
+    const todayNormalized = new Date(today + 'T00:00:00').getTime();
+    
+    const diff = end - todayNormalized;
+    const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+    
+    if(days < 0) return {txt:'Просрочено', cls:'days-critical', days: -1};
+    if(days === 0) return {txt:'Сегодня', cls:'days-critical', days: 0};
+    if(days <= 3) return {txt: days + ' дн.', cls:'days-warning', days: days};
+    return {txt: days + ' дн.', cls:'days-normal', days: days};
 }
 
 function changeMonth(m){ 
