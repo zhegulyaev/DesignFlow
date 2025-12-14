@@ -107,7 +107,7 @@
   
   .btns{display:flex;gap:15px;flex-wrap:wrap; align-items: center;} 
   
-  button{padding:10px 20px;background:var(--button-bg);border:1px solid var(--border);color:var(--text);border-radius:8px;cursor:pointer;font-weight:600;font-size:14px;transition:.2s;display:flex;align-items:center;gap:8px;white-space: nowrap;}
+  button{padding:10px 20px;background:var(--button-bg);border:1px solid var(--border);color:var(--text);border-radius:8px;cursor:pointer;font-weight:600;font-size:14px;transition:.2s;display:flex;align-items:center;gap:8px;white-space: normal;}
   button:hover{border-color:var(--accent);color:var(--accent);}
 
   .toast { position: fixed; top: 15px; right: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; display: none; align-items: center; gap: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); z-index: 1200; min-width: 260px; }
@@ -532,10 +532,11 @@
   .add-modal-stack > * { padding: 8px 0; }
   .add-modal-stack > *:not(:first-child) { border-top: 1px solid var(--border); padding-top: 14px; }
   .add-modal-compact { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; align-items: start; }
-  .add-modal-compact.price-tax-row { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); align-items: end; }
-  .price-tax-row .inp-group { display: flex; flex-direction: column; gap: 8px; margin: 0; }
+  .add-modal-compact.price-tax-row { grid-template-columns: 1.1fr 1fr 0.85fr; align-items: end; column-gap: 10px; }
+  .price-tax-row .inp-group { display: flex; flex-direction: column; gap: 5px; margin: 0; }
+  .price-tax-row .inp-group label { margin-bottom: 0; }
   .price-tax-row .tax-group select { min-height: 44px; }
-  .price-group { max-width: 100%; }
+  .price-group { max-width: 240px; }
   .price-tax-row .inp-group input,
   .price-tax-row .inp-group select { min-height: 44px; }
   .contractor-inline label { margin-bottom: 6px; }
@@ -567,7 +568,7 @@
       transition: opacity 0.2s;
   }
   .close-modal-x:hover { opacity: 1; }
-  .save-stg { padding: 12px 16px; border-radius: 12px; font-weight: 800; letter-spacing: 0.1px; background: var(--btn-blue); border: 1px solid var(--btn-blue); color: #fff; transition: transform .1s, box-shadow .1s, background .1s; cursor: pointer; }
+  .save-stg { padding: 12px 16px; border-radius: 12px; font-weight: 800; letter-spacing: 0.1px; background: var(--btn-blue); border: 1px solid var(--btn-blue); color: #fff; transition: transform .1s, box-shadow .1s, background .1s; cursor: pointer; justify-content: center; text-align: center; line-height: 1.35; }
   .save-stg:hover { transform: translateY(-1px); box-shadow: none; color: #fff; background: #2f81f7; }
   .modal .save-stg { width: 100%; margin-top: 20px; }
   .request-add-btn { width: auto; align-self: flex-end; min-width: 140px; height: 46px; margin-top: 0; }
@@ -872,6 +873,7 @@
   .template-add-btn { align-self: flex-start; margin-top: 0; }
   .contractor-layout { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
   .contractor-group { align-self: stretch; min-width: 0; }
+  .tax-group { flex: 0 0 130px; }
   .contractor-mode-select { width: 100%; padding: 10px; border-radius: 10px; font-weight: 700; min-height: 44px; min-width: 0; }
   .contractor-amount { display: flex; flex-direction: column; gap: 8px; background: var(--pill-bg); border: 1px solid var(--border); padding: 12px; border-radius: 12px; width: 100%; }
   .contractor-amount-row { margin-top: 2px; }
