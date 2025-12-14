@@ -517,9 +517,10 @@
 
   .timeline-row { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 10px; align-items: start; }
   .timeline-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; align-items: stretch; }
-  .timeline-row .inp-group { margin-bottom: 0; }
+  .timeline-row .inp-group { margin-bottom: 0; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
   .timeline-row .deadline-presets { justify-content: flex-start; }
   .timeline-row .deadline-presets select, .timeline-row .deadline-presets input { background: var(--input-bg); border: 1px solid var(--border); }
+  .timeline-row .date-input-wrap { width: 100%; }
 
   .add-modal-grid {
     display: grid;
@@ -533,7 +534,7 @@
   .add-modal-stack > * { padding: 8px 0; }
   .add-modal-stack > *:not(:first-child) { border-top: 1px solid var(--border); padding-top: 14px; }
   .add-modal-compact { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; align-items: start; }
-  .add-modal-compact.price-tax-row { grid-template-columns: minmax(200px, 0.9fr) minmax(130px, 0.6fr) minmax(180px, 1fr); align-items: end; }
+  .add-modal-compact.price-tax-row { grid-template-columns: minmax(220px, 0.95fr) minmax(140px, 0.55fr) minmax(220px, 1fr); align-items: stretch; }
   .price-group { max-width: 280px; }
   .contractor-inline label { margin-bottom: 6px; }
   .contractor-inline select { min-height: 44px; }
@@ -845,6 +846,8 @@
 
   .template-manager { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 18px; margin-bottom: 4px; padding-bottom: 2px; position: relative; }
   .template-manager-title { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; padding-top: 0; margin-bottom: 0; }
+  .template-wide { grid-column: 1 / -1; }
+  .template-wide .template-manager { margin-top: 0; padding-top: 10px; }
   .template-create-inline { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: none; color: var(--accent); font-weight: 800; padding: 6px 0 0; cursor: pointer; font-size: 14px; }
   .template-create-inline:hover { color: #8ab4ff; }
   .template-pills { display: flex; gap: 8px; overflow-x: auto; padding: 6px 4px 2px 2px; scrollbar-width: none; margin-top: 0; max-width: 100%; position: relative; }
@@ -862,7 +865,7 @@
   .template-pill .template-delete-btn:hover { color: var(--red); }
   .template-add-btn { align-self: flex-start; margin-top: 0; }
   .contractor-layout { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
-  .contractor-group { align-self: stretch; }
+  .contractor-group { align-self: stretch; min-width: 220px; }
   .contractor-mode-select { width: 100%; padding: 10px; border-radius: 10px; font-weight: 700; min-height: 44px; }
   .contractor-amount { display: flex; flex-direction: column; gap: 8px; background: var(--pill-bg); border: 1px solid var(--border); padding: 12px; border-radius: 12px; width: 100%; }
   .contractor-amount-row { margin-top: 2px; }
@@ -1384,11 +1387,6 @@ td.date-cell + td.date-cell {
                         <datalist id="project-name-templates"></datalist>
                     </div>
                     <button class="template-create-inline" type="button" onclick="saveNameTemplate()">+ Создать шаблон</button>
-                    <div class="template-manager">
-                        <div class="template-manager-title">Мои шаблоны</div>
-                        <div class="template-pills" id="saved-template-pills"></div>
-                        <div class="template-helper" id="template-helper">Введите название проекта, затем сохраните как шаблон.</div>
-                    </div>
                 </div>
             </div>
                 <div class="add-modal-card add-modal-stack">
@@ -1463,6 +1461,13 @@ td.date-cell + td.date-cell {
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="add-modal-card template-wide">
+                <div class="template-manager">
+                    <div class="template-manager-title">Мои шаблоны</div>
+                    <div class="template-pills" id="saved-template-pills"></div>
+                    <div class="template-helper" id="template-helper">Введите название проекта, затем сохраните как шаблон.</div>
                 </div>
             </div>
         </div>
