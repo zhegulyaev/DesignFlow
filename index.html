@@ -515,6 +515,7 @@
   .deadline-presets { display: flex; gap: 8px; align-items: center; flex-wrap: nowrap; }
   .deadline-presets select { min-width: 140px; max-width: 170px; white-space: nowrap; flex: 0 1 150px; }
   .deadline-presets input { min-width: 110px; max-width: 140px; flex: 1 1 110px; }
+  .deadline-time { min-width: 120px; max-width: 150px; flex: 0 0 130px; padding: 10px 12px; }
   .date-duo { display: flex; gap: 12px; align-items: stretch; margin-bottom: 12px; flex-wrap: wrap; }
   .date-duo .inp-group { margin-bottom: 0; }
   .date-duo-card { flex: 1 1 220px; min-width: 0; padding: 0; border-radius: 14px; border: none; background: transparent; box-shadow: none; }
@@ -1374,18 +1375,18 @@ td.date-cell + td.date-cell {
                       </div>
                   </div>
               </div>
+              <div class="card top-clients-card">
+                <div class="top-clients-header">
+                  <div>
+                    <div class="top-clients-title">Топ 5 клиентов · Чистая прибыль</div>
+                    <div class="top-clients-sub">Маржа по активным, архивным, на паузе и в ожидании</div>
+                  </div>
+                  <div class="top-clients-legend"><span class="top-clients-dot"></span> Чистая прибыль</div>
+                </div>
+                <div class="top-clients-chart"><canvas id="topClientsChart"></canvas></div>
+              </div>
           </div>
 
-          <div class="card top-clients-card">
-            <div class="top-clients-header">
-              <div>
-                <div class="top-clients-title">Топ 5 клиентов · Чистая прибыль</div>
-                <div class="top-clients-sub">Маржа по активным, архивным, на паузе и в ожидании</div>
-              </div>
-              <div class="top-clients-legend"><span class="top-clients-dot"></span> Чистая прибыль</div>
-            </div>
-            <div class="top-clients-chart"><canvas id="topClientsChart"></canvas></div>
-          </div>
       </div>
     </div>
   </div>
@@ -1517,7 +1518,8 @@ td.date-cell + td.date-cell {
                                     <option value="7">7 дней</option>
                                     <option value="custom">Свои дни</option>
                                 </select>
-                                <input type="number" id="add-proj-dl-custom" placeholder="Свои дни" style="width:120px" oninput="applyDeadlinePreset()">
+                                <input type="number" id="add-proj-dl-custom" placeholder="Свои дни" oninput="applyDeadlinePreset()">
+                                <input type="time" id="add-proj-dl-time" class="deadline-time" step="300" aria-label="Время дедлайна" oninput="applyDeadlinePreset()">
                             </div>
                         </div>
                     </div>
@@ -2447,6 +2449,14 @@ function formatDateDisplay(str) {
     return d;
 }
 
+function formatDateWithTime(dateObj, timeStr) {
+    const y = dateObj.getFullYear();
+    const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const d = String(dateObj.getDate()).padStart(2, '0');
+    const base = `${y}-${m}-${d}`;
+    return timeStr ? `${base}T${timeStr}` : base;
+}
+
 function calcContractorAmount(item) {
     const gross = toNumeric(item.p);
     const mode = item.contractorMode || 'amount';
@@ -3287,6 +3297,8 @@ function openAddModal(){
     previousDeadlineValue = today;
     document.getElementById('add-proj-dl-days').value = '';
     document.getElementById('add-proj-dl-custom').value = '';
+    const presetTimeInput = document.getElementById('add-proj-dl-time');
+    if (presetTimeInput) presetTimeInput.value = '';
     document.getElementById('add-proj-start-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
     document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
     handleStatusChange('active');
@@ -3328,7 +3340,16 @@ function saveNewProject(){
 function applyDeadlinePreset() {
     const select = document.getElementById('add-proj-dl-days');
     const customInput = document.getElementById('add-proj-dl-custom');
-    const currentDl = document.getElementById('add-proj-dl-val').value || document.getElementById('add-proj-start-val').value || today;
+    const timeInput = document.getElementById('add-proj-dl-time');
+    const currentStart = document.getElementById('add-proj-start-val').value || today;
+    const currentDl = document.getElementById('add-proj-dl-val').value || currentStart || today;
+    const startTime = currentStart && currentStart.includes('T') ? currentStart.slice(11, 16) : '';
+    const manualTime = (timeInput?.value || '').trim();
+    const finalTime = manualTime || startTime;
+
+    if (!manualTime && startTime && timeInput) {
+        timeInput.value = startTime;
+    }
 
     if (!previousDeadlineValue) {
         previousDeadlineValue = currentDl;
@@ -3363,13 +3384,14 @@ function applyDeadlinePreset() {
 
     if (!days || days <= 0) return;
     const startRaw = document.getElementById('add-proj-start-val').value || today;
-    const baseDate = new Date(startRaw);
+    const baseDate = new Date(startRaw.replace(' ', 'T'));
     if (isNaN(baseDate)) return;
     const dlDate = new Date(baseDate);
     dlDate.setDate(dlDate.getDate() + days);
-    const iso = dlDate.toISOString().slice(0, 10);
-    document.getElementById('add-proj-dl-val').value = iso;
-    document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(iso);
+    const deadlineValue = formatDateWithTime(dlDate, finalTime);
+    document.getElementById('add-proj-dl-val').value = deadlineValue;
+    document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(deadlineValue);
+    previousDeadlineValue = deadlineValue;
 }
 
 function handleStatusChange(status) {
@@ -3456,6 +3478,10 @@ function saveDate(){
         const displayId = queue.targetId.replace('-val', '-display');
         document.getElementById(displayId).querySelector('.date-text-display').innerHTML = formatDateDisplay(result);
         if (queue.targetId === 'add-proj-start-val') {
+            const presetTimeInput = document.getElementById('add-proj-dl-time');
+            if (presetTimeInput && result.includes('T')) {
+                presetTimeInput.value = result.slice(11, 16);
+            }
             const presetDays = parseInt(document.getElementById('add-proj-dl-days').value, 10);
             if (presetDays) applyDeadlinePreset();
         }
