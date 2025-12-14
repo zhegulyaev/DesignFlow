@@ -595,15 +595,15 @@
   }
   #settingsModal .modal-content h2 { margin-bottom: 15px; }
 
-  .settings-modal { max-width: 980px; }
-  .settings-header { display:flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 14px; }
+  .settings-modal { max-width: 1120px; }
+  .settings-header { display:flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 10px; }
   .settings-title { font-size: 24px; font-weight: 900; letter-spacing: -0.5px; }
   .settings-sub { color: var(--muted); font-size: 14px; font-weight: 600; }
   .settings-pill { padding: 6px 10px; background: var(--pill-bg); border:1px solid var(--border); border-radius: 10px; font-weight: 800; color: var(--muted); font-size: 12px; }
   .settings-grid { display: grid; gap: 14px; }
-  .settings-layout { display: grid; grid-template-columns: 230px 1fr; gap: 16px; margin-top: 6px; align-items: start; }
-  .settings-nav { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 10px; display: grid; gap: 8px; position: sticky; top: 18px; }
-  .settings-nav-btn { width: 100%; justify-content: flex-start; padding: 10px 12px; border-radius: 12px; font-weight: 800; color: var(--muted); background: transparent; border: 1px solid transparent; }
+  .settings-layout { display: flex; flex-direction: column; gap: 12px; margin-top: 6px; }
+  .settings-tabs { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 8px; }
+  .settings-nav-btn { width: 100%; justify-content: center; padding: 12px; border-radius: 12px; font-weight: 800; color: var(--muted); background: transparent; border: 1px solid transparent; }
   .settings-nav-btn.active { background: var(--card-alt); border-color: var(--border); color: var(--text); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
   .settings-content { display: flex; flex-direction: column; gap: 14px; }
   .settings-pane { display: none; flex-direction: column; gap: 14px; }
@@ -637,6 +637,14 @@
   .settings-actions { display:flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
   .settings-actions button { flex: 1; justify-content: center; min-width: 180px; }
   .settings-footer-note { color: var(--muted); font-size: 12px; font-weight: 600; margin-top: 8px; line-height: 1.5; }
+  .settings-chip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 12px; }
+  .settings-chip { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--card-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); font-weight: 700; }
+  .settings-chip .settings-row-sub { margin-top: 0; }
+  .settings-chip small { color: var(--muted); font-size: 12px; font-weight: 600; }
+  .settings-chip strong { font-size: 13px; letter-spacing: -0.2px; }
+
+  .scroll-toggle { position: fixed; right: 18px; bottom: 18px; width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--border); background: var(--button-bg); color: var(--text); display: grid; place-items: center; font-size: 20px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 28px rgba(0,0,0,0.25); z-index: 1200; opacity: 0.92; }
+  .scroll-toggle:hover { background: var(--btn-hover); border-color: var(--accent); color: var(--accent); }
 
   .footer-note { color: var(--muted); font-size: 12px; font-weight: 600; }
   .helper-note { color: var(--muted); font-size: 12px; margin-top: 6px; line-height: 1.4; text-align: left; }
@@ -1075,7 +1083,7 @@ td.date-cell + td.date-cell {
                   <div class="rep-chip-score" id="pace-rep-text">100 / 100</div>
               </div>
           </div>
-          <button class="inline-link-btn" onclick="scrollToReputation()">Подробнее</button>
+          <button class="inline-link-btn" id="pace-details-btn" onclick="scrollToReputation()">Подробнее</button>
           <div class="pace-status" id="pace-status">Критично</div>
       </div>
   </div>
@@ -1291,7 +1299,7 @@ td.date-cell + td.date-cell {
                       <button class="inline-link-btn" onclick="openGoalSettings()">Редактировать</button>
                   </div>
               </div>
-              <div class="goal-wrap">
+              <div class="goal-wrap" id="goal-progress">
                   <div class="goal-info">
                       <span class="stat-label-with-help">Прогресс цели <span class="help-icon" data-tooltip="Соотношение текущей чистой прибыли к месячной цели. Значение обновляется при изменении статусов проектов и оплат.">?</span></span>
                       <span id="goal-text">0 / 0 ₽</span>
@@ -1299,7 +1307,7 @@ td.date-cell + td.date-cell {
                   <div class="progress-bg"><div class="progress-fill" id="p-bar"></div></div>
               </div>
               <div class="stats-grid">
-                  <div class="stat-box">
+                  <div class="stat-box" data-stat="fact">
                       <div class="stat-label-row">
                           <div class="stat-label-with-help"><span class="stat-label">ФАКТ</span><span class="help-icon" data-tooltip="Чистая прибыль за выбранный месяц с учётом всех статусов.">?</span></div>
                           <div class="stat-pill">Чистыми</div>
@@ -1307,7 +1315,7 @@ td.date-cell + td.date-cell {
                       <div class="stat-val text-green mono" id="val-fact">0 ₽</div>
                       <div class="stat-helper" id="val-fact-prc">0%</div>
                   </div>
-                  <div class="stat-box">
+                  <div class="stat-box" data-stat="active-fact">
                       <div class="stat-label-row">
                           <div class="stat-label-with-help"><span class="stat-label">ПОЛУЧЕНО</span><span class="help-icon" data-tooltip="Чистая сумма, уже поступившая по проектам в работе (статус ‘В работе’).">?</span></div>
                           <div class="stat-pill">Чистыми (в работе)</div>
@@ -1315,7 +1323,7 @@ td.date-cell + td.date-cell {
                       <div class="stat-val text-green mono" id="val-active-fact">0 ₽</div>
                       <div class="stat-helper">Оплачено в текущих проектах</div>
                   </div>
-                  <div class="stat-box">
+                  <div class="stat-box" data-stat="paid-gross">
                       <div class="stat-label-row">
                           <div class="stat-label-with-help"><span class="stat-label">ОПЛАЧЕНО</span><span class="help-icon" data-tooltip="Все полученные платежи без вычета налогов и расходов (грязными).">?</span></div>
                           <div class="stat-pill">Все поступления</div>
@@ -1323,7 +1331,7 @@ td.date-cell + td.date-cell {
                       <div class="stat-val mono" id="val-paid-gross" style="color:var(--accent)">0 ₽</div>
                       <div class="stat-helper">Полученные платежи (грязными)</div>
                   </div>
-                  <div class="stat-box">
+                  <div class="stat-box" data-stat="plan">
                       <div class="stat-label-row">
                           <div class="stat-label-with-help"><span class="stat-label">ПЛАН</span><span class="help-icon" data-tooltip="Сколько ещё нужно получить до достижения цели месяца.">?</span></div>
                           <div class="stat-pill">Остаток до цели</div>
@@ -1331,7 +1339,7 @@ td.date-cell + td.date-cell {
                       <div class="stat-val text-gold mono" id="val-plan">0 ₽</div>
                       <div class="stat-helper">Осталось получить</div>
                   </div>
-                  <div class="stat-box">
+                  <div class="stat-box" data-stat="forecast">
                       <div class="stat-label-row">
                           <div class="stat-label-with-help"><span class="stat-label">ПРОГНОЗ ИТОГА</span><span class="help-icon" data-tooltip="Оценка конца месяца: текущий факт + ожидаемые платежи по проектам.">?</span></div>
                           <div class="stat-pill">Факт + ожидаемое</div>
@@ -1339,7 +1347,7 @@ td.date-cell + td.date-cell {
                       <div class="stat-val mono" id="val-total" style="color:var(--accent)">0 ₽</div>
                       <div class="stat-helper">Маржа: <span id="val-margin">0 ₽</span> (<span id="val-margin-prc">0%</span>)</div>
                   </div>
-                  <div class="stat-box">
+                  <div class="stat-box" data-stat="expenses">
                       <div class="stat-label-row">
                           <div class="stat-label-with-help"><span class="stat-label">РАСХОДЫ</span><span class="help-icon" data-tooltip="Совокупные траты по всем проектам, включая архив и паузу.">?</span></div>
                           <div class="stat-pill">По всем проектам</div>
@@ -1347,7 +1355,7 @@ td.date-cell + td.date-cell {
                       <div class="stat-val mono text-red" id="val-expenses">0 ₽</div>
                       <div class="stat-helper">Сумма затрат</div>
                   </div>
-                  <div class="stat-box">
+                  <div class="stat-box" data-stat="taxes">
                       <div class="stat-label-row">
                           <div class="stat-label-with-help"><span class="stat-label">НАЛОГИ</span><span class="help-icon" data-tooltip="Предварительные начисления по указанным ставкам для каждого проекта.">?</span></div>
                           <div class="stat-pill">К уплате</div>
@@ -1358,7 +1366,7 @@ td.date-cell + td.date-cell {
               </div>
               <div style="position:relative;height:250px;width:100%"><canvas id="lineChart"></canvas></div>
           </div>
-              <div class="card top-clients-card">
+              <div class="card top-clients-card" id="top-clients-card">
                 <div class="top-clients-header">
                   <div>
                     <div class="top-clients-title">Топ 5 клиентов · Чистая прибыль</div>
@@ -1371,7 +1379,7 @@ td.date-cell + td.date-cell {
           </div>
 
           <div class="side-stack">
-              <div class="card efficiency-card">
+              <div class="card efficiency-card" id="efficiency-card">
                   <div class="card-head">Эффективность <span class="help-icon" data-tooltip="Визуализация распределения чистой прибыли между уже полученными средствами и оставшимся потенциалом проектов.">?</span></div>
                   <div style="position:relative;height:170px;width:100%;display:flex;justify-content:center;margin-bottom:14px;"><canvas id="pieChart"></canvas></div>
                   <div style="border-top:1px solid var(--border); padding-top:16px;">
@@ -1435,10 +1443,12 @@ td.date-cell + td.date-cell {
   </div>
 
   <footer style="text-align:center; margin-top:50px; padding-top:20px; border-top:1px solid var(--border); color:var(--muted); font-size: 14px;">
-      DesignFlow Tracker by 
+      DesignFlow Tracker by
       <a href="https://t.me/r_zhegulyaev" target="_blank" style="color:var(--accent); text-decoration:none; font-weight:600;">Zhegulyaev</a>
   </footer>
 </div>
+
+<button class="scroll-toggle" id="scrollToggle" aria-label="Прокрутить вниз">↓</button>
 
 <div class="bulk-toolbar" id="bulkToolbar" style="display: none;">
     <span style="color:var(--text); font-weight: 600;" id="bulkCount">0 выбрано</span>
@@ -1649,7 +1659,7 @@ td.date-cell + td.date-cell {
         </div>
 
         <div class="settings-layout">
-            <div class="settings-nav">
+            <div class="settings-tabs">
                 <button class="settings-nav-btn active" data-target="appearance" onclick="activateSettingsPane('appearance')">Внешний вид</button>
                 <button class="settings-nav-btn" data-target="blocks" onclick="activateSettingsPane('blocks')">Блоки</button>
                 <button class="settings-nav-btn" data-target="tables" onclick="activateSettingsPane('tables')">Таблица</button>
@@ -1737,7 +1747,7 @@ td.date-cell + td.date-cell {
                                 <div class="block-preview">
                                     <div class="preview-pill">Цель месяца</div>
                                     <div class="preview-grid">
-                                        <div class="preview-card"><div class="settings-row-title">Факт</div><div class="preview-bar" style="margin-top:8px"><span style="width:76%"></span></div></div>
+                                    <div class="preview-card"><div class="settings-row-title">Факт</div><div class="preview-bar" style="margin-top:8px"><span style="width:76%"></span></div></div>
                                         <div class="preview-card"><div class="settings-row-title">Прогноз</div><div class="preview-bar"style="margin-top:8px"><span style="width:54%"></span></div></div>
                                         <div class="preview-card"><div class="settings-row-title">Расходы</div><div class="preview-bar"style="margin-top:8px"><span style="width:42%"></span></div></div>
                                     </div>
@@ -1746,8 +1756,54 @@ td.date-cell + td.date-cell {
                             <div>
                                 <div class="settings-row">
                                     <div>
-                                        <div class="settings-row-title">Рекорд и репутация</div>
-                                        <div class="settings-row-sub">Блоки с прогрессом по рекорду месяца и рейтингом дедлайнов.</div>
+                                        <div class="settings-row-title">Эффективность</div>
+                                        <div class="settings-row-sub">Круговая диаграмма получено/потенциал и динамика по месяцам.</div>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="block-toggle-efficiency">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="block-preview">
+                                    <div class="preview-card"><div class="settings-row-title">Pie</div><div class="preview-bar" style="margin-top:8px"><span style="width: 58%"></span></div></div>
+                                    <div class="preview-card"><div class="settings-row-title">Бар-чарт</div><div class="preview-bar" style="margin-top:8px"><span style="width: 44%"></span></div></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="settings-row">
+                                    <div>
+                                        <div class="settings-row-title">Топ клиентов</div>
+                                        <div class="settings-row-sub">Столбики по чистой прибыли среди 5 лучших клиентов.</div>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="block-toggle-top-clients">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="block-preview">
+                                    <div class="preview-card"><div class="settings-row-title">Top 5</div><div class="preview-bar" style="margin-top:8px"><span style="width: 65%"></span></div></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="settings-row">
+                                    <div>
+                                        <div class="settings-row-title">Рекорд месяца</div>
+                                        <div class="settings-row-sub">Прогресс-бар к личному рекорду по чистой прибыли.</div>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="block-toggle-record">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="block-preview">
+                                    <div class="preview-banner">🏆 Прогресс к рекорду</div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="settings-row">
+                                    <div>
+                                        <div class="settings-row-title">Репутация</div>
+                                        <div class="settings-row-sub">Карточка с рейтингом дедлайнов и советами.</div>
                                     </div>
                                     <label class="toggle-switch">
                                         <input type="checkbox" id="block-toggle-reputation">
@@ -1755,12 +1811,73 @@ td.date-cell + td.date-cell {
                                     </label>
                                 </div>
                                 <div class="block-preview">
-                                    <div class="preview-banner">🏆 Прогресс к рекорду</div>
                                     <div class="preview-grid">
                                         <div class="preview-card"><div class="settings-row-title">Репутация</div><div class="settings-row-sub" style="margin-top:6px">100 / 100</div></div>
                                         <div class="preview-card"><div class="settings-row-title">Просрочки</div><div class="settings-row-sub" style="margin-top:6px">0 задач</div></div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="settings-section">
+                        <div class="settings-section-title">Карточки статистики</div>
+                        <div class="settings-section-sub">Включайте только нужные показатели в дашборде.</div>
+                        <div class="settings-chip-grid">
+                            <div class="settings-chip">
+                                <div><strong>Прогресс цели</strong><br><small>Полоса и подписи по месячной цели</small></div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="stat-toggle-goal">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="settings-chip">
+                                <div><strong>Факт</strong><br><small>Чистая прибыль за месяц</small></div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="stat-toggle-fact">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="settings-chip">
+                                <div><strong>Получено (в работе)</strong><br><small>Уже оплачено в активных проектах</small></div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="stat-toggle-active-fact">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="settings-chip">
+                                <div><strong>Оплачено</strong><br><small>Грязные поступления</small></div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="stat-toggle-paid-gross">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="settings-chip">
+                                <div><strong>План</strong><br><small>Остаток до цели</small></div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="stat-toggle-plan">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="settings-chip">
+                                <div><strong>Прогноз итога</strong><br><small>Факт + ожидаемые платежи</small></div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="stat-toggle-forecast">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="settings-chip">
+                                <div><strong>Расходы</strong><br><small>Все траты по проектам</small></div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="stat-toggle-expenses">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="settings-chip">
+                                <div><strong>Налоги</strong><br><small>Предварительные начисления</small></div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="stat-toggle-taxes">
+                                    <span class="toggle-slider"></span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -1863,12 +1980,25 @@ const DEFAULT_UI_PREFS = {
         backup: true,
         pace: true,
         dashboard: true,
+        efficiency: true,
+        topClients: true,
+        record: true,
         reputation: true
     },
     tableVisibility: {
         waiting: true,
         requests: true,
         paused: true
+    },
+    statVisibility: {
+        goal: true,
+        fact: true,
+        activeFact: true,
+        paidGross: true,
+        plan: true,
+        forecast: true,
+        expenses: true,
+        taxes: true
     }
 };
 let UI_PREFS = JSON.parse(JSON.stringify(DEFAULT_UI_PREFS));
@@ -1933,8 +2063,15 @@ function loadUiPrefs() {
                 tableVisibility: {
                     ...DEFAULT_UI_PREFS.tableVisibility,
                     ...(stored.tableVisibility || {})
+                },
+                statVisibility: {
+                    ...DEFAULT_UI_PREFS.statVisibility,
+                    ...(stored.statVisibility || {})
                 }
             };
+            if (stored?.blockVisibility?.reputation === false && stored?.blockVisibility?.record === undefined) {
+                UI_PREFS.blockVisibility.record = false;
+            }
         }
     } catch (e) {
         console.warn('UI prefs load failed', e);
@@ -2016,12 +2153,32 @@ function applyBlockVisibility() {
     const dashboard = document.getElementById('analytics-dashboard');
     const record = document.getElementById('record-banner');
     const reputation = document.getElementById('reputation-card');
+    const efficiency = document.getElementById('efficiency-card');
+    const topClients = document.getElementById('top-clients-card');
+    const paceDetails = document.getElementById('pace-details-btn');
 
     if (backup) backup.classList.toggle('is-hidden', visibility.backup === false);
     if (pace) pace.classList.toggle('is-hidden', visibility.pace === false);
     if (dashboard) dashboard.classList.toggle('is-hidden', visibility.dashboard === false);
-    if (record) record.classList.toggle('is-hidden', visibility.reputation === false);
-    if (reputation) reputation.classList.toggle('is-hidden', visibility.reputation === false);
+    const hideAnalytics = visibility.dashboard === false;
+    if (efficiency) efficiency.classList.toggle('is-hidden', hideAnalytics || visibility.efficiency === false);
+    if (topClients) topClients.classList.toggle('is-hidden', hideAnalytics || visibility.topClients === false);
+    if (record) record.classList.toggle('is-hidden', hideAnalytics || visibility.record === false);
+    if (reputation) reputation.classList.toggle('is-hidden', hideAnalytics || visibility.reputation === false);
+    if (paceDetails) paceDetails.classList.toggle('is-hidden', visibility.reputation === false || hideAnalytics);
+}
+
+function applyStatVisibility() {
+    const visibility = UI_PREFS.statVisibility || {};
+    document.querySelectorAll('[data-stat]').forEach(el => {
+        const key = el.getAttribute('data-stat');
+        const enabled = visibility[key] !== false;
+        el.classList.toggle('is-hidden', !enabled);
+    });
+    const goal = document.getElementById('goal-progress');
+    const goalPill = document.getElementById('goal-pill');
+    if (goal) goal.classList.toggle('is-hidden', visibility.goal === false);
+    if (goalPill) goalPill.classList.toggle('is-hidden', visibility.goal === false);
 }
 
 function activateSettingsPane(pane) {
@@ -2035,28 +2192,75 @@ function activateSettingsPane(pane) {
     });
 }
 
-function getEnabledTabs() {
+function isTableEnabled(key) {
     const visibility = UI_PREFS.tableVisibility || {};
+    return visibility[key] !== false;
+}
+
+function getEnabledTabs() {
     return ['all','active','waiting','potential','requests','paused','archive','trash'].filter(tab => {
-        if (['waiting','requests','paused'].includes(tab)) return visibility[tab] !== false;
+        if (['waiting','requests','paused'].includes(tab)) return isTableEnabled(tab);
         return true;
     });
 }
 
 function applyTableVisibility() {
-    const visibility = UI_PREFS.tableVisibility || {};
     ['waiting','requests','paused'].forEach(key => {
         const tabEl = document.getElementById(`tab-${key}`);
         const viewEl = document.getElementById(`view-${key}`);
-        const enabled = visibility[key] !== false;
+        const enabled = isTableEnabled(key);
         if (tabEl) tabEl.classList.toggle('is-hidden', !enabled);
         if (viewEl) viewEl.style.display = enabled ? (currentTab === key ? 'block' : 'none') : 'none';
     });
+    updateBulkMoveOptions();
     const available = getEnabledTabs();
     if (!available.includes(currentTab) && available.length) {
         const fallback = available.includes('active') ? 'active' : available[0];
         if (fallback !== currentTab) switchTab(fallback);
     }
+}
+
+function updateBulkMoveOptions() {
+    const select = document.getElementById('bulkMoveSelect');
+    if (!select) return;
+    const visibility = UI_PREFS.tableVisibility || {};
+    Array.from(select.options).forEach(opt => {
+        if (['waiting','paused','requests'].includes(opt.value)) {
+            const enabled = visibility[opt.value] !== false;
+            opt.hidden = !enabled;
+        }
+    });
+    if (select.selectedOptions.length && select.selectedOptions[0].hidden) {
+        select.value = '';
+    }
+}
+
+function toggleScrollDirection() {
+    const btn = document.getElementById('scrollToggle');
+    if (!btn) return;
+    const dir = btn.dataset.dir || 'down';
+    if (dir === 'down') {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function updateScrollToggle() {
+    const btn = document.getElementById('scrollToggle');
+    if (!btn) return;
+    const nearTop = window.scrollY < 120;
+    const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 160;
+    if (nearTop) {
+        btn.textContent = '↓';
+        btn.dataset.dir = 'down';
+        btn.setAttribute('aria-label', 'Прокрутить вниз');
+    } else {
+        btn.textContent = '↑';
+        btn.dataset.dir = 'up';
+        btn.setAttribute('aria-label', 'Вернуться наверх');
+    }
+    btn.style.display = nearTop && nearBottom ? 'none' : 'grid';
 }
 
 function formatNumberInput(inputEl) {
@@ -2775,6 +2979,7 @@ function init(){
     }
     cleanupTrash();
     applyBlockVisibility();
+    applyStatVisibility();
     applyTableVisibility();
     renderMonthSelect();
     setupModalsBackgroundCheck();
@@ -2787,6 +2992,11 @@ function init(){
         DATA[t].sortDirection = DATA[t].sortDirection || 1;
         updateSortIndicators(t);
     });
+    const scrollBtn = document.getElementById('scrollToggle');
+    if (scrollBtn) scrollBtn.addEventListener('click', toggleScrollDirection);
+    updateScrollToggle();
+    window.addEventListener('scroll', updateScrollToggle);
+    window.addEventListener('resize', updateScrollToggle);
     upd();
 }
 
@@ -2985,6 +3195,11 @@ function renderActive(){
         const contractorSymbolClass = contractorSymbol ? '' : 'symbol-empty';
         const contractorValue = contractorMode === 'none' ? '' : formatPlainNumber(item.contractor ?? 0);
         const contractorHelper = contractorMode === 'none' ? 'Расходы не учитываются' : `≈ ${formatCurrency(contractorAmount)}`;
+        const actionButtons = [
+            `<div class="done-btn action-btn-base" onclick="mv(${i},'active','archive')" title="Выполнено">✓</div>`
+        ];
+        if (isTableEnabled('waiting')) actionButtons.push(`<div class="wait-active-btn action-btn-base" onclick="mv(${i},'active','waiting')" title="В ожидании">...</div>`);
+        if (isTableEnabled('paused')) actionButtons.push(`<div class="pause-active-btn action-btn-base" onclick="mv(${i},'active','paused')" title="На паузе">||</div>`);
 
         tr.innerHTML = `
             <td class="select-col">
@@ -3041,9 +3256,7 @@ function renderActive(){
             </td>
             
             <td><div class="action-btns">
-                <div class="done-btn action-btn-base" onclick="mv(${i},'active','archive')" title="Выполнено">✓</div>
-                <div class="wait-active-btn action-btn-base" onclick="mv(${i},'active','waiting')" title="В ожидании">...</div>
-                <div class="pause-active-btn action-btn-base" onclick="mv(${i},'active','paused')" title="На паузе">||</div>
+                ${actionButtons.join('')}
                 <button class="del-btn" onclick="askDel('active',${i})" title="Удалить" aria-label="Удалить в корзину">
                     <svg><use href="#icon-trash"/></svg>
                 </button>
@@ -3923,6 +4136,9 @@ function openSettings(){
         ['block-toggle-backup', 'backup'],
         ['block-toggle-pace', 'pace'],
         ['block-toggle-dashboard', 'dashboard'],
+        ['block-toggle-efficiency', 'efficiency'],
+        ['block-toggle-top-clients', 'topClients'],
+        ['block-toggle-record', 'record'],
         ['block-toggle-reputation', 'reputation']
     ];
     toggleMap.forEach(([id, key]) => {
@@ -3937,6 +4153,20 @@ function openSettings(){
     ].forEach(([id, key]) => {
         const el = document.getElementById(id);
         if (el) el.checked = tableVisibility[key] !== false;
+    });
+    const statVisibility = UI_PREFS.statVisibility || {};
+    [
+        ['stat-toggle-goal', 'goal'],
+        ['stat-toggle-fact', 'fact'],
+        ['stat-toggle-active-fact', 'activeFact'],
+        ['stat-toggle-paid-gross', 'paidGross'],
+        ['stat-toggle-plan', 'plan'],
+        ['stat-toggle-forecast', 'forecast'],
+        ['stat-toggle-expenses', 'expenses'],
+        ['stat-toggle-taxes', 'taxes'],
+    ].forEach(([id, key]) => {
+        const el = document.getElementById(id);
+        if (el) el.checked = statVisibility[key] !== false;
     });
     document.getElementById('settingsModal').style.display = 'flex';
 }
@@ -3964,12 +4194,25 @@ function saveSettings(){
         backup: document.getElementById('block-toggle-backup')?.checked !== false,
         pace: document.getElementById('block-toggle-pace')?.checked !== false,
         dashboard: document.getElementById('block-toggle-dashboard')?.checked !== false,
+        efficiency: document.getElementById('block-toggle-efficiency')?.checked !== false,
+        topClients: document.getElementById('block-toggle-top-clients')?.checked !== false,
+        record: document.getElementById('block-toggle-record')?.checked !== false,
         reputation: document.getElementById('block-toggle-reputation')?.checked !== false,
     };
     UI_PREFS.tableVisibility = {
         requests: document.getElementById('table-toggle-requests')?.checked !== false,
         waiting: document.getElementById('table-toggle-waiting')?.checked !== false,
         paused: document.getElementById('table-toggle-paused')?.checked !== false,
+    };
+    UI_PREFS.statVisibility = {
+        goal: document.getElementById('stat-toggle-goal')?.checked !== false,
+        fact: document.getElementById('stat-toggle-fact')?.checked !== false,
+        activeFact: document.getElementById('stat-toggle-active-fact')?.checked !== false,
+        paidGross: document.getElementById('stat-toggle-paid-gross')?.checked !== false,
+        plan: document.getElementById('stat-toggle-plan')?.checked !== false,
+        forecast: document.getElementById('stat-toggle-forecast')?.checked !== false,
+        expenses: document.getElementById('stat-toggle-expenses')?.checked !== false,
+        taxes: document.getElementById('stat-toggle-taxes')?.checked !== false,
     };
     if (selectedMode) {
         applyThemeMode(selectedMode.value);
@@ -3978,6 +4221,7 @@ function saveSettings(){
     }
     applyBlockVisibility();
     applyTableVisibility();
+    applyStatVisibility();
     DATA.monthlyGoals[currentMonth] = toNumeric(document.getElementById('stg-goal').value);
     DATA.settings.record = toNumeric(document.getElementById('stg-rec').value);
     document.getElementById('settingsModal').style.display = 'none';
