@@ -1375,18 +1375,18 @@ td.date-cell + td.date-cell {
                   </div>
               </div>
           </div>
-      </div>
-    </div>
 
-    <div class="card top-clients-card">
-      <div class="top-clients-header">
-        <div>
-          <div class="top-clients-title">Топ 5 клиентов · Чистая прибыль</div>
-          <div class="top-clients-sub">Суммируем маржу по всем проектам и статусам</div>
-        </div>
-        <div class="top-clients-legend"><span class="top-clients-dot"></span> Чистая прибыль</div>
+          <div class="card top-clients-card">
+            <div class="top-clients-header">
+              <div>
+                <div class="top-clients-title">Топ 5 клиентов · Чистая прибыль</div>
+                <div class="top-clients-sub">Маржа по активным, архивным, на паузе и в ожидании</div>
+              </div>
+              <div class="top-clients-legend"><span class="top-clients-dot"></span> Чистая прибыль</div>
+            </div>
+            <div class="top-clients-chart"><canvas id="topClientsChart"></canvas></div>
+          </div>
       </div>
-      <div class="top-clients-chart"><canvas id="topClientsChart"></canvas></div>
     </div>
   </div>
 
@@ -3980,7 +3980,7 @@ function updateTopClientsChart(scope) {
     if (!canvas) return;
 
     const totals = {};
-    ['active','archive','paused','waiting','potential'].forEach(type => {
+    ['active','archive','paused','waiting'].forEach(type => {
         (scope[type] || []).forEach(item => {
             const client = (item.c || 'Без имени').trim() || 'Без имени';
             const net = calcNet(item);
