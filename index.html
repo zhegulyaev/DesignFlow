@@ -595,12 +595,20 @@
   }
   #settingsModal .modal-content h2 { margin-bottom: 15px; }
 
-  .settings-modal { max-width: 820px; }
+  .settings-modal { max-width: 980px; }
   .settings-header { display:flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 14px; }
   .settings-title { font-size: 24px; font-weight: 900; letter-spacing: -0.5px; }
   .settings-sub { color: var(--muted); font-size: 14px; font-weight: 600; }
   .settings-pill { padding: 6px 10px; background: var(--pill-bg); border:1px solid var(--border); border-radius: 10px; font-weight: 800; color: var(--muted); font-size: 12px; }
   .settings-grid { display: grid; gap: 14px; }
+  .settings-layout { display: grid; grid-template-columns: 230px 1fr; gap: 16px; margin-top: 6px; align-items: start; }
+  .settings-nav { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 10px; display: grid; gap: 8px; position: sticky; top: 18px; }
+  .settings-nav-btn { width: 100%; justify-content: flex-start; padding: 10px 12px; border-radius: 12px; font-weight: 800; color: var(--muted); background: transparent; border: 1px solid transparent; }
+  .settings-nav-btn.active { background: var(--card-alt); border-color: var(--border); color: var(--text); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .settings-content { display: flex; flex-direction: column; gap: 14px; }
+  .settings-pane { display: none; flex-direction: column; gap: 14px; }
+  .settings-pane.active { display: flex; }
+  .settings-columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; }
   .settings-section { border: 1px solid var(--border); border-radius: 14px; padding: 16px; background: var(--card); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
   .settings-section-title { font-weight: 800; font-size: 16px; display:flex; align-items:center; justify-content: space-between; gap: 10px; }
   .settings-section-sub { color: var(--muted); font-size: 13px; margin-top: 4px; font-weight: 600; }
@@ -1019,7 +1027,7 @@ td.date-cell + td.date-cell {
             <span id="themeToggleIcon">🌞</span>
             <span id="themeToggleLabel">Светлая тема</span>
         </button>
-        <button onclick="openSettings()">⚙ Общие настройки</button>
+        <button onclick="openSettings()">⚙ Настройки</button>
         <select id="monthSelect" class="month-select" onchange="changeMonth(this.value)"></select>
     </div>
   </div>
@@ -1634,144 +1642,196 @@ td.date-cell + td.date-cell {
         <span class="close-modal-x" onclick="document.getElementById('settingsModal').style.display='none'">×</span>
         <div class="settings-header">
             <div>
-                <div class="settings-title">Общие настройки</div>
-                <div class="settings-sub">Управляйте блоками, темой и резервными копиями.</div>
+                <div class="settings-title">Настройки</div>
+                <div class="settings-sub">Управляйте блоками, темой, таблицами и резервными копиями.</div>
             </div>
             <div class="settings-pill">DesignFlow v0.8</div>
         </div>
 
-        <div class="settings-grid">
-            <div class="settings-section">
-                <div class="settings-section-title">Тема оформления</div>
-                <div class="settings-section-sub">Выберите светлую, тёмную или автоматическую тему по времени суток.</div>
-                <div class="radio-grid">
-                    <label class="radio-card">
-                        <input type="radio" name="theme-mode" value="auto" id="theme-mode-auto">
-                        <div>
-                            <div class="radio-card-title">Авто</div>
-                            <div class="radio-card-sub">Определяет тему по времени суток и подстраивается каждые несколько минут.</div>
-                        </div>
-                    </label>
-                    <label class="radio-card">
-                        <input type="radio" name="theme-mode" value="light" id="theme-mode-light">
-                        <div>
-                            <div class="radio-card-title">Светлая</div>
-                            <div class="radio-card-sub">Лёгкая палитра для дневной работы и презентаций.</div>
-                        </div>
-                    </label>
-                    <label class="radio-card">
-                        <input type="radio" name="theme-mode" value="dark" id="theme-mode-dark">
-                        <div>
-                            <div class="radio-card-title">Тёмная</div>
-                            <div class="radio-card-sub">Контрастная палитра с меньшим бликом для ночи.</div>
-                        </div>
-                    </label>
-                </div>
+        <div class="settings-layout">
+            <div class="settings-nav">
+                <button class="settings-nav-btn active" data-target="appearance" onclick="activateSettingsPane('appearance')">Внешний вид</button>
+                <button class="settings-nav-btn" data-target="blocks" onclick="activateSettingsPane('blocks')">Блоки</button>
+                <button class="settings-nav-btn" data-target="tables" onclick="activateSettingsPane('tables')">Таблица</button>
+                <button class="settings-nav-btn" data-target="data" onclick="activateSettingsPane('data')">Данные</button>
             </div>
 
-            <div class="settings-section">
-                <div class="settings-section-title">Отображение блоков</div>
-                <div class="settings-section-sub">Скройте элементы, которые мешают фокусу. Превью ниже покажут, как выглядят блоки.</div>
-                <div class="settings-options">
-                    <div>
-                        <div class="settings-row">
-                            <div>
-                                <div class="settings-row-title">Предупреждение и бэкап</div>
-                                <div class="settings-row-sub">Плашка с напоминанием, что данные хранятся локально.</div>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="block-toggle-backup">
-                                <span class="toggle-slider"></span>
+            <div class="settings-content">
+                <div class="settings-pane active" data-pane="appearance">
+                    <div class="settings-section">
+                        <div class="settings-section-title">Тема оформления</div>
+                        <div class="settings-section-sub">Выберите светлую, тёмную или автоматическую тему по времени суток.</div>
+                        <div class="radio-grid">
+                            <label class="radio-card">
+                                <input type="radio" name="theme-mode" value="auto" id="theme-mode-auto">
+                                <div>
+                                    <div class="radio-card-title">Авто</div>
+                                    <div class="radio-card-sub">Определяет тему по времени суток и подстраивается каждые несколько минут.</div>
+                                </div>
                             </label>
-                        </div>
-                        <div class="block-preview">
-                            <div class="preview-banner">⚠ Локально • Данные хранятся в браузере</div>
-                            <div class="preview-pill">Бэкап · Скачать / Загрузить</div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="settings-row">
-                            <div>
-                                <div class="settings-row-title">Индикатор темпа</div>
-                                <div class="settings-row-sub">Карточка с подсказками по дедлайнам и марже.</div>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="block-toggle-pace">
-                                <span class="toggle-slider"></span>
+                            <label class="radio-card">
+                                <input type="radio" name="theme-mode" value="light" id="theme-mode-light">
+                                <div>
+                                    <div class="radio-card-title">Светлая</div>
+                                    <div class="radio-card-sub">Лёгкая палитра для дневного времени. Подходит для печати.</div>
+                                </div>
                             </label>
-                        </div>
-                        <div class="block-preview">
-                            <div class="preview-grid">
-                                <div class="preview-card"><div class="preview-bar"><span style="width: 62%"></span></div><div class="settings-row-sub" style="margin-top:8px">Темп на неделе</div></div>
-                                <div class="preview-card"><div class="preview-bar"><span style="width: 38%"></span></div><div class="settings-row-sub" style="margin-top:8px">Репутация</div></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="settings-row">
-                            <div>
-                                <div class="settings-row-title">Дашборд и графики</div>
-                                <div class="settings-row-sub">Карточки по целям, денежным потокам и топам клиентов.</div>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="block-toggle-dashboard">
-                                <span class="toggle-slider"></span>
+                            <label class="radio-card">
+                                <input type="radio" name="theme-mode" value="dark" id="theme-mode-dark">
+                                <div>
+                                    <div class="radio-card-title">Тёмная</div>
+                                    <div class="radio-card-sub">Контрастная палитра, бережёт глаза и батарею.</div>
+                                </div>
                             </label>
-                        </div>
-                        <div class="block-preview">
-                            <div class="preview-pill">Цель месяца</div>
-                            <div class="preview-grid">
-                                <div class="preview-card"><div class="settings-row-title">Факт</div><div class="preview-bar" style="margin-top:8px"><span style="width:76%"></span></div></div>
-                                <div class="preview-card"><div class="settings-row-title">Прогноз</div><div class="preview-bar" style="margin-top:8px"><span style="width:54%"></span></div></div>
-                                <div class="preview-card"><div class="settings-row-title">Расходы</div><div class="preview-bar" style="margin-top:8px"><span style="width:42%"></span></div></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="settings-row">
-                            <div>
-                                <div class="settings-row-title">Рекорд и репутация</div>
-                                <div class="settings-row-sub">Блоки с прогрессом по рекорду месяца и рейтингом дедлайнов.</div>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="block-toggle-reputation">
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="block-preview">
-                            <div class="preview-banner">🏆 Прогресс к рекорду</div>
-                            <div class="preview-grid">
-                                <div class="preview-card"><div class="settings-row-title">Репутация</div><div class="settings-row-sub" style="margin-top:6px">100 / 100</div></div>
-                                <div class="preview-card"><div class="settings-row-title">Просрочки</div><div class="settings-row-sub" style="margin-top:6px">0 задач</div></div>
-                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="settings-section">
-                <div class="settings-section-title">Резервные копии</div>
-                <div class="settings-section-sub">Скачайте или загрузите JSON, либо выгрузите таблицу в CSV.</div>
-                <div class="settings-actions">
-                    <button onclick="exp()">💾 Скачать базу (Бэкап)</button>
-                    <button onclick="document.getElementById('imp').click()">📂 Загрузить базу</button>
-                    <button onclick="expCSV()">📊 Экспорт в CSV</button>
-                </div>
-                <input type="file" id="imp" accept=".json" style="display:none" onchange="imp(this.files[0])">
-                <div class="settings-footer-note">Данные хранятся только в вашем браузере. Делайте резервную копию перед очисткой кэша или переустановкой системы.</div>
-            </div>
-
-            <div class="settings-section">
-                <div class="settings-section-title">Цели и рекорд</div>
-                <div class="settings-section-sub">Используются в дашборде и напоминаниях.</div>
-                <div class="settings-actions" style="margin-top: 0; gap: 16px;">
-                    <div class="inp-group" style="flex:1">
-                        <label>Цель на месяц (₽)</label>
-                        <input type="text" id="stg-goal" oninput="formatNumberInput(this)">
+                <div class="settings-pane" data-pane="blocks">
+                    <div class="settings-section">
+                        <div class="settings-section-title">Отображение блоков</div>
+                        <div class="settings-section-sub">Скройте элементы, которые мешают фокусу. Превью ниже покажут, как выглядят блоки.</div>
+                        <div class="settings-options settings-columns">
+                            <div>
+                                <div class="settings-row">
+                                    <div>
+                                        <div class="settings-row-title">Предупреждение и бэкап</div>
+                                        <div class="settings-row-sub">Плашка с напоминанием, что данные хранятся локально.</div>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="block-toggle-backup">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="block-preview">
+                                    <div class="preview-banner">⚠ Важно: данные хранятся локально.</div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="settings-row">
+                                    <div>
+                                        <div class="settings-row-title">Индикатор темпа</div>
+                                        <div class="settings-row-sub">Карточка с подсказками по дедлайнам и марже.</div>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="block-toggle-pace">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="block-preview">
+                                    <div class="preview-card"><div class="preview-bar"><span style="width: 62%"></span></div><div class="settings-row-sub" style="margin-top:8px">Темп на неделе</div></div>
+                                    <div class="preview-card"><div class="preview-bar"><span style="width: 38%"></span></div><div class="settings-row-sub" style="margin-top:8px">Репутация</div></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="settings-row">
+                                    <div>
+                                        <div class="settings-row-title">Дашборд и графики</div>
+                                        <div class="settings-row-sub">Карточки по целям, денежным потокам и топам клиентов.</div>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="block-toggle-dashboard">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="block-preview">
+                                    <div class="preview-pill">Цель месяца</div>
+                                    <div class="preview-grid">
+                                        <div class="preview-card"><div class="settings-row-title">Факт</div><div class="preview-bar" style="margin-top:8px"><span style="width:76%"></span></div></div>
+                                        <div class="preview-card"><div class="settings-row-title">Прогноз</div><div class="preview-bar"style="margin-top:8px"><span style="width:54%"></span></div></div>
+                                        <div class="preview-card"><div class="settings-row-title">Расходы</div><div class="preview-bar"style="margin-top:8px"><span style="width:42%"></span></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="settings-row">
+                                    <div>
+                                        <div class="settings-row-title">Рекорд и репутация</div>
+                                        <div class="settings-row-sub">Блоки с прогрессом по рекорду месяца и рейтингом дедлайнов.</div>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" id="block-toggle-reputation">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                </div>
+                                <div class="block-preview">
+                                    <div class="preview-banner">🏆 Прогресс к рекорду</div>
+                                    <div class="preview-grid">
+                                        <div class="preview-card"><div class="settings-row-title">Репутация</div><div class="settings-row-sub" style="margin-top:6px">100 / 100</div></div>
+                                        <div class="preview-card"><div class="settings-row-title">Просрочки</div><div class="settings-row-sub" style="margin-top:6px">0 задач</div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="inp-group" style="flex:1">
-                        <label>Рекорд (₽)</label>
-                        <input type="text" id="stg-rec" oninput="formatNumberInput(this)">
+                </div>
+
+                <div class="settings-pane" data-pane="tables">
+                    <div class="settings-section">
+                        <div class="settings-section-title">Разделы таблицы</div>
+                        <div class="settings-section-sub">Выберите, какие статусы показывать в навигации и таблице.</div>
+                        <div class="settings-options settings-columns">
+                            <div class="settings-row">
+                                <div>
+                                    <div class="settings-row-title">Заявки</div>
+                                    <div class="settings-row-sub">Новые обращения из каналов и лидогенерации.</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="table-toggle-requests">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="settings-row">
+                                <div>
+                                    <div class="settings-row-title">Ожидает</div>
+                                    <div class="settings-row-sub">Проекты, где ждём материалов или ответа клиента.</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="table-toggle-waiting">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="settings-row">
+                                <div>
+                                    <div class="settings-row-title">На паузе</div>
+                                    <div class="settings-row-sub">Замороженные проекты, которые можно временно скрыть.</div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="table-toggle-paused">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="settings-footer-note">Если статус скрыт, вкладка и её иконка исчезнут, а переключение вернётся на доступный раздел.</div>
+                    </div>
+                </div>
+
+                <div class="settings-pane" data-pane="data">
+                    <div class="settings-section">
+                        <div class="settings-section-title">Резервные копии</div>
+                        <div class="settings-section-sub">Скачайте или загрузите JSON, либо выгрузите таблицу в CSV.</div>
+                        <div class="settings-actions">
+                            <button onclick="exp()">💾 Скачать базу (Бэкап)</button>
+                            <button onclick="document.getElementById('imp').click()">📂 Загрузить базу</button>
+                            <button onclick="expCSV()">📊 Экспорт в CSV</button>
+                        </div>
+                        <input type="file" id="imp" accept=".json" style="display:none" onchange="imp(this.files[0])">
+                        <div class="settings-footer-note">Данные хранятся только в вашем браузере. Делайте резервную копию перед очисткой кэша или переустановкой системы.</div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="settings-section-title">Цели и рекорд</div>
+                        <div class="settings-section-sub">Используются в дашборде и напоминаниях.</div>
+                        <div class="settings-actions" style="margin-top: 0; gap: 16px;">
+                            <div class="inp-group" style="flex:1">
+                                <label>Цель на месяц (₽)</label>
+                                <input type="text" id="stg-goal" oninput="formatNumberInput(this)">
+                            </div>
+                            <div class="inp-group" style="flex:1">
+                                <label>Рекорд (₽)</label>
+                                <input type="text" id="stg-rec" oninput="formatNumberInput(this)">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1780,7 +1840,6 @@ td.date-cell + td.date-cell {
         <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveSettings()">Сохранить настройки</button>
     </div>
 </div>
-
 <div class="modal" id="deleteConfirmModal">
     <div class="modal-content">
         <span class="close-modal-x" onclick="document.getElementById('deleteConfirmModal').style.display='none'">×</span>
@@ -1805,6 +1864,11 @@ const DEFAULT_UI_PREFS = {
         pace: true,
         dashboard: true,
         reputation: true
+    },
+    tableVisibility: {
+        waiting: true,
+        requests: true,
+        paused: true
     }
 };
 let UI_PREFS = JSON.parse(JSON.stringify(DEFAULT_UI_PREFS));
@@ -1865,6 +1929,10 @@ function loadUiPrefs() {
                 blockVisibility: {
                     ...DEFAULT_UI_PREFS.blockVisibility,
                     ...(stored.blockVisibility || {})
+                },
+                tableVisibility: {
+                    ...DEFAULT_UI_PREFS.tableVisibility,
+                    ...(stored.tableVisibility || {})
                 }
             };
         }
@@ -1954,6 +2022,41 @@ function applyBlockVisibility() {
     if (dashboard) dashboard.classList.toggle('is-hidden', visibility.dashboard === false);
     if (record) record.classList.toggle('is-hidden', visibility.reputation === false);
     if (reputation) reputation.classList.toggle('is-hidden', visibility.reputation === false);
+}
+
+function activateSettingsPane(pane) {
+    document.querySelectorAll('.settings-nav-btn').forEach(btn => {
+        const target = btn.getAttribute('data-target');
+        btn.classList.toggle('active', target === pane);
+    });
+    document.querySelectorAll('.settings-pane').forEach(p => {
+        const target = p.getAttribute('data-pane');
+        p.classList.toggle('active', target === pane);
+    });
+}
+
+function getEnabledTabs() {
+    const visibility = UI_PREFS.tableVisibility || {};
+    return ['all','active','waiting','potential','requests','paused','archive','trash'].filter(tab => {
+        if (['waiting','requests','paused'].includes(tab)) return visibility[tab] !== false;
+        return true;
+    });
+}
+
+function applyTableVisibility() {
+    const visibility = UI_PREFS.tableVisibility || {};
+    ['waiting','requests','paused'].forEach(key => {
+        const tabEl = document.getElementById(`tab-${key}`);
+        const viewEl = document.getElementById(`view-${key}`);
+        const enabled = visibility[key] !== false;
+        if (tabEl) tabEl.classList.toggle('is-hidden', !enabled);
+        if (viewEl) viewEl.style.display = enabled ? (currentTab === key ? 'block' : 'none') : 'none';
+    });
+    const available = getEnabledTabs();
+    if (!available.includes(currentTab) && available.length) {
+        const fallback = available.includes('active') ? 'active' : available[0];
+        if (fallback !== currentTab) switchTab(fallback);
+    }
 }
 
 function formatNumberInput(inputEl) {
@@ -2672,6 +2775,7 @@ function init(){
     }
     cleanupTrash();
     applyBlockVisibility();
+    applyTableVisibility();
     renderMonthSelect();
     setupModalsBackgroundCheck();
     setupDatePickers();
@@ -2750,6 +2854,14 @@ function setupModalsBackgroundCheck() {
 }
 
 function switchTab(t){
+    const enabledTabs = getEnabledTabs();
+    if (!enabledTabs.includes(t)) {
+        const fallback = enabledTabs.includes('active') ? 'active' : enabledTabs[0];
+        if (fallback && fallback !== t) {
+            return switchTab(fallback);
+        }
+        return;
+    }
     currentTab = t;
     document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
     document.getElementById(`tab-${t}`).classList.add('active');
@@ -3798,6 +3910,7 @@ function saveLink(){
 }
 
 function openSettings(){
+    activateSettingsPane('appearance');
     document.getElementById('stg-goal').value = formatPlainNumber(DATA.monthlyGoals[currentMonth] || 250000);
     document.getElementById('stg-rec').value = formatPlainNumber(DATA.settings.record || 0);
     const mode = UI_PREFS.themeMode || 'dark';
@@ -3816,10 +3929,20 @@ function openSettings(){
         const el = document.getElementById(id);
         if (el) el.checked = visibility[key] !== false;
     });
+    const tableVisibility = UI_PREFS.tableVisibility || {};
+    [
+        ['table-toggle-requests', 'requests'],
+        ['table-toggle-waiting', 'waiting'],
+        ['table-toggle-paused', 'paused'],
+    ].forEach(([id, key]) => {
+        const el = document.getElementById(id);
+        if (el) el.checked = tableVisibility[key] !== false;
+    });
     document.getElementById('settingsModal').style.display = 'flex';
 }
 function openGoalSettings(){
     openSettings();
+    activateSettingsPane('data');
     const goalInput = document.getElementById('stg-goal');
     if (goalInput) {
         goalInput.focus();
@@ -3828,6 +3951,7 @@ function openGoalSettings(){
 }
 function openRecordSettings(){
     openSettings();
+    activateSettingsPane('data');
     const recordInput = document.getElementById('stg-rec');
     if (recordInput) {
         recordInput.focus();
@@ -3842,12 +3966,18 @@ function saveSettings(){
         dashboard: document.getElementById('block-toggle-dashboard')?.checked !== false,
         reputation: document.getElementById('block-toggle-reputation')?.checked !== false,
     };
+    UI_PREFS.tableVisibility = {
+        requests: document.getElementById('table-toggle-requests')?.checked !== false,
+        waiting: document.getElementById('table-toggle-waiting')?.checked !== false,
+        paused: document.getElementById('table-toggle-paused')?.checked !== false,
+    };
     if (selectedMode) {
         applyThemeMode(selectedMode.value);
     } else {
         persistUiPrefs();
     }
     applyBlockVisibility();
+    applyTableVisibility();
     DATA.monthlyGoals[currentMonth] = toNumeric(document.getElementById('stg-goal').value);
     DATA.settings.record = toNumeric(document.getElementById('stg-rec').value);
     document.getElementById('settingsModal').style.display = 'none';
@@ -4145,8 +4275,13 @@ function updatePaceReputation(state){
 
 function scrollToReputation(){
     const card = document.getElementById('reputation-card');
-    if (card) {
+    if (card && !card.classList.contains('is-hidden')) {
         card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+        openSettings();
+        activateSettingsPane('blocks');
+        const toggle = document.getElementById('block-toggle-reputation');
+        if (toggle) toggle.focus();
     }
 }
 
