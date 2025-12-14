@@ -508,8 +508,10 @@
       transition: opacity 0.2s;
   }
   .close-modal-x:hover { opacity: 1; }
-  .save-stg { width: 100%; margin-top: 20px; color: #fff; font-weight: 800; letter-spacing: 0.1px; }
-  button[style*="var(--btn-blue)"] { color: #fff; }
+  .save-stg { padding: 12px 16px; border-radius: 12px; font-weight: 800; letter-spacing: 0.1px; background: var(--btn-blue); border: 1px solid var(--btn-blue); color: #fff; transition: transform .1s, box-shadow .1s; cursor: pointer; }
+  .save-stg:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,0.18); }
+  .modal .save-stg { width: 100%; margin-top: 20px; }
+  .request-add-btn { width: auto; margin-top: 6px; align-self: stretch; min-width: 140px; }
   
   /* Settings Modal specific padding fix */
   #settingsModal .modal-content {
@@ -763,6 +765,19 @@
   .trash-clean-btn:hover { border-color: var(--accent); color: var(--accent); }
   .trash-date-cell { display: flex; flex-direction: column; gap: 4px; }
   .trash-deleted-label { font-weight: 800; color: var(--text); font-size: 13px; }
+  #view-trash .table-wrap { padding: 12px 12px 4px; }
+  #t-trash { border-collapse: separate; border-spacing: 0 10px; min-width: 0; }
+  #t-trash thead th { background: var(--card-alt); border-bottom: 1px solid var(--border); border-radius: 12px 12px 0 0; padding: 12px; }
+  #t-trash tbody tr { background: var(--card-alt); border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.16); }
+  #t-trash tbody td { border-bottom: none; padding: 14px 12px; }
+  #t-trash tbody td:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
+  #t-trash tbody td:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
+  #t-trash tbody tr:hover td { background: var(--row-hover); }
+  .trash-label { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 4px; }
+  .trash-client { font-weight: 800; color: var(--text); }
+  .trash-project { font-weight: 800; color: var(--accent); }
+  .trash-amount { font-size: 17px; font-weight: 900; color: var(--text); }
+  .trash-row-meta { display: flex; flex-direction: column; gap: 6px; }
 
   .template-manager { display: flex; flex-direction: column; gap: 8px; width: 100%; }
   .template-manager-title { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; }
@@ -770,7 +785,15 @@
   .template-pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; background: var(--pill-bg); border: 1px solid var(--border); font-weight: 700; color: var(--text); }
   .template-pill button { border: none; background: transparent; color: var(--muted); padding: 0 4px; cursor: pointer; font-weight: 800; }
   .template-pill button:hover { color: var(--red); }
-  .contractor-helper { color: var(--muted); font-size: 12px; font-weight: 700; margin-top: 6px; }
+  .contractor-layout { display: flex; flex-direction: column; gap: 10px; }
+  .contractor-group { align-self: stretch; }
+  .contractor-mode-select { width: 100%; padding: 10px; border-radius: 10px; font-weight: 700; }
+  .contractor-amount { display: flex; flex-direction: column; gap: 8px; background: var(--pill-bg); border: 1px solid var(--border); padding: 10px; border-radius: 12px; }
+  .input-with-suffix { display: grid; grid-template-columns: 1fr auto; align-items: stretch; gap: 0; }
+  .input-with-suffix input { border-radius: 10px 0 0 10px; }
+  .input-with-suffix input:focus { z-index: 1; }
+  .input-suffix { display: inline-flex; align-items: center; justify-content: center; padding: 0 14px; background: var(--card-alt); border: 1px solid var(--border); border-left: none; border-radius: 0 10px 10px 0; font-weight: 800; color: var(--muted); min-width: 52px; }
+  .contractor-helper { color: var(--muted); font-size: 12px; font-weight: 700; line-height: 1.4; }
   .is-hidden { display: none !important; }
   .expense-cell input:disabled { background: var(--input-bg); color: var(--muted); cursor: not-allowed; }
 
@@ -973,7 +996,7 @@ td.date-cell + td.date-cell {
                 <label>Бюджет</label>
                 <input type="text" id="req-budget" placeholder="0" oninput="formatNumberInput(this)">
             </div>
-            <button class="save-stg" style="height:42px; margin-top:6px;" onclick="addRequest()">Добавить</button>
+            <button class="save-stg request-add-btn" style="height:42px;" onclick="addRequest()">Добавить</button>
         </div>
         <table id="t-requests">
             <thead>
@@ -1285,17 +1308,22 @@ td.date-cell + td.date-cell {
                 <label>Сумма (₽)</label>
                 <input type="text" id="add-proj-price" placeholder="50 000" oninput="formatNumberInput(this)">
             </div>
-             <div class="inp-group" style="flex:1">
+             <div class="inp-group contractor-group" style="flex:1">
                 <label>Подрядчик (расходы)</label>
-                <div style="display:flex; gap:10px; align-items:center; flex-wrap: wrap;">
-                    <select id="add-proj-contractor-mode" class="symbol-select" onchange="handleNewContractorModeChange(this.value)">
-                        <option value="none">Нет</option>
+                <div class="contractor-layout">
+                    <select id="add-proj-contractor-mode" class="contractor-mode-select" onchange="handleNewContractorModeChange(this.value)">
+                        <option value="none">Нет расходов</option>
                         <option value="percent">Процент (%)</option>
                         <option value="amount">Фикс. сумма (₽)</option>
                     </select>
-                    <input type="text" id="add-proj-contractor" placeholder="0" style="flex:1 1 260px; min-width: 180px;" oninput="formatNumberInput(this)" class="is-hidden">
+                    <div class="contractor-amount is-hidden" id="contractor-amount-wrap">
+                        <div class="input-with-suffix">
+                            <input type="text" id="add-proj-contractor" placeholder="Например, 30 000" style="flex:1 1 260px; min-width: 180px;" oninput="formatNumberInput(this)" disabled>
+                            <span class="input-suffix" id="contractor-suffix"></span>
+                        </div>
+                        <div class="contractor-helper" id="add-contractor-helper">Выберите тип расходов, чтобы указать сумму.</div>
+                    </div>
                 </div>
-                <div class="contractor-helper" id="add-contractor-helper">Выберите тип расходов, чтобы указать сумму.</div>
             </div>
              <div class="inp-group" style="flex: 0 0 120px;">
                 <label>Налог</label>
@@ -1581,19 +1609,25 @@ function deleteNameTemplate(val) {
 function handleNewContractorModeChange(mode) {
     const input = document.getElementById('add-proj-contractor');
     const helper = document.getElementById('add-contractor-helper');
-    if (!input || !helper) return;
+    const wrapper = document.getElementById('contractor-amount-wrap');
+    const suffix = document.getElementById('contractor-suffix');
+    if (!input || !helper || !wrapper || !suffix) return;
     const showInput = mode !== 'none';
-    input.classList.toggle('is-hidden', !showInput);
+    wrapper.classList.toggle('is-hidden', !showInput);
     input.disabled = !showInput;
     if (!showInput) {
         input.value = '';
-        helper.textContent = 'Расходы не учитываются для этого проекта.';
+        suffix.textContent = '';
+        helper.textContent = 'Выберите тип расходов, чтобы добавить сумму.';
         return;
     }
-    helper.textContent = mode === 'percent'
+    const isPercent = mode === 'percent';
+    helper.textContent = isPercent
         ? 'Укажите процент расходов от общей суммы.'
         : 'Укажите фиксированную сумму расходов.';
-    input.placeholder = mode === 'percent' ? 'Например, 20' : 'Например, 30 000';
+    input.placeholder = isPercent ? 'Например, 20' : 'Например, 30 000';
+    suffix.textContent = isPercent ? '%' : '₽';
+    input.focus();
 }
 
 let DATA = {
@@ -2629,9 +2663,24 @@ function renderTrash(){
                 <div class="trash-deleted-label">Удалено: ${delDate}</div>
                 <div class="trash-expire">${expireText}</div>
             </td>
-            <td>${item.c}</td>
-            <td>${item.n}</td>
-            <td>${formatCurrency(item.p)}</td>
+            <td>
+                <div class="trash-row-meta">
+                    <div class="trash-label">Клиент</div>
+                    <div class="trash-client">${item.c}</div>
+                </div>
+            </td>
+            <td>
+                <div class="trash-row-meta">
+                    <div class="trash-label">Проект</div>
+                    <div class="trash-project">${item.n}</div>
+                </div>
+            </td>
+            <td>
+                <div class="trash-row-meta">
+                    <div class="trash-label">Сумма</div>
+                    <div class="trash-amount">${formatCurrency(item.p)}</div>
+                </div>
+            </td>
             <td>
                 <div class="trash-action-btns">
                     <div class="restore-trash-btn" onclick="restoreFromTrash(${i})">Восстановить</div>
