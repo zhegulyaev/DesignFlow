@@ -81,12 +81,12 @@
   .brand-white { color: var(--muted); font-weight: 400; letter-spacing: -0.4px; }
   
   /* Исправлен отступ в шапке */
-  .header-row{display:flex;justify-content:space-between;align-items:center;margin:20px 0 16px; gap: 16px; padding: 12px 16px; border-radius: 14px; background: var(--card); border: 1px solid var(--border);}
+  .header-row{display:flex;justify-content:space-between;align-items:center;margin:20px 0 16px; gap: 16px; padding: 12px 18px; border-radius: 16px; background: linear-gradient(120deg, rgba(124,82,228,0.08), rgba(124,82,228,0.02)); border: 1px solid rgba(124,82,228,0.25); box-shadow: 0 16px 42px rgba(0,0,0,0.16);}
   .brand-wrap { display: flex; align-items: center; gap: 12px; }
-  .brand-logo { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: transparent; border: 2px solid #a371f7; font-size: 22px; color: #a371f7; font-weight: 900; box-shadow: 0 6px 18px rgba(163,113,247,0.2); }
-  .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
-  .brand-title { display: flex; align-items: baseline; gap: 8px; font-size: 28px; font-weight: 900; letter-spacing: -0.6px; color: #a371f7; }
-  .brand-version { font-size: 13px; font-weight: 800; color: var(--muted); }
+  .brand-logo { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; background: #7c52e4; border: 2px solid rgba(255,255,255,0.18); font-size: 22px; color: #f5f1ff; font-weight: 900; box-shadow: 0 10px 28px rgba(124,82,228,0.35); }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.05; }
+  .brand-title { display: flex; align-items: baseline; gap: 8px; font-size: 30px; font-weight: 900; letter-spacing: -0.8px; color: #7c52e4; }
+  .brand-version { font-size: 14px; font-weight: 800; color: #9aa3b8; letter-spacing: -0.3px; }
   .brand-sub { font-size: 14px; color: var(--muted); font-weight: 700; }
   .month-select{background:var(--card);color:var(--text);border:1px solid var(--border);padding:8px 15px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;outline:none;transition:.2s;}
   .month-select:hover{border-color:var(--muted);}
@@ -845,6 +845,7 @@ td.date-cell + td.date-cell {
         <div class="tab active" id="tab-active" onclick="switchTab('active')"><svg><use href="#icon-active"/></svg> В работе <span class="tab-count" id="count-active">0</span></div>
         <div class="tab" id="tab-waiting" onclick="switchTab('waiting')"><svg><use href="#icon-waiting"/></svg> Ожидает <span class="tab-count" id="count-waiting">0</span></div>
         <div class="tab" id="tab-potential" onclick="switchTab('potential')"><svg><use href="#icon-potential"/></svg> Потенциал <span class="tab-count" id="count-potential">0</span></div>
+        <div class="tab" id="tab-requests" onclick="switchTab('requests')"><svg><use href="#icon-all"/></svg> Заявки <span class="tab-count" id="count-requests">0</span></div>
         <div class="tab" id="tab-paused" onclick="switchTab('paused')"><svg><use href="#icon-paused"/></svg> На паузе <span class="tab-count" id="count-paused">0</span></div>
         <div class="tab" id="tab-archive" onclick="switchTab('archive')"><svg><use href="#icon-archive"/></svg> Выполнено <span class="tab-count" id="count-archive">0</span></div>
         <div class="tab tab-trash" id="tab-trash" onclick="switchTab('trash')"><svg><use href="#icon-trash"/></svg> Корзина <span class="tab-count" id="count-trash">0</span></div>
@@ -936,9 +937,47 @@ td.date-cell + td.date-cell {
               </tr>
             </thead>
             <tbody></tbody>
-            <tfoot id="total-row-potential"><tr><td colspan="3">Итого:</td><td></td><td></td></tr></tfoot>
-          </table>
+          <tfoot id="total-row-potential"><tr><td colspan="3">Итого:</td><td></td><td></td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div id="view-requests" style="display:none">
+      <div class="table-wrap">
+        <div class="row-inputs" style="padding: 15px; gap: 10px; align-items:flex-end;">
+            <div class="inp-group" style="flex:1">
+                <label>Кто обращается</label>
+                <input type="text" id="req-name" placeholder="Имя или компания">
+            </div>
+            <div class="inp-group" style="flex:1">
+                <label>Источник</label>
+                <input type="text" id="req-source" placeholder="Телеграм, сайт, рекомендация">
+            </div>
+            <div class="inp-group" style="flex:1">
+                <label>Описание</label>
+                <input type="text" id="req-note" placeholder="Что нужно сделать">
+            </div>
+            <div class="inp-group" style="flex:0 0 140px">
+                <label>Бюджет</label>
+                <input type="text" id="req-budget" placeholder="0" oninput="formatNumberInput(this)">
+            </div>
+            <button class="save-stg" style="height:42px; margin-top:6px;" onclick="addRequest()">Добавить</button>
         </div>
+        <table id="t-requests">
+            <thead>
+                <tr>
+                    <th class="select-col">№</th>
+                    <th width="18%">Клиент</th>
+                    <th width="18%">Источник</th>
+                    <th width="34%">Описание</th>
+                    <th width="12%">Бюджет</th>
+                    <th width="18%">Действия</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot id="total-row-requests"><tr><td colspan="4">Всего заявок</td><td></td><td></td></tr></tfoot>
+        </table>
+      </div>
     </div>
 
     <div id="view-paused" style="display:none">
@@ -1022,6 +1061,7 @@ td.date-cell + td.date-cell {
       </div>
       <div class="trash-toolbar">
           <div style="color: var(--muted); font-size: 13px;">Объекты хранятся здесь 7 дней, затем удаляются навсегда.</div>
+          <button class="trash-clean-btn" onclick="clearTrashForever()">Удалить все проекты</button>
           <button class="trash-clean-btn" onclick="clearTrashForever()">🗑 Очистить корзину навсегда</button>
       </div>
     </div>
@@ -1201,8 +1241,25 @@ td.date-cell + td.date-cell {
         <span class="close-modal-x" onclick="document.getElementById('addProjectModal').style.display='none'">×</span>
         <h2 style="margin-bottom:20px">Новый проект</h2>
         <div class="inp-group">
+            <label>Статус</label>
+            <select id="add-proj-type" onchange="handleStatusChange(this.value)">
+                <option value="active">В работу</option>
+                <option value="potential">Потенциал</option>
+                <option value="waiting">Ожидает</option>
+                <option value="paused">На паузе</option>
+                <option value="archive">Выполнено (Архив)</option>
+            </select>
+        </div>
+        <div class="inp-group">
             <label>Название проекта</label>
-            <input type="text" id="add-proj-name" placeholder="Сайт для кофейни">
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                <input type="text" id="add-proj-name" list="project-name-templates" placeholder="Сайт для кофейни" style="flex:1 1 260px;">
+                <select id="add-proj-template-select" onchange="applyNameTemplate(this.value)" style="min-width:170px;">
+                    <option value="">Шаблоны</option>
+                </select>
+                <button class="inline-link-btn" type="button" onclick="saveNameTemplate()">Сохранить шаблон</button>
+                <datalist id="project-name-templates"></datalist>
+            </div>
         </div>
         <div class="inp-group">
             <label>Имя клиента</label>
@@ -1234,7 +1291,7 @@ td.date-cell + td.date-cell {
             </div>
         </div>
         
-        <div class="date-duo">
+        <div class="date-duo status-dates">
             <div class="date-duo-card">
                 <div class="inp-group">
                     <label>⚡ Старт</label>
@@ -1257,7 +1314,7 @@ td.date-cell + td.date-cell {
             </div>
         </div>
 
-        <div class="deadline-template">
+        <div class="deadline-template status-dates">
             <div class="inp-group">
                 <label>Шаблон срока</label>
                 <div class="deadline-presets">
@@ -1275,17 +1332,6 @@ td.date-cell + td.date-cell {
             </div>
         </div>
 
-        <div class="inp-group">
-            <label>Статус</label>
-            <select id="add-proj-type">
-                <option value="active">В работу</option>
-                <option value="potential">Потенциал</option>
-                <option value="waiting">Ожидает</option>
-                <option value="paused">На паузе</option>
-                <option value="archive">Выполнено (Архив)</option>
-            </select>
-        </div>
-        
         <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveNewProject()">Создать</button>
     </div>
 </div>
@@ -1362,6 +1408,7 @@ td.date-cell + td.date-cell {
 <script>
 const K = 'grok_design_v5';
 const THEME_KEY = 'designflow_theme';
+const NAME_TEMPLATES_KEY = 'designflow_name_templates';
 const now = new Date();
 const today = now.toISOString().slice(0, 10);
 let currentMonth = today.slice(0,7);
@@ -1370,6 +1417,7 @@ const TAB_DESCRIPTIONS = {
     active: "Проекты в работе. Следите за дедлайнами и фиксируйте предоплату.",
     waiting: "Ожидают реакции клиента или материалов.",
     potential: "Лиды и переговоры. Ещё не начаты.",
+    requests: "Новые заявки и обращения с каналов.",
     paused: "Замороженные проекты.",
     archive: "Успешно завершенные заказы.",
     all: "Все проекты и архив в одном месте.",
@@ -1436,13 +1484,62 @@ function formatNumberInput(inputEl) {
     inputEl.value = formatPlainNumber(inputEl.value);
 }
 
+const DEFAULT_NAME_TEMPLATES = [
+    'Лендинг',
+    'Корпоративный сайт',
+    'Интернет-магазин',
+    'Мобильное приложение',
+    'UX/UI аудит',
+    'Brandbook'
+];
+
+let NAME_TEMPLATES = [...DEFAULT_NAME_TEMPLATES];
+
+function loadNameTemplates() {
+    try {
+        const raw = localStorage.getItem(NAME_TEMPLATES_KEY);
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) NAME_TEMPLATES = parsed;
+        }
+    } catch(e) { console.warn('Template load failed', e); }
+    refreshTemplateSelects();
+}
+
+function refreshTemplateSelects() {
+    const select = document.getElementById('add-proj-template-select');
+    const list = document.getElementById('project-name-templates');
+    if (!select || !list) return;
+    select.innerHTML = '<option value="">Шаблоны</option>' + NAME_TEMPLATES.map(t=>`<option value="${t}">${t}</option>`).join('');
+    list.innerHTML = NAME_TEMPLATES.map(t=>`<option value="${t}">`).join('');
+}
+
+function applyNameTemplate(val) {
+    if (!val) return;
+    const input = document.getElementById('add-proj-name');
+    if (input) input.value = val;
+}
+
+function saveNameTemplate() {
+    const input = document.getElementById('add-proj-name');
+    if (!input) return;
+    const val = input.value.trim();
+    if (!val) return;
+    if (!NAME_TEMPLATES.includes(val)) {
+        NAME_TEMPLATES.unshift(val);
+        localStorage.setItem(NAME_TEMPLATES_KEY, JSON.stringify(NAME_TEMPLATES.slice(0, 20)));
+        refreshTemplateSelects();
+        showToast('Шаблон сохранен');
+    }
+}
+
 let DATA = {
     settings: { record: 0 },
     monthlyGoals: { [currentMonth]: 250000 },
-    active: [], archive: [], paused: [], waiting: [], potential: [], trash: []
+    active: [], archive: [], paused: [], waiting: [], potential: [], requests: [], trash: []
 };
 
-let SORT = { active: 'dl', archive: 'date', potential: 'p', waiting: 'dl', paused: 'dl' };
+let SORT = { active: 'dl', archive: 'date', potential: 'p', waiting: 'dl', paused: 'dl', requests: 'created' };
 let queue = { type: null, idx: null, field: null, targetId: null };
 let previousDeadlineValue = '';
 let toastTimeout = null;
@@ -1762,10 +1859,11 @@ function init(){
     if(!exist) { const v4 = localStorage.getItem('grok_design_v4'); if(v4) exist = v4; }
 
     if (exist) {
-        try { 
+        try {
             const parsed = JSON.parse(exist);
             DATA = { ...DATA, ...parsed };
             if(!DATA.trash) DATA.trash = [];
+            if(!DATA.requests) DATA.requests = [];
             ['active', 'archive', 'paused', 'waiting', 'potential'].forEach(type => {
                  DATA[type].forEach(i => {
                     if(i.contractor === undefined) i.contractor = 0;
@@ -1777,6 +1875,7 @@ function init(){
     }
 
     initTheme();
+    loadNameTemplates();
     cleanupTrash();
     renderMonthSelect();
     setupModalsBackgroundCheck();
@@ -1850,7 +1949,7 @@ function switchTab(t){
     currentTab = t;
     document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
     document.getElementById(`tab-${t}`).classList.add('active');
-    ['active','waiting','potential','paused','archive','all','trash'].forEach(k => {
+    ['active','waiting','potential','requests','paused','archive','all','trash'].forEach(k => {
         const el = document.getElementById(`view-${k}`);
         if(el) el.style.display = (k === t) ? 'block' : 'none';
         const cb = document.getElementById(`selectAll${k.charAt(0).toUpperCase() + k.slice(1)}`);
@@ -1872,6 +1971,23 @@ function getTabSummary(type, baseText) {
         return `${baseText} · Статистика скрыта в корзине.`;
     }
     return baseText;
+}
+
+function updateTabCounts() {
+    const counts = {
+        active: DATA.active.length,
+        waiting: DATA.waiting.length,
+        potential: DATA.potential.length,
+        requests: DATA.requests.length,
+        paused: DATA.paused.length,
+        archive: DATA.archive.length,
+        all: DATA.active.length + DATA.waiting.length + DATA.potential.length + DATA.paused.length + DATA.archive.length,
+        trash: DATA.trash.length
+    };
+    Object.entries(counts).forEach(([key, val]) => {
+        const el = document.getElementById(`count-${key}`);
+        if (el) el.innerText = val;
+    });
 }
 
 function sortData(type, key, dataType, initial = false) {
@@ -1914,6 +2030,7 @@ function upd(){
     renderSimple('waiting');
     renderSimple('paused');
     renderPotential();
+    renderRequests();
     renderArchive();
     renderAll();
     renderTrash();
@@ -1921,6 +2038,7 @@ function upd(){
     const desc = document.getElementById('tab-description');
     if (desc) desc.innerHTML = getTabSummary(currentTab, TAB_DESCRIPTIONS[currentTab]);
     updateBulkToolbar(currentTab);
+    updateTabCounts();
 }
 
 function renderActive(){
@@ -2178,6 +2296,68 @@ function renderPotential(){
     </tr>`;
 }
 
+function renderRequests(){
+    const tbody = document.querySelector('#t-requests tbody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    let total = 0;
+    DATA.requests.forEach((item, i) => {
+        const budget = toNumeric(item.budget);
+        total += budget;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="select-col"><div class="row-index">${i + 1}</div></td>
+            <td><span contenteditable onblur="updateRequestField(${i},'name',this.innerText)">${item.name || '—'}</span></td>
+            <td><span contenteditable onblur="updateRequestField(${i},'source',this.innerText)">${item.source || '—'}</span></td>
+            <td><span contenteditable onblur="updateRequestField(${i},'note',this.innerText)">${item.note || '—'}</span></td>
+            <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(budget)}" oninput="formatNumberInput(this)" onblur="updateRequestField(${i},'budget',this.value)"><span class="currency-symbol">₽</span></div></td>
+            <td>
+                <div class="trash-action-btns">
+                    <div class="restore-trash-btn" onclick="convertRequestToPotential(${i})">В потенциал</div>
+                    <div class="delete-forever-text" onclick="deleteRequest(${i})" title="Удалить">Удалить</div>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+    const footer = document.querySelector('#total-row-requests');
+    if (footer) {
+        footer.innerHTML = `<tr><td colspan="4" class="footer-total-toggle">Всего ${DATA.requests.length} заявок</td><td style="text-align:right;">${formatCurrency(total)}</td><td></td></tr>`;
+    }
+}
+
+function addRequest() {
+    const name = document.getElementById('req-name').value.trim();
+    const source = document.getElementById('req-source').value.trim();
+    const note = document.getElementById('req-note').value.trim();
+    const budget = toNumeric(document.getElementById('req-budget').value);
+    if (!name && !note) return;
+    DATA.requests.unshift({ name, source, note, budget, created: new Date().toISOString() });
+    ['req-name','req-source','req-note','req-budget'].forEach(id => document.getElementById(id).value = '');
+    save(); upd();
+    showToast('Заявка добавлена');
+}
+
+function updateRequestField(idx, key, val) {
+    if (!DATA.requests[idx]) return;
+    DATA.requests[idx][key] = key === 'budget' ? toNumeric(val) : val;
+    save(); upd();
+}
+
+function deleteRequest(idx) {
+    DATA.requests.splice(idx, 1);
+    save(); upd();
+}
+
+function convertRequestToPotential(idx) {
+    const req = DATA.requests.splice(idx, 1)[0];
+    if (!req) return;
+    DATA.potential.unshift({ n: req.note || req.name || 'Новый лид', c: req.name || '—', p: req.budget || 0, contractor: 0, contractorMode: 'amount', taxPrc: 0, paid: 0, link: '' });
+    save();
+    showToast('Перенесено в потенциал');
+    switchTab('potential');
+}
+
 function renderArchive(){
     const tbody = document.querySelector('#t-archive tbody');
     tbody.innerHTML = '';
@@ -2287,17 +2467,19 @@ function renderAll(){
 
         const tr = document.createElement('tr');
         const deadlineValue = wrap.__type === 'archive' ? item.date : (item.dl || item.date || item.start);
+        const dateField = wrap.__type === 'archive' ? 'date' : 'dl';
         const rem = wrap.__type === 'archive' ? { cls: '', txt: '' } : getTimeRemaining(deadlineValue);
         const remText = wrap.__type === 'archive' || rem.txt === '—' ? '' : ` (${rem.txt})`;
         const dateDisplay = deadlineValue ? formatDateDisplay(deadlineValue) : '—';
         const dateCls = wrap.__type === 'archive' ? '' : rem.cls;
+        const linkIcon = renderLinkControls(item, wrap.idx, wrap.__type);
 
         tr.innerHTML = `
             <td class="select-col"><div class="row-index">${i + 1}</div></td>
             <td><span class="status-pill ${status.cls}">${status.label}</span></td>
-            <td><div class="client-wrap">${item.c || '—'}</div></td>
+            <td><div class="client-wrap">${item.c || '—'}${linkIcon}</div></td>
             <td class="project-name-wrap">${item.n || '—'}</td>
-            <td class="date-cell"><div class="date-input-wrap ${dateCls}"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${dateDisplay}${remText}</span></div></td>
+            <td class="date-cell"><div class="date-input-wrap ${dateCls}" onclick="openDate('${wrap.__type}',${wrap.idx},'${dateField}')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${dateDisplay}${remText}</span></div></td>
             <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(gross)}" oninput="formatNumberInput(this)" onblur="updVal('${wrap.__type}',${wrap.idx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td style="text-align:right;">
                 <div class="price-cell-wrap expense-cell">
@@ -2344,10 +2526,11 @@ function formatTrashExpire(item) {
     if (remainingMs <= 0) return 'Удалится в течение часа';
     const days = Math.floor(remainingMs / (24 * 60 * 60 * 1000));
     const hours = Math.floor((remainingMs % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+    const absolute = expiresAt.toLocaleString('ru-RU', { hour12: false });
     if (days > 0) {
-        return `Удалится через ${days} д. ${hours} ч.`;
+        return `Удалится через ${days} д. ${hours} ч. · ${absolute}`;
     }
-    return `Удалится через ${hours} ч.`;
+    return `Удалится через ${hours} ч. · ${absolute}`;
 }
 
 function renderTrash(){
@@ -2493,6 +2676,7 @@ function openAddModal(){
     ['name','client','price','contractor'].forEach(id => document.getElementById(`add-proj-${id}`).value = '');
     document.getElementById('add-proj-tax').value = '0';
     document.getElementById('add-proj-contractor-mode').value = 'amount';
+    document.getElementById('add-proj-type').value = 'active';
     document.getElementById('add-proj-start-val').value = today;
     document.getElementById('add-proj-dl-val').value = today;
     previousDeadlineValue = today;
@@ -2500,6 +2684,7 @@ function openAddModal(){
     document.getElementById('add-proj-dl-custom').value = '';
     document.getElementById('add-proj-start-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
     document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
+    handleStatusChange('active');
     document.getElementById('addProjectModal').style.display = 'flex';
 }
 function saveNewProject(){
@@ -2516,10 +2701,15 @@ function saveNewProject(){
     const item = {
         n: name, c: client, p: price, contractor: contr, contractorMode: contrMode, taxPrc: tax, link: '',
         start: type==='active'? start : undefined,
-        dl: type==='active' || type==='waiting' || type==='paused' ? dl : undefined, 
+        dl: type==='active' || type==='waiting' || type==='paused' ? dl : undefined,
         paid: (type==='active'||type==='archive'? (type==='archive'?100:50) : 0),
         date: type==='archive' ? today : undefined
     };
+
+    if (type === 'potential') {
+        delete item.start;
+        delete item.dl;
+    }
     
     DATA[type].unshift(item);
     document.getElementById('addProjectModal').style.display = 'none';
@@ -2572,6 +2762,15 @@ function applyDeadlinePreset() {
     const iso = dlDate.toISOString().slice(0, 10);
     document.getElementById('add-proj-dl-val').value = iso;
     document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(iso);
+}
+
+function handleStatusChange(status) {
+    const dateBlocks = document.querySelectorAll('.status-dates');
+    dateBlocks.forEach(block => block.style.display = status === 'potential' ? 'none' : '');
+    if (status === 'potential') {
+        document.getElementById('add-proj-dl-days').value = '';
+        document.getElementById('add-proj-dl-custom').value = '';
+    }
 }
 
 function openDate(type, idx, field){
