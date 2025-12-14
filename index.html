@@ -137,7 +137,7 @@
   .tab-desc-block { margin-bottom: 15px; } 
 
   /* Main Layout & Tables */
-  .table-wrap{overflow-x:visible;overflow-y:visible;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:5px; margin-top: 10px; position: relative;}
+  .table-wrap{overflow-x:auto;overflow-y:visible;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:5px; margin-top: 10px; position: relative;}
   table{width:100%;border-collapse:collapse; min-width: 1400px;}
   th{text-align:left;color:var(--muted);font-size:12px;text-transform:uppercase;padding:12px 10px;border-bottom:1px solid var(--border);user-select:none; white-space: nowrap; cursor: pointer;}
   
@@ -479,6 +479,7 @@
   .inp-group input, .inp-group select {background-color: var(--input-bg);border:1px solid var(--border);padding:10px;width:100%;color:var(--text);border-radius:8px; outline: none; box-sizing: border-box;}
   .row-inputs{display:flex;gap:12px;margin-bottom:15px;flex-wrap:wrap; align-items:flex-start;}
   .row-inputs > div {flex: 1 1 180px;}
+  .input-error { border-color: var(--red) !important; box-shadow: 0 0 0 2px rgba(218,54,51,0.12); }
   .deadline-presets { display: flex; gap: 10px; align-items: center; flex-wrap: nowrap; }
   .deadline-presets select { min-width: 150px; white-space: nowrap; }
   .deadline-presets input { min-width: 120px; }
@@ -508,10 +509,10 @@
       transition: opacity 0.2s;
   }
   .close-modal-x:hover { opacity: 1; }
-  .save-stg { padding: 12px 16px; border-radius: 12px; font-weight: 800; letter-spacing: 0.1px; background: var(--btn-blue); border: 1px solid var(--btn-blue); color: #fff; transition: transform .1s, box-shadow .1s; cursor: pointer; }
-  .save-stg:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(0,0,0,0.18); }
+  .save-stg { padding: 12px 16px; border-radius: 12px; font-weight: 800; letter-spacing: 0.1px; background: var(--btn-blue); border: 1px solid var(--btn-blue); color: #fff; transition: transform .1s, box-shadow .1s, background .1s; cursor: pointer; }
+  .save-stg:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(0,0,0,0.14); color: #fff; background: #2f81f7; }
   .modal .save-stg { width: 100%; margin-top: 20px; }
-  .request-add-btn { width: auto; margin-top: 6px; align-self: stretch; min-width: 140px; }
+  .request-add-btn { width: auto; align-self: flex-end; min-width: 140px; height: 46px; margin-top: 0; }
   
   /* Settings Modal specific padding fix */
   #settingsModal .modal-content {
@@ -787,27 +788,30 @@
   .trash-expire.warn { color: var(--gold); }
   .trash-expire.danger { color: var(--red); }
 
-  .template-manager { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+  .template-manager { display: flex; flex-direction: column; gap: 8px; width: 100%; }
   .template-manager-title { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; }
-  .template-pills { display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px 2px; scrollbar-width: thin; }
-  .template-pills::-webkit-scrollbar { height: 8px; }
-  .template-pills::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-  .template-pills::-webkit-scrollbar-track { background: transparent; }
+  .template-pills { display: flex; gap: 8px; overflow-x: auto; padding: 10px 2px 4px; scrollbar-width: none; margin-top: 2px; }
+  .template-pills::-webkit-scrollbar { display: none; }
+  .template-helper { font-size: 12px; font-weight: 700; color: var(--muted); }
+  .template-helper.error { color: var(--red); }
+  .template-helper.success { color: var(--green); }
   .template-pill { display: inline-flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 10px; background: var(--pill-bg); border: 1px solid var(--border); font-weight: 700; color: var(--text); white-space: nowrap; }
   .template-pill .template-fill-btn { border: none; background: transparent; color: var(--text); padding: 0; cursor: pointer; font-weight: 800; }
   .template-pill .template-fill-btn:hover { color: var(--accent); }
   .template-pill .template-delete-btn { border: none; background: transparent; color: var(--muted); padding: 0 4px; cursor: pointer; font-weight: 800; }
   .template-pill .template-delete-btn:hover { color: var(--red); }
-  .template-add-btn { align-self: flex-start; margin-top: 4px; }
+  .template-add-btn { align-self: flex-start; margin-top: 0; }
   .contractor-layout { display: flex; flex-direction: column; gap: 10px; }
   .contractor-group { align-self: stretch; }
   .contractor-mode-select { width: 100%; padding: 10px; border-radius: 10px; font-weight: 700; }
-  .contractor-amount { display: flex; flex-direction: column; gap: 8px; background: var(--pill-bg); border: 1px solid var(--border); padding: 10px; border-radius: 12px; }
-  .input-with-suffix { display: grid; grid-template-columns: 1fr auto; align-items: stretch; gap: 0; }
-  .input-with-suffix input { border-radius: 10px 0 0 10px; }
+  .contractor-amount { display: flex; flex-direction: column; gap: 8px; background: var(--pill-bg); border: 1px solid var(--border); padding: 10px; border-radius: 12px; width: 100%; }
+  .input-with-suffix { display: grid; grid-template-columns: 1fr auto; align-items: stretch; gap: 0; width: 100%; }
+  .input-with-suffix input { border-radius: 10px 0 0 10px; min-width: 0; }
   .input-with-suffix input:focus { z-index: 1; }
   .input-suffix { display: inline-flex; align-items: center; justify-content: center; padding: 0 14px; background: var(--card-alt); border: 1px solid var(--border); border-left: none; border-radius: 0 10px 10px 0; font-weight: 800; color: var(--muted); min-width: 52px; }
   .contractor-helper { color: var(--muted); font-size: 12px; font-weight: 700; line-height: 1.4; }
+  .contractor-input { width: 100%; }
+  .tax-group { align-self: flex-end; }
   .is-hidden { display: none !important; }
   .expense-cell input:disabled { background: var(--input-bg); color: var(--muted); cursor: not-allowed; }
 
@@ -1010,7 +1014,7 @@ td.date-cell + td.date-cell {
                 <label>Бюджет</label>
                 <input type="text" id="req-budget" placeholder="0" oninput="formatNumberInput(this)">
             </div>
-            <button class="save-stg request-add-btn" style="height:42px;" onclick="addRequest()">Добавить</button>
+            <button class="save-stg request-add-btn" onclick="addRequest()">Добавить</button>
         </div>
         <table id="t-requests">
             <thead>
@@ -1308,6 +1312,7 @@ td.date-cell + td.date-cell {
                 <div class="template-manager-title">Мои шаблоны</div>
                 <div class="template-pills" id="saved-template-pills"></div>
                 <button class="inline-link-btn template-add-btn" type="button" onclick="saveNameTemplate()">Создать свой шаблон</button>
+                <div class="template-helper" id="template-helper">Введите название проекта, затем сохраните как шаблон.</div>
             </div>
         </div>
         <div class="inp-group">
@@ -1320,7 +1325,7 @@ td.date-cell + td.date-cell {
                 <input type="text" id="add-proj-price" placeholder="50 000" oninput="formatNumberInput(this)">
             </div>
              <div class="inp-group contractor-group" style="flex:1">
-                <label>Подрядчик (расходы)</label>
+                <label>Расходы</label>
                 <div class="contractor-layout">
                     <select id="add-proj-contractor-mode" class="contractor-mode-select" onchange="handleNewContractorModeChange(this.value)">
                         <option value="none">Нет расходов</option>
@@ -1329,14 +1334,14 @@ td.date-cell + td.date-cell {
                     </select>
                     <div class="contractor-amount is-hidden" id="contractor-amount-wrap">
                         <div class="input-with-suffix">
-                            <input type="text" id="add-proj-contractor" placeholder="Например, 30 000" style="flex:1 1 260px; min-width: 180px;" oninput="formatNumberInput(this)" disabled>
+                            <input type="text" class="contractor-input" id="add-proj-contractor" placeholder="Например, 30 000" oninput="formatNumberInput(this)" disabled>
                             <span class="input-suffix" id="contractor-suffix"></span>
                         </div>
                         <div class="contractor-helper" id="add-contractor-helper">Выберите тип расходов, чтобы указать сумму.</div>
                     </div>
                 </div>
             </div>
-             <div class="inp-group" style="flex: 0 0 120px;">
+             <div class="inp-group tax-group" style="flex: 0 0 120px;">
                 <label>Налог</label>
                 <select id="add-proj-tax" class="symbol-select">
                     <option value="0">0%</option>
@@ -1572,6 +1577,14 @@ function persistNameTemplates() {
     localStorage.setItem(NAME_TEMPLATES_KEY, JSON.stringify(NAME_TEMPLATES.slice(0, 20)));
 }
 
+function setTemplateHelper(message, state = '') {
+    const helper = document.getElementById('template-helper');
+    if (!helper) return;
+    helper.textContent = message;
+    helper.classList.remove('error', 'success');
+    if (state) helper.classList.add(state);
+}
+
 function renderTemplatePills() {
     const pills = document.getElementById('saved-template-pills');
     if (!pills) return;
@@ -1603,12 +1616,20 @@ function saveNameTemplate() {
     const input = document.getElementById('add-proj-name');
     if (!input) return;
     const val = input.value.trim();
-    if (!val) return;
+    if (!val) {
+        input.classList.add('input-error');
+        setTemplateHelper('Введите название, чтобы сохранить шаблон.', 'error');
+        input.focus();
+        return;
+    }
     if (!NAME_TEMPLATES.includes(val)) {
         NAME_TEMPLATES.unshift(val);
         persistNameTemplates();
         refreshTemplateSelects();
         showToast('Шаблон сохранен');
+        setTemplateHelper('Шаблон сохранен и добавлен в список.', 'success');
+    } else {
+        setTemplateHelper('Такой шаблон уже есть в списке.', '');
     }
 }
 
@@ -1985,6 +2006,14 @@ function init(){
 
     initTheme();
     loadNameTemplates();
+    setTemplateHelper('Введите название проекта, затем сохраните как шаблон.');
+    const nameInput = document.getElementById('add-proj-name');
+    if (nameInput) {
+        nameInput.addEventListener('input', () => {
+            nameInput.classList.remove('input-error');
+            setTemplateHelper('Введите название проекта, затем сохраните как шаблон.');
+        });
+    }
     cleanupTrash();
     renderMonthSelect();
     setupModalsBackgroundCheck();
@@ -2174,7 +2203,8 @@ function renderActive(){
         const linkIcon = renderLinkControls(item, i, 'active');
         const paidAmount = Math.round(gross * ((toNumeric(item.paid) || 0) / 100));
         totalPaidGross += paidAmount;
-        const contractorSymbol = item.contractorMode === 'percent' ? '%' : item.contractorMode === 'none' ? '—' : '₽';
+        const contractorSymbol = item.contractorMode === 'percent' ? '%' : item.contractorMode === 'none' ? '' : '₽';
+        const contractorSymbolClass = contractorSymbol ? '' : 'symbol-empty';
         const contractorValue = item.contractorMode === 'none' ? '' : formatPlainNumber(item.contractor ?? 0);
         const contractorHelper = item.contractorMode === 'none' ? 'Расходы не учитываются' : `≈ ${formatCurrency(contractorAmount)}`;
 
@@ -2210,7 +2240,7 @@ function renderActive(){
             <td style="text-align:right;">
                 <div class="price-cell-wrap expense-cell">
                     <input type="text" value="${contractorValue}" ${item.contractorMode === 'none' ? 'disabled' : ''} oninput="formatNumberInput(this)" onblur="updateContractorValue('active',${i},this.value)">
-                    <span class="currency-symbol">${contractorSymbol}</span>
+                    <span class="currency-symbol ${contractorSymbolClass}">${contractorSymbol || '₽'}</span>
                     <select class="expense-mode" onchange="updateContractorMode('active',${i},this.value)">
                         <option value="none" ${item.contractorMode==='none'?'selected':''}>Нет</option>
                         <option value="amount" ${item.contractorMode!=='percent'?'selected':''}>₽</option>
@@ -2491,7 +2521,8 @@ function renderArchive(){
         
         const linkIcon = renderLinkControls(item, realIdx, 'archive');
                                       
-        const contractorSymbol = item.contractorMode === 'percent' ? '%' : item.contractorMode === 'none' ? '—' : '₽';
+        const contractorSymbol = item.contractorMode === 'percent' ? '%' : item.contractorMode === 'none' ? '' : '₽';
+        const contractorSymbolClass = contractorSymbol ? '' : 'symbol-empty';
         const contractorValue = item.contractorMode === 'none' ? '' : formatPlainNumber(item.contractor ?? 0);
         const contractorHelper = item.contractorMode === 'none' ? 'Расходы не учитываются' : `≈ ${formatCurrency(contractorAmount)}`;
 
@@ -2516,7 +2547,7 @@ function renderArchive(){
             <td>
                 <div class="price-cell-wrap expense-cell">
                     <input type="text" value="${contractorValue}" ${item.contractorMode === 'none' ? 'disabled' : ''} oninput="formatNumberInput(this)" onblur="updateContractorValue('archive',${realIdx},this.value)">
-                    <span class="currency-symbol">${contractorSymbol}</span>
+                    <span class="currency-symbol ${contractorSymbolClass}">${contractorSymbol || '₽'}</span>
                     <select class="expense-mode" onchange="updateContractorMode('archive',${realIdx},this.value)">
                         <option value="none" ${item.contractorMode==='none'?'selected':''}>Нет</option>
                         <option value="amount" ${item.contractorMode!=='percent'?'selected':''}>₽</option>
@@ -2590,7 +2621,8 @@ function renderAll(){
         const dateCls = wrap.__type === 'archive' ? '' : rem.cls;
         const linkIcon = renderLinkControls(item, wrap.idx, wrap.__type);
 
-        const contractorSymbol = item.contractorMode === 'percent' ? '%' : item.contractorMode === 'none' ? '—' : '₽';
+        const contractorSymbol = item.contractorMode === 'percent' ? '%' : item.contractorMode === 'none' ? '' : '₽';
+        const contractorSymbolClass = contractorSymbol ? '' : 'symbol-empty';
         const contractorValue = item.contractorMode === 'none' ? '' : formatPlainNumber(item.contractor ?? 0);
         const contractorHelper = item.contractorMode === 'none' ? 'Расходы не учитываются' : `≈ ${formatCurrency(contractorAmount)}`;
 
@@ -2604,7 +2636,7 @@ function renderAll(){
             <td style="text-align:right;">
                 <div class="price-cell-wrap expense-cell">
                     <input type="text" value="${contractorValue}" ${item.contractorMode === 'none' ? 'disabled' : ''} oninput="formatNumberInput(this)" onblur="updateContractorValue('${wrap.__type}',${wrap.idx},this.value)">
-                    <span class="currency-symbol">${contractorSymbol}</span>
+                    <span class="currency-symbol ${contractorSymbolClass}">${contractorSymbol || '₽'}</span>
                 </div>
                 <div class="expense-helper">${contractorHelper}</div>
             </td>
@@ -3076,16 +3108,23 @@ function pluralize(num, forms){
 
 function getTimeRemaining(dl){
     if(!dl) return {txt:'—', cls:'days-normal', days: Infinity};
-    const end = new Date(dl.slice(0, 10) + 'T00:00:00').getTime();
-    const todayNormalized = new Date(today + 'T00:00:00').getTime();
-    
-    const diff = end - todayNormalized;
-    const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-    
-    if(days < 0) return {txt:'Просрочено', cls:'days-critical', days: -1};
-    if(days === 0) return {txt:'Сегодня', cls:'days-critical', days: 0};
-    if(days <= 3) return {txt: days + ' дн.', cls:'days-warning', days: days};
-    return {txt: days + ' дн.', cls:'days-normal', days: days};
+    const targetDay = new Date(dl.slice(0, 10) + 'T00:00:00');
+    const todayNormalized = new Date(today + 'T00:00:00');
+
+    if (isNaN(targetDay.getTime())) return {txt:'—', cls:'days-normal', days: Infinity};
+
+    const dayDiff = Math.ceil((targetDay.getTime() - todayNormalized.getTime()) / (1000 * 60 * 60 * 24));
+    const targetExact = dl.includes('T') ? new Date(dl.replace(' ', 'T')) : new Date(dl + 'T23:59:59');
+    if (isNaN(targetExact.getTime())) return {txt:'—', cls:'days-normal', days: Infinity};
+    const msLeft = targetExact.getTime() - Date.now();
+
+    if(msLeft < 0) return {txt:'Просрочено', cls:'days-critical', days: -1};
+    if(dayDiff === 0) {
+        const hours = Math.max(1, Math.ceil(msLeft / (1000 * 60 * 60)));
+        return {txt:`${hours} ч.`, cls:'days-critical', days: 0};
+    }
+    if(dayDiff <= 3) return {txt: dayDiff + ' дн.', cls:'days-warning', days: dayDiff};
+    return {txt: dayDiff + ' дн.', cls:'days-normal', days: dayDiff};
 }
 
 function changeMonth(m){ 
