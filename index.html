@@ -861,6 +861,20 @@
   .template-wide .template-manager { margin-top: 0; padding-top: 10px; }
   .template-create-inline { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: none; color: var(--accent); font-weight: 800; padding: 6px 0 0; cursor: pointer; font-size: 14px; }
   .template-create-inline:hover { color: #8ab4ff; }
+  .template-actions-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+  .template-secondary-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--button-bg); border: 1px solid var(--border); color: var(--text); border-radius: 10px; font-weight: 800; font-size: 14px; cursor: pointer; }
+  .template-secondary-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .template-manager-modal { max-height: 80vh; overflow: hidden; }
+  .template-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; max-height: 60vh; overflow: auto; padding-right: 6px; }
+  .template-empty { color: var(--muted); font-weight: 700; font-size: 14px; padding: 12px; border: 1px dashed var(--border); border-radius: 12px; background: var(--pill-bg); }
+  .template-row { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--pill-bg); cursor: grab; }
+  .template-row:active { cursor: grabbing; }
+  .template-row.drag-over { box-shadow: 0 0 0 2px var(--accent); }
+  .template-drag-handle { width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; color: var(--muted); }
+  .template-row input { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); font-weight: 800; }
+  .template-row input:focus { border-color: var(--accent); outline: none; }
+  .template-row .template-delete-btn { border: none; background: transparent; color: var(--muted); padding: 4px 6px; cursor: pointer; font-weight: 800; font-size: 18px; }
+  .template-row .template-delete-btn:hover { color: var(--red); }
   .template-inline-block { border-top: 1px solid var(--border); padding-top: 12px; margin-top: 6px; }
   .template-pills { display: flex; gap: 8px; overflow-y: auto; overflow-x: hidden; padding: 6px 4px 10px 2px; scrollbar-width: none; margin-top: 0; max-width: 100%; position: relative; flex: 1; flex-wrap: wrap; align-content: flex-start; }
   .template-pills::-webkit-scrollbar { display: none; }
@@ -891,6 +905,8 @@
   .tax-group { align-self: flex-end; }
   .is-hidden { display: none !important; }
   .expense-cell input:disabled { background: var(--input-bg); color: var(--muted); cursor: not-allowed; }
+  .deadline-links-row { margin-top: 12px; display: flex; align-items: center; justify-content: flex-start; }
+  .link-inline-btn { padding: 6px 0 0; }
 
 
 .date-cell:not(:last-child) .date-input-wrap {
@@ -1399,14 +1415,11 @@ td.date-cell + td.date-cell {
                         </div>
                         <datalist id="project-name-templates"></datalist>
                     </div>
-                    <button class="template-create-inline" type="button" onclick="saveNameTemplate()">+ Создать шаблон</button>
-                    <div class="template-inline-block template-card">
-                        <div class="template-manager">
-                            <div class="template-manager-title">Мои шаблоны</div>
-                            <div class="template-helper" id="template-helper">Введите название проекта, затем сохраните как шаблон.</div>
-                            <div class="template-pills" id="saved-template-pills"></div>
-                        </div>
+                    <div class="template-actions-row">
+                        <button class="template-create-inline" type="button" onclick="saveNameTemplate()">+ Создать шаблон</button>
+                        <button class="template-secondary-btn" type="button" onclick="openTemplateManagerModal()">📂 Мои шаблоны</button>
                     </div>
+                    <div class="template-helper" id="template-helper">Введите название проекта, затем сохраните как шаблон.</div>
                 </div>
             </div>
                 <div class="add-modal-card add-modal-stack">
@@ -1481,14 +1494,25 @@ td.date-cell + td.date-cell {
                             </div>
                         </div>
                     </div>
+                    <div class="deadline-links-row">
+                        <button type="button" class="template-create-inline link-inline-btn" onclick="openLink('new')">🔗 Добавить ссылку</button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="add-modal-actions">
-            <button type="button" class="link-manage-btn" id="new-project-link-btn" onclick="openLink('new')">🔗 Ссылка на чат/материалы</button>
             <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveNewProject()">Создать новый проект</button>
         </div>
+    </div>
+</div>
+
+<div class="modal" id="templateManagerModal">
+    <div class="modal-content modal-wide template-manager-modal">
+        <span class="close-modal-x" onclick="closeTemplateManagerModal()">×</span>
+        <h3 style="margin-bottom: 8px;">Мои шаблоны</h3>
+        <p class="helper-note">Перетаскивайте строки, чтобы менять порядок. Нажмите на текст, чтобы отредактировать.</p>
+        <div class="template-list" id="template-manager-list"></div>
     </div>
 </div>
 
@@ -1651,6 +1675,7 @@ const TEMPLATE_HELPER_DEFAULT = 'Введите название проекта,
 
 let NAME_TEMPLATES = [...DEFAULT_NAME_TEMPLATES];
 let draggedTemplate = null;
+let draggedTemplateIndex = null;
 
 function loadNameTemplates() {
     try {
@@ -1668,6 +1693,7 @@ function refreshTemplateSelects() {
     if (!list) return;
     list.innerHTML = NAME_TEMPLATES.map(t=>`<option value="${t}">`).join('');
     renderTemplatePills();
+    renderTemplateManagerList();
 }
 
 function persistNameTemplates() {
@@ -1713,6 +1739,30 @@ function renderTemplatePills() {
     }).join('');
     attachTemplateScrollHandler(pills);
     updateTemplateScrollState(pills);
+}
+
+function renderTemplateManagerList() {
+    const list = document.getElementById('template-manager-list');
+    if (!list) return;
+    if (!NAME_TEMPLATES.length) {
+        list.innerHTML = '<div class="template-empty">Шаблонов пока нет. Создайте первый через кнопку «Создать шаблон».</div>';
+        return;
+    }
+    list.innerHTML = NAME_TEMPLATES.map((t, idx) => {
+        const safe = t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        const safeArg = t.replace(/'/g,"\\'");
+        return `
+        <div class="template-row" draggable="true"
+            ondragstart="templateRowDragStart(${idx})"
+            ondragover="templateRowDragOver(event, ${idx})"
+            ondragleave="templateRowDragLeave(event)"
+            ondrop="templateRowDrop(event, ${idx})"
+            ondragend="templateRowDragEnd()">
+            <span class="template-drag-handle">≡</span>
+            <input type="text" value="${safe}" onblur="commitTemplateEdit(${idx}, this)" aria-label="Название шаблона">
+            <button aria-label="Удалить шаблон" class="template-delete-btn" onclick="deleteNameTemplate('${safeArg}')">×</button>
+        </div>`;
+    }).join('');
 }
 
 function toggleProjectNameClear() {
@@ -1796,6 +1846,64 @@ function onTemplateDrop(event, targetVal) {
 function onTemplateDragEnd() {
     draggedTemplate = null;
     document.querySelectorAll('.template-pill.drag-over').forEach(el => el.classList.remove('drag-over'));
+}
+
+function templateRowDragStart(idx) {
+    draggedTemplateIndex = idx;
+}
+
+function templateRowDragOver(event, idx) {
+    if (draggedTemplateIndex === null || draggedTemplateIndex === idx) return;
+    event.preventDefault();
+    event.currentTarget.classList.add('drag-over');
+}
+
+function templateRowDragLeave(event) {
+    event.currentTarget.classList.remove('drag-over');
+}
+
+function templateRowDrop(event, idx) {
+    event.preventDefault();
+    if (draggedTemplateIndex === null || draggedTemplateIndex === idx) return;
+    const [moved] = NAME_TEMPLATES.splice(draggedTemplateIndex, 1);
+    NAME_TEMPLATES.splice(idx, 0, moved);
+    draggedTemplateIndex = null;
+    persistNameTemplates();
+    refreshTemplateSelects();
+    renderTemplateManagerList();
+}
+
+function templateRowDragEnd() {
+    draggedTemplateIndex = null;
+    document.querySelectorAll('.template-row.drag-over').forEach(el => el.classList.remove('drag-over'));
+}
+
+function commitTemplateEdit(idx, inputEl) {
+    if (!inputEl || idx < 0 || idx >= NAME_TEMPLATES.length) return;
+    const val = inputEl.value.trim();
+    if (!val) {
+        inputEl.value = NAME_TEMPLATES[idx];
+        return;
+    }
+    const duplicateIdx = NAME_TEMPLATES.findIndex((t, i) => t === val && i !== idx);
+    if (duplicateIdx !== -1) {
+        inputEl.value = NAME_TEMPLATES[idx];
+        setTemplateHelper('Такой шаблон уже есть в списке.', '');
+        return;
+    }
+    NAME_TEMPLATES[idx] = val;
+    persistNameTemplates();
+    refreshTemplateSelects();
+    renderTemplateManagerList();
+}
+
+function openTemplateManagerModal() {
+    document.getElementById('templateManagerModal').style.display = 'block';
+    renderTemplateManagerList();
+}
+
+function closeTemplateManagerModal() {
+    document.getElementById('templateManagerModal').style.display = 'none';
 }
 
 function attachTemplateScrollHandler(pills) {
