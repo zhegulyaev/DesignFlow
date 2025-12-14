@@ -765,24 +765,31 @@
   .trash-clean-btn:hover { border-color: var(--accent); color: var(--accent); }
   .trash-date-cell { display: flex; flex-direction: column; gap: 4px; }
   .trash-deleted-label { font-weight: 800; color: var(--text); font-size: 13px; }
-  #view-trash .table-wrap { padding: 12px 12px 4px; }
-  #t-trash { border-collapse: separate; border-spacing: 0 10px; min-width: 0; }
-  #t-trash thead th { background: var(--card-alt); border-bottom: 1px solid var(--border); border-radius: 12px 12px 0 0; padding: 12px; }
-  #t-trash tbody tr { background: var(--card-alt); border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.16); }
-  #t-trash tbody td { border-bottom: none; padding: 14px 12px; }
-  #t-trash tbody td:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
-  #t-trash tbody td:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
+  #view-trash .table-wrap { padding: 5px; }
+  #t-trash { border-collapse: collapse; border-spacing: 0; min-width: 1200px; }
+  #t-trash thead th { background: transparent; border-bottom: 1px solid var(--border); padding: 12px 10px; border-radius: 0; }
+  #t-trash tbody tr { background: transparent; border: none; box-shadow: none; position: relative; }
+  #t-trash tbody td { border-bottom: 1px solid var(--table-border); padding: 12px 10px; }
   #t-trash tbody tr:hover td { background: var(--row-hover); }
   .trash-label { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 4px; }
   .trash-client { font-weight: 800; color: var(--text); }
   .trash-project { font-weight: 800; color: var(--accent); }
   .trash-amount { font-size: 17px; font-weight: 900; color: var(--text); }
   .trash-row-meta { display: flex; flex-direction: column; gap: 6px; }
+  .trash-row::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(218, 54, 51, 0.08), rgba(218, 54, 51, 0)); pointer-events: none; opacity: 0.9; }
+  .trash-row .row-controls { position: relative; z-index: 1; }
+  .trash-row-meta, .trash-action-btns, .trash-date-cell { position: relative; z-index: 1; }
+  .trash-expire.neutral { color: var(--muted); }
+  .trash-expire.warn { color: var(--gold); }
+  .trash-expire.danger { color: var(--red); }
 
-  .template-manager { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+  .template-manager { display: flex; flex-direction: column; gap: 6px; width: 100%; }
   .template-manager-title { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; }
-  .template-pills { display: flex; flex-wrap: wrap; gap: 8px; }
-  .template-pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; background: var(--pill-bg); border: 1px solid var(--border); font-weight: 700; color: var(--text); }
+  .template-pills { display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px 2px; scrollbar-width: thin; }
+  .template-pills::-webkit-scrollbar { height: 8px; }
+  .template-pills::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+  .template-pills::-webkit-scrollbar-track { background: transparent; }
+  .template-pill { display: inline-flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 10px; background: var(--pill-bg); border: 1px solid var(--border); font-weight: 700; color: var(--text); white-space: nowrap; }
   .template-pill button { border: none; background: transparent; color: var(--muted); padding: 0 4px; cursor: pointer; font-weight: 800; }
   .template-pill button:hover { color: var(--red); }
   .contractor-layout { display: flex; flex-direction: column; gap: 10px; }
@@ -2154,6 +2161,7 @@ function renderActive(){
 
         const rem = getTimeRemaining(item.dl);
         const tr = document.createElement('tr');
+        tr.classList.add('trash-row');
         tr.dataset.index = i;
 
         const isSelected = selectedRows.active?.has(i.toString());
@@ -2297,6 +2305,7 @@ function renderSimple(type){
     DATA[type].forEach((item, i) => {
         tot += toNumeric(item.p);
         const tr = document.createElement('tr');
+        tr.classList.add('trash-row');
         tr.dataset.index = i;
 
         const isSelected = selectedRows[type]?.has(i.toString());
@@ -2352,6 +2361,7 @@ function renderPotential(){
     DATA.potential.forEach((item, i) => {
         tot += toNumeric(item.p);
         const tr = document.createElement('tr');
+        tr.classList.add('trash-row');
         tr.dataset.index = i;
 
         const isSelected = selectedRows.potential?.has(i.toString());
@@ -2627,16 +2637,18 @@ function renderAll(){
 }
 
 function formatTrashExpire(item) {
-    if (!item.deletedAt) return 'Удалится в течение часа';
+    const fallback = { text: 'Удалится в течение часа', tone: 'danger' };
+    if (!item.deletedAt) return fallback;
     const sevenDays = 7 * 24 * 60 * 60 * 1000;
     const expiresAt = new Date(item.deletedAt + sevenDays);
     const remainingMs = expiresAt - Date.now();
-    if (remainingMs <= 0) return 'Удалится в течение часа';
+    if (remainingMs <= 0) return fallback;
     const days = Math.floor(remainingMs / (24 * 60 * 60 * 1000));
     const hours = Math.floor((remainingMs % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
     const absolute = expiresAt.toLocaleString('ru-RU', { hour12: false });
     const relative = days > 0 ? `${days} д. ${hours} ч.` : `${hours} ч.`;
-    return `Исчезнет через ${relative} (до ${absolute})`;
+    const tone = remainingMs <= 24 * 60 * 60 * 1000 ? 'danger' : remainingMs <= 3 * 24 * 60 * 60 * 1000 ? 'warn' : 'neutral';
+    return { text: `Исчезнет через ${relative} (до ${absolute})`, tone };
 }
 
 function renderTrash(){
@@ -2644,12 +2656,13 @@ function renderTrash(){
     tbody.innerHTML = '';
     DATA.trash.forEach((item, i) => {
         const tr = document.createElement('tr');
+        tr.classList.add('trash-row');
         tr.dataset.index = i;
 
         const isSelected = selectedRows.trash?.has(i.toString());
         if (isSelected) tr.classList.add('row-selected');
         const delDate = item.deletedAt ? new Date(item.deletedAt).toLocaleString('ru-RU', { hour12: false }) : '?';
-        const expireText = formatTrashExpire(item);
+        const expireInfo = formatTrashExpire(item);
         tr.innerHTML = `
             <td class="select-col">
                 <div class="row-index">${i + 1}</div>
@@ -2661,7 +2674,7 @@ function renderTrash(){
             </td>
             <td class="trash-date-cell">
                 <div class="trash-deleted-label">Удалено: ${delDate}</div>
-                <div class="trash-expire">${expireText}</div>
+                <div class="trash-expire ${expireInfo.tone}">${expireInfo.text}</div>
             </td>
             <td>
                 <div class="trash-row-meta">
