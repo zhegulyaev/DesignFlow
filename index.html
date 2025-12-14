@@ -346,6 +346,7 @@
   /* Stats Dashboard fixes */
   .stats-full { margin-top: 50px; display: flex; flex-direction: column; gap: 20px; }
   .stats-two-columns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; align-items: start; }
+  .stats-main { display: flex; flex-direction: column; gap: 16px; }
   .side-stack { display: flex; flex-direction: column; gap: 16px; }
   .efficiency-card { padding-bottom: 14px; }
   .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
@@ -1237,7 +1238,8 @@ td.date-cell + td.date-cell {
   <div class="dashboard">
     <div class="stats-full">
       <div class="stats-two-columns">
-          <div class="card">
+          <div class="stats-main">
+              <div class="card">
               <div class="card-head">
                   <div>
                       <div class="finance-title">Финансы: <span class="text-green" id="dash-month-name">...</span></div>
@@ -1316,6 +1318,17 @@ td.date-cell + td.date-cell {
               </div>
               <div style="position:relative;height:250px;width:100%"><canvas id="lineChart"></canvas></div>
           </div>
+              <div class="card top-clients-card">
+                <div class="top-clients-header">
+                  <div>
+                    <div class="top-clients-title">Топ 5 клиентов · Чистая прибыль</div>
+                    <div class="top-clients-sub">Маржа по активным, архивным, на паузе и в ожидании</div>
+                  </div>
+                  <div class="top-clients-legend"><span class="top-clients-dot"></span> Чистая прибыль</div>
+                </div>
+                <div class="top-clients-chart"><canvas id="topClientsChart"></canvas></div>
+              </div>
+          </div>
 
           <div class="side-stack">
               <div class="card efficiency-card">
@@ -1374,16 +1387,6 @@ td.date-cell + td.date-cell {
                           <div id="reputation-tips"></div>
                       </div>
                   </div>
-              </div>
-              <div class="card top-clients-card">
-                <div class="top-clients-header">
-                  <div>
-                    <div class="top-clients-title">Топ 5 клиентов · Чистая прибыль</div>
-                    <div class="top-clients-sub">Маржа по активным, архивным, на паузе и в ожидании</div>
-                  </div>
-                  <div class="top-clients-legend"><span class="top-clients-dot"></span> Чистая прибыль</div>
-                </div>
-                <div class="top-clients-chart"><canvas id="topClientsChart"></canvas></div>
               </div>
           </div>
 
