@@ -595,6 +595,41 @@
   }
   #settingsModal .modal-content h2 { margin-bottom: 15px; }
 
+  .settings-modal { max-width: 820px; }
+  .settings-header { display:flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 14px; }
+  .settings-title { font-size: 24px; font-weight: 900; letter-spacing: -0.5px; }
+  .settings-sub { color: var(--muted); font-size: 14px; font-weight: 600; }
+  .settings-pill { padding: 6px 10px; background: var(--pill-bg); border:1px solid var(--border); border-radius: 10px; font-weight: 800; color: var(--muted); font-size: 12px; }
+  .settings-grid { display: grid; gap: 14px; }
+  .settings-section { border: 1px solid var(--border); border-radius: 14px; padding: 16px; background: var(--card); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .settings-section-title { font-weight: 800; font-size: 16px; display:flex; align-items:center; justify-content: space-between; gap: 10px; }
+  .settings-section-sub { color: var(--muted); font-size: 13px; margin-top: 4px; font-weight: 600; }
+  .settings-options { display: grid; gap: 12px; margin-top: 12px; }
+  .settings-row { display:flex; justify-content: space-between; align-items: center; gap: 14px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--card-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .settings-row-title { font-weight: 800; }
+  .settings-row-sub { color: var(--muted); font-size: 13px; font-weight: 600; margin-top: 4px; max-width: 520px; }
+  .toggle-switch { position: relative; display: inline-block; width: 46px; height: 26px; }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border); transition: .2s; border-radius: 999px; }
+  .toggle-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: var(--muted); transition: .2s; border-radius: 50%; }
+  .toggle-switch input:checked + .toggle-slider { background-color: var(--btn-blue); }
+  .toggle-switch input:checked + .toggle-slider:before { transform: translateX(18px); background: #fff; }
+  .radio-card { display:flex; gap: 12px; border:1px solid var(--border); padding: 12px; border-radius: 12px; align-items: flex-start; background: var(--card-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .radio-card input { margin-top: 3px; }
+  .radio-card-title { font-weight: 800; }
+  .radio-card-sub { color: var(--muted); font-size: 13px; font-weight: 600; }
+  .radio-grid { display:grid; gap:10px; margin-top: 10px; }
+  .block-preview { border: 1px dashed var(--border); border-radius: 12px; padding: 12px; background: var(--pill-bg); display: grid; gap: 10px; }
+  .preview-banner { background: linear-gradient(90deg, rgba(88,166,255,0.15), rgba(163,113,247,0.15)); border: 1px solid rgba(88,166,255,0.35); padding: 10px; border-radius: 10px; font-weight: 700; color: var(--text); display: flex; gap: 10px; align-items: center; }
+  .preview-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 10px; background: var(--card); border:1px solid var(--border); font-size: 12px; font-weight: 800; color: var(--text); }
+  .preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+  .preview-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px; min-height: 70px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .preview-bar { height: 8px; border-radius: 999px; background: var(--border); overflow: hidden; }
+  .preview-bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--btn-blue), var(--purple)); width: 70%; }
+  .settings-actions { display:flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+  .settings-actions button { flex: 1; justify-content: center; min-width: 180px; }
+  .settings-footer-note { color: var(--muted); font-size: 12px; font-weight: 600; margin-top: 8px; line-height: 1.5; }
+
   .footer-note { color: var(--muted); font-size: 12px; font-weight: 600; }
   .helper-note { color: var(--muted); font-size: 12px; margin-top: 6px; line-height: 1.4; text-align: left; }
 
@@ -984,22 +1019,19 @@ td.date-cell + td.date-cell {
             <span id="themeToggleIcon">🌞</span>
             <span id="themeToggleLabel">Светлая тема</span>
         </button>
-        <button onclick="openSettings()">⚙ Настройки целей</button>
+        <button onclick="openSettings()">⚙ Общие настройки</button>
         <select id="monthSelect" class="month-select" onchange="changeMonth(this.value)"></select>
     </div>
   </div>
 
 
-  <div class="top-panel">
+  <div class="top-panel" id="backup-panel">
     <div class="backup-info">
       <b>⚠ Важно:</b> Данные хранятся только в вашем браузере. <br>
       Обязательно скачивайте резервную копию перед очисткой кэша или переустановкой системы.
     </div>
     <div class="btns">
-      <button onclick="exp()">💾 Скачать базу (Бэкап)</button>
-      <button onclick="document.getElementById('imp').click()">📂 Загрузить базу</button>
-      <input type="file" id="imp" accept=".json" style="display:none" onchange="imp(this.files[0])">
-      <button onclick="expCSV()">📊 Экспорт в CSV</button>
+      <button onclick="openSettings()">⚙ Открыть настройки</button>
     </div>
   </div>
 
@@ -1235,7 +1267,7 @@ td.date-cell + td.date-cell {
     </div>
   </div>
   
-  <div class="dashboard">
+  <div class="dashboard" id="analytics-dashboard">
     <div class="stats-full">
       <div class="stats-two-columns">
           <div class="stats-main">
@@ -1339,7 +1371,7 @@ td.date-cell + td.date-cell {
                       <div style="height:120px;width:100%"><canvas id="barChart"></canvas></div>
                   </div>
               </div>
-              <div class="record-banner">
+              <div class="record-banner" id="record-banner">
                   <div class="record-texts">
                       <div class="record-title">🏆 Рекордный заработок за месяц <span class="help-icon" data-tooltip="Сравниваем текущий факт по чистой прибыли с твоим личным рекордом. Настрой значение, чтобы видеть прогресс к новой планке.">?</span></div>
                       <div class="record-motiv" id="record-motiv">Обновим цифры!</div>
@@ -1598,18 +1630,154 @@ td.date-cell + td.date-cell {
 </div>
 
 <div class="modal" id="settingsModal">
-    <div class="modal-content">
+    <div class="modal-content settings-modal">
         <span class="close-modal-x" onclick="document.getElementById('settingsModal').style.display='none'">×</span>
-        <h2>Настройки</h2>
-        <div class="inp-group">
-            <label>Цель на месяц (₽)</label>
-            <input type="text" id="stg-goal" oninput="formatNumberInput(this)">
+        <div class="settings-header">
+            <div>
+                <div class="settings-title">Общие настройки</div>
+                <div class="settings-sub">Управляйте блоками, темой и резервными копиями.</div>
+            </div>
+            <div class="settings-pill">DesignFlow v0.8</div>
         </div>
-        <div class="inp-group">
-            <label>Рекорд (₽)</label>
-            <input type="text" id="stg-rec" oninput="formatNumberInput(this)">
+
+        <div class="settings-grid">
+            <div class="settings-section">
+                <div class="settings-section-title">Тема оформления</div>
+                <div class="settings-section-sub">Выберите светлую, тёмную или автоматическую тему по времени суток.</div>
+                <div class="radio-grid">
+                    <label class="radio-card">
+                        <input type="radio" name="theme-mode" value="auto" id="theme-mode-auto">
+                        <div>
+                            <div class="radio-card-title">Авто</div>
+                            <div class="radio-card-sub">Определяет тему по времени суток и подстраивается каждые несколько минут.</div>
+                        </div>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="theme-mode" value="light" id="theme-mode-light">
+                        <div>
+                            <div class="radio-card-title">Светлая</div>
+                            <div class="radio-card-sub">Лёгкая палитра для дневной работы и презентаций.</div>
+                        </div>
+                    </label>
+                    <label class="radio-card">
+                        <input type="radio" name="theme-mode" value="dark" id="theme-mode-dark">
+                        <div>
+                            <div class="radio-card-title">Тёмная</div>
+                            <div class="radio-card-sub">Контрастная палитра с меньшим бликом для ночи.</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="settings-section-title">Отображение блоков</div>
+                <div class="settings-section-sub">Скройте элементы, которые мешают фокусу. Превью ниже покажут, как выглядят блоки.</div>
+                <div class="settings-options">
+                    <div>
+                        <div class="settings-row">
+                            <div>
+                                <div class="settings-row-title">Предупреждение и бэкап</div>
+                                <div class="settings-row-sub">Плашка с напоминанием, что данные хранятся локально.</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="block-toggle-backup">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="block-preview">
+                            <div class="preview-banner">⚠ Локально • Данные хранятся в браузере</div>
+                            <div class="preview-pill">Бэкап · Скачать / Загрузить</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="settings-row">
+                            <div>
+                                <div class="settings-row-title">Индикатор темпа</div>
+                                <div class="settings-row-sub">Карточка с подсказками по дедлайнам и марже.</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="block-toggle-pace">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="block-preview">
+                            <div class="preview-grid">
+                                <div class="preview-card"><div class="preview-bar"><span style="width: 62%"></span></div><div class="settings-row-sub" style="margin-top:8px">Темп на неделе</div></div>
+                                <div class="preview-card"><div class="preview-bar"><span style="width: 38%"></span></div><div class="settings-row-sub" style="margin-top:8px">Репутация</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="settings-row">
+                            <div>
+                                <div class="settings-row-title">Дашборд и графики</div>
+                                <div class="settings-row-sub">Карточки по целям, денежным потокам и топам клиентов.</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="block-toggle-dashboard">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="block-preview">
+                            <div class="preview-pill">Цель месяца</div>
+                            <div class="preview-grid">
+                                <div class="preview-card"><div class="settings-row-title">Факт</div><div class="preview-bar" style="margin-top:8px"><span style="width:76%"></span></div></div>
+                                <div class="preview-card"><div class="settings-row-title">Прогноз</div><div class="preview-bar" style="margin-top:8px"><span style="width:54%"></span></div></div>
+                                <div class="preview-card"><div class="settings-row-title">Расходы</div><div class="preview-bar" style="margin-top:8px"><span style="width:42%"></span></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="settings-row">
+                            <div>
+                                <div class="settings-row-title">Рекорд и репутация</div>
+                                <div class="settings-row-sub">Блоки с прогрессом по рекорду месяца и рейтингом дедлайнов.</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="block-toggle-reputation">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="block-preview">
+                            <div class="preview-banner">🏆 Прогресс к рекорду</div>
+                            <div class="preview-grid">
+                                <div class="preview-card"><div class="settings-row-title">Репутация</div><div class="settings-row-sub" style="margin-top:6px">100 / 100</div></div>
+                                <div class="preview-card"><div class="settings-row-title">Просрочки</div><div class="settings-row-sub" style="margin-top:6px">0 задач</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="settings-section-title">Резервные копии</div>
+                <div class="settings-section-sub">Скачайте или загрузите JSON, либо выгрузите таблицу в CSV.</div>
+                <div class="settings-actions">
+                    <button onclick="exp()">💾 Скачать базу (Бэкап)</button>
+                    <button onclick="document.getElementById('imp').click()">📂 Загрузить базу</button>
+                    <button onclick="expCSV()">📊 Экспорт в CSV</button>
+                </div>
+                <input type="file" id="imp" accept=".json" style="display:none" onchange="imp(this.files[0])">
+                <div class="settings-footer-note">Данные хранятся только в вашем браузере. Делайте резервную копию перед очисткой кэша или переустановкой системы.</div>
+            </div>
+
+            <div class="settings-section">
+                <div class="settings-section-title">Цели и рекорд</div>
+                <div class="settings-section-sub">Используются в дашборде и напоминаниях.</div>
+                <div class="settings-actions" style="margin-top: 0; gap: 16px;">
+                    <div class="inp-group" style="flex:1">
+                        <label>Цель на месяц (₽)</label>
+                        <input type="text" id="stg-goal" oninput="formatNumberInput(this)">
+                    </div>
+                    <div class="inp-group" style="flex:1">
+                        <label>Рекорд (₽)</label>
+                        <input type="text" id="stg-rec" oninput="formatNumberInput(this)">
+                    </div>
+                </div>
+            </div>
         </div>
-        <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveSettings()">Сохранить</button>
+
+        <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveSettings()">Сохранить настройки</button>
     </div>
 </div>
 
@@ -1629,6 +1797,18 @@ td.date-cell + td.date-cell {
 const K = 'grok_design_v5';
 const THEME_KEY = 'designflow_theme';
 const NAME_TEMPLATES_KEY = 'designflow_name_templates';
+const UI_PREFS_KEY = 'designflow_ui_prefs';
+const DEFAULT_UI_PREFS = {
+    themeMode: 'dark',
+    blockVisibility: {
+        backup: true,
+        pace: true,
+        dashboard: true,
+        reputation: true
+    }
+};
+let UI_PREFS = JSON.parse(JSON.stringify(DEFAULT_UI_PREFS));
+let autoThemeInterval = null;
 const now = new Date();
 const today = now.toISOString().slice(0, 10);
 let currentMonth = today.slice(0,7);
@@ -1675,28 +1855,105 @@ function getCssVar(name) {
     return getComputedStyle(document.body).getPropertyValue(name).trim();
 }
 
+function loadUiPrefs() {
+    try {
+        const stored = JSON.parse(localStorage.getItem(UI_PREFS_KEY));
+        if (stored) {
+            UI_PREFS = {
+                ...DEFAULT_UI_PREFS,
+                ...stored,
+                blockVisibility: {
+                    ...DEFAULT_UI_PREFS.blockVisibility,
+                    ...(stored.blockVisibility || {})
+                }
+            };
+        }
+    } catch (e) {
+        console.warn('UI prefs load failed', e);
+    }
+    if (!UI_PREFS.themeMode) UI_PREFS.themeMode = 'dark';
+}
+
+function persistUiPrefs() {
+    localStorage.setItem(UI_PREFS_KEY, JSON.stringify(UI_PREFS));
+}
+
+function resolveTheme(mode = UI_PREFS.themeMode) {
+    if (mode === 'light' || mode === 'dark') return mode;
+    const hour = new Date().getHours();
+    return hour >= 7 && hour < 20 ? 'light' : 'dark';
+}
+
+function startAutoThemeWatcher() {
+    stopAutoThemeWatcher();
+    autoThemeInterval = setInterval(() => applyThemeMode('auto', { silent: true, skipSave: true }), 5 * 60 * 1000);
+}
+
+function stopAutoThemeWatcher() {
+    if (autoThemeInterval) {
+        clearInterval(autoThemeInterval);
+        autoThemeInterval = null;
+    }
+}
+
 function applyTheme(theme) {
     const isLight = theme === 'light';
     document.body.classList.toggle('light', isLight);
     const icon = document.getElementById('themeToggleIcon');
     const label = document.getElementById('themeToggleLabel');
     if (icon) icon.textContent = isLight ? '🌙' : '🌞';
-    if (label) label.textContent = isLight ? 'Тёмная тема' : 'Светлая тема';
+    if (label) {
+        const mode = UI_PREFS.themeMode || 'dark';
+        label.textContent = mode === 'auto'
+            ? (isLight ? 'Авто · Светлая' : 'Авто · Тёмная')
+            : (isLight ? 'Тёмная тема' : 'Светлая тема');
+    }
 }
 
-function toggleTheme() {
-    const current = localStorage.getItem(THEME_KEY) || 'dark';
-    const next = current === 'light' ? 'dark' : 'light';
-    localStorage.setItem(THEME_KEY, next);
-    applyTheme(next);
-    if (typeof calcStats === 'function') {
+function applyThemeMode(mode, { silent = false, skipSave = false } = {}) {
+    UI_PREFS.themeMode = mode || 'dark';
+    const actual = resolveTheme(UI_PREFS.themeMode);
+    localStorage.setItem(THEME_KEY, actual);
+    if (!skipSave) persistUiPrefs();
+    applyTheme(actual);
+    document.querySelectorAll('input[name="theme-mode"]').forEach(r => r.checked = r.value === UI_PREFS.themeMode);
+    if (UI_PREFS.themeMode === 'auto') {
+        startAutoThemeWatcher();
+    } else {
+        stopAutoThemeWatcher();
+    }
+    if (!silent && typeof calcStats === 'function') {
         calcStats();
     }
 }
 
+function toggleTheme() {
+    const next = UI_PREFS.themeMode === 'light' ? 'dark' : 'light';
+    applyThemeMode(next);
+}
+
 function initTheme() {
-    const saved = localStorage.getItem(THEME_KEY) || 'dark';
-    applyTheme(saved);
+    const storedTheme = localStorage.getItem(THEME_KEY);
+    if (!localStorage.getItem(UI_PREFS_KEY) && (storedTheme === 'light' || storedTheme === 'dark')) {
+        UI_PREFS.themeMode = storedTheme;
+    }
+    applyThemeMode(UI_PREFS.themeMode || storedTheme || 'dark', { silent: true });
+    if (UI_PREFS.themeMode === 'auto') startAutoThemeWatcher();
+}
+
+function applyBlockVisibility() {
+    const visibility = UI_PREFS.blockVisibility || {};
+    const backup = document.getElementById('backup-panel');
+    const pace = document.getElementById('pace-indicator');
+    const dashboard = document.getElementById('analytics-dashboard');
+    const record = document.getElementById('record-banner');
+    const reputation = document.getElementById('reputation-card');
+
+    if (backup) backup.classList.toggle('is-hidden', visibility.backup === false);
+    if (pace) pace.classList.toggle('is-hidden', visibility.pace === false);
+    if (dashboard) dashboard.classList.toggle('is-hidden', visibility.dashboard === false);
+    if (record) record.classList.toggle('is-hidden', visibility.reputation === false);
+    if (reputation) reputation.classList.toggle('is-hidden', visibility.reputation === false);
 }
 
 function formatNumberInput(inputEl) {
@@ -2400,6 +2657,7 @@ function init(){
         } catch(e) { console.error("Data load error", e); }
     }
 
+    loadUiPrefs();
     initTheme();
     loadNameTemplates();
     setTemplateHelper(TEMPLATE_HELPER_DEFAULT);
@@ -2413,6 +2671,7 @@ function init(){
         toggleProjectNameClear();
     }
     cleanupTrash();
+    applyBlockVisibility();
     renderMonthSelect();
     setupModalsBackgroundCheck();
     setupDatePickers();
@@ -3541,6 +3800,22 @@ function saveLink(){
 function openSettings(){
     document.getElementById('stg-goal').value = formatPlainNumber(DATA.monthlyGoals[currentMonth] || 250000);
     document.getElementById('stg-rec').value = formatPlainNumber(DATA.settings.record || 0);
+    const mode = UI_PREFS.themeMode || 'dark';
+    ['auto', 'light', 'dark'].forEach(m => {
+        const radio = document.getElementById(`theme-mode-${m}`);
+        if (radio) radio.checked = mode === m;
+    });
+    const visibility = UI_PREFS.blockVisibility || {};
+    const toggleMap = [
+        ['block-toggle-backup', 'backup'],
+        ['block-toggle-pace', 'pace'],
+        ['block-toggle-dashboard', 'dashboard'],
+        ['block-toggle-reputation', 'reputation']
+    ];
+    toggleMap.forEach(([id, key]) => {
+        const el = document.getElementById(id);
+        if (el) el.checked = visibility[key] !== false;
+    });
     document.getElementById('settingsModal').style.display = 'flex';
 }
 function openGoalSettings(){
@@ -3560,6 +3835,19 @@ function openRecordSettings(){
     }
 }
 function saveSettings(){
+    const selectedMode = document.querySelector('input[name="theme-mode"]:checked');
+    UI_PREFS.blockVisibility = {
+        backup: document.getElementById('block-toggle-backup')?.checked !== false,
+        pace: document.getElementById('block-toggle-pace')?.checked !== false,
+        dashboard: document.getElementById('block-toggle-dashboard')?.checked !== false,
+        reputation: document.getElementById('block-toggle-reputation')?.checked !== false,
+    };
+    if (selectedMode) {
+        applyThemeMode(selectedMode.value);
+    } else {
+        persistUiPrefs();
+    }
+    applyBlockVisibility();
     DATA.monthlyGoals[currentMonth] = toNumeric(document.getElementById('stg-goal').value);
     DATA.settings.record = toNumeric(document.getElementById('stg-rec').value);
     document.getElementById('settingsModal').style.display = 'none';
