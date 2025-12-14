@@ -77,11 +77,20 @@
   
   /* Header */
   h1{font-size:42px;font-weight:800;margin:0;letter-spacing: -1px;}
-  .brand-grad { background:linear-gradient(90deg,#58a6ff,#a371f7,#d29922);-webkit-background-clip:text;-webkit-text-fill-color:transparent; }
-  .brand-white { color: var(--muted); font-weight: 400; letter-spacing: -0.4px; }
-  
-  /* Исправлен отступ в шапке */
-  .header-row{display:flex;justify-content:space-between;align-items:center;margin:30px 0 20px;}
+  .header-row{display:flex;justify-content:space-between;align-items:center;margin:30px 0 20px; gap: 20px;}
+  .hero-card {flex: 1; display:flex; gap:16px; align-items:center; padding:18px 20px; border:1px solid var(--border); border-radius:16px; background:linear-gradient(90deg, rgba(88,166,255,0.10), rgba(163,113,247,0.10)); box-shadow:0 16px 36px rgba(0,0,0,0.18);}
+  .brand-logos {display:flex; align-items:center; gap:12px;}
+  .logo-tile {width:58px; height:58px; border-radius:14px; border:1px solid var(--border); display:grid; place-items:center; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); background:var(--card);}
+  .logo-tile.light {background:linear-gradient(135deg,#f8fbff,#eef3ff); border-color: var(--border);}
+  .logo-mark {width:32px; height:32px; border-radius:10px; display:grid; place-items:center; font-weight:900; letter-spacing:-0.3px;}
+  .logo-mark.dark {background:#0d1117;color:#facc15;}
+  .logo-mark.light {background:#ffffff;color:#111827; border:1px solid #d8e1f0;}
+  .brand-meta {display:flex; flex-direction:column; gap:6px; line-height:1.25;}
+  .brand-title {font-size:26px; font-weight:900; letter-spacing:-0.6px; display:flex; align-items:center; gap:10px;}
+  .brand-sub {font-size:15px; color:var(--muted); font-weight:700;}
+  .brand-tags {display:flex; gap:8px; flex-wrap:wrap;}
+  .brand-pill {padding:6px 10px; border-radius:10px; border:1px solid var(--border); background:var(--pill-bg); font-size:12px; font-weight:800; letter-spacing:-0.1px; color:var(--muted);}
+  .header-actions {display:flex; gap:12px; align-items:center; flex-wrap:wrap; justify-content:flex-end;}
   .month-select{background:var(--card);color:var(--text);border:1px solid var(--border);padding:8px 15px;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;outline:none;transition:.2s;}
   .month-select:hover{border-color:var(--muted);}
 
@@ -114,12 +123,14 @@
   /* Tabs */
   .tabs-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
   .tabs{display:flex;gap:10px;overflow-x: auto; padding-bottom: 5px; flex-shrink: 1;}
-  .tab{flex-shrink: 0; padding:8px 15px;border-radius:8px;cursor:pointer;font-size:15px; background:transparent;border:1px solid transparent;transition:.2s; font-weight: 500; color:var(--muted); display: flex; align-items: center; gap: 6px;}
-  .tab svg { width: 14px; height: 14px; opacity: 0.6; transition: opacity .2s; }
+  .tab{flex-shrink: 0; padding:8px 14px;border-radius:10px;cursor:pointer;font-size:15px; background:transparent;border:1px solid transparent;transition:.2s; font-weight: 600; color:var(--muted); display: flex; align-items: center; gap: 8px; letter-spacing: -0.2px;}
+  .tab svg { width: 14px; height: 14px; opacity: 0.7; transition: opacity .2s; }
   .tab:hover{background:var(--tab-hover);border-color:var(--tab-hover);color:var(--text);}
-  .tab.active{background:var(--card); border-color:var(--border); font-weight: 600; color: var(--text) !important;}
+  .tab.active{background:var(--card); border-color:var(--border); font-weight: 700; color: var(--text) !important;}
   .tab.active svg { opacity: 1; color: var(--text); }
   .tab.tab-trash { margin-left: auto; }
+  .tab-count { min-width: 22px; height: 22px; border-radius: 8px; background: var(--button-bg); border: 1px solid var(--border); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: var(--text); padding: 0 6px; }
+  .tab.active .tab-count { background: var(--accent); border-color: var(--accent); color: #fff; }
 
   /* New Project Button (Notion Style) */
   #newProjectButton { background: var(--btn-blue); color: #fff; border: 1px solid var(--btn-blue); font-weight: 700; padding: 8px 16px; margin-left: 20px;}
@@ -795,8 +806,26 @@ td.date-cell + td.date-cell {
 <div class="c">
   
   <div class="header-row">
-    <h1><span class="brand-grad">DesignFlow</span> <span class="brand-white">— Трекер проектов</span></h1>
-    <div style="display:flex;gap:15px;align-items:center">
+    <div class="hero-card">
+      <div class="brand-logos" aria-hidden="true">
+        <div class="logo-tile">
+          <div class="logo-mark dark">DF</div>
+        </div>
+        <div class="logo-tile light">
+          <div class="logo-mark light">DF</div>
+        </div>
+      </div>
+      <div class="brand-meta">
+        <div class="brand-title">DesignFlow — проекты под контролем</div>
+        <div class="brand-sub">Сводка, статус, дедлайны и ссылки собраны так, как было на макете.</div>
+        <div class="brand-tags">
+          <span class="brand-pill">Новый логотип (светлая/тёмная)</span>
+          <span class="brand-pill">Вкладки с количеством</span>
+          <span class="brand-pill">Факты + дедлайны</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-actions">
         <button id="themeToggle" onclick="toggleTheme()" aria-label="Переключить тему">
             <span id="themeToggleIcon">🌞</span>
             <span id="themeToggleLabel">Светлая тема</span>
@@ -822,13 +851,13 @@ td.date-cell + td.date-cell {
 
   <div class="tabs-container">
     <div class="tabs">
-        <div class="tab" id="tab-all" onclick="switchTab('all')"><svg><use href="#icon-all"/></svg> Все проекты</div>
-        <div class="tab active" id="tab-active" onclick="switchTab('active')"><svg><use href="#icon-active"/></svg> В работе</div>
-        <div class="tab" id="tab-waiting" onclick="switchTab('waiting')"><svg><use href="#icon-waiting"/></svg> Ожидает</div>
-        <div class="tab" id="tab-potential" onclick="switchTab('potential')"><svg><use href="#icon-potential"/></svg> Потенциал</div>
-        <div class="tab" id="tab-paused" onclick="switchTab('paused')"><svg><use href="#icon-paused"/></svg> На паузе</div>
-        <div class="tab" id="tab-archive" onclick="switchTab('archive')"><svg><use href="#icon-archive"/></svg> Выполнено</div>
-        <div class="tab tab-trash" id="tab-trash" onclick="switchTab('trash')"><svg><use href="#icon-trash"/></svg> Корзина</div>
+        <div class="tab" id="tab-all" onclick="switchTab('all')"><svg><use href="#icon-all"/></svg> Все проекты <span class="tab-count" id="count-all">0</span></div>
+        <div class="tab active" id="tab-active" onclick="switchTab('active')"><svg><use href="#icon-active"/></svg> В работе <span class="tab-count" id="count-active">0</span></div>
+        <div class="tab" id="tab-waiting" onclick="switchTab('waiting')"><svg><use href="#icon-waiting"/></svg> Ожидает <span class="tab-count" id="count-waiting">0</span></div>
+        <div class="tab" id="tab-potential" onclick="switchTab('potential')"><svg><use href="#icon-potential"/></svg> Потенциал <span class="tab-count" id="count-potential">0</span></div>
+        <div class="tab" id="tab-paused" onclick="switchTab('paused')"><svg><use href="#icon-paused"/></svg> На паузе <span class="tab-count" id="count-paused">0</span></div>
+        <div class="tab" id="tab-archive" onclick="switchTab('archive')"><svg><use href="#icon-archive"/></svg> Выполнено <span class="tab-count" id="count-archive">0</span></div>
+        <div class="tab tab-trash" id="tab-trash" onclick="switchTab('trash')"><svg><use href="#icon-trash"/></svg> Корзина <span class="tab-count" id="count-trash">0</span></div>
     </div>
     <button id="newProjectButton" onclick="openAddModal()">＋ Новый проект</button>
   </div>

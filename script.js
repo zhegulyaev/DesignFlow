@@ -195,13 +195,32 @@ function deleteItem() {
   closeModal();
 }
 
-function switchTab(el) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  const tabId = el.getAttribute('data-tab');
+function switchTab(tabKey) {
+  const tabEl = document.getElementById(`tab-${tabKey}`);
+  if (!tabEl) return;
 
-  document.querySelectorAll('.tab-content').forEach(tc => tc.classList.add('hidden'));
-  document.getElementById(tabId).classList.remove('hidden');
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  tabEl.classList.add('active');
+
+  const viewId = `view-${tabKey}`;
+  document.querySelectorAll('[id^="view-"]').forEach(view => {
+    view.style.display = view.id === viewId ? '' : 'none';
+  });
+
+  const descMap = {
+    all: 'Сводка по всем проектам с быстрыми ссылками.',
+    active: 'Проекты в работе. Следите за дедлайнами и фиксируйте предоплату.',
+    waiting: 'Ожидают согласования или стартовых условий.',
+    potential: 'Лиды с потенциалом — только ключевые цифры без лишних столбцов.',
+    paused: 'Пауза — держите клиентов в курсе и планируйте возврат.',
+    archive: 'Завершённые проекты. История оплат и расходов.',
+    trash: 'Корзина. Объекты удаляются автоматически через 7 дней.'
+  };
+
+  const desc = document.getElementById('tab-description');
+  if (desc && descMap[tabKey]) {
+    desc.textContent = descMap[tabKey];
+  }
 }
 
 function renderItem(item) {
@@ -251,6 +270,26 @@ function renderList(list, containerId) {
 function renderAll() {
   Object.keys(DATA).forEach(key => {
     renderList(DATA[key], key);
+  });
+  updateTabCounts();
+}
+
+function updateTabCounts() {
+  const counts = {
+    active: DATA.active.length,
+    waiting: DATA.waiting.length,
+    potential: DATA.potential.length,
+    paused: DATA.paused.length,
+    archive: DATA.archive.length,
+    all: DATA.active.length + DATA.waiting.length + DATA.potential.length + DATA.paused.length + DATA.archive.length,
+    trash: 0
+  };
+
+  Object.entries(counts).forEach(([key, value]) => {
+    const el = document.getElementById(`count-${key}`);
+    if (el) {
+      el.textContent = value;
+    }
   });
 }
 
