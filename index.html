@@ -515,11 +515,10 @@
   .deadline-presets input { min-width: 110px; }
   .date-chip { margin-top: 8px; }
 
-  .deadline-template { margin-bottom: 15px; }
-  .deadline-template .deadline-presets { gap: 8px; flex-wrap: wrap; }
-  .deadline-template .inp-group { margin-bottom: 0; }
-  .deadline-template .deadline-presets select,
-  .deadline-template .deadline-presets input { background: var(--input-bg); border: 1px solid var(--border); }
+  .timeline-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 10px; align-items: start; }
+  .timeline-row .inp-group { margin-bottom: 0; }
+  .timeline-row .deadline-presets { justify-content: flex-start; }
+  .timeline-row .deadline-presets select, .timeline-row .deadline-presets input { background: var(--input-bg); border: 1px solid var(--border); }
 
   .add-modal-grid {
     display: grid;
@@ -529,10 +528,8 @@
   }
   .add-modal-card { padding: 8px 0; border: none; border-radius: 0; background: transparent; box-shadow: none; }
   .add-modal-card h3 { margin: 0 0 14px; font-size: 15px; color: var(--muted); letter-spacing: 0.1px; }
-  .add-modal-divider { margin: 6px 0 16px; height: 1px; background: var(--border); opacity: 0.6; }
-  .add-modal-stack { display: flex; flex-direction: column; gap: 0; }
-  .add-modal-stack > * { padding: 10px 0; }
-  .add-modal-stack > * + * { border-top: 1px solid var(--border); }
+  .add-modal-stack { display: flex; flex-direction: column; gap: 6px; }
+  .add-modal-stack > * { padding: 8px 0; }
   .add-modal-compact { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; align-items: start; }
   .add-modal-compact .inp-group { margin-bottom: 0; }
   @media(max-width: 980px) {
@@ -776,7 +773,7 @@
   
   /* Trash Table Button Fix */
   .trash-action-btns { display: flex; gap: 10px; align-items: center; }
-  #t-trash tbody td { vertical-align: top; }
+  #t-trash tbody td { vertical-align: middle; }
   #t-trash tbody td:nth-child(5) { text-align: right; }
   #t-trash tbody td:nth-child(6) { text-align: right; }
   .trash-action-btns { justify-content: flex-end; }
@@ -817,7 +814,7 @@
   .trash-clean-btn:hover { border-color: var(--accent); color: var(--accent); }
   .trash-date-cell { display: flex; flex-direction: column; gap: 4px; }
   .trash-deleted-label { font-weight: 800; color: var(--text); font-size: 13px; }
-  #view-trash .table-wrap { padding: 5px 16px 5px 56px; }
+  #view-trash .table-wrap { padding: 5px 18px 5px 28px; }
   #t-trash { border-collapse: collapse; border-spacing: 0; min-width: 1200px; width: 100%; }
   #t-trash thead th { background: transparent; border-bottom: 1px solid var(--border); padding: 12px 10px; border-radius: 0; }
   #t-trash tbody tr { background: transparent; border: none; box-shadow: none; position: relative; }
@@ -828,14 +825,15 @@
   .trash-project { font-weight: 800; color: var(--accent); }
   .trash-amount { font-size: 17px; font-weight: 900; color: var(--text); }
   .trash-row-meta { display: flex; flex-direction: column; gap: 6px; }
-  .trash-row::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(218, 54, 51, 0.05), rgba(218, 54, 51, 0)); pointer-events: none; opacity: 0.9; }
+  .trash-row { transition: background .2s, box-shadow .2s; }
+  .trash-row:hover td { background: var(--row-hover); }
   .trash-row .row-controls { position: absolute; z-index: 2; }
   .trash-row-meta, .trash-action-btns, .trash-date-cell { position: relative; z-index: 1; }
   .trash-expire.neutral { color: var(--muted); }
   .trash-expire.warn { color: var(--gold); }
   .trash-expire.danger { color: var(--red); }
 
-  .template-manager { display: flex; flex-direction: column; gap: 6px; width: 100%; margin-top: 12px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); position: relative; }
+  .template-manager { display: flex; flex-direction: column; gap: 6px; width: 100%; margin-top: 12px; margin-bottom: 4px; padding-bottom: 6px; position: relative; }
   .template-manager-title { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; padding-top: 6px; margin-bottom: 0; }
   .template-pills { display: flex; gap: 8px; overflow-x: auto; padding: 6px 28px 2px 2px; scrollbar-width: none; margin-top: 0; max-width: 100%; position: relative; }
   .template-pills::-webkit-scrollbar { display: none; }
@@ -1420,9 +1418,7 @@ td.date-cell + td.date-cell {
                     </div>
                 </div>
 
-                <div class="add-modal-divider"></div>
-
-                <div class="date-duo status-dates">
+                <div class="timeline-row">
                     <div class="date-duo-card">
                         <div class="inp-group">
                             <label>⚡ Старт</label>
@@ -1440,29 +1436,26 @@ td.date-cell + td.date-cell {
                                 <svg class="date-icon"><use href="#icon-calendar"/></svg>
                                 <span class="date-text-display">Сегодня</span>
                              </div>
-                             <input type="hidden" id="add-proj-dl-val" value="">
+                            <input type="hidden" id="add-proj-dl-val" value="">
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="add-modal-divider"></div>
-
-        <div class="deadline-template status-dates">
-            <div class="inp-group">
-                <label>Шаблон срока</label>
-                <div class="deadline-presets">
-                    <select id="add-proj-dl-days" onchange="applyDeadlinePreset()">
-                        <option value="">Не выбрано</option>
-                        <option value="1">1 день</option>
-                        <option value="2">2 дня</option>
-                        <option value="3">3 дня</option>
-                        <option value="5">5 дней</option>
-                        <option value="7">7 дней</option>
-                        <option value="custom">Свои дни</option>
-                    </select>
-                    <input type="number" id="add-proj-dl-custom" placeholder="Свои дни" style="width:140px" oninput="applyDeadlinePreset()">
+                    <div class="date-duo-card">
+                        <div class="inp-group">
+                            <label>Шаблон срока</label>
+                            <div class="deadline-presets">
+                                <select id="add-proj-dl-days" onchange="applyDeadlinePreset()">
+                                    <option value="">Не выбрано</option>
+                                    <option value="1">1 день</option>
+                                    <option value="2">2 дня</option>
+                                    <option value="3">3 дня</option>
+                                    <option value="5">5 дней</option>
+                                    <option value="7">7 дней</option>
+                                    <option value="custom">Свои дни</option>
+                                </select>
+                                <input type="number" id="add-proj-dl-custom" placeholder="Свои дни" style="width:140px" oninput="applyDeadlinePreset()">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
