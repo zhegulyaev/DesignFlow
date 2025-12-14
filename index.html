@@ -509,14 +509,14 @@
   .deadline-presets input { min-width: 140px; flex: 1 1 140px; }
   .date-duo { display: flex; gap: 12px; align-items: stretch; margin-bottom: 12px; flex-wrap: wrap; }
   .date-duo .inp-group { margin-bottom: 0; }
-  .date-duo-card { flex: 1 1 220px; min-width: 240px; padding: 0; border-radius: 14px; border: none; background: transparent; box-shadow: none; }
+  .date-duo-card { flex: 1 1 220px; min-width: 0; padding: 0; border-radius: 14px; border: none; background: transparent; box-shadow: none; }
   .date-duo .inp-group label { display: flex; align-items: center; gap: 6px; color: var(--muted); font-weight: 700; }
   .deadline-presets select { min-width: 140px; }
   .deadline-presets input { min-width: 110px; }
   .date-chip { margin-top: 8px; }
 
   .timeline-row { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 10px; align-items: start; }
-  .timeline-pair { display: grid; grid-template-columns: repeat(2, minmax(200px, 1fr)); gap: 12px; }
+  .timeline-pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; align-items: stretch; }
   .timeline-row .inp-group { margin-bottom: 0; }
   .timeline-row .deadline-presets { justify-content: flex-start; }
   .timeline-row .deadline-presets select, .timeline-row .deadline-presets input { background: var(--input-bg); border: 1px solid var(--border); }
@@ -533,7 +533,10 @@
   .add-modal-stack > * { padding: 8px 0; }
   .add-modal-stack > *:not(:first-child) { border-top: 1px solid var(--border); padding-top: 14px; }
   .add-modal-compact { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; align-items: start; }
-  .add-modal-compact.price-tax-row { grid-template-columns: minmax(0, 1fr) minmax(150px, 180px); }
+  .add-modal-compact.price-tax-row { grid-template-columns: minmax(200px, 0.9fr) minmax(130px, 0.6fr) minmax(180px, 1fr); align-items: end; }
+  .price-group { max-width: 280px; }
+  .contractor-inline label { margin-bottom: 6px; }
+  .contractor-inline select { min-height: 44px; }
   .add-modal-compact .inp-group { margin-bottom: 0; }
   @media(max-width: 980px) {
     .add-modal-grid { grid-template-columns: 1fr; }
@@ -862,6 +865,7 @@
   .contractor-group { align-self: stretch; }
   .contractor-mode-select { width: 100%; padding: 10px; border-radius: 10px; font-weight: 700; min-height: 44px; }
   .contractor-amount { display: flex; flex-direction: column; gap: 8px; background: var(--pill-bg); border: 1px solid var(--border); padding: 12px; border-radius: 12px; width: 100%; }
+  .contractor-amount-row { margin-top: 2px; }
   .input-with-suffix { display: grid; grid-template-columns: 1fr auto; align-items: stretch; gap: 0; width: 100%; }
   .input-with-suffix input { border-radius: 10px 0 0 10px; min-width: 0; }
   .input-with-suffix input:focus { z-index: 1; }
@@ -1387,9 +1391,9 @@ td.date-cell + td.date-cell {
                     </div>
                 </div>
             </div>
-            <div class="add-modal-card add-modal-stack">
+                <div class="add-modal-card add-modal-stack">
                 <div class="add-modal-compact price-tax-row">
-                     <div class="inp-group" style="flex:1">
+                     <div class="inp-group price-group">
                         <label>Сумма (₽)</label>
                         <input type="text" id="add-proj-price" placeholder="50 000" oninput="formatNumberInput(this)">
                     </div>
@@ -1402,23 +1406,21 @@ td.date-cell + td.date-cell {
                             <option value="13">13%</option>
                         </select>
                     </div>
-                </div>
-                <div class="inp-group contractor-group" style="flex:1">
-                    <label>Расходы</label>
-                    <div class="contractor-layout">
+                    <div class="inp-group contractor-group contractor-inline">
+                        <label>Расходы</label>
                         <select id="add-proj-contractor-mode" class="contractor-mode-select" onchange="handleNewContractorModeChange(this.value)">
                             <option value="none">Нет расходов</option>
                             <option value="percent">Процент (%)</option>
                             <option value="amount">Фикс. сумма (₽)</option>
                         </select>
-                        <div class="contractor-amount is-hidden" id="contractor-amount-wrap">
-                            <div class="input-with-suffix">
-                                <input type="text" class="contractor-input" id="add-proj-contractor" placeholder="Например, 30 000" oninput="formatNumberInput(this)" disabled>
-                                <span class="input-suffix" id="contractor-suffix"></span>
-                            </div>
-                            <div class="contractor-helper" id="add-contractor-helper">Выберите тип расходов, чтобы указать сумму.</div>
-                        </div>
                     </div>
+                </div>
+                <div class="contractor-amount contractor-amount-row is-hidden" id="contractor-amount-wrap">
+                    <div class="input-with-suffix">
+                        <input type="text" class="contractor-input" id="add-proj-contractor" placeholder="Например, 30 000" oninput="formatNumberInput(this)" disabled>
+                        <span class="input-suffix" id="contractor-suffix"></span>
+                    </div>
+                    <div class="contractor-helper" id="add-contractor-helper">Выберите тип расходов, чтобы указать сумму.</div>
                 </div>
 
                 <div class="timeline-row">
