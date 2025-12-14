@@ -137,7 +137,7 @@
   .tab-desc-block { margin-bottom: 15px; } 
 
   /* Main Layout & Tables */
-  .table-wrap{overflow:visible;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:5px 16px 5px 56px; margin-top: 10px; position: relative;}
+  .table-wrap{overflow:visible;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:5px 16px 5px 28px; margin-top: 10px; position: relative;}
   table{width:100%;border-collapse:collapse; min-width: 1400px;}
   th{text-align:left;color:var(--muted);font-size:12px;text-transform:uppercase;padding:12px 10px;border-bottom:1px solid var(--border);user-select:none; white-space: nowrap; cursor: pointer;}
   
@@ -267,11 +267,11 @@
   .dup-icon { opacity: 0; transition: opacity 0.2s; cursor: pointer; color: var(--muted); width: 16px; height: 16px; flex-shrink: 0;}
   tr:hover .dup-icon { opacity: 1; }
 
-  .select-col { position: relative; min-width: 52px; }
+  .select-col { position: relative; min-width: 44px; }
   .row-index { color: var(--muted); font-weight: 700; font-size: 12px; text-align: center; }
   .row-selected .row-index { color: var(--text); }
 
-  .row-controls { position:absolute; left:-24px; top:50%; transform:translate(-115%,-50%); display:flex; gap:10px; align-items:center; opacity:0; transition:opacity .2s; }
+  .row-controls { position:absolute; left:-8px; top:50%; transform:translate(-110%,-50%); display:flex; gap:10px; align-items:center; opacity:0; transition:opacity .2s; }
   tr:hover .row-controls, .row-selected .row-controls { opacity:1; }
   .row-controls .bulk-checkbox { width: 18px; height: 18px; }
 
@@ -476,13 +476,15 @@
 
 
   /* Modals */
-  .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:var(--modal-overlay);z-index:1000;justify-content:center;align-items:center;backdrop-filter: blur(4px);}
+  .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:var(--modal-overlay);z-index:1000;justify-content:center;align-items:flex-start;backdrop-filter: blur(4px); overflow-y: auto; padding: 30px 12px;}
   .modal-content{background:var(--card);padding:30px;border-radius:16px;width:460px;max-width:95%;border:1px solid var(--border);text-align:center; position: relative; box-shadow: 0 18px 60px rgba(0,0,0,0.35);}
   .modal-content.modal-wide {
     width: 920px;
     max-width: 96vw;
     text-align: left;
     overflow: hidden;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
   }
   
   /* Inputs & Selects inside modal */
@@ -833,7 +835,7 @@
 
   .template-manager { display: flex; flex-direction: column; gap: 6px; width: 100%; margin-top: 12px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
   .template-manager-title { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; padding-top: 6px; margin-bottom: 0; }
-  .template-pills { display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px 2px; scrollbar-width: none; margin-top: 0; }
+  .template-pills { display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px 2px; scrollbar-width: none; margin-top: 0; max-width: 100%; }
   .template-pills::-webkit-scrollbar { display: none; }
   .template-helper { font-size: 12px; font-weight: 700; color: var(--muted); }
   .template-helper.error { color: var(--red); }
