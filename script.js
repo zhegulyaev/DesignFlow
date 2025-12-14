@@ -252,6 +252,26 @@ function renderAll() {
   Object.keys(DATA).forEach(key => {
     renderList(DATA[key], key);
   });
+  updateTabCounts();
+}
+
+function updateTabCounts() {
+  const counts = {
+    active: DATA.active.length,
+    waiting: DATA.waiting.length,
+    potential: DATA.potential.length,
+    paused: DATA.paused.length,
+    archive: DATA.archive.length,
+    all: DATA.active.length + DATA.waiting.length + DATA.potential.length + DATA.paused.length + DATA.archive.length,
+    trash: 0
+  };
+
+  Object.entries(counts).forEach(([key, value]) => {
+    const el = document.getElementById(`count-${key}`);
+    if (el) {
+      el.textContent = value;
+    }
+  });
 }
 
 function calcTax(item) {
