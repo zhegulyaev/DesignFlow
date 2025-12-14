@@ -147,6 +147,8 @@
   #t-active th:nth-child(10) { /* Чистыми */
       text-align: right;
   }
+  #t-active th:nth-child(6),
+  #t-active td:nth-child(6) { text-align: center; }
 
   th:first-child, td:first-child { width: 24px; cursor: default; text-align: center; }
   td{ padding: 5px 10px; border-bottom:1px solid var(--table-border); vertical-align:middle; font-size:15px; position: relative; }
@@ -220,6 +222,7 @@
   .price-cell-wrap:focus-within { border-color: var(--border); background: var(--input-bg); border-radius: 6px; }
   .price-cell-wrap input::-webkit-outer-spin-button, .price-cell-wrap input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
   .currency-symbol { color: var(--muted); font-size: 14px; font-weight: 600; font-family: monospace; min-width: 15px; }
+  .currency-symbol.symbol-empty { font-size: 12px; font-weight: 800; color: var(--muted); text-transform: lowercase; }
 
   /* Net Column Fix */
   .net-display-wrap { display: flex; flex-direction: column; align-items: flex-end; padding: 5px 0; }
@@ -479,6 +482,16 @@
   .inp-group input, .inp-group select {background-color: var(--input-bg);border:1px solid var(--border);padding:10px;width:100%;color:var(--text);border-radius:8px; outline: none; box-sizing: border-box;}
   .row-inputs{display:flex;gap:12px;margin-bottom:15px;flex-wrap:wrap; align-items:flex-start;}
   .row-inputs > div {flex: 1 1 180px;}
+  .contractor-row { align-items: flex-end; column-gap: 14px; }
+  .contractor-row .contractor-group { min-width: 260px; display: flex; flex-direction: column; gap: 10px; }
+  .contractor-row .tax-group { min-width: 140px; }
+  .requests-row { align-items: flex-end; }
+  .requests-row .inp-group { margin-bottom: 0; }
+  .input-with-clear { position: relative; flex: 1 1 260px; display: flex; align-items: center; }
+  .input-with-clear input { padding-right: 44px; width: 100%; }
+  .clear-input-btn { position: absolute; right: 8px; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; border: 1px solid var(--border); background: var(--button-bg); color: var(--muted); cursor: pointer; transition: .15s; }
+  .clear-input-btn:hover { color: var(--text); border-color: var(--accent); }
+  .clear-input-btn.hidden { opacity: 0; pointer-events: none; }
   .input-error { border-color: var(--red) !important; box-shadow: 0 0 0 2px rgba(218,54,51,0.12); }
   .deadline-presets { display: flex; gap: 10px; align-items: center; flex-wrap: nowrap; }
   .deadline-presets select { min-width: 150px; white-space: nowrap; }
@@ -513,6 +526,7 @@
   .save-stg:hover { transform: translateY(-1px); box-shadow: 0 8px 18px rgba(0,0,0,0.14); color: #fff; background: #2f81f7; }
   .modal .save-stg { width: 100%; margin-top: 20px; }
   .request-add-btn { width: auto; align-self: flex-end; min-width: 140px; height: 46px; margin-top: 0; }
+  .request-add-btn:hover { box-shadow: none; transform: none; }
   
   /* Settings Modal specific padding fix */
   #settingsModal .modal-content {
@@ -770,8 +784,8 @@
   .trash-clean-btn:hover { border-color: var(--accent); color: var(--accent); }
   .trash-date-cell { display: flex; flex-direction: column; gap: 4px; }
   .trash-deleted-label { font-weight: 800; color: var(--text); font-size: 13px; }
-  #view-trash .table-wrap { padding: 5px; }
-  #t-trash { border-collapse: collapse; border-spacing: 0; min-width: 1200px; }
+  #view-trash .table-wrap { padding: 5px 0; }
+  #t-trash { border-collapse: collapse; border-spacing: 0; min-width: 1200px; width: 100%; }
   #t-trash thead th { background: transparent; border-bottom: 1px solid var(--border); padding: 12px 10px; border-radius: 0; }
   #t-trash tbody tr { background: transparent; border: none; box-shadow: none; position: relative; }
   #t-trash tbody td { border-bottom: 1px solid var(--table-border); padding: 12px 10px; }
@@ -788,9 +802,9 @@
   .trash-expire.warn { color: var(--gold); }
   .trash-expire.danger { color: var(--red); }
 
-  .template-manager { display: flex; flex-direction: column; gap: 8px; width: 100%; }
-  .template-manager-title { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; }
-  .template-pills { display: flex; gap: 8px; overflow-x: auto; padding: 10px 2px 4px; scrollbar-width: none; margin-top: 2px; }
+  .template-manager { display: flex; flex-direction: column; gap: 6px; width: 100%; margin-top: 12px; }
+  .template-manager-title { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; padding-top: 6px; margin-bottom: 0; }
+  .template-pills { display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px 2px; scrollbar-width: none; margin-top: 0; }
   .template-pills::-webkit-scrollbar { display: none; }
   .template-helper { font-size: 12px; font-weight: 700; color: var(--muted); }
   .template-helper.error { color: var(--red); }
@@ -801,10 +815,10 @@
   .template-pill .template-delete-btn { border: none; background: transparent; color: var(--muted); padding: 0 4px; cursor: pointer; font-weight: 800; }
   .template-pill .template-delete-btn:hover { color: var(--red); }
   .template-add-btn { align-self: flex-start; margin-top: 0; }
-  .contractor-layout { display: flex; flex-direction: column; gap: 10px; }
+  .contractor-layout { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
   .contractor-group { align-self: stretch; }
-  .contractor-mode-select { width: 100%; padding: 10px; border-radius: 10px; font-weight: 700; }
-  .contractor-amount { display: flex; flex-direction: column; gap: 8px; background: var(--pill-bg); border: 1px solid var(--border); padding: 10px; border-radius: 12px; width: 100%; }
+  .contractor-mode-select { width: 100%; padding: 10px; border-radius: 10px; font-weight: 700; min-height: 44px; }
+  .contractor-amount { display: flex; flex-direction: column; gap: 8px; background: var(--pill-bg); border: 1px solid var(--border); padding: 12px; border-radius: 12px; width: 100%; }
   .input-with-suffix { display: grid; grid-template-columns: 1fr auto; align-items: stretch; gap: 0; width: 100%; }
   .input-with-suffix input { border-radius: 10px 0 0 10px; min-width: 0; }
   .input-with-suffix input:focus { z-index: 1; }
@@ -997,7 +1011,7 @@ td.date-cell + td.date-cell {
 
     <div id="view-requests" style="display:none">
       <div class="table-wrap">
-        <div class="row-inputs" style="padding: 15px; gap: 10px; align-items:flex-end;">
+        <div class="row-inputs requests-row" style="padding: 15px; gap: 10px;">
             <div class="inp-group" style="flex:1">
                 <label>Кто обращается</label>
                 <input type="text" id="req-name" placeholder="Имя или компания">
@@ -1305,7 +1319,10 @@ td.date-cell + td.date-cell {
         <div class="inp-group">
             <label>Название проекта</label>
             <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-                <input type="text" id="add-proj-name" list="project-name-templates" placeholder="Сайт для кофейни" style="flex:1 1 260px;">
+                <div class="input-with-clear">
+                    <input type="text" id="add-proj-name" list="project-name-templates" placeholder="Сайт для кофейни">
+                    <button type="button" class="clear-input-btn hidden" id="project-name-clear" onclick="clearProjectName()" aria-label="Очистить название">×</button>
+                </div>
                 <datalist id="project-name-templates"></datalist>
             </div>
             <div class="template-manager">
@@ -1319,7 +1336,7 @@ td.date-cell + td.date-cell {
             <label>Имя клиента</label>
             <input type="text" id="add-proj-client" placeholder="Иван Иванов">
         </div>
-        <div class="row-inputs">
+        <div class="row-inputs contractor-row">
              <div class="inp-group" style="flex:1">
                 <label>Сумма (₽)</label>
                 <input type="text" id="add-proj-price" placeholder="50 000" oninput="formatNumberInput(this)">
@@ -1603,12 +1620,29 @@ function renderTemplatePills() {
     }).join('');
 }
 
+function toggleProjectNameClear() {
+    const input = document.getElementById('add-proj-name');
+    const btn = document.getElementById('project-name-clear');
+    if (!input || !btn) return;
+    const hasValue = !!input.value.trim();
+    btn.classList.toggle('hidden', !hasValue);
+}
+
+function clearProjectName() {
+    const input = document.getElementById('add-proj-name');
+    if (!input) return;
+    input.value = '';
+    toggleProjectNameClear();
+    input.focus();
+}
+
 function applyNameTemplate(val) {
     if (!val) return;
     const input = document.getElementById('add-proj-name');
     if (input) {
         input.value = val;
         input.focus();
+        toggleProjectNameClear();
     }
 }
 
@@ -2012,7 +2046,9 @@ function init(){
         nameInput.addEventListener('input', () => {
             nameInput.classList.remove('input-error');
             setTemplateHelper('Введите название проекта, затем сохраните как шаблон.');
+            toggleProjectNameClear();
         });
+        toggleProjectNameClear();
     }
     cleanupTrash();
     renderMonthSelect();
@@ -2240,7 +2276,7 @@ function renderActive(){
             <td style="text-align:right;">
                 <div class="price-cell-wrap expense-cell">
                     <input type="text" value="${contractorValue}" ${item.contractorMode === 'none' ? 'disabled' : ''} oninput="formatNumberInput(this)" onblur="updateContractorValue('active',${i},this.value)">
-                    <span class="currency-symbol ${contractorSymbolClass}">${contractorSymbol || '₽'}</span>
+                    <span class="currency-symbol ${contractorSymbolClass}">${contractorSymbol || 'нет'}</span>
                     <select class="expense-mode" onchange="updateContractorMode('active',${i},this.value)">
                         <option value="none" ${item.contractorMode==='none'?'selected':''}>Нет</option>
                         <option value="amount" ${item.contractorMode!=='percent'?'selected':''}>₽</option>
@@ -2547,7 +2583,7 @@ function renderArchive(){
             <td>
                 <div class="price-cell-wrap expense-cell">
                     <input type="text" value="${contractorValue}" ${item.contractorMode === 'none' ? 'disabled' : ''} oninput="formatNumberInput(this)" onblur="updateContractorValue('archive',${realIdx},this.value)">
-                    <span class="currency-symbol ${contractorSymbolClass}">${contractorSymbol || '₽'}</span>
+                    <span class="currency-symbol ${contractorSymbolClass}">${contractorSymbol || 'нет'}</span>
                     <select class="expense-mode" onchange="updateContractorMode('archive',${realIdx},this.value)">
                         <option value="none" ${item.contractorMode==='none'?'selected':''}>Нет</option>
                         <option value="amount" ${item.contractorMode!=='percent'?'selected':''}>₽</option>
@@ -2636,7 +2672,7 @@ function renderAll(){
             <td style="text-align:right;">
                 <div class="price-cell-wrap expense-cell">
                     <input type="text" value="${contractorValue}" ${item.contractorMode === 'none' ? 'disabled' : ''} oninput="formatNumberInput(this)" onblur="updateContractorValue('${wrap.__type}',${wrap.idx},this.value)">
-                    <span class="currency-symbol ${contractorSymbolClass}">${contractorSymbol || '₽'}</span>
+                    <span class="currency-symbol ${contractorSymbolClass}">${contractorSymbol || 'нет'}</span>
                 </div>
                 <div class="expense-helper">${contractorHelper}</div>
             </td>
@@ -2843,6 +2879,7 @@ function restoreFromTrash(idx){
 
 function openAddModal(){
     ['name','client','price','contractor'].forEach(id => document.getElementById(`add-proj-${id}`).value = '');
+    toggleProjectNameClear();
     document.getElementById('add-proj-tax').value = '0';
     document.getElementById('add-proj-contractor-mode').value = 'none';
     handleNewContractorModeChange('none');
