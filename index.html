@@ -531,6 +531,11 @@
   .add-modal-stack { display: flex; flex-direction: column; gap: 6px; }
   .add-modal-stack > * { padding: 8px 0; }
   .add-modal-stack > *:not(:first-child) { border-top: 1px solid var(--border); padding-top: 14px; }
+  .add-modal-actions { display: flex; justify-content: flex-end; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+  .add-modal-actions .save-stg { width: auto; margin-top: 0; min-width: 210px; }
+  .link-manage-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 14px; border-radius: 10px; font-weight: 750; background: var(--button-bg); border: 1px solid var(--border); color: var(--text); box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
+  .link-manage-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .link-manage-btn.link-active { border-color: var(--accent); color: var(--accent); background: rgba(88,166,255,0.08); }
   .add-modal-compact { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; align-items: start; }
   .add-modal-compact.price-tax-row { grid-template-columns: 1.1fr 1fr 0.85fr; align-items: end; column-gap: 10px; }
   .price-tax-row .inp-group { display: flex; flex-direction: column; gap: 5px; margin: 0; }
@@ -1398,8 +1403,8 @@ td.date-cell + td.date-cell {
                     <div class="template-inline-block template-card">
                         <div class="template-manager">
                             <div class="template-manager-title">Мои шаблоны</div>
-                            <div class="template-pills" id="saved-template-pills"></div>
                             <div class="template-helper" id="template-helper">Введите название проекта, затем сохраните как шаблон.</div>
+                            <div class="template-pills" id="saved-template-pills"></div>
                         </div>
                     </div>
                 </div>
@@ -1480,7 +1485,10 @@ td.date-cell + td.date-cell {
             </div>
         </div>
 
-        <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveNewProject()">Создать</button>
+        <div class="add-modal-actions">
+            <button type="button" class="link-manage-btn" id="new-project-link-btn" onclick="openLink('new')">🔗 Ссылка на чат/материалы</button>
+            <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveNewProject()">Создать новый проект</button>
+        </div>
     </div>
 </div>
 
@@ -1844,6 +1852,7 @@ let previousDeadlineValue = '';
 let toastTimeout = null;
 let templateHelperTimeout = null;
 let lastPermanentDeletion = null;
+let newProjectLink = '';
 let datePicker = null;
 let timePicker = null;
 
@@ -3047,6 +3056,14 @@ function clearTrashForever() {
     };
 }
 
+function updateNewProjectLinkButton() {
+    const btn = document.getElementById('new-project-link-btn');
+    if (!btn) return;
+    const hasLink = !!newProjectLink;
+    btn.classList.toggle('link-active', hasLink);
+    btn.textContent = hasLink ? '🔗 Ссылка добавлена' : '🔗 Ссылка на чат/материалы';
+}
+
 function wipeAllData() {
     const ok = confirm('Стереть всю базу, включая шаблоны? Отменить действие нельзя.');
     if (!ok) return;
@@ -3077,6 +3094,8 @@ function openAddModal(){
     document.getElementById('add-proj-start-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
     document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
     handleStatusChange('active');
+    newProjectLink = '';
+    updateNewProjectLinkButton();
     document.getElementById('addProjectModal').style.display = 'flex';
 }
 function saveNewProject(){
@@ -3089,9 +3108,9 @@ function saveNewProject(){
     const type = document.getElementById('add-proj-type').value;
     const start = document.getElementById('add-proj-start-val').value || today;
     const dl = document.getElementById('add-proj-dl-val').value || today;
-    
+
     const item = {
-        n: name, c: client, p: price, contractor: contr, contractorMode: contrMode, taxPrc: tax, link: '',
+        n: name, c: client, p: price, contractor: contr, contractorMode: contrMode, taxPrc: tax, link: newProjectLink,
         start: type==='active'? start : undefined,
         dl: type==='active' || type==='waiting' || type==='paused' ? dl : undefined,
         paid: (type==='active'||type==='archive'? (type==='archive'?100:50) : 0),
@@ -3262,7 +3281,7 @@ function openProjectLink(idx, type) {
 }
 function openLink(type, idx){
     queue = {type, idx};
-    const currentLink = DATA[type][idx].link || '';
+    const currentLink = type === 'new' ? newProjectLink : (DATA[type][idx]?.link || '');
     const tgCheckbox = document.getElementById('link-is-telegram');
     let displayValue = currentLink;
 
@@ -3280,7 +3299,17 @@ function closeLinkModal(){ document.getElementById('linkModal').style.display = 
 function saveLink(){
     const isTelegram = document.getElementById('link-is-telegram').checked;
     const raw = document.getElementById('link-input').value;
-    DATA[queue.type][queue.idx].link = normalizeLinkValue(raw, isTelegram);
+    const normalized = normalizeLinkValue(raw, isTelegram);
+
+    if (queue.type === 'new') {
+        newProjectLink = normalized;
+        updateNewProjectLinkButton();
+        queue = { type: null, idx: null, field: null, targetId: null };
+        closeLinkModal();
+        return;
+    }
+
+    DATA[queue.type][queue.idx].link = normalized;
     closeLinkModal(); save(); upd();
 }
 
