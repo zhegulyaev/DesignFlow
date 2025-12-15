@@ -636,6 +636,8 @@
   .block-setting.is-off .preview-state { opacity: 1; transform: translateY(0); }
   .block-preview { border: 1px solid var(--border); border-radius: 12px; padding: 14px; background: linear-gradient(135deg, rgba(88,166,255,0.08), rgba(163,113,247,0.08)); display: grid; gap: 10px; position: relative; overflow: hidden; }
   .block-preview--neutral { background: linear-gradient(135deg, rgba(17,23,34,0.9), rgba(16,20,28,0.96)); }
+  body.light .block-preview { background: linear-gradient(135deg, rgba(59,130,246,0.06), rgba(124,82,228,0.06)); }
+  body.light .block-preview--neutral { background: linear-gradient(135deg, #f9fbff, #f4f6fb); border-color: #d8e1f0; box-shadow: 0 10px 28px rgba(17,24,39,0.06); }
   .preview-banner { background: linear-gradient(90deg, rgba(248,81,73,0.2), rgba(88,166,255,0.15)); border: 1px solid rgba(248,81,73,0.35); padding: 10px; border-radius: 10px; font-weight: 700; color: var(--text); display: flex; gap: 10px; align-items: center; justify-content: space-between; }
   .preview-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 10px; background: var(--card); border:1px solid var(--border); font-size: 12px; font-weight: 800; color: var(--text); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
   .preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
@@ -644,6 +646,7 @@
   .preview-bar { height: 10px; border-radius: 999px; background: var(--border); overflow: hidden; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
   .preview-bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--btn-blue), var(--purple)); width: 70%; box-shadow: 0 6px 18px rgba(163,113,247,0.25); }
   .preview-state { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.55); color: #fff; border-radius: 10px; padding: 6px 10px; font-size: 11px; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase; opacity: 0; transform: translateY(-4px); transition: opacity .2s, transform .2s; }
+  body.light .preview-state { background: rgba(255,255,255,0.9); color: #1f2937; border: 1px solid #e2e8f5; box-shadow: 0 6px 18px rgba(17,24,39,0.08); }
   .settings-actions { display:flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
   .settings-actions button { flex: 1; justify-content: center; min-width: 180px; }
   .settings-footer-note { color: var(--muted); font-size: 12px; font-weight: 600; margin-top: 8px; line-height: 1.5; }
@@ -662,16 +665,17 @@
   .layout-edit [data-editable].is-hidden { display: none !important; }
   .layout-edit .edit-controls { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 5; }
   .layout-edit .edit-hint { display: inline-flex; }
-  .layout-edit .edit-handle { width: 30px; height: 30px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; background: var(--button-bg); border: 1px solid var(--border); color: var(--muted); cursor: grab; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .layout-edit .edit-handle { width: 32px; height: 32px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; background: var(--card-alt); border: 1px solid var(--border); color: var(--text); cursor: grab; box-shadow: 0 6px 18px rgba(0,0,0,0.22); }
   .layout-edit [draggable="true"] .edit-handle { cursor: grab; }
-  .layout-edit .edit-remove { width: 30px; height: 30px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; background: rgba(218,54,51,0.12); border: 1px solid var(--red); color: var(--red); font-weight: 900; cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
-  .layout-edit .edit-remove:hover { background: rgba(218,54,51,0.2); }
-  .layout-edit .edit-remove svg { width: 14px; height: 14px; }
+  .layout-edit .edit-remove { width: 32px; height: 32px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; background: rgba(218,54,51,0.1); border: 1px solid rgba(218,54,51,0.35); color: var(--red); font-weight: 900; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
+  .layout-edit .edit-remove:hover { background: rgba(218,54,51,0.15); }
+  .layout-edit .edit-remove svg { width: 15px; height: 15px; }
   .layout-edit .drag-over { outline-color: var(--accent); box-shadow: 0 0 0 2px rgba(88,166,255,0.35); }
   .layout-edit .edit-hint { position: absolute; bottom: 10px; right: 10px; background: var(--pill-bg); color: var(--muted); padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; border: 1px solid var(--border); }
   .layout-edit .dragging { opacity: 0.55; transform: scale(0.99); box-shadow: 0 10px 28px rgba(0,0,0,0.28); }
   .layout-edit .block-drop-target { outline: 2px dashed var(--accent); border-radius: 12px; }
-  .drag-ghost { position: absolute; top: -9999px; left: -9999px; padding: 12px; border-radius: 12px; background: var(--card); box-shadow: 0 16px 38px rgba(0,0,0,0.35); opacity: 0.9; border: 1px solid var(--border); }
+  .drag-ghost { position: absolute; top: -9999px; left: -9999px; padding: 12px; border-radius: 12px; background: var(--card); box-shadow: 0 16px 38px rgba(0,0,0,0.35); opacity: 0.95; border: 1px solid var(--border); overflow: hidden; pointer-events: none; }
+  body.light .drag-ghost { background: #fff; box-shadow: 0 16px 38px rgba(17,24,39,0.1); border-color: #d8e1f0; }
 
   .footer-note { color: var(--muted); font-size: 12px; font-weight: 600; }
   .helper-note { color: var(--muted); font-size: 12px; margin-top: 6px; line-height: 1.4; text-align: left; }
@@ -1037,6 +1041,8 @@ td.date-cell + td.date-cell {
     <symbol id="icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="m16.707 6.293-7.25 7.25a1 1 0 0 1-1.414 0l-4-4a1 1 0 1 1 1.414-1.414L8.5 11.672l6.543-6.543a1 1 0 0 1 1.414 1.164a.99.99 0 0 1-.25.293Z"/></symbol>
     <symbol id="icon-settings" viewBox="0 0 24 24"><path fill="currentColor" d="M10.325 2.55a2 2 0 0 1 3.35 0l.72 1.08a2 2 0 0 0 1.362.89l1.284.214a2 2 0 0 1 1.64 1.64l.214 1.284a2 2 0 0 0 .89 1.362l1.08.72a2 2 0 0 1 0 3.35l-1.08.72a2 2 0 0 0-.89 1.362l-.214 1.284a2 2 0 0 1-1.64 1.64l-1.284.214a2 2 0 0 0-1.362.89l-.72 1.08a2 2 0 0 1-3.35 0l-.72-1.08a2 2 0 0 0-1.362-.89l-1.284-.214a2 2 0 0 1-1.64-1.64l-.214-1.284a2 2 0 0 0-.89-1.362l-1.08-.72a2 2 0 0 1 0-3.35l1.08-.72a2 2 0 0 0 .89-1.362l.214-1.284a2 2 0 0 1 1.64-1.64l1.284-.214a2 2 0 0 0 1.362-.89Zm.462 10.548a3 3 0 1 0 4.426-4.096a3 3 0 0 0-4.426 4.096Z"/></symbol>
     <symbol id="icon-drag" viewBox="0 0 24 24"><path fill="currentColor" d="M10 4a2 2 0 1 1-4 0a2 2 0 0 1 4 0Zm4 0a2 2 0 1 1 4 0a2 2 0 0 1-4 0ZM8 12a2 2 0 1 0-4 0a2 2 0 0 0 4 0Zm8 0a2 2 0 1 0-4 0a2 2 0 0 0 4 0Zm-6 6a2 2 0 1 1-4 0a2 2 0 0 1 4 0Zm4 0a2 2 0 1 1 4 0a2 2 0 0 1-4 0Z"/></symbol>
+    <symbol id="icon-grip" viewBox="0 0 24 24"><path fill="currentColor" d="M10 5a1 1 0 0 1-1 1H7a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1Zm7-1h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2Zm0 6h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2Zm0 6h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2Zm-8-4H7a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2Zm0 6H7a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2Zm0-12H7a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2Z"/></symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24"><path fill="currentColor" d="M6.34 4.93a1 1 0 0 0-1.41 1.41L10.59 12l-5.66 5.66a1 1 0 1 0 1.41 1.41L12 13.41l5.66 5.66a1 1 0 0 0 1.41-1.41L13.41 12l5.66-5.66a1 1 0 1 0-1.41-1.41L12 10.59Z"/></symbol>
     <symbol id="icon-hide" viewBox="0 0 24 24"><path fill="currentColor" d="M4.52 3.1a1 1 0 0 0-1.42 1.41l16 16a1 1 0 0 0 1.42-1.41l-2.03-2.03A11.3 11.3 0 0 0 21.89 12a11.29 11.29 0 0 0-3.67-4.91A9.3 9.3 0 0 0 12 5A9.4 9.4 0 0 0 8.6 5.6Zm5.58 5.58l2.11 2.1a2 2 0 0 0-2.1-2.1Zm-5.42-1.5A9.27 9.27 0 0 0 2.11 12a11.29 11.29 0 0 0 3.67 4.91A9.3 9.3 0 0 0 12 19a9.4 9.4 0 0 0 1.61-.14l-2.44-2.45A4 4 0 0 1 7.6 9.18Z"/></symbol>
     <symbol id="icon-active" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM3 8a5 5 0 0 1 10 0 5 5 0 0 1-10 0Z"/></symbol>
     <symbol id="icon-all" viewBox="0 0 16 16"><path fill="currentColor" d="M2.5 2.5A.5.5 0 0 1 3 2h4.5a.5.5 0 0 1 .5.5V7a.5.5 0 0 1-.5.5H3A.5.5 0 0 1 2.5 7Zm6 0A.5.5 0 0 1 9 2h4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-.5.5H9a.5.5 0 0 1-.5-.5Zm-6 6A.5.5 0 0 1 3 8h4.5a.5.5 0 0 1 .5.5V13a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5Zm8 0A.5.5 0 0 1 11 8h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5Z"/></symbol>
@@ -2342,13 +2348,13 @@ function createEditControls(type, key) {
     wrap.className = 'edit-controls';
     const handle = document.createElement('span');
     handle.className = 'edit-handle';
-    handle.innerHTML = '<svg class="btn-icon"><use href="#icon-drag"/></svg>';
+    handle.innerHTML = '<svg class="btn-icon lg"><use href="#icon-grip"/></svg>';
     handle.title = 'Переместить блок';
     const remove = document.createElement('button');
     remove.type = 'button';
     remove.className = 'edit-remove';
     remove.title = 'Скрыть блок';
-    remove.innerHTML = '<svg aria-hidden="true"><use href="#icon-hide"/></svg>';
+    remove.innerHTML = '<svg aria-hidden="true" class="btn-icon"><use href="#icon-close"/></svg>';
     remove.onclick = (e) => {
         e.stopPropagation();
         hideEditableBlock(type, key);
@@ -2399,6 +2405,8 @@ function setupEditableBlocks() {
         el.dataset.editable = el.dataset.editable || 'block';
         const canDragBlock = LAYOUT_BLOCK_KEYS.includes(key);
         el.setAttribute('draggable', layoutEditMode && canDragBlock ? 'true' : 'false');
+        const handle = el.querySelector('.edit-handle');
+        if (handle) handle.style.display = canDragBlock && layoutEditMode ? 'inline-flex' : 'none';
         el.removeEventListener('dragstart', onBlockDragStart);
         el.removeEventListener('dragend', onBlockDragEnd);
         el.removeEventListener('dragover', onBlockDragOverBlock);
@@ -2474,6 +2482,11 @@ function getBlockContainerKey(el) {
 function createDragPreview(el) {
     const clone = el.cloneNode(true);
     clone.querySelectorAll('.edit-controls, .edit-hint').forEach(n => n.remove());
+    const rect = el.getBoundingClientRect();
+    clone.style.width = `${rect.width}px`;
+    clone.style.maxWidth = `${rect.width}px`;
+    clone.style.height = `${Math.min(rect.height, 260)}px`;
+    clone.style.maxHeight = `${Math.min(rect.height, 260)}px`;
     clone.classList.add('drag-ghost');
     document.body.appendChild(clone);
     return clone;
