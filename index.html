@@ -320,7 +320,11 @@
   .pace-chill { background: rgba(57, 211, 83, 0.1); color: var(--green); }
   .pace-hurry { background: var(--red); color: white; }
 
-  body.light .pace-block.critical { background: #fff1f1; border-color: #f3c5c5; box-shadow: 0 8px 24px rgba(218,54,51,0.08); }
+body.light .pace-block.critical {
+    background: #ffffff;
+    border-color: #d8e1f0;
+    box-shadow: none;
+}
   body.light .pace-hurry { background: #f26b6b; color: #fff; box-shadow: 0 6px 14px rgba(242,107,107,0.25); }
 
   .pace-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; width: 100%; align-items: stretch; }
