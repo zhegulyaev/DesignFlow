@@ -305,17 +305,16 @@
   /* Pacing Block Updated (Fire) */
   .pace-block {
     background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    padding: 15px 20px;
+    padding: 16px;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: space-between;
     margin-bottom: 20px;
     margin-top: 15px; /* Дополнительный отступ сверху */
     transition: background .3s;
-    gap: 20px;
+    gap: 16px;
   }
   .pace-block.critical { background: rgba(218, 54, 51, 0.15); border-color: var(--red); }
-  .pace-info { display: flex; align-items: center; gap: 15px; }
   .pace-icon { font-size: 24px; }
   .pace-status { font-weight: 700; font-size: 14px; padding: 5px 12px; border-radius: 6px; }
   .pace-chill { background: rgba(57, 211, 83, 0.1); color: var(--green); }
@@ -324,12 +323,19 @@
   body.light .pace-block.critical { background: #fff1f1; border-color: #f3c5c5; box-shadow: 0 8px 24px rgba(218,54,51,0.08); }
   body.light .pace-hurry { background: #f26b6b; color: #fff; box-shadow: 0 6px 14px rgba(242,107,107,0.25); }
 
-  .pace-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .pace-rep-chip { display: inline-flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 14px; background: var(--chip-bg); border: 1px solid var(--border); color: #e9edf4; font-weight: 700; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); min-height: 44px; }
+  .pace-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; width: 100%; align-items: stretch; }
+  .pace-card { border: 1px solid var(--border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 8px; background: var(--card-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .pace-card-label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; color: var(--muted); display: inline-flex; align-items: center; gap: 8px; }
+  .pace-card-label-icon .pace-icon { font-size: 18px; }
+  .pace-card-value { font-size: 18px; font-weight: 900; color: var(--text); }
+  .pace-card-sub { color: var(--muted); font-size: 13px; font-weight: 600; line-height: 1.45; }
+  .pace-card--rep .pace-rep-chip { width: 100%; }
+  .pace-rep-chip { display: inline-flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; background: var(--chip-bg); border: 1px solid var(--border); color: #e9edf4; font-weight: 700; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); min-height: 48px; width: auto; }
   .pace-rep-chip .rep-dot { width: 10px; height: 10px; box-shadow: 0 0 0 4px rgba(88,166,255,0.12); }
   .pace-rep-chip .rep-chip-text { display: flex; flex-direction: column; gap: 2px; line-height: 1.2; }
   .pace-rep-chip .rep-chip-label { font-size: 11px; letter-spacing: 0.4px; text-transform: uppercase; color: var(--muted); }
   .pace-rep-chip .rep-chip-score { font-size: 15px; font-weight: 800; }
+  .pace-rep-chip .rep-chip-sub { font-size: 12px; color: var(--muted); font-weight: 600; }
   .pace-rep-chip.good { border-color: rgba(46, 160, 67, 0.35); background: linear-gradient(135deg, rgba(46,160,67,0.14), rgba(15,23,31,0.8)); box-shadow: 0 0 0 1px rgba(46,160,67,0.18); }
   .pace-rep-chip.warn { border-color: rgba(210, 153, 34, 0.35); background: linear-gradient(135deg, rgba(210,153,34,0.14), rgba(15,23,31,0.8)); box-shadow: 0 0 0 1px rgba(210,153,34,0.16); }
   .pace-rep-chip.bad { border-color: rgba(218, 54, 51, 0.35); background: linear-gradient(135deg, rgba(248,81,73,0.14), rgba(15,23,31,0.8)); box-shadow: 0 0 0 1px rgba(218,54,51,0.16); }
@@ -338,8 +344,7 @@
   body.light .pace-rep-chip.good { border-color: rgba(46,160,67,0.3); background: linear-gradient(135deg, rgba(46,160,67,0.1), #f5fbf7); box-shadow: 0 0 0 1px rgba(46,160,67,0.12); color: #1f422c; }
   body.light .pace-rep-chip.warn { border-color: rgba(210,153,34,0.28); background: linear-gradient(135deg, rgba(210,153,34,0.12), #fdf7ec); box-shadow: 0 0 0 1px rgba(210,153,34,0.12); color: #5a4314; }
   body.light .pace-rep-chip.bad { border-color: rgba(218,54,51,0.32); background: linear-gradient(135deg, rgba(248,81,73,0.12), #fff1f0); box-shadow: 0 0 0 1px rgba(218,54,51,0.12); color: #6b1c1c; }
-
-  .pace-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .inline-link-btn.full { width: 100%; justify-content: center; }
 
 
       .date-input-wrap:not(:last-child) {
@@ -617,7 +622,8 @@
   #settingsModal .modal-content h2 { margin-bottom: 15px; }
 
   .settings-modal { max-width: 1280px; width: 96vw; }
-  .settings-header { display:flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 14px; }
+  .settings-header { display:flex; justify-content: space-between; gap: 14px; align-items: center; margin-bottom: 14px; }
+  .settings-header-text { text-align: center; flex: 1; }
   .settings-title { font-size: 24px; font-weight: 900; letter-spacing: -0.5px; }
   .settings-sub { color: var(--muted); font-size: 14px; font-weight: 600; }
   .settings-pill { padding: 6px 10px; background: var(--pill-bg); border:1px solid var(--border); border-radius: 10px; font-weight: 800; color: var(--muted); font-size: 12px; }
@@ -643,10 +649,11 @@
   .toggle-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: var(--muted); transition: .2s; border-radius: 50%; }
   .toggle-switch input:checked + .toggle-slider { background-color: var(--btn-blue); }
   .toggle-switch input:checked + .toggle-slider:before { transform: translateX(18px); background: #fff; }
-  .radio-card { display:flex; gap: 12px; border:1px solid var(--border); padding: 12px; border-radius: 12px; align-items: flex-start; background: var(--card-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
-  .radio-card input { margin-top: 3px; }
-  .radio-card-title { font-weight: 800; }
-  .radio-card-sub { color: var(--muted); font-size: 13px; font-weight: 600; }
+  .radio-card { display:flex; gap: 14px; border:1px solid var(--border); padding: 14px 16px; border-radius: 14px; align-items: center; background: var(--card-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); transition: border-color .2s, box-shadow .2s, transform .15s; }
+  .radio-card input { margin-top: 0; transform: translateY(1px); }
+  .radio-card:hover { border-color: var(--accent); box-shadow: 0 12px 26px rgba(0,0,0,0.18); transform: translateY(-1px); }
+  .radio-card-title { font-weight: 900; letter-spacing: -0.2px; }
+  .radio-card-sub { color: var(--muted); font-size: 13px; font-weight: 600; line-height: 1.45; }
   .radio-grid { display:grid; gap:10px; margin-top: 10px; }
   .block-setting { display: grid; gap: 12px; border: 1px solid var(--border); border-radius: 14px; padding: 12px; background: var(--card); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); position: relative; }
   .block-setting.is-off .settings-row { border-color: rgba(255,255,255,0.08); }
@@ -681,20 +688,20 @@
 
   /* Layout edit mode */
   .edit-controls, .edit-hint { display: none; }
-  .layout-edit [data-editable] { position: relative; outline: 1px dashed var(--border); border-radius: 12px; }
+  .layout-edit [data-editable] { position: relative; outline: 1px dashed var(--border); border-radius: 12px; overflow: hidden; }
   .layout-edit [data-editable].is-hidden { display: none !important; }
   .layout-edit .edit-controls { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 5; }
   .layout-edit .edit-hint { display: inline-flex; }
-  .layout-edit .edit-handle { width: 32px; height: 32px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; background: var(--card-alt); border: 1px solid var(--border); color: var(--text); cursor: grab; box-shadow: 0 6px 18px rgba(0,0,0,0.22); }
+  .layout-edit .edit-handle { width: 36px; height: 36px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; background: var(--card-alt); border: 1px solid var(--border); color: var(--text); cursor: grab; box-shadow: 0 6px 18px rgba(0,0,0,0.22); }
   .layout-edit [draggable="true"] .edit-handle { cursor: grab; }
-  .layout-edit .edit-remove { width: 32px; height: 32px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; background: rgba(218,54,51,0.1); border: 1px solid rgba(218,54,51,0.35); color: var(--red); font-weight: 900; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
-  .layout-edit .edit-remove:hover { background: rgba(218,54,51,0.15); }
-  .layout-edit .edit-remove svg { width: 15px; height: 15px; }
+  .layout-edit .edit-remove { width: 36px; height: 36px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; background: rgba(218,54,51,0.1); border: 1px solid rgba(218,54,51,0.35); color: var(--red); font-weight: 900; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
+  .layout-edit .edit-remove:hover { background: rgba(218,54,51,0.15); border-color: rgba(218,54,51,0.55); }
+  .layout-edit .edit-remove svg { width: 17px; height: 17px; }
   .layout-edit .drag-over { outline-color: var(--accent); box-shadow: 0 0 0 2px rgba(88,166,255,0.35); }
   .layout-edit .edit-hint { position: absolute; bottom: 10px; right: 10px; background: var(--pill-bg); color: var(--muted); padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; border: 1px solid var(--border); }
   .layout-edit .dragging { opacity: 0.55; transform: scale(0.99); box-shadow: 0 10px 28px rgba(0,0,0,0.28); }
   .layout-edit .block-drop-target { outline: 2px dashed var(--accent); border-radius: 12px; }
-  .drag-ghost { position: absolute; top: -9999px; left: -9999px; padding: 12px; border-radius: 12px; background: var(--card); box-shadow: 0 16px 38px rgba(0,0,0,0.35); opacity: 0.95; border: 1px solid var(--border); overflow: hidden; pointer-events: none; }
+  .drag-ghost { position: absolute; top: -9999px; left: -9999px; padding: 6px; border-radius: 14px; background: var(--card); box-shadow: 0 16px 38px rgba(0,0,0,0.35); opacity: 0.95; border: 1px solid var(--border); overflow: hidden; pointer-events: none; }
   body.light .drag-ghost { background: #fff; box-shadow: 0 16px 38px rgba(17,24,39,0.1); border-color: #d8e1f0; }
 
   .footer-note { color: var(--muted); font-size: 12px; font-weight: 600; }
@@ -1151,23 +1158,28 @@ td.date-cell + td.date-cell {
   <div class="tab-desc-block" id="tab-description">Проекты в работе. Следите за дедлайнами и фиксируйте предоплату.</div>
 
   <div class="pace-block" id="pace-indicator" style="display:none;" data-editable data-block-key="pace">
-      <div class="pace-info">
-          <div class="pace-icon" id="pace-icon">🔥</div>
-          <div>
-              <div style="font-weight:700;font-size:16px; color:var(--text);" id="pace-title">Нужно ускориться!</div>
-              <div style="font-size:13px;color:var(--muted)" id="pace-desc">Загрузка...</div>
-          </div>
-      </div>
       <div class="pace-actions">
-          <div class="pace-rep-chip good" id="pace-rep-chip">
-              <span class="rep-dot good" id="pace-rep-dot"></span>
-              <div class="rep-chip-text">
-                  <div class="rep-chip-label">Репутация</div>
-                  <div class="rep-chip-score" id="pace-rep-text">100 / 100</div>
+          <div class="pace-card pace-card--deadlines">
+              <div class="pace-card-label pace-card-label-icon">
+                  <span class="pace-icon" id="pace-icon">🔥</span>
+                  <span>Темп недели</span>
               </div>
+              <div class="pace-card-value" id="pace-title">Нужно ускориться!</div>
+              <div class="pace-card-sub" id="pace-desc">Загрузка...</div>
+              <div class="pace-status" id="pace-status">Критично</div>
           </div>
-          <button class="inline-link-btn" id="pace-details-btn" onclick="scrollToReputation()">Подробнее</button>
-          <div class="pace-status" id="pace-status">Критично</div>
+          <div class="pace-card pace-card--rep">
+              <div class="pace-card-label">Репутация</div>
+              <div class="pace-rep-chip good" id="pace-rep-chip">
+                  <span class="rep-dot good" id="pace-rep-dot"></span>
+                  <div class="rep-chip-text">
+                      <div class="rep-chip-label">Счёт</div>
+                      <div class="rep-chip-score" id="pace-rep-text">100 / 100</div>
+                      <div class="rep-chip-sub" id="pace-rep-caption">Доверие стабильно</div>
+                  </div>
+              </div>
+              <button class="inline-link-btn full" id="pace-details-btn" onclick="scrollToReputation()">Открыть блок репутации</button>
+          </div>
       </div>
   </div>
 
@@ -1761,7 +1773,7 @@ td.date-cell + td.date-cell {
     <div class="modal-content settings-modal">
         <span class="close-modal-x" onclick="document.getElementById('settingsModal').style.display='none'">×</span>
         <div class="settings-header">
-            <div>
+            <div class="settings-header-text">
                 <div class="settings-title">Настройки</div>
                 <div class="settings-sub">Управляйте блоками, темой, таблицами и резервными копиями.</div>
             </div>
@@ -2063,7 +2075,7 @@ td.date-cell + td.date-cell {
 
                     <div class="settings-section">
                         <div class="settings-section-title">Цели и рекорд</div>
-                        <div class="settings-section-sub">Используются в дашборде и напоминаниях.</div>
+                        <div class="settings-section-sub">Эти значения мы покажем на дашборде и в напоминаниях.</div>
                         <div class="settings-actions" style="margin-top: 0; gap: 16px;">
                             <div class="inp-group" style="flex:1">
                                 <label>Цель на месяц (₽)</label>
@@ -2100,6 +2112,7 @@ td.date-cell + td.date-cell {
 <script>
 const K = 'grok_design_v5';
 const THEME_KEY = 'designflow_theme';
+const THEME_OVERRIDE_KEY = 'designflow_theme_override';
 const NAME_TEMPLATES_KEY = 'designflow_name_templates';
 const UI_PREFS_KEY = 'designflow_ui_prefs';
 const STAT_KEYS = ['fact','active-fact','paid-gross','total-gross','plan','forecast','expenses','taxes'];
@@ -2270,15 +2283,19 @@ function persistUiPrefs() {
     localStorage.setItem(UI_PREFS_KEY, JSON.stringify(UI_PREFS));
 }
 
-function resolveTheme(mode = UI_PREFS.themeMode) {
+function resolveTheme(mode = UI_PREFS.themeMode, { respectOverride = true } = {}) {
     if (mode === 'light' || mode === 'dark') return mode;
+    if (respectOverride) {
+        const override = localStorage.getItem(THEME_OVERRIDE_KEY);
+        if (override === 'light' || override === 'dark') return override;
+    }
     const hour = new Date().getHours();
     return hour >= 7 && hour < 20 ? 'light' : 'dark';
 }
 
 function startAutoThemeWatcher() {
     stopAutoThemeWatcher();
-    autoThemeInterval = setInterval(() => applyThemeMode('auto', { silent: true, skipSave: true }), 5 * 60 * 1000);
+    autoThemeInterval = setInterval(() => applyThemeMode('auto', { silent: true, skipSave: true, respectOverride: false }), 5 * 60 * 1000);
 }
 
 function stopAutoThemeWatcher() {
@@ -2305,9 +2322,17 @@ function applyTheme(theme) {
     }
 }
 
-function applyThemeMode(mode, { silent = false, skipSave = false } = {}) {
+function applyThemeMode(mode, { silent = false, skipSave = false, respectOverride = true, overrideTheme } = {}) {
     UI_PREFS.themeMode = mode || 'dark';
-    const actual = resolveTheme(UI_PREFS.themeMode);
+    if (UI_PREFS.themeMode !== 'auto') {
+        localStorage.removeItem(THEME_OVERRIDE_KEY);
+    } else {
+        if (!respectOverride) localStorage.removeItem(THEME_OVERRIDE_KEY);
+        if (overrideTheme === 'light' || overrideTheme === 'dark') {
+            localStorage.setItem(THEME_OVERRIDE_KEY, overrideTheme);
+        }
+    }
+    const actual = resolveTheme(UI_PREFS.themeMode, { respectOverride });
     localStorage.setItem(THEME_KEY, actual);
     if (!skipSave) persistUiPrefs();
     applyTheme(actual);
@@ -2323,6 +2348,12 @@ function applyThemeMode(mode, { silent = false, skipSave = false } = {}) {
 }
 
 function toggleTheme() {
+    if (UI_PREFS.themeMode === 'auto') {
+        const current = resolveTheme('auto');
+        const nextActual = current === 'light' ? 'dark' : 'light';
+        applyThemeMode('auto', { overrideTheme: nextActual });
+        return;
+    }
     const next = UI_PREFS.themeMode === 'light' ? 'dark' : 'light';
     applyThemeMode(next);
 }
@@ -2424,7 +2455,7 @@ function createEditControls(type, key) {
     remove.type = 'button';
     remove.className = 'edit-remove';
     remove.title = 'Скрыть блок';
-    remove.innerHTML = '<svg aria-hidden="true" class="btn-icon"><use href="#icon-close"/></svg>';
+    remove.innerHTML = '<svg aria-hidden="true" class="btn-icon"><use href="#icon-trash"/></svg>';
     remove.onclick = (e) => {
         e.stopPropagation();
         hideEditableBlock(type, key);
@@ -2557,6 +2588,9 @@ function createDragPreview(el) {
     clone.style.maxWidth = `${rect.width}px`;
     clone.style.height = `${Math.min(rect.height, 260)}px`;
     clone.style.maxHeight = `${Math.min(rect.height, 260)}px`;
+    clone.style.margin = '0';
+    clone.style.overflow = 'hidden';
+    clone.style.borderRadius = '14px';
     clone.classList.add('drag-ghost');
     document.body.appendChild(clone);
     return clone;
@@ -5085,6 +5119,7 @@ function updatePaceReputation(state){
     const chip = document.getElementById('pace-rep-chip');
     const text = document.getElementById('pace-rep-text');
     const dot = document.getElementById('pace-rep-dot');
+    const caption = document.getElementById('pace-rep-caption');
 
     if (chip) {
         chip.classList.remove('good', 'warn', 'bad');
@@ -5093,6 +5128,7 @@ function updatePaceReputation(state){
 
     if (text) text.innerText = `${state.score} / 100`;
     if (dot) dot.className = `rep-dot ${state.level}`;
+    if (caption) caption.innerText = state.level === 'good' ? 'Доверие стабильно' : 'Нужно ускориться';
 }
 
 function scrollToReputation(){
