@@ -94,6 +94,9 @@
   #themeToggle { padding:10px 20px; gap:10px; min-height: 44px; }
   #themeToggleIcon { font-size: 16px; }
   #themeToggleLabel { font-weight: 700; font-size: 13px; }
+  .btn-icon { width: 16px; height: 16px; }
+  .btn-icon.lg { width: 18px; height: 18px; }
+  .btn-label { font-weight: 700; letter-spacing: -0.1px; }
 
 
       .date-cell:not(:last-child) .date-input-wrap {
@@ -663,8 +666,12 @@
   .layout-edit [draggable="true"] .edit-handle { cursor: grab; }
   .layout-edit .edit-remove { width: 30px; height: 30px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; background: rgba(218,54,51,0.12); border: 1px solid var(--red); color: var(--red); font-weight: 900; cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
   .layout-edit .edit-remove:hover { background: rgba(218,54,51,0.2); }
+  .layout-edit .edit-remove svg { width: 14px; height: 14px; }
   .layout-edit .drag-over { outline-color: var(--accent); box-shadow: 0 0 0 2px rgba(88,166,255,0.35); }
   .layout-edit .edit-hint { position: absolute; bottom: 10px; right: 10px; background: var(--pill-bg); color: var(--muted); padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; border: 1px solid var(--border); }
+  .layout-edit .dragging { opacity: 0.55; transform: scale(0.99); box-shadow: 0 10px 28px rgba(0,0,0,0.28); }
+  .layout-edit .block-drop-target { outline: 2px dashed var(--accent); border-radius: 12px; }
+  .drag-ghost { position: absolute; top: -9999px; left: -9999px; padding: 12px; border-radius: 12px; background: var(--card); box-shadow: 0 16px 38px rgba(0,0,0,0.35); opacity: 0.9; border: 1px solid var(--border); }
 
   .footer-note { color: var(--muted); font-size: 12px; font-weight: 600; }
   .helper-note { color: var(--muted); font-size: 12px; margin-top: 6px; line-height: 1.4; text-align: left; }
@@ -1024,6 +1031,13 @@ td.date-cell + td.date-cell {
 </div>
 
 <svg style="display: none;">
+    <symbol id="icon-sun" viewBox="0 0 24 24"><path fill="currentColor" d="M12 4.5a1 1 0 0 1-1-1V2a1 1 0 1 1 2 0v1.5a1 1 0 0 1-1 1Zm0 17a1 1 0 0 1-1 1V24a1 1 0 1 1 2 0v-1.5a1 1 0 0 1-1-1Zm7.424-14.924a1 1 0 0 1 0-1.414l1.06-1.06a1 1 0 1 1 1.415 1.414l-1.06 1.06a1 1 0 0 1-1.415 0ZM2.1 20.4a1 1 0 0 1 0-1.415l1.06-1.06a1 1 0 1 1 1.414 1.414l-1.06 1.061A1 1 0 0 1 2.1 20.4Zm19.8-1.414a1 1 0 0 1-1.415 0l-1.06-1.06a1 1 0 1 1 1.414-1.415l1.06 1.06a1 1 0 0 1 0 1.415ZM2.1 3.6a1 1 0 0 1 1.414 0l1.06 1.06A1 1 0 0 1 3.16 6.074L2.1 5.014A1 1 0 0 1 2.1 3.6ZM4.5 12a1 1 0 0 1-1 1H2a1 1 0 1 1 0-2h1.5a1 1 0 0 1 1 1Zm18 0a1 1 0 0 1-1 1H20a1 1 0 1 1 0-2h1.5a1 1 0 0 1 1 1Zm-7 0a3.5 3.5 0 1 1-7 0a3.5 3.5 0 0 1 7 0Z"/></symbol>
+    <symbol id="icon-moon" viewBox="0 0 24 24"><path fill="currentColor" d="M21.74 15.34a1 1 0 0 0-1.11-.27A7.5 7.5 0 0 1 9.06 4.5a1 1 0 0 0-.76-1.2a9 9 0 1 0 13.44 12.36Z"/></symbol>
+    <symbol id="icon-pen" viewBox="0 0 20 20"><path fill="currentColor" d="M2.5 13.793V17.5h3.707L16.1 7.607l-3.707-3.707Zm13.94-8.233l-.633.634l-3.707-3.707l.633-.633a1.5 1.5 0 0 1 2.122 0l1.585 1.585a1.5 1.5 0 0 1 0 2.121Z"/></symbol>
+    <symbol id="icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="m16.707 6.293-7.25 7.25a1 1 0 0 1-1.414 0l-4-4a1 1 0 1 1 1.414-1.414L8.5 11.672l6.543-6.543a1 1 0 0 1 1.414 1.164a.99.99 0 0 1-.25.293Z"/></symbol>
+    <symbol id="icon-settings" viewBox="0 0 24 24"><path fill="currentColor" d="M10.325 2.55a2 2 0 0 1 3.35 0l.72 1.08a2 2 0 0 0 1.362.89l1.284.214a2 2 0 0 1 1.64 1.64l.214 1.284a2 2 0 0 0 .89 1.362l1.08.72a2 2 0 0 1 0 3.35l-1.08.72a2 2 0 0 0-.89 1.362l-.214 1.284a2 2 0 0 1-1.64 1.64l-1.284.214a2 2 0 0 0-1.362.89l-.72 1.08a2 2 0 0 1-3.35 0l-.72-1.08a2 2 0 0 0-1.362-.89l-1.284-.214a2 2 0 0 1-1.64-1.64l-.214-1.284a2 2 0 0 0-.89-1.362l-1.08-.72a2 2 0 0 1 0-3.35l1.08-.72a2 2 0 0 0 .89-1.362l.214-1.284a2 2 0 0 1 1.64-1.64l1.284-.214a2 2 0 0 0 1.362-.89Zm.462 10.548a3 3 0 1 0 4.426-4.096a3 3 0 0 0-4.426 4.096Z"/></symbol>
+    <symbol id="icon-drag" viewBox="0 0 24 24"><path fill="currentColor" d="M10 4a2 2 0 1 1-4 0a2 2 0 0 1 4 0Zm4 0a2 2 0 1 1 4 0a2 2 0 0 1-4 0ZM8 12a2 2 0 1 0-4 0a2 2 0 0 0 4 0Zm8 0a2 2 0 1 0-4 0a2 2 0 0 0 4 0Zm-6 6a2 2 0 1 1-4 0a2 2 0 0 1 4 0Zm4 0a2 2 0 1 1 4 0a2 2 0 0 1-4 0Z"/></symbol>
+    <symbol id="icon-hide" viewBox="0 0 24 24"><path fill="currentColor" d="M4.52 3.1a1 1 0 0 0-1.42 1.41l16 16a1 1 0 0 0 1.42-1.41l-2.03-2.03A11.3 11.3 0 0 0 21.89 12a11.29 11.29 0 0 0-3.67-4.91A9.3 9.3 0 0 0 12 5A9.4 9.4 0 0 0 8.6 5.6Zm5.58 5.58l2.11 2.1a2 2 0 0 0-2.1-2.1Zm-5.42-1.5A9.27 9.27 0 0 0 2.11 12a11.29 11.29 0 0 0 3.67 4.91A9.3 9.3 0 0 0 12 19a9.4 9.4 0 0 0 1.61-.14l-2.44-2.45A4 4 0 0 1 7.6 9.18Z"/></symbol>
     <symbol id="icon-active" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM3 8a5 5 0 0 1 10 0 5 5 0 0 1-10 0Z"/></symbol>
     <symbol id="icon-all" viewBox="0 0 16 16"><path fill="currentColor" d="M2.5 2.5A.5.5 0 0 1 3 2h4.5a.5.5 0 0 1 .5.5V7a.5.5 0 0 1-.5.5H3A.5.5 0 0 1 2.5 7Zm6 0A.5.5 0 0 1 9 2h4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-.5.5H9a.5.5 0 0 1-.5-.5Zm-6 6A.5.5 0 0 1 3 8h4.5a.5.5 0 0 1 .5.5V13a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5Zm8 0A.5.5 0 0 1 11 8h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5Z"/></symbol>
     <symbol id="icon-waiting" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM8 4a1 1 0 0 1 1 1v3.5a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1 0-1H8V5a1 1 0 0 1 1-1Z"/></symbol>
@@ -1052,11 +1066,17 @@ td.date-cell + td.date-cell {
     </div>
     <div style="display:flex;gap:15px;align-items:center">
         <button id="themeToggle" onclick="toggleTheme()" aria-label="Переключить тему">
-            <span id="themeToggleIcon">🌞</span>
-            <span id="themeToggleLabel">Светлая тема</span>
+            <svg class="btn-icon" id="themeToggleIcon"><use href="#icon-sun"/></svg>
+            <span class="btn-label" id="themeToggleLabel">Светлая тема</span>
         </button>
-        <button id="layoutEditBtn" onclick="toggleLayoutEditMode()">✏️ Редактировать блоки</button>
-        <button onclick="openSettings()">⚙ Настройки</button>
+        <button id="layoutEditBtn" onclick="toggleLayoutEditMode()">
+            <svg class="btn-icon" id="layoutEditIcon"><use href="#icon-pen"/></svg>
+            <span class="btn-label" id="layoutEditLabel">Редактировать блоки</span>
+        </button>
+        <button onclick="openSettings()" id="openSettingsBtn">
+            <svg class="btn-icon"><use href="#icon-settings"/></svg>
+            <span class="btn-label">Настройки</span>
+        </button>
         <select id="monthSelect" class="month-select" onchange="changeMonth(this.value)"></select>
     </div>
   </div>
@@ -1068,7 +1088,10 @@ td.date-cell + td.date-cell {
       Обязательно скачивайте резервную копию перед очисткой кэша или переустановкой системы.
     </div>
     <div class="btns">
-      <button onclick="openSettings()">⚙ Открыть настройки</button>
+      <button onclick="openSettings()">
+          <svg class="btn-icon"><use href="#icon-settings"/></svg>
+          <span class="btn-label">Открыть настройки</span>
+      </button>
     </div>
   </div>
 
@@ -1299,7 +1322,10 @@ td.date-cell + td.date-cell {
       </div>
       <div class="trash-toolbar">
           <div style="color: var(--muted); font-size: 13px;">Объекты хранятся здесь 7 дней, затем удаляются навсегда.</div>
-          <button class="trash-clean-btn" onclick="clearTrashForever()">🗑 Очистить корзину</button>
+          <button class="trash-clean-btn" onclick="clearTrashForever()">
+              <svg class="btn-icon"><use href="#icon-trash"/></svg>
+              <span class="btn-label">Очистить корзину</span>
+          </button>
       </div>
     </div>
   </div>
@@ -1307,7 +1333,7 @@ td.date-cell + td.date-cell {
   <div class="dashboard" id="analytics-dashboard">
     <div class="stats-full">
       <div class="stats-two-columns">
-          <div class="stats-main">
+          <div class="stats-main" data-block-container="main">
               <div class="card">
               <div class="card-head">
                   <div>
@@ -1399,7 +1425,7 @@ td.date-cell + td.date-cell {
               </div>
           </div>
 
-          <div class="side-stack">
+          <div class="side-stack" data-block-container="side">
               <div class="card efficiency-card" id="efficiency-card" data-editable data-block-key="efficiency">
                   <div class="card-head">Эффективность <span class="help-icon" data-tooltip="Визуализация распределения чистой прибыли между уже полученными средствами и оставшимся потенциалом проектов.">?</span></div>
                   <div style="position:relative;height:170px;width:100%;display:flex;justify-content:center;margin-bottom:14px;"><canvas id="pieChart"></canvas></div>
@@ -2005,6 +2031,12 @@ const NAME_TEMPLATES_KEY = 'designflow_name_templates';
 const UI_PREFS_KEY = 'designflow_ui_prefs';
 const STAT_KEYS = ['fact','active-fact','paid-gross','plan','forecast','expenses','taxes'];
 const SIDE_BLOCK_KEYS = ['efficiency','record','reputation'];
+const LAYOUT_BLOCK_KEYS = ['topClients','efficiency','record','reputation'];
+const BLOCK_CONTAINERS = ['main','side'];
+const DEFAULT_BLOCK_ORDER = {
+    main: ['topClients'],
+    side: ['efficiency','record','reputation']
+};
 const DEFAULT_UI_PREFS = {
     themeMode: 'dark',
     blockVisibility: {
@@ -2016,6 +2048,7 @@ const DEFAULT_UI_PREFS = {
         record: true,
         reputation: true
     },
+    blockOrder: { ...DEFAULT_BLOCK_ORDER },
     tableVisibility: {
         waiting: true,
         requests: true,
@@ -2095,6 +2128,27 @@ function normalizeOrder(order, defaults) {
     return result;
 }
 
+function normalizeBlockOrder(orderMap, fallback = DEFAULT_BLOCK_ORDER) {
+    const result = {};
+    const seen = new Set();
+    Object.keys(fallback).forEach(zone => result[zone] = []);
+    Object.entries({ ...fallback, ...(orderMap || {}) }).forEach(([zone, list]) => {
+        if (!result[zone]) result[zone] = [];
+        (list || []).forEach(key => {
+            if (!LAYOUT_BLOCK_KEYS.includes(key) || seen.has(key)) return;
+            result[zone].push(key);
+            seen.add(key);
+        });
+    });
+    LAYOUT_BLOCK_KEYS.forEach(key => {
+        if (seen.has(key)) return;
+        const fallbackZone = fallback.main.includes(key) ? 'main' : fallback.side.includes(key) ? 'side' : Object.keys(fallback)[0];
+        result[fallbackZone] = result[fallbackZone] || [];
+        result[fallbackZone].push(key);
+    });
+    return result;
+}
+
 function loadUiPrefs() {
     try {
         const storedTheme = localStorage.getItem(THEME_KEY);
@@ -2116,7 +2170,8 @@ function loadUiPrefs() {
                     ...(stored.statVisibility || {})
                 },
                 statOrder: normalizeOrder(stored.statOrder, STAT_KEYS),
-                sideOrder: normalizeOrder(stored.sideOrder, SIDE_BLOCK_KEYS)
+                sideOrder: normalizeOrder(stored.sideOrder, SIDE_BLOCK_KEYS),
+                blockOrder: normalizeBlockOrder(stored.blockOrder, DEFAULT_BLOCK_ORDER)
             };
             if (stored?.blockVisibility?.reputation === false && stored?.blockVisibility?.record === undefined) {
                 UI_PREFS.blockVisibility.record = false;
@@ -2132,6 +2187,7 @@ function loadUiPrefs() {
     }
     UI_PREFS.statOrder = normalizeOrder(UI_PREFS.statOrder, STAT_KEYS);
     UI_PREFS.sideOrder = normalizeOrder(UI_PREFS.sideOrder, SIDE_BLOCK_KEYS);
+    UI_PREFS.blockOrder = normalizeBlockOrder(UI_PREFS.blockOrder, DEFAULT_BLOCK_ORDER);
     if (!UI_PREFS.themeMode) UI_PREFS.themeMode = 'dark';
     persistUiPrefs();
 }
@@ -2163,7 +2219,10 @@ function applyTheme(theme) {
     document.body.classList.toggle('light', isLight);
     const icon = document.getElementById('themeToggleIcon');
     const label = document.getElementById('themeToggleLabel');
-    if (icon) icon.textContent = isLight ? '🌙' : '🌞';
+    if (icon) {
+        const use = icon.querySelector('use');
+        if (use) use.setAttribute('href', isLight ? '#icon-moon' : '#icon-sun');
+    }
     if (label) {
         const mode = UI_PREFS.themeMode || 'dark';
         label.textContent = mode === 'auto'
@@ -2256,30 +2315,40 @@ function applyStatOrder() {
     });
 }
 
-function applySideOrder() {
-    const stack = document.querySelector('.side-stack');
-    if (!stack) return;
-    UI_PREFS.sideOrder = normalizeOrder(UI_PREFS.sideOrder, SIDE_BLOCK_KEYS);
-    const map = Object.fromEntries([...stack.children].map(el => [el.getAttribute('data-block-key'), el]));
-    UI_PREFS.sideOrder.forEach(key => {
-        if (map[key]) stack.appendChild(map[key]);
+function applyBlockOrder() {
+    const containers = Object.fromEntries([...document.querySelectorAll('[data-block-container]')]
+        .map(el => [el.getAttribute('data-block-container'), el]));
+    UI_PREFS.blockOrder = normalizeBlockOrder(UI_PREFS.blockOrder, DEFAULT_BLOCK_ORDER);
+    const lookup = Object.fromEntries([...document.querySelectorAll('[data-block-key]')]
+        .map(el => [el.getAttribute('data-block-key'), el]));
+    BLOCK_CONTAINERS.forEach(zone => {
+        const container = containers[zone];
+        if (!container) return;
+        UI_PREFS.blockOrder[zone].forEach(key => {
+            if (lookup[key]) {
+                container.appendChild(lookup[key]);
+            }
+        });
     });
 }
 
 let layoutEditMode = false;
 let draggingStat = null;
+let draggingBlock = null;
+let dragPreview = null;
 
 function createEditControls(type, key) {
     const wrap = document.createElement('div');
     wrap.className = 'edit-controls';
     const handle = document.createElement('span');
     handle.className = 'edit-handle';
+    handle.innerHTML = '<svg class="btn-icon"><use href="#icon-drag"/></svg>';
     handle.title = 'Переместить блок';
     const remove = document.createElement('button');
     remove.type = 'button';
     remove.className = 'edit-remove';
     remove.title = 'Скрыть блок';
-    remove.innerHTML = '×';
+    remove.innerHTML = '<svg aria-hidden="true"><use href="#icon-hide"/></svg>';
     remove.onclick = (e) => {
         e.stopPropagation();
         hideEditableBlock(type, key);
@@ -2328,16 +2397,40 @@ function setupEditableBlocks() {
     document.querySelectorAll('[data-block-key]').forEach(el => {
         const key = el.getAttribute('data-block-key');
         el.dataset.editable = el.dataset.editable || 'block';
+        const canDragBlock = LAYOUT_BLOCK_KEYS.includes(key);
+        el.setAttribute('draggable', layoutEditMode && canDragBlock ? 'true' : 'false');
+        el.removeEventListener('dragstart', onBlockDragStart);
+        el.removeEventListener('dragend', onBlockDragEnd);
+        el.removeEventListener('dragover', onBlockDragOverBlock);
+        el.removeEventListener('dragleave', onBlockDragLeaveBlock);
+        el.removeEventListener('drop', onBlockDropOnBlock);
         if (!el.dataset.controlsReady) {
             const controls = createEditControls('block', key);
             el.appendChild(controls);
             el.dataset.controlsReady = '1';
         }
+        if (layoutEditMode && canDragBlock) {
+            el.addEventListener('dragstart', onBlockDragStart);
+            el.addEventListener('dragend', onBlockDragEnd);
+            el.addEventListener('dragover', onBlockDragOverBlock);
+            el.addEventListener('dragleave', onBlockDragLeaveBlock);
+            el.addEventListener('drop', onBlockDropOnBlock);
+        }
+    });
+
+    document.querySelectorAll('[data-block-container]').forEach(container => {
+        container.removeEventListener('dragover', onBlockDragOverContainer);
+        container.removeEventListener('dragleave', onBlockDragLeaveContainer);
+        container.removeEventListener('drop', onBlockDropOnContainer);
+        if (layoutEditMode) {
+            container.addEventListener('dragover', onBlockDragOverContainer);
+            container.addEventListener('dragleave', onBlockDragLeaveContainer);
+            container.addEventListener('drop', onBlockDropOnContainer);
+        }
     });
 
     document.body.classList.toggle('layout-edit', layoutEditMode);
-    const btn = document.getElementById('layoutEditBtn');
-    if (btn) btn.textContent = layoutEditMode ? '✅ Готово' : '✏️ Редактировать блоки';
+    updateLayoutEditButton();
 }
 
 function onStatDragStart(e) {
@@ -2373,12 +2466,120 @@ function onStatDrop(e) {
     persistUiPrefs();
 }
 
+function getBlockContainerKey(el) {
+    const container = el ? el.closest('[data-block-container]') : null;
+    return container ? container.getAttribute('data-block-container') : null;
+}
+
+function createDragPreview(el) {
+    const clone = el.cloneNode(true);
+    clone.querySelectorAll('.edit-controls, .edit-hint').forEach(n => n.remove());
+    clone.classList.add('drag-ghost');
+    document.body.appendChild(clone);
+    return clone;
+}
+
+function clearBlockDragState() {
+    document.querySelectorAll('.drag-over, .block-drop-target').forEach(el => {
+        el.classList.remove('drag-over');
+        el.classList.remove('block-drop-target');
+    });
+    if (dragPreview?.parentNode) dragPreview.remove();
+    if (draggingBlock?.el) draggingBlock.el.classList.remove('dragging');
+    draggingBlock = null;
+    dragPreview = null;
+}
+
+function onBlockDragStart(e) {
+    if (!layoutEditMode) return e.preventDefault();
+    const block = e.currentTarget;
+    const key = block.getAttribute('data-block-key');
+    draggingBlock = { key, el: block, from: getBlockContainerKey(block) };
+    block.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', key);
+    dragPreview = createDragPreview(block);
+    e.dataTransfer.setDragImage(dragPreview, dragPreview.offsetWidth / 2, dragPreview.offsetHeight / 2);
+}
+
+function onBlockDragEnd() {
+    clearBlockDragState();
+}
+
+function onBlockDragOverBlock(e) {
+    if (!layoutEditMode || !draggingBlock) return;
+    e.preventDefault();
+    e.currentTarget.classList.add('drag-over');
+}
+
+function onBlockDragLeaveBlock(e) {
+    e.currentTarget.classList.remove('drag-over');
+}
+
+function onBlockDragOverContainer(e) {
+    if (!layoutEditMode || !draggingBlock) return;
+    e.preventDefault();
+    e.currentTarget.classList.add('block-drop-target');
+}
+
+function onBlockDragLeaveContainer(e) {
+    e.currentTarget.classList.remove('block-drop-target');
+}
+
+function moveBlockTo(zone, beforeKey = null) {
+    if (!draggingBlock || !zone || !BLOCK_CONTAINERS.includes(zone)) return;
+    const key = draggingBlock.key;
+    const order = normalizeBlockOrder(UI_PREFS.blockOrder, DEFAULT_BLOCK_ORDER);
+    Object.keys(order).forEach(k => {
+        order[k] = order[k].filter(item => item !== key);
+    });
+    order[zone] = order[zone] || [];
+    if (beforeKey && order[zone].includes(beforeKey)) {
+        const idx = order[zone].indexOf(beforeKey);
+        order[zone].splice(idx, 0, key);
+    } else {
+        order[zone].push(key);
+    }
+    UI_PREFS.blockOrder = normalizeBlockOrder(order, DEFAULT_BLOCK_ORDER);
+    applyBlockOrder();
+    persistUiPrefs();
+}
+
+function onBlockDropOnBlock(e) {
+    if (!layoutEditMode || !draggingBlock) return;
+    e.preventDefault();
+    const target = e.currentTarget;
+    const targetKey = target.getAttribute('data-block-key');
+    const zone = getBlockContainerKey(target);
+    target.classList.remove('drag-over');
+    if (zone && draggingBlock.key !== targetKey) {
+        moveBlockTo(zone, targetKey);
+    }
+    clearBlockDragState();
+}
+
+function onBlockDropOnContainer(e) {
+    if (!layoutEditMode || !draggingBlock) return;
+    e.preventDefault();
+    const zone = e.currentTarget.getAttribute('data-block-container');
+    e.currentTarget.classList.remove('block-drop-target');
+    if (zone) moveBlockTo(zone, null);
+    clearBlockDragState();
+}
+
 function toggleLayoutEditMode() {
     layoutEditMode = !layoutEditMode;
     setupEditableBlocks();
     if (!layoutEditMode) {
-        document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+        clearBlockDragState();
     }
+}
+
+function updateLayoutEditButton() {
+    const iconUse = document.querySelector('#layoutEditIcon use');
+    const label = document.getElementById('layoutEditLabel');
+    if (iconUse) iconUse.setAttribute('href', layoutEditMode ? '#icon-check' : '#icon-pen');
+    if (label) label.textContent = layoutEditMode ? 'Готово' : 'Редактировать блоки';
 }
 
 function activateSettingsPane(pane) {
@@ -3204,7 +3405,7 @@ function init(){
     updateSettingsPreviewStates();
     applyStatVisibility();
     applyStatOrder();
-    applySideOrder();
+    applyBlockOrder();
     applyTableVisibility();
     setupEditableBlocks();
     renderMonthSelect();
