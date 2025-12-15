@@ -454,6 +454,24 @@
   body.light .rep-chart-pill { background: #f7faff; border-color: #d8e1f0; color: #374151; }
   body.light .rep-tips { background: #f6f8fd; border-color: #d8e1f0; }
   body.light .rep-tips-title { color: #1f2d45; }
+  .reputation-top-row { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .rep-score-chip { display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--card-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .rep-score-icon { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; background: var(--pill-bg); color: var(--accent); border: 1px solid var(--border); font-weight: 900; }
+  .rep-score-meta { display: flex; flex-direction: column; line-height: 1.2; }
+  .rep-score-label { color: var(--muted); font-size: 12px; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase; }
+  .rep-score-main { font-size: 18px; font-weight: 900; }
+  .rep-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .rep-severity { padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border); font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; }
+  .rep-severity.good { background: rgba(46,160,67,0.1); color: #2ea043; border-color: rgba(46,160,67,0.35); }
+  .rep-severity.warn { background: rgba(210,153,34,0.1); color: #d29922; border-color: rgba(210,153,34,0.4); }
+  .rep-severity.bad { background: rgba(248,81,73,0.1); color: #f85149; border-color: rgba(248,81,73,0.4); }
+  .rep-cta { padding: 9px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); font-weight: 800; display: inline-flex; align-items: center; gap: 6px; }
+  .rep-cta:hover { border-color: var(--accent); color: var(--accent); }
+  .rep-cta svg { width: 16px; height: 16px; }
+  .link-preview { margin-top: 10px; padding: 10px 12px; border: 1px dashed var(--border); border-radius: 12px; background: var(--card-alt); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .link-preview-url { font-weight: 800; color: var(--text); word-break: break-all; }
+  .link-preview-actions { display: flex; gap: 8px; }
+  .link-preview button { padding: 8px 12px; min-height: 36px; }
   /* Bulk Toolbar */
   .bulk-toolbar {
       position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); 
@@ -613,10 +631,10 @@
   .settings-pane.active { display: flex; }
   .settings-columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; }
   .settings-section { border: 1px solid var(--border); border-radius: 14px; padding: 16px; background: var(--card); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
-  .settings-section-title { font-weight: 800; font-size: 16px; display:flex; align-items:center; justify-content: space-between; gap: 10px; }
+  .settings-section-title { font-weight: 800; font-size: 16px; display:flex; align-items:flex-start; justify-content: space-between; gap: 10px; text-align: left; }
   .settings-section-sub { color: var(--muted); font-size: 13px; margin-top: 4px; font-weight: 600; }
   .settings-options { display: grid; gap: 12px; margin-top: 12px; }
-  .settings-row { display:flex; justify-content: space-between; align-items: center; gap: 14px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--card-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); transition: border-color .2s, background .2s; }
+  .settings-row { display:flex; justify-content: space-between; align-items: flex-start; gap: 14px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--card-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); transition: border-color .2s, background .2s; text-align: left; }
   .settings-row-title { font-weight: 800; }
   .settings-row-sub { color: var(--muted); font-size: 13px; font-weight: 600; margin-top: 4px; max-width: 520px; }
   .toggle-switch { position: relative; display: inline-block; width: 46px; height: 26px; }
@@ -651,13 +669,15 @@
   .settings-actions button { flex: 1; justify-content: center; min-width: 180px; }
   .settings-footer-note { color: var(--muted); font-size: 12px; font-weight: 600; margin-top: 8px; line-height: 1.5; }
   .settings-chip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 12px; }
-  .settings-chip { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--card-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); font-weight: 700; }
+  .settings-chip { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--card-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); font-weight: 700; text-align: left; }
   .settings-chip .settings-row-sub { margin-top: 0; }
   .settings-chip small { color: var(--muted); font-size: 12px; font-weight: 600; }
   .settings-chip strong { font-size: 13px; letter-spacing: -0.2px; }
+  .settings-row .toggle-switch, .settings-chip .toggle-switch { margin-top: 2px; }
 
   .scroll-toggle { position: fixed; right: 18px; bottom: 18px; width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--border); background: var(--button-bg); color: var(--text); display: grid; place-items: center; font-size: 20px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 28px rgba(0,0,0,0.25); z-index: 1200; opacity: 0.92; }
   .scroll-toggle:hover { background: var(--btn-hover); border-color: var(--accent); color: var(--accent); }
+  .scroll-toggle svg { width: 20px; height: 20px; }
 
   /* Layout edit mode */
   .edit-controls, .edit-hint { display: none; }
@@ -679,6 +699,9 @@
 
   .footer-note { color: var(--muted); font-size: 12px; font-weight: 600; }
   .helper-note { color: var(--muted); font-size: 12px; margin-top: 6px; line-height: 1.4; text-align: left; }
+  .settings-actions-row { display: flex; justify-content: flex-end; gap: 10px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+  .btn-ghost { background: transparent; border-color: var(--border); color: var(--muted); font-weight: 800; }
+  .btn-ghost:hover { color: var(--accent); border-color: var(--accent); }
 
   /* Date/Time Input Styling (Override attempts for dark theme) */
   .inp-group input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
@@ -1058,6 +1081,12 @@ td.date-cell + td.date-cell {
     <symbol id="icon-calendar" viewBox="0 0 16 16"><path fill="currentColor" d="M3 2.75A.75.75 0 0 1 3.75 2h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 3 2.75ZM12.25 2a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5c0-.414.336-.75.75-.75ZM2 5.5a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 5.5Zm12.5 2.25v7.25c0 .414-.336.75-.75.75H2.25a.75.75 0 0 1-.75-.75V7.75c0-.414.336-.75.75-.75h11.5c.414 0 .75.336.75.75Z"/></symbol>
     <symbol id="icon-clock" viewBox="0 0 16 16"><path fill="currentColor" d="M8 1.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13Zm0 1.5a5 5 0 1 1 0 10a5 5 0 0 1 0-10Zm-.5 1.25c0-.276.224-.5.5-.5s.5.224.5.5v2.6l2 1.2a.5.5 0 1 1-.5.866l-2.25-1.35A.5.5 0 0 1 7.5 7V4.25Z"/></symbol>
     <symbol id="icon-undo" viewBox="0 0 20 20"><path fill="currentColor" d="M9.5 3a7.5 7.5 0 1 1-5.303 12.803a.75.75 0 0 1 1.06-1.061A6 6 0 1 0 7 5.233V7.5a.75.75 0 0 1-1.28.53l-3-3a.75.75 0 0 1 0-1.06l3-3A.75.75 0 0 1 7 1.97V4.2A7.47 7.47 0 0 1 9.5 3Z"/></symbol>
+    <symbol id="icon-arrow-right" viewBox="0 0 24 24"><path fill="currentColor" d="M5 12a1 1 0 0 1 1-1h9.586l-3.293-3.293a1 1 0 1 1 1.414-1.414l5 5a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414-1.414L15.586 13H6a1 1 0 0 1-1-1Z"/></symbol>
+    <symbol id="icon-upload" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3a1 1 0 0 1 .707.293l4 4a1 1 0 0 1-1.414 1.414L13 6.414V16a1 1 0 1 1-2 0V6.414L8.707 8.707A1 1 0 0 1 7.293 7.293l4-4A1 1 0 0 1 12 3Z"/><path fill="currentColor" d="M5 15a1 1 0 0 1 1 1v3h12v-3a1 1 0 1 1 2 0v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a1 1 0 0 1 1-1Z"/></symbol>
+    <symbol id="icon-download" viewBox="0 0 24 24"><path fill="currentColor" d="M12 17a1 1 0 0 1-.707-.293l-4-4a1 1 0 0 1 1.414-1.414L11 13.586V4a1 1 0 1 1 2 0v9.586l2.293-2.293a1 1 0 0 1 1.414 1.414l-4 4A1 1 0 0 1 12 17Z"/><path fill="currentColor" d="M5 18a1 1 0 0 1 1 1v2h12v-2a1 1 0 1 1 2 0v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a1 1 0 0 1 1-1Z"/></symbol>
+    <symbol id="icon-csv" viewBox="0 0 24 24"><path fill="currentColor" d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9.414a2 2 0 0 0-.586-1.414l-4.414-4.414A2 2 0 0 0 14.586 3ZM5 5h9v4a2 2 0 0 0 2 2h4v8H5Zm11 0.414L18.586 8H16Z"/><path fill="currentColor" d="M7.5 13c-1.105 0-1.9.726-1.9 1.75S6.41 16.5 7.5 16.5c.57 0 1.06-.18 1.43-.51a.75.75 0 0 0-.99-1.12c-.12.1-.25.13-.44.13-.37 0-.65-.24-.65-.75s.28-.75.65-.75c.17 0 .31.04.44.14a.75.75 0 0 0 .99-1.12c-.37-.33-.86-.48-1.43-.48Zm2.43.1a.75.75 0 0 0-.57.9l.6 2.4a.75.75 0 1 0 1.46-.36l-.6-2.4a.75.75 0 0 0-.89-.54Zm3.93 0c-.62 0-1.07.29-1.31.66a1.6 1.6 0 0 0-.25.82c0 .36.12.67.31.93a1.88 1.88 0 0 0 1.53.79c.59 0 1.05-.17 1.39-.5a.75.75 0 1 0-1.02-1.09c-.08.08-.2.14-.38.14-.23 0-.44-.16-.44-.32c0-.12.03-.2.08-.26c.07-.1.19-.17.36-.17c.16 0 .26.04.35.12c.3.26.82.24 1.06-.1c.27-.35.1-.8-.1-1.02c-.27-.29-.7-.5-1.38-.5Z"/></symbol>
+    <symbol id="icon-arrow-up" viewBox="0 0 24 24"><path fill="currentColor" d="M12 5a1 1 0 0 1 .707.293l5 5a1 1 0 0 1-1.414 1.414L13 8.414V19a1 1 0 1 1-2 0V8.414l-3.293 3.293A1 1 0 0 1 6.293 10.293l5-5A1 1 0 0 1 12 5Z"/></symbol>
+    <symbol id="icon-arrow-down" viewBox="0 0 24 24"><path fill="currentColor" d="M12 19a1 1 0 0 1-.707-.293l-5-5a1 1 0 0 1 1.414-1.414L11 15.586V5a1 1 0 1 1 2 0v10.586l3.293-3.293a1 1 0 0 1 1.414 1.414l-5 5A1 1 0 0 1 12 19Z"/></symbol>
 </svg>
 
 <div class="c">
@@ -1078,6 +1107,10 @@ td.date-cell + td.date-cell {
         <button id="layoutEditBtn" onclick="toggleLayoutEditMode()">
             <svg class="btn-icon" id="layoutEditIcon"><use href="#icon-pen"/></svg>
             <span class="btn-label" id="layoutEditLabel">Редактировать блоки</span>
+        </button>
+        <button id="layoutEditCancel" class="btn-ghost" style="display:none" onclick="cancelLayoutEditMode()">
+            <svg class="btn-icon"><use href="#icon-undo"/></svg>
+            <span class="btn-label">Отмена</span>
         </button>
         <button onclick="openSettings()" id="openSettingsBtn">
             <svg class="btn-icon"><use href="#icon-settings"/></svg>
@@ -1384,6 +1417,14 @@ td.date-cell + td.date-cell {
                       <div class="stat-val mono" id="val-paid-gross" style="color:var(--accent)">0 ₽</div>
                       <div class="stat-helper">Полученные платежи (грязными)</div>
                   </div>
+                  <div class="stat-box" data-stat="total-gross" data-editable="stat">
+                      <div class="stat-label-row">
+                          <div class="stat-label-with-help"><span class="stat-label">ОБЩАЯ СУММА</span><span class="help-icon" data-tooltip="Все бюджеты проектов (грязными) во всех разделах, включая архив и паузу.">?</span></div>
+                          <div class="stat-pill">Грязными</div>
+                      </div>
+                      <div class="stat-val mono" id="val-total-gross" style="color:var(--accent)">0 ₽</div>
+                      <div class="stat-helper">Бюджеты по всем статусам</div>
+                  </div>
                   <div class="stat-box" data-stat="plan" data-editable="stat">
                       <div class="stat-label-row">
                           <div class="stat-label-with-help"><span class="stat-label">ПЛАН</span><span class="help-icon" data-tooltip="Сколько ещё нужно получить до достижения цели месяца.">?</span></div>
@@ -1453,11 +1494,20 @@ td.date-cell + td.date-cell {
                   </div>
               </div>
               <div class="reputation-card" id="reputation-card" data-editable data-block-key="reputation">
-                  <div class="reputation-heading">
-                      <div class="reputation-title">Репутация дизайнера <span class="help-icon" data-tooltip="Пульс по дедлайнам: учитываем все активные проекты и просрочки, чтобы предупредить потери клиентов.">?</span></div>
-                      <div class="rep-chip good" id="reputation-chip">🔥 Всё ок</div>
+                  <div class="reputation-title">Репутация дизайнера <span class="help-icon" data-tooltip="Пульс по дедлайнам: учитываем все активные проекты и просрочки, чтобы предупредить потери клиентов.">?</span></div>
+                  <div class="reputation-top-row">
+                      <div class="rep-score-chip">
+                          <div class="rep-score-icon">★</div>
+                          <div class="rep-score-meta">
+                              <div class="rep-score-label">Счёт</div>
+                              <div class="rep-score-main" id="reputation-score">100 / 100</div>
+                          </div>
+                      </div>
+                      <div class="rep-actions">
+                          <button class="rep-cta" type="button" onclick="openReputationTasks()"><svg><use href="#icon-arrow-right"/></svg><span class="btn-label">Просрочки</span></button>
+                          <div class="rep-severity good" id="reputation-severity">Всё ок</div>
+                      </div>
                   </div>
-                  <div class="reputation-score" id="reputation-score">100 / 100</div>
                   <div class="reputation-grade" id="reputation-grade">Просроченных дедлайнов нет</div>
                   <div class="reputation-detail" id="reputation-detail">Отсутствие просрочек усиливает доверие клиентов. Держи темп и фиксируй успехи в архиве.</div>
                   <div class="reputation-fallout" id="reputation-fallout" style="display:none"></div>
@@ -1501,7 +1551,7 @@ td.date-cell + td.date-cell {
   </footer>
 </div>
 
-<button class="scroll-toggle" id="scrollToggle" aria-label="Прокрутить вниз">↓</button>
+<button class="scroll-toggle" id="scrollToggle" aria-label="Прокрутить вниз"><svg><use href="#icon-arrow-down"/></svg></button>
 
 <div class="bulk-toolbar" id="bulkToolbar" style="display: none;">
     <span style="color:var(--text); font-weight: 600;" id="bulkCount">0 выбрано</span>
@@ -1630,7 +1680,14 @@ td.date-cell + td.date-cell {
                         </div>
                     </div>
                     <div class="deadline-links-row">
-                        <button type="button" class="template-create-inline link-inline-btn" onclick="openLink('new')">🔗 Добавить ссылку</button>
+                        <button type="button" class="template-create-inline link-inline-btn" id="new-project-link-btn" onclick="openLink('new')">🔗 Добавить ссылку</button>
+                    </div>
+                    <div class="link-preview" id="new-project-link-preview" style="display:none">
+                        <div class="link-preview-url" id="new-project-link-text"></div>
+                        <div class="link-preview-actions">
+                            <button class="btn-ghost" type="button" onclick="openLink('new')">Редактировать</button>
+                            <button class="del-btn" type="button" onclick="clearNewProjectLink()" title="Очистить ссылку">×</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1913,6 +1970,13 @@ td.date-cell + td.date-cell {
                                 </label>
                             </div>
                             <div class="settings-chip">
+                                <div><strong>Общая сумма</strong><br><small>Все бюджеты по разделам</small></div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="stat-toggle-total-gross">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            <div class="settings-chip">
                                 <div><strong>План</strong><br><small>Остаток до цели</small></div>
                                 <label class="toggle-switch">
                                     <input type="checkbox" id="stat-toggle-plan">
@@ -1989,9 +2053,9 @@ td.date-cell + td.date-cell {
                         <div class="settings-section-title">Резервные копии</div>
                         <div class="settings-section-sub">Скачайте или загрузите JSON, либо выгрузите таблицу в CSV.</div>
                         <div class="settings-actions">
-                            <button onclick="exp()">💾 Скачать базу (Бэкап)</button>
-                            <button onclick="document.getElementById('imp').click()">📂 Загрузить базу</button>
-                            <button onclick="expCSV()">📊 Экспорт в CSV</button>
+                            <button onclick="exp()"><svg class="btn-icon"><use href="#icon-download"/></svg><span class="btn-label">Скачать базу (Бэкап)</span></button>
+                            <button onclick="document.getElementById('imp').click()"><svg class="btn-icon"><use href="#icon-upload"/></svg><span class="btn-label">Загрузить базу</span></button>
+                            <button onclick="expCSV()"><svg class="btn-icon"><use href="#icon-csv"/></svg><span class="btn-label">Экспорт в CSV</span></button>
                         </div>
                         <input type="file" id="imp" accept=".json" style="display:none" onchange="imp(this.files[0])">
                         <div class="settings-footer-note">Данные хранятся только в вашем браузере. Делайте резервную копию перед очисткой кэша или переустановкой системы.</div>
@@ -2015,7 +2079,10 @@ td.date-cell + td.date-cell {
             </div>
         </div>
 
-        <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveSettings()">Сохранить настройки</button>
+        <div class="settings-actions-row">
+            <button class="btn-ghost" type="button" onclick="resetInterface()">Сброс интерфейса</button>
+            <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveSettings()">Сохранить настройки</button>
+        </div>
     </div>
 </div>
 <div class="modal" id="deleteConfirmModal">
@@ -2035,7 +2102,7 @@ const K = 'grok_design_v5';
 const THEME_KEY = 'designflow_theme';
 const NAME_TEMPLATES_KEY = 'designflow_name_templates';
 const UI_PREFS_KEY = 'designflow_ui_prefs';
-const STAT_KEYS = ['fact','active-fact','paid-gross','plan','forecast','expenses','taxes'];
+const STAT_KEYS = ['fact','active-fact','paid-gross','total-gross','plan','forecast','expenses','taxes'];
 const SIDE_BLOCK_KEYS = ['efficiency','record','reputation'];
 const LAYOUT_BLOCK_KEYS = ['topClients','efficiency','record','reputation'];
 const BLOCK_CONTAINERS = ['main','side'];
@@ -2065,6 +2132,7 @@ const DEFAULT_UI_PREFS = {
         fact: true,
         activeFact: true,
         paidGross: true,
+        totalGross: true,
         plan: true,
         forecast: true,
         expenses: true,
@@ -2302,7 +2370,8 @@ function applyStatVisibility() {
     const visibility = UI_PREFS.statVisibility || {};
     document.querySelectorAll('[data-stat]').forEach(el => {
         const key = el.getAttribute('data-stat');
-        const enabled = visibility[key] !== false;
+        const camelKey = key.replace(/-([a-z])/g, (_, ch) => ch.toUpperCase());
+        const enabled = (visibility[key] ?? visibility[camelKey] ?? true) !== false;
         el.classList.toggle('is-hidden', !enabled);
     });
     const goal = document.getElementById('goal-progress');
@@ -2342,6 +2411,7 @@ let layoutEditMode = false;
 let draggingStat = null;
 let draggingBlock = null;
 let dragPreview = null;
+let layoutEditSnapshot = null;
 
 function createEditControls(type, key) {
     const wrap = document.createElement('div');
@@ -2582,6 +2652,7 @@ function onBlockDropOnContainer(e) {
 
 function toggleLayoutEditMode() {
     layoutEditMode = !layoutEditMode;
+    layoutEditSnapshot = layoutEditMode ? JSON.parse(JSON.stringify(UI_PREFS)) : null;
     setupEditableBlocks();
     if (!layoutEditMode) {
         clearBlockDragState();
@@ -2591,8 +2662,27 @@ function toggleLayoutEditMode() {
 function updateLayoutEditButton() {
     const iconUse = document.querySelector('#layoutEditIcon use');
     const label = document.getElementById('layoutEditLabel');
+    const cancelBtn = document.getElementById('layoutEditCancel');
     if (iconUse) iconUse.setAttribute('href', layoutEditMode ? '#icon-check' : '#icon-pen');
     if (label) label.textContent = layoutEditMode ? 'Готово' : 'Редактировать блоки';
+    if (cancelBtn) cancelBtn.style.display = layoutEditMode ? 'flex' : 'none';
+}
+
+function cancelLayoutEditMode() {
+    if (!layoutEditMode) return;
+    if (layoutEditSnapshot) {
+        UI_PREFS = JSON.parse(JSON.stringify(layoutEditSnapshot));
+        persistUiPrefs();
+        applyBlockOrder();
+        applyBlockVisibility();
+        applyTableVisibility();
+        applyStatOrder();
+        applyStatVisibility();
+    }
+    layoutEditMode = false;
+    clearBlockDragState();
+    setupEditableBlocks();
+    layoutEditSnapshot = null;
 }
 
 function activateSettingsPane(pane) {
@@ -2665,15 +2755,10 @@ function updateScrollToggle() {
     if (!btn) return;
     const nearTop = window.scrollY < 120;
     const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 160;
-    if (nearTop) {
-        btn.textContent = '↓';
-        btn.dataset.dir = 'down';
-        btn.setAttribute('aria-label', 'Прокрутить вниз');
-    } else {
-        btn.textContent = '↑';
-        btn.dataset.dir = 'up';
-        btn.setAttribute('aria-label', 'Вернуться наверх');
-    }
+    const iconId = nearTop ? '#icon-arrow-down' : '#icon-arrow-up';
+    btn.innerHTML = `<svg><use href="${iconId}"/></svg>`;
+    btn.dataset.dir = nearTop ? 'down' : 'up';
+    btn.setAttribute('aria-label', nearTop ? 'Прокрутить вниз' : 'Вернуться наверх');
     btn.style.display = nearTop && nearBottom ? 'none' : 'grid';
 }
 
@@ -3639,10 +3724,10 @@ function renderActive(){
         const contractorValue = contractorMode === 'none' ? '' : formatPlainNumber(item.contractor ?? 0);
         const contractorHelper = contractorMode === 'none' ? 'Расходы не учитываются' : `≈ ${formatCurrency(contractorAmount)}`;
         const actionButtons = [
-            `<div class="done-btn action-btn-base" onclick="mv(${i},'active','archive')" title="Выполнено">✓</div>`
+            `<div class="done-btn action-btn-base" onclick="mv(${i},'active','archive')" title="Выполнено"><svg class="btn-icon"><use href="#icon-check"/></svg></div>`
         ];
-        if (isTableEnabled('waiting')) actionButtons.push(`<div class="wait-active-btn action-btn-base" onclick="mv(${i},'active','waiting')" title="В ожидании">...</div>`);
-        if (isTableEnabled('paused')) actionButtons.push(`<div class="pause-active-btn action-btn-base" onclick="mv(${i},'active','paused')" title="На паузе">||</div>`);
+        if (isTableEnabled('waiting')) actionButtons.push(`<div class="wait-active-btn action-btn-base" onclick="mv(${i},'active','waiting')" title="В ожидании"><svg class="btn-icon"><use href="#icon-waiting"/></svg></div>`);
+        if (isTableEnabled('paused')) actionButtons.push(`<div class="pause-active-btn action-btn-base" onclick="mv(${i},'active','paused')" title="На паузе"><svg class="btn-icon"><use href="#icon-paused"/></svg></div>`);
 
         tr.innerHTML = `
             <td class="select-col">
@@ -3801,7 +3886,7 @@ function renderSimple(type){
             <td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('${type}',${i},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.dl)} (${rem.txt})</span></div></td>
             <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('${type}',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td><div class="action-btns" style="justify-content:flex-end">
-                <div class="action-btn-base" onclick="mv(${i},'${type}','active')" title="В работу">▶️</div>
+                <div class="action-btn-base" onclick="mv(${i},'${type}','active')" title="В работу"><svg class="btn-icon"><use href="#icon-arrow-right"/></svg></div>
                 <button class="del-btn" onclick="askDel('${type}',${i})" aria-label="Удалить в корзину">
                     <svg><use href="#icon-trash"/></svg>
                 </button>
@@ -3853,7 +3938,7 @@ function renderPotential(){
             </td>
             <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('potential',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td><div class="action-btns" style="justify-content:flex-end">
-                <div class="done-btn action-btn-base" onclick="mv(${i},'potential','active')" title="В работу">✅ В работу</div>
+                <div class="done-btn action-btn-base" onclick="mv(${i},'potential','active')" title="В работу"><svg class="btn-icon"><use href="#icon-arrow-right"/></svg><span class="btn-label">В работу</span></div>
                 <button class="del-btn" onclick="askDel('potential',${i})" aria-label="Удалить в корзину">
                     <svg><use href="#icon-trash"/></svg>
                 </button>
@@ -4294,10 +4379,21 @@ function clearTrashForever() {
 
 function updateNewProjectLinkButton() {
     const btn = document.getElementById('new-project-link-btn');
+    const preview = document.getElementById('new-project-link-preview');
+    const text = document.getElementById('new-project-link-text');
     if (!btn) return;
     const hasLink = !!newProjectLink;
     btn.classList.toggle('link-active', hasLink);
     btn.textContent = hasLink ? '🔗 Ссылка добавлена' : '🔗 Ссылка на чат/материалы';
+    if (preview && text) {
+        preview.style.display = hasLink ? 'flex' : 'none';
+        text.textContent = hasLink ? newProjectLink : '';
+    }
+}
+
+function clearNewProjectLink() {
+    newProjectLink = '';
+    updateNewProjectLinkButton();
 }
 
 function wipeAllData() {
@@ -4609,6 +4705,7 @@ function openSettings(){
         ['stat-toggle-fact', 'fact'],
         ['stat-toggle-active-fact', 'activeFact'],
         ['stat-toggle-paid-gross', 'paidGross'],
+        ['stat-toggle-total-gross', 'totalGross'],
         ['stat-toggle-plan', 'plan'],
         ['stat-toggle-forecast', 'forecast'],
         ['stat-toggle-expenses', 'expenses'],
@@ -4659,6 +4756,7 @@ function saveSettings(){
         fact: document.getElementById('stat-toggle-fact')?.checked !== false,
         activeFact: document.getElementById('stat-toggle-active-fact')?.checked !== false,
         paidGross: document.getElementById('stat-toggle-paid-gross')?.checked !== false,
+        totalGross: document.getElementById('stat-toggle-total-gross')?.checked !== false,
         plan: document.getElementById('stat-toggle-plan')?.checked !== false,
         forecast: document.getElementById('stat-toggle-forecast')?.checked !== false,
         expenses: document.getElementById('stat-toggle-expenses')?.checked !== false,
@@ -4676,6 +4774,25 @@ function saveSettings(){
     DATA.settings.record = toNumeric(document.getElementById('stg-rec').value);
     document.getElementById('settingsModal').style.display = 'none';
     save(); upd();
+}
+
+function resetInterface() {
+    const ok = confirm('Вернуть интерфейс к заводским настройкам? Настройки отображения и темы будут сброшены.');
+    if (!ok) return;
+    UI_PREFS = JSON.parse(JSON.stringify(DEFAULT_UI_PREFS));
+    persistUiPrefs();
+    applyThemeMode(UI_PREFS.themeMode || 'dark', { silent: true });
+    applyBlockVisibility();
+    applyBlockOrder();
+    applyTableVisibility();
+    applyStatVisibility();
+    applyStatOrder();
+    layoutEditMode = false;
+    updateLayoutEditButton();
+    setupEditableBlocks();
+    upd();
+    openSettings();
+    showToast('Интерфейс сброшен');
 }
 
 function pluralize(num, forms){
@@ -4786,7 +4903,7 @@ function analyzeReputation(){
     let level = 'good';
     let headline = 'Всё ок — ты держишь сроки';
     let hint = 'Просроченных дедлайнов нет, продолжай в том же духе.';
-    let chip = '🔥 Всё ок';
+    let chip = 'Стабильно';
     let detail = 'Отсутствие просрочек усиливает доверие клиентов. Держи темп и фиксируй успехи в архиве.';
     let fallout = 'Сохраняй привычку опережать дедлайны — это личный бренд и поток рекомендаций.';
     let tips = [
@@ -4801,7 +4918,7 @@ function analyzeReputation(){
             level = 'warn';
             headline = 'Есть просрочки — поправь сроки';
             hint = `${overdueWord} до ${daysWord}. Обнови план и предупреди клиентов.`;
-            chip = '⚠ Поднажми';
+            chip = 'Нужно ускориться';
             detail = 'Пара задержек ещё поправима: договорись о новых сроках и закрой задачи, чтобы не терять доверие.';
             fallout = 'Если так тянуть и дальше, клиенты начнут замораживать платежи и уйдут к тем, кто держит сроки.';
             tips = [
@@ -4813,7 +4930,7 @@ function analyzeReputation(){
             level = 'bad';
             headline = 'Репутация проседает';
             hint = `${overdueWord} до ${daysWord} — пора спасать ситуацию.`;
-            chip = '🤯 Жесть';
+            chip = 'Критично';
             detail = 'Множественные просрочки уже бьют по имени. Наведи порядок в приоритетах и верни сроки под контроль.';
             fallout = 'Продолжение срывов = штрафы, возвраты и жёсткие отзывы. Лиды будут обходить тебя стороной.';
             tips = [
@@ -4830,6 +4947,17 @@ function analyzeReputation(){
     return { level, headline, hint, chip, detail, fallout, score, total, worst, avg, activeCount, nearDeadline, tips, onTime };
 }
 
+function openReputationTasks() {
+    if (isTableEnabled('waiting')) {
+        switchTab('waiting');
+        const tabBtn = document.getElementById('tab-waiting');
+        if (tabBtn) tabBtn.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+        openSettings();
+        activateSettingsPane('tables');
+    }
+}
+
 function updateReputationUI(){
     const state = analyzeReputation();
     const strip = document.getElementById('reputation-strip');
@@ -4844,11 +4972,11 @@ function updateReputationUI(){
     const hint = document.getElementById('reputation-hint');
     if (hint) hint.innerText = state.hint;
 
-    const chip = document.getElementById('reputation-chip');
-    if (chip) {
-        chip.classList.remove('good', 'warn', 'bad');
-        chip.classList.add(state.level);
-        chip.innerText = state.chip;
+    const severity = document.getElementById('reputation-severity');
+    if (severity) {
+        severity.classList.remove('good', 'warn', 'bad');
+        severity.classList.add(state.level);
+        severity.innerText = state.chip;
     }
 
     const score = document.getElementById('reputation-score');
@@ -5041,6 +5169,7 @@ function calcStats(){
     document.getElementById('val-margin-prc').innerText = `${totalGrossCombined > 0 ? Math.round((totalMargin/totalGrossCombined)*100) : 0}%`;
     document.getElementById('val-plan').innerText = formatCurrency(plan);
     document.getElementById('val-total').innerText = formatCurrency(forecast);
+    document.getElementById('val-total-gross').innerText = formatCurrency(totalGrossCombined);
     document.getElementById('val-expenses').innerText = formatCurrency(totalExpenses);
     document.getElementById('val-taxes').innerText = formatCurrency(totalTaxes);
     document.getElementById('val-paid-gross').innerText = formatCurrency(totalPaidGross);
