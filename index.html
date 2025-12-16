@@ -1058,103 +1058,6 @@ td.date-cell + td.date-cell {
 }
 
 
-
-.notice {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;          /* меньше */
-  line-height: 1.4;
-  color: #d1433b;           /* мягкий красный */
-}
-
-.notice strong {
-  font-weight: 600;
-}
-
-.notice-icon {
-  font-size: 14px;
-  opacity: 0.85;
-}
-
-.notice-text strong {
-  font-weight: 600;
-}
-      
-
-
-
-.header-btn--new {
-    position: relative;
-    gap: 6px;
-}
-
-.badge-new {
-    font-size: 10px;
-    line-height: 1;
-    padding: 2px 6px;
-    border-radius: 999px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-
-    color: #8b5cf6; /* фиолетовый как в DesignFlow */
-    background: rgba(139, 92, 246, 0.12);
-
-    opacity: 0.85;
-}
-
-
-
-      .header-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 14px;
-    border-radius: 12px;
-    background: #f6f7fb;
-    color: #1f2937;
-    font-weight: 500;
-    text-decoration: none;
-    transition: background 0.2s ease, transform 0.15s ease;
-}
-
-.header-btn:hover {
-    background: #eef0f7;
-}
-
-.header-btn:active {
-    transform: translateY(1px);
-}
-
-.header-btn--ghost {
-    background: transparent;
-}
-
-.header-btn--ghost:hover {
-    background: #f0f2f8;
-}
-
-.btn-icon {
-    opacity: 0.8;
-}
-
-
-.theme-dark .badge-new,
-[data-theme="dark"] .badge-new {
-    color: #b8a7ff;
-    background: rgba(184, 167, 255, 0.14);
-    border: 1px solid rgba(184, 167, 255, 0.3);
-}
-
-
-.btn.secondary:hover { 
-    /* Используем более заметный серый цвет, как у стандартных кнопок при ховере */
-    background: #444c56; 
-    /* Также убедимся, что цвет границы не исчезает */
-    border-color: #444c56;
-}
-      
-      
 </style>
 </head>
 <body>
@@ -1208,23 +1111,18 @@ td.date-cell + td.date-cell {
       </div>
     </div>
     <div style="display:flex;gap:15px;align-items:center">
-
-<a href="https://zhegulyaev.github.io/DesignFlow/Goal.html"
-   class="header-btn header-btn--ghost"
-   aria-label="Трекер целей">
-
-    <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-        <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
-        <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
-    </svg>
-
-    <span class="btn-label">Трекер целей</span>
-
-    <span class="badge-new">New</span>
-</a>
-          
-
+        <button id="themeToggle" onclick="toggleTheme()" aria-label="Переключить тему">
+            <svg class="btn-icon" id="themeToggleIcon"><use href="#icon-sun"/></svg>
+            <span class="btn-label" id="themeToggleLabel">Светлая тема</span>
+        </button>
+        <button id="layoutEditBtn" onclick="toggleLayoutEditMode()">
+            <svg class="btn-icon" id="layoutEditIcon"><use href="#icon-pen"/></svg>
+            <span class="btn-label" id="layoutEditLabel">Редактировать блоки</span>
+        </button>
+        <button id="layoutEditCancel" class="btn-ghost" style="display:none" onclick="cancelLayoutEditMode()">
+            <svg class="btn-icon"><use href="#icon-undo"/></svg>
+            <span class="btn-label">Отмена</span>
+        </button>
         <button onclick="openSettings()" id="openSettingsBtn">
             <svg class="btn-icon"><use href="#icon-settings"/></svg>
             <span class="btn-label">Настройки</span>
@@ -1821,15 +1719,7 @@ td.date-cell + td.date-cell {
     <div class="modal-content modal-wide template-manager-modal">
         <span class="close-modal-x" onclick="closeTemplateManagerModal()">×</span>
         <h3 style="margin-bottom: 8px;">Мои шаблоны</h3>
-        <p class="helper-note">Перетаскивайте строки, чтобы менять порядок. Нажмите на текст, чтобы отредактировать. <br>
-        <div class="notice">
-  <span class="notice-icon">⚠️</span>
-  <span class="notice-text">
-    <strong><b>Важно:</b></strong> после изменений нужно создать проект, чтобы всё применилось
-  </span>
-</div>
-        
-        </p>
+        <p class="helper-note">Перетаскивайте строки, чтобы менять порядок. Нажмите на текст, чтобы отредактировать.</p>
         <div class="template-modal-add">
             <div class="inp-group template-modal-input">
                 <label>Создать шаблон</label>
@@ -2432,7 +2322,7 @@ function applyTheme(theme) {
         const mode = UI_PREFS.themeMode || 'dark';
         label.textContent = mode === 'auto'
             ? (isLight ? 'Авто · Светлая' : 'Авто · Тёмная')
-            : (isLight ? '' : '');
+            : (isLight ? 'Тёмная тема' : 'Светлая тема');
     }
 }
 
@@ -2812,7 +2702,7 @@ function updateLayoutEditButton() {
     const label = document.getElementById('layoutEditLabel');
     const cancelBtn = document.getElementById('layoutEditCancel');
     if (iconUse) iconUse.setAttribute('href', layoutEditMode ? '#icon-check' : '#icon-pen');
-    if (label) label.textContent = layoutEditMode ? 'Готово' : '';
+    if (label) label.textContent = layoutEditMode ? 'Готово' : 'Редактировать блоки';
     if (cancelBtn) cancelBtn.style.display = layoutEditMode ? 'flex' : 'none';
 }
 
