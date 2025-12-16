@@ -1135,13 +1135,22 @@ td.date-cell + td.date-cell {
       </div>
     </div>
     <div style="display:flex;gap:15px;align-items:center">
+
+
+<button class="header-btn" onclick="window.location.href='https://zhegulyaev.github.io/DesignFlow/Goal.html'">
+    <svg class="btn-icon">
+        <use href="#icon-target"></use>
+    </svg>
+    <span class="btn-label">Трекер целей</span>
+</button>
+          
         <button id="themeToggle" onclick="toggleTheme()" aria-label="Переключить тему">
             <svg class="btn-icon" id="themeToggleIcon"><use href="#icon-sun"/></svg>
-            <span class="btn-label" id="themeToggleLabel">Светлая тема</span>
+            <span class="btn-label" id="themeToggleLabel"></span>
         </button>
         <button id="layoutEditBtn" onclick="toggleLayoutEditMode()">
             <svg class="btn-icon" id="layoutEditIcon"><use href="#icon-pen"/></svg>
-            <span class="btn-label" id="layoutEditLabel">Редактировать блоки</span>
+            <span class="btn-label" id="layoutEditLabel"></span>
         </button>
         <button id="layoutEditCancel" class="btn-ghost" style="display:none" onclick="cancelLayoutEditMode()">
             <svg class="btn-icon"><use href="#icon-undo"/></svg>
