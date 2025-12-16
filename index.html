@@ -1063,13 +1063,18 @@ td.date-cell + td.date-cell {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 14px;
-  color: #e5483d; /* красный как в предупреждениях */
+  font-size: 13px;          /* меньше */
+  line-height: 1.4;
+  color: #d1433b;           /* мягкий красный */
+}
+
+.notice strong {
+  font-weight: 600;
 }
 
 .notice-icon {
-  font-size: 16px;
-  line-height: 1;
+  font-size: 14px;
+  opacity: 0.85;
 }
 
 .notice-text strong {
