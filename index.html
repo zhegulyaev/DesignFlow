@@ -1058,6 +1058,25 @@ td.date-cell + td.date-cell {
 }
 
 
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #e5483d; /* красный как в предупреждениях */
+}
+
+.notice-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.notice-text strong {
+  font-weight: 600;
+}
+      
+
 </style>
 </head>
 <body>
@@ -1720,7 +1739,14 @@ td.date-cell + td.date-cell {
         <span class="close-modal-x" onclick="closeTemplateManagerModal()">×</span>
         <h3 style="margin-bottom: 8px;">Мои шаблоны</h3>
         <p class="helper-note">Перетаскивайте строки, чтобы менять порядок. Нажмите на текст, чтобы отредактировать. <br>
-<b>⚠️ Важно:</b> после изменений нужно создать проект, чтобы всё применилось и сохранилось.</p>
+        <div class="notice">
+  <span class="notice-icon">⚠️</span>
+  <span class="notice-text">
+    <strong><b>Важно:</b></strong> после изменений нужно создать проект, чтобы всё применилось
+  </span>
+</div>
+        
+        </p>
         <div class="template-modal-add">
             <div class="inp-group template-modal-input">
                 <label>Создать шаблон</label>
