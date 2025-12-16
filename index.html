@@ -1113,35 +1113,57 @@ td.date-cell + td.date-cell {
     <div style="display:flex;gap:15px;align-items:center">
 
 <style>
-/* Стиль для кнопки "Трекер проектов" */
-.btn-project {
-    background: transparent;
-    border: 1px solid var(--accent); /* Цвет границы: синий (из переменной) */
-    color: var(--accent); /* Цвет текста: синий */
-    padding-right: 16px; 
+.header-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  box-shadow: var(--shadow);
 }
-.btn-project:hover {
-    background: rgba(88, 166, 255, 0.1); /* Легкий синий фон при наведении */
+
+.header-btn:hover {
+  border-color: var(--accent);
+  background: rgba(124, 92, 255, 0.08);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124, 92, 255, 0.15);
 }
-.btn-project svg {
-    fill: var(--accent);
-    width: 16px;
-    height: 16px;
-    margin-right: 4px;
+
+.header-btn i {
+  font-size: 18px;
+  color: var(--accent);
 }
-/* Переопределение цвета для светлой темы */
-body[data-theme="light"] .btn-project {
-    border: 1px solid var(--accent);
-    color: var(--accent);
+
+.header-btn-text {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .header-btn-text {
+    display: inline;
+  }
+}
+
+/* Тёмная тема — чуть ярче ховер */
+body[data-theme="dark"] .header-btn:hover {
+  background: rgba(124, 92, 255, 0.15);
 }
 </style>
 
-        <a href="https://zhegulyaev.github.io/DesignFlow/Goal.html" class="btn btn-project" aria-label="Трекер проектов">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 L5 14 H11 L10 22 L19 8 H13 L14 2 Z"/></svg>
-    Трекер проектов 
-                <span class="btn-goal-badge">New</span>
-</a>
-
+      <!-- Кнопка "Трекер целей" с действием по клику -->
+<button class="header-btn" onclick="window.location.href='Goal.html'" title="Трекер целей">
+  <i class="fa-solid fa-bullseye"></i>
+  <span class="header-btn-text">Трекер целей</span>
+</button>
+          
         <button onclick="openSettings()" id="openSettingsBtn">
             <svg class="btn-icon"><use href="#icon-settings"/></svg>
             <span class="btn-label">Настройки</span>
