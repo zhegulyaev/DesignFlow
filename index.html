@@ -2363,7 +2363,7 @@ function applyTheme(theme) {
         const mode = UI_PREFS.themeMode || 'dark';
         label.textContent = mode === 'auto'
             ? (isLight ? 'Авто · Светлая' : 'Авто · Тёмная')
-            : (isLight ? 'Тёмная тема' : 'Светлая тема');
+            : (isLight ? '' : '');
     }
 }
 
@@ -2743,7 +2743,7 @@ function updateLayoutEditButton() {
     const label = document.getElementById('layoutEditLabel');
     const cancelBtn = document.getElementById('layoutEditCancel');
     if (iconUse) iconUse.setAttribute('href', layoutEditMode ? '#icon-check' : '#icon-pen');
-    if (label) label.textContent = layoutEditMode ? 'Готово' : 'Редактировать блоки';
+    if (label) label.textContent = layoutEditMode ? 'Готово' : '';
     if (cancelBtn) cancelBtn.style.display = layoutEditMode ? 'flex' : 'none';
 }
 
