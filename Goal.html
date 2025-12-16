@@ -19,7 +19,7 @@
       --accent-hover: #6a4bff;
       --text: #1e293b;
       --text-muted: #64748b;
-      --bg: #f8fafc; /* Основной фон (светлый) */
+      --bg: #f8fafc;
       --card-bg: #ffffff;
       --border: #e2e8f0;
       --shadow: 0 1px 3px rgba(0,0,0,0.05);
@@ -30,7 +30,6 @@
       --celebrate-end: #34d399;
       --fav-gold: #fbbf24;
       
-      /* Светлая тема для WARNING (Нейтральный стиль, как просили) */
       --warn-bg: var(--card-bg); 
       --warn-border: var(--border); 
       --warn-text: var(--text); 
@@ -38,14 +37,13 @@
     }
 
     body[data-theme="dark"] {
-      --bg: #0f172a; /* Темный фон страницы */
-      --card-bg: #1e293b; /* Фон карточек в темной теме */
-      --text: #e2e8f0; /* Светлый текст */
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #e2e8f0;
       --text-muted: #94a3b8;
       --border: #334155;
-      background: #020617; /* Чуть более темный фон для body */
+      background: #020617;
       
-      /* Темная тема для WARNING (Нейтральный стиль, как просили) */
       --warn-bg: var(--card-bg); 
       --warn-border: var(--border);
       --warn-text: var(--text); 
@@ -96,7 +94,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      /* Цвет молнии - желтый/золотой */
       color: #fbbf24; 
       font-size: 20px;
       box-shadow: 0 4px 10px rgba(124, 92, 255, 0.2);
@@ -154,7 +151,6 @@
       white-space: nowrap;
     }
     
-    /* Иконки кнопок наследуют color: var(--text) */
     .btn i { color: inherit; } 
 
     body[data-theme="dark"] .btn { background: #334155; border-color: #475569; }
@@ -163,7 +159,7 @@
 
     .btn.primary { background: var(--accent); color: white; border: none; }
     .btn.primary:hover { background: var(--accent-hover); }
-    .btn.primary i { color: white; } /* Белые иконки на Primary кнопках */
+    .btn.primary i { color: white; } 
 
     .btn.secondary { background: transparent; border: 1px solid var(--border); }
     .btn.secondary:hover { background: #f8fafc; }
@@ -172,7 +168,7 @@
     .btn.danger { background: #fee2e2; color: var(--red); }
     .btn.danger:hover { background: #fecaca; }
 
-    /* --- WARNING BLOCK (НЕЙТРАЛЬНЫЙ СТИЛЬ + ТОЧЕЧНОЕ КРАСНОЕ ВЫДЕЛЕНИЕ) --- */
+    /* --- WARNING BLOCK --- */
     .warning-wrapper {
         max-width: 1200px;
         margin: 0 auto;
@@ -199,7 +195,6 @@
         gap: 12px;
     }
     
-    /* Дефолтный цвет иконки (серый/заглушенный) */
     .warning i { color: var(--warn-icon); font-size: 16px; margin-top: 2px; } 
     .warning strong { font-weight: 700; color: var(--warn-text); } 
     
@@ -209,7 +204,6 @@
         flex-shrink: 0; 
     }
 
-    /* ТОЧЕЧНОЕ КРАСНОЕ ВЫДЕЛЕНИЕ */
     .warning-red-icon,
     .warning-red-text {
         color: var(--red) !important;
@@ -217,7 +211,6 @@
     .warning-red-text {
         font-weight: 700;
     }
-    /* КОНЕЦ ТОЧЕЧНОГО КРАСНОГО ВЫДЕЛЕНИЯ */
 
 
     /* --- TABS --- */
@@ -333,11 +326,8 @@
         opacity: 1;
     }
 
-
     textarea { min-height: 80px; resize: vertical; font-family: inherit; }
-
     .custom-days-field { display: none; margin-top: 10px; }
-
     .btn-group { display: flex; gap: 10px; margin-top: 16px; }
     .btn-group .btn { flex: 1; justify-content: center; padding: 12px; }
 
@@ -350,16 +340,13 @@
       padding: 20px;
       background: var(--card-bg);
       transition: transform .2s, box-shadow .2s, border-color .3s, opacity .2s;
-      position: relative; /* Для позиционирования чекбокса */
-      padding-left: 55px; /* Освобождаем место для чекбокса */
-      cursor: grab; /* Курсор для перетаскивания */
+      position: relative; 
+      padding-left: 55px;
+      cursor: grab;
     }
 
-    .goal-card:active {
-        cursor: grabbing;
-    }
+    .goal-card:active { cursor: grabbing; }
     
-    /* Стили для перетаскиваемого элемента */
     .goal-card.dragging {
         opacity: 0.4;
         border: 2px dashed var(--accent);
@@ -368,38 +355,34 @@
     }
     
     @media (max-width: 600px) {
-        /* В мобильной версии убираем этот отступ, чтобы карточка была шире */
         .goal-card { padding-left: 20px; }
     }
     
     .goal-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
     
-    /* Индикатор выбора на карточке */
     .goal-card.selected {
         border-color: var(--accent);
         box-shadow: 0 0 0 2px rgba(124, 92, 255, 0.2), var(--shadow);
     }
     
-    /* НОВОЕ: Стиль для завершенной цели */
+    /* Стили для завершенной цели */
     .goal-card.done {
-        border-color: var(--celebrate-end); /* Зеленая рамка */
-        opacity: 0.7;
-        box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3); /* Легкая зеленая тень */
-        background: #f0fdf4; /* Очень светлый зеленый фон */
+        border-color: var(--celebrate-end);
+        opacity: 0.8; /* Чуть менее прозрачный, чтобы было видно победную шкалу */
+        box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3);
+        background: #f0fdf4;
     }
     body[data-theme="dark"] .goal-card.done {
-        background: #064e3b; /* Темно-зеленый фон */
+        background: #064e3b;
         border-color: #34d399;
     }
     .goal-card.done:hover {
         transform: none;
         box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3), var(--shadow);
     }
-    /* КОНЕЦ НОВОГО СТИЛЯ */
 
     
     .goal-card-content {
-        /* Вся внутренняя разметка цели */
         position: relative; 
         z-index: 1;
     }
@@ -408,19 +391,27 @@
         position: absolute;
         top: 20px;
         left: 20px;
-        z-index: 2; /* Чекбокс должен быть кликабелен */
+        z-index: 2;
         height: 18px;
+        opacity: 0; /* ИЗМЕНЕНИЕ: Скрыто по умолчанию */
+        transition: opacity 0.2s ease;
+    }
+    
+    /* ИЗМЕНЕНИЕ: Показываем чекбокс при наведении или если карточка выбрана */
+    .goal-card:hover .goal-checkbox-wrapper,
+    .goal-card.selected .goal-checkbox-wrapper {
+        opacity: 1;
     }
     
     @media (max-width: 600px) {
         .goal-checkbox-wrapper {
-            top: 15px; /* Сдвигаем чекбокс в угол */
+            top: 15px; 
             right: 15px;
             left: auto;
+            opacity: 1; /* На мобильном всегда показываем, т.к. нет ховера */
         }
     }
     
-    /* Стиль для самого чекбокса, чтобы он выглядел аккуратно */
     .goal-select-checkbox {
       margin: 0;
       width: 18px;
@@ -430,7 +421,7 @@
       border: 1px solid var(--border);
       background: var(--bg);
       flex-shrink: 0;
-      accent-color: var(--accent); /* Цвет при выборе */
+      accent-color: var(--accent);
     }
     
     body[data-theme="dark"] .goal-select-checkbox {
@@ -446,9 +437,8 @@
         gap: 8px;
     }
 
-    /* ЗВЕЗДОЧКА ИЗБРАННОГО */
     .star-icon {
-        color: #cbd5e1; /* Серый по умолчанию */
+        color: #cbd5e1;
         font-size: 16px;
         margin-top: 4px;
         cursor: pointer;
@@ -458,13 +448,18 @@
         transform: scale(1.2);
         color: var(--fav-gold);
     }
-    .star-icon.active {
-        color: var(--fav-gold);
-    }
+    .star-icon.active { color: var(--fav-gold); }
     body[data-theme="dark"] .star-icon { color: #475569; }
     body[data-theme="dark"] .star-icon:hover,
     body[data-theme="dark"] .star-icon.active { color: var(--fav-gold); }
-
+    
+    /* ИЗМЕНЕНИЕ: Иконка закрепления */
+    .pin-icon-status {
+        color: var(--accent);
+        font-size: 14px;
+        margin-top: 5px;
+        transform: rotate(45deg);
+    }
 
     .goal-title { font-size: 18px; font-weight: 700; line-height: 1.3; color: var(--text); }
 
@@ -477,7 +472,6 @@
       color: var(--text-muted);
     }
     
-    /* УЛУЧШЕНИЕ: выделение текста времени, чтобы он был более заметным */
     .goal-meta > span { 
         color: var(--text); 
         font-weight: 600; 
@@ -486,7 +480,6 @@
         color: var(--text-muted);
     }
     .goal-meta span .fa-clock { color: inherit; }
-
 
     .priority-badge {
       padding: 4px 10px;
@@ -499,14 +492,12 @@
       gap: 6px; 
     }
     
-    /* Цвета и иконки приоритетов */
     .priority-badge i { font-size: 12px; } 
 
     .priority-high { background: #fee2e2; color: var(--red); }
     .priority-med { background: #ffedd5; color: var(--orange); }
     .priority-low { background: #dcfce7; color: var(--green); }
 
-    /* Dark theme priority badges */
     body[data-theme="dark"] .priority-high { background: #450a0a; color: #f87171; }
     body[data-theme="dark"] .priority-med { background: #451a03; color: #fb923c; }
     body[data-theme="dark"] .priority-low { background: #064e3b; color: #34d399; }
@@ -521,10 +512,18 @@
     body[data-theme="dark"] .progress-bar { background: #334155; }
     .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #c084fc); transition: width .5s; }
     
-    /* НОВОЕ: Праздничный стиль для завершенного прогресс-бара */
+    /* ИЗМЕНЕНИЕ: Новая победная (золотая) шкала */
     .progress-bar.done .progress-fill {
-        background: linear-gradient(90deg, var(--celebrate-start), var(--celebrate-end));
-        box-shadow: 0 0 10px var(--celebrate-end);
+        /* Золотой градиент */
+        background: linear-gradient(90deg, #facc15, #fbbf24, #f59e0b, #d97706);
+        background-size: 200% 100%;
+        animation: shine 3s infinite linear;
+        box-shadow: 0 0 12px rgba(251, 191, 36, 0.6);
+    }
+    
+    @keyframes shine {
+        0% { background-position: 100% 0; }
+        100% { background-position: -100% 0; }
     }
 
 
@@ -568,15 +567,16 @@
     }
     .action-icon-btn:hover { background: #f1f5f9; color: var(--text); }
     .action-icon-btn.delete:hover { background: #fee2e2; color: var(--red); }
+    .action-icon-btn.pinned { color: var(--accent); background: rgba(124, 92, 255, 0.1); }
     
     body[data-theme="dark"] .action-icon-btn:hover { background: #334155; color: var(--text); }
     body[data-theme="dark"] .action-icon-btn.delete:hover { background: #450a0a; color: #f87171; }
 
 
-    /* УЛУЧШЕННЫЕ СТИЛИ KPI (Новая попытка) */
+    /* KPI */
     .kpi {
       display: flex; 
-      justify-content: space-between; /* Используем space-between */
+      justify-content: space-between; 
       gap: 15px; 
       margin-top: 16px;
       padding: 0;
@@ -590,7 +590,6 @@
       position: relative;
     }
     
-    /* Добавляем тонкий вертикальный разделитель */
     .kpi-item:not(:last-child)::after {
         content: '';
         position: absolute;
@@ -609,9 +608,9 @@
     }
     
     .kpi-value { 
-        font-size: 20px; /* Крупные и заметные цифры */
+        font-size: 20px; 
         font-weight: 700; 
-        color: var(--text); /* Используем основной цвет */
+        color: var(--text); 
         line-height: 1.1;
     }
     .kpi-label { 
@@ -619,13 +618,11 @@
         color: var(--text-muted); 
         margin-top: 4px;
         font-weight: 600; 
-        text-transform: uppercase; /* Заглавные буквы */
+        text-transform: uppercase;
         letter-spacing: 0.2px;
     }
-    /* КОНЕЦ УЛУЧШЕННЫХ СТИЛЕЙ KPI */
     
     /* --- MULTI-SELECT MODE STYLES --- */
-    /* Панель массовых действий */
     .multi-action-bar {
         background: var(--card-bg);
         border: 1px solid var(--border);
@@ -704,13 +701,13 @@
     
     .empty-message { text-align: center; padding: 50px; color: var(--text-muted); font-size: 15px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
 
-    /* --- CONFIRM MODAL SPECIFIC --- */
+    /* --- CONFIRM MODAL --- */
     #confirm-modal .modal-content { max-width: 400px; }
     #confirm-modal .modal-actions { justify-content: space-between; }
     #confirm-modal .modal-actions .btn { flex: 1; justify-content: center; padding: 12px; }
     #confirm-modal p { font-size: 16px; text-align: center; margin: 0; }
     
-    /* НОВОЕ: CONGRATULATIONS MODAL */
+    /* CONGRATULATIONS MODAL */
     #congratulations-modal .modal-content { max-width: 400px; padding: 40px 24px; text-align: center; }
     #congratulations-modal .modal-header,
     #congratulations-modal .modal-actions { display: none; }
@@ -763,7 +760,6 @@
     }
     .footer a:hover { text-decoration: underline; }
     
-    /* Медиа-запрос для адаптивности блока .warning */
     @media (max-width: 600px) {
         .warning {
             flex-direction: column;
@@ -779,15 +775,14 @@
         }
         
         .goal-card {
-            padding-left: 20px; /* Убираем отступ для чекбокса, в мобильной версии будет некрасиво */
+            padding-left: 20px; 
         }
         .goal-checkbox-wrapper {
-            top: 15px; /* Сдвигаем чекбокс в угол */
+            top: 15px; 
             right: 15px;
             left: auto;
         }
         
-        /* Скрываем текст кнопок действий в мобильной версии */
         .desktop-only { display: none; }
         .multi-action-btns .btn {
             font-size: 0;
@@ -1060,7 +1055,6 @@
   const toast = document.getElementById('toast');
   const toastMessage = document.getElementById('toast-message');
   
-  // NEW: Multi-selection state and elements
   let selectedGoalIds = new Set();
   const multiActionBar = document.getElementById('multi-action-bar');
   const multiActionText = document.getElementById('multi-action-text');
@@ -1068,7 +1062,6 @@
   const btnMultiDone = document.getElementById('btn-multi-done');
   const btnMultiTrash = document.getElementById('btn-multi-trash');
   
-  // New buttons for trash mode (created once to use in updateMultiActionBar)
   const btnMultiRestore = document.createElement('button');
   btnMultiRestore.className = 'btn';
   btnMultiRestore.innerHTML = '<i class="fa-solid fa-rotate-left"></i> <span class="desktop-only">Восстановить</span>';
@@ -1092,8 +1085,6 @@
 
   function safeParseNum(v) {
     if (!v) return 0;
-    // Очистка от пробелов и замена запятой на точку для корректного parseFloat
-    // Добавлена обработка суффиксов 'к' и 'k'
     let str = String(v).replace(/\s+/g, '').replace(/,/g, '.').toLowerCase();
     let multiplier = 1;
     if (str.endsWith('к') || str.endsWith('k')) {
@@ -1105,11 +1096,9 @@
 
   function fmt(n) {
     const num = safeParseNum(n);
-    // Используем toLocaleString для форматирования с разделителем тысяч (пробелом в ru-RU)
     return Math.round(num).toLocaleString('ru-RU');
   }
 
-  // --- НОВАЯ ЛОГИКА АВТОФОРМАТИРОВАНИЯ ЧИСЕЛ ПРИ ВВОДЕ ---
   
   function formatNumberInput(inputId) {
       const input = document.getElementById(inputId);
@@ -1121,38 +1110,28 @@
           const oldValue = input.value;
           const oldLength = oldValue.length;
 
-          // 1. Убираем все, кроме цифр, 'к', 'k', 'К' (для поддержки "50к")
           let cleanNum = oldValue.replace(/[^0-9кkК]/g, '');
           
-          // 2. Сохраняем суффикс 'к' или 'k'
           let suffix = '';
           if (cleanNum.toLowerCase().endsWith('к') || cleanNum.toLowerCase().endsWith('k')) {
               suffix = cleanNum.slice(-1);
               cleanNum = cleanNum.slice(0, -1);
           }
           
-          // 3. Добавляем пробелы как разделитель тысяч
-          // Регулярное выражение для вставки пробелов каждые три цифры
           let formattedValue = cleanNum.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-
-          // 4. Возвращаем суффикс
           formattedValue += suffix;
 
           input.value = formattedValue;
           
-          // 5. Корректируем позицию курсора с учетом добавленных/удаленных пробелов
           const newLength = formattedValue.length;
           const diff = newLength - oldLength;
           
           if (diff !== 0 && start !== null) {
-              // Смещаем курсор на разницу в длине, если курсор был не в самом конце
               let newStart = start + diff;
               input.setSelectionRange(newStart, newStart);
           }
       });
       
-      // Форматируем по потере фокуса, чтобы убрать суффиксы "к" и показать чистое число,
-      // или если пользователь ввел некорректно и хочет исправить.
       input.addEventListener('blur', (e) => {
           let val = e.target.value;
           const num = safeParseNum(val);
@@ -1160,15 +1139,11 @@
       });
   }
 
-  // Применяем новую функцию ко всем полям ввода сумм
   formatNumberInput('g-target');
   formatNumberInput('g-current');
   formatNumberInput('edit-target');
   formatNumberInput('edit-current');
   formatNumberInput('progress-amount');
-  
-  // --- КОНЕЦ НОВОЙ ЛОГИКИ ---
-
 
   function setupDateTemplate(selectId, customGroup, customInputId, dateInputId) {
     const select = document.getElementById(selectId);
@@ -1196,27 +1171,20 @@
   setupDateTemplate('g-template', 'g-custom-days-field', 'g-custom-days-input', 'g-deadline');
   setupDateTemplate('edit-template', 'edit-custom-days-field', 'edit-custom-days-input', 'edit-deadline');
 
-  // --- ФУНКЦИИ ДЛЯ РАСЧЕТА ВРЕМЕНИ И ПЛЮРАЛИЗАЦИИ ---
-
-  // Хелпер для правильного склонения слов
   function declOfNum(number, titles) {
     const cases = [2, 0, 1, 1, 1, 2];
     number = Math.abs(number);
     return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
   }
   
-  // Функция для расчета и форматирования оставшегося времени
   function formatTimeLeft(deadline) {
     if (!deadline) return { text: '—', totalHours: null };
 
-    // Устанавливаем дедлайн на конец дня (23:59:59) для точности
-    // Добавляем 'T23:59:59' к дате, чтобы расчет велся до конца дедлайн-дня
     const deadlineTime = new Date(deadline + 'T23:59:59');
     const now = new Date();
     let diffMs = deadlineTime - now;
 
     if (diffMs <= 0) {
-      // Просрочено
       const absDays = Math.ceil(Math.abs(diffMs) / 86400000); 
       const overdueText = absDays === 0 
           ? `<span style="color:var(--red)">Просрочено (сегодня)</span>`
@@ -1233,7 +1201,6 @@
     let text = 'Осталось ';
     
     if (diffMs < MS_PER_DAY) {
-      // Менее 24 часов: часы и минуты
       const hours = Math.floor(diffMs / MS_PER_HOUR);
       const minutes = Math.floor((diffMs % MS_PER_HOUR) / MS_PER_MINUTE);
       
@@ -1247,14 +1214,12 @@
       }
       
     } else {
-      // Более 24 часов: дни и часы
       const days = Math.floor(diffMs / MS_PER_DAY);
       const remainingMs = diffMs % MS_PER_DAY;
       const hours = Math.floor(remainingMs / MS_PER_HOUR);
       
       text += `${days} ${declOfNum(days, ['день', 'дня', 'дней'])}`;
       if (hours > 0) {
-          // Часы добавляются только если осталось 1 или более дней
           text += `, ${hours} ${declOfNum(hours, ['час', 'часа', 'часов'])}`;
       }
     }
@@ -1265,7 +1230,6 @@
   function shortDate(dateStr) {
     if (!dateStr) return '—';
     const date = new Date(dateStr);
-    // Добавление 12 часов, чтобы избежать проблем с часовыми поясами, сдвигающими дату на предыдущий день
     date.setHours(12); 
     const day = date.getDate();
     const month = date.toLocaleString('ru-RU', { month: 'short' }).replace('.', '');
@@ -1286,7 +1250,6 @@
       const raw = localStorage.getItem(K);
       if (raw) {
         const parsed = JSON.parse(raw);
-        // Добавлена более надежная проверка структуры
         DATA.goals = Array.isArray(parsed.data?.goals) ? parsed.data.goals : [];
       }
     } catch(e) { 
@@ -1308,7 +1271,6 @@
         openModal('confirm-modal');
   }
   
-  // NEW: Модальное окно поздравления
   function showCongratulationsModal(goalId, title) {
     congratsGoalId = goalId;
     document.getElementById('congrats-title').innerHTML = `«${title}» достигнута!`;
@@ -1332,7 +1294,6 @@
       confirmAction = null;
   };
   
-  // NEW: Обработчики кнопок в модальном окне поздравления
   document.getElementById('btn-congrats-done').onclick = () => {
       const g = DATA.goals.find(x => x.id === congratsGoalId);
       if (g) {
@@ -1351,32 +1312,26 @@
       showToast('Цель оставлена активной');
   };
 
-  // --- NEW: MULTI-SELECTION LOGIC ---
-
   function updateMultiActionBar(visibleGoals) {
     const selectedCount = selectedGoalIds.size;
     
-    // Manage visibility
     multiActionBar.style.display = selectedCount > 0 ? 'flex' : 'none';
     multiActionText.textContent = `Выбрано: ${selectedCount}`;
     
     const actionBtnsContainer = multiActionBar.querySelector('.multi-action-btns');
-    actionBtnsContainer.innerHTML = ''; // Clear previous buttons
+    actionBtnsContainer.innerHTML = ''; 
     
     const filter = document.querySelector('.tab.active').dataset.filter;
     
     if (filter === 'trash') {
-        // Trash mode actions
         actionBtnsContainer.appendChild(btnSelectAll);
         btnSelectAll.innerHTML = `<i class="fa-solid fa-list-check"></i> <span class="desktop-only">${selectedCount === visibleGoals.length && visibleGoals.length > 0 ? 'Снять выделение' : 'Выбрать все'}</span>`;
         actionBtnsContainer.appendChild(btnMultiRestore);
         actionBtnsContainer.appendChild(btnMultiFinalDelete);
     } else if (filter === 'active' || filter === 'done' || filter === 'all' || filter === 'favorite') {
-        // Active/Done/All mode actions
         actionBtnsContainer.appendChild(btnSelectAll);
         btnSelectAll.innerHTML = `<i class="fa-solid fa-list-check"></i> <span class="desktop-only">${selectedCount === visibleGoals.length && visibleGoals.length > 0 ? 'Снять выделение' : 'Выбрать все'}</span>`;
 
-        // Check the status of selected goals to determine which button to show for completion
         const selected = DATA.goals.filter(g => selectedGoalIds.has(g.id));
         const allSelectedAreDone = selected.every(g => g.status === 'done');
         
@@ -1397,7 +1352,6 @@
     } else {
         selectedGoalIds.add(goalId);
     }
-    // Re-render to update the selected class and action bar
     render(); 
   }
   
@@ -1405,7 +1359,6 @@
       return DATA.goals.filter(g => selectedGoalIds.has(g.id));
   }
   
-  // Select/Deselect All
   if(btnSelectAll) {
       btnSelectAll.onclick = () => {
           const filter = document.querySelector('.tab.active').dataset.filter;
@@ -1419,18 +1372,17 @@
           });
           
           if (selectedGoalIds.size === visibleGoals.length && visibleGoals.length > 0) {
-              selectedGoalIds.clear(); // Deselect all
+              selectedGoalIds.clear(); 
               showToast('Выделение снято');
           } else {
-              selectedGoalIds.clear(); // Ensure clear first
-              visibleGoals.forEach(g => selectedGoalIds.add(g.id)); // Select all
+              selectedGoalIds.clear(); 
+              visibleGoals.forEach(g => selectedGoalIds.add(g.id)); 
               showToast(`Выбрано ${visibleGoals.length} целей`);
           }
           render();
       };
   }
 
-  // Bulk Done / Restore (from done)
   if(btnMultiDone) {
       btnMultiDone.onclick = () => {
           const selected = getSelectedGoals();
@@ -1452,7 +1404,6 @@
       };
   }
 
-  // Bulk Trash
   if(btnMultiTrash) {
       btnMultiTrash.onclick = () => {
           const selected = getSelectedGoals();
@@ -1470,7 +1421,6 @@
       };
   }
   
-  // Bulk Restore (from trash)
   if(btnMultiRestore) {
       btnMultiRestore.onclick = () => {
           const selected = getSelectedGoals();
@@ -1488,7 +1438,6 @@
       };
   }
 
-  // Bulk Final Delete (from trash)
   if(btnMultiFinalDelete) {
       btnMultiFinalDelete.onclick = () => {
           const selected = getSelectedGoals();
@@ -1504,19 +1453,13 @@
       };
   }
   
-  // --- END MULTI-SELECTION LOGIC ---
-  
-  // --- DRAG AND DROP LOGIC (Reordering) ---
   
   function reorderGoals(draggedId, targetId) {
-      // Find indices in the main DATA.goals array
       const draggedIndex = DATA.goals.findIndex(g => g.id === draggedId);
       const targetIndex = DATA.goals.findIndex(g => g.id === targetId);
       
       if (draggedIndex > -1 && targetIndex > -1) {
-          // Remove from old position
           const [movedItem] = DATA.goals.splice(draggedIndex, 1);
-          // Insert at new position
           DATA.goals.splice(targetIndex, 0, movedItem);
           save();
           render();
@@ -1540,29 +1483,30 @@
       if (filter === 'all') return g.status !== 'trash';
       return false;
     });
+    
+    // ИЗМЕНЕНИЕ: Сортировка - закрепленные (isPinned) всегда сверху
+    visible.sort((a, b) => {
+        if (a.isPinned === b.isPinned) return 0;
+        return a.isPinned ? -1 : 1;
+    });
+
 
     if (visible.length === 0) {
       list.innerHTML = `<div class="empty-message"><i class="fa-regular fa-folder-open"></i><span>Список пуст</span></div>`;
-      selectedGoalIds.clear(); // Clear selection if the list is empty
+      selectedGoalIds.clear(); 
       updateMultiActionBar(visible);
-      // Обновляем счетчики, даже если список пуст
       updateCounts(); 
-      return; // Exit render early
+      return; 
     }
     
-    // NEW: Update multi-action bar here before rendering cards
     updateMultiActionBar(visible);
-    updateCounts(); // Обновляем счетчики
+    updateCounts(); 
 
-    // REMOVED SORTING BY DATE TO ALLOW MANUAL DRAG AND DROP ORDERING
-    // visible.sort((a,b) => (b.updatedAt || b.createdAt || '') .localeCompare(a.updatedAt || a.createdAt || ''));
-    
     const isTrash = (filter === 'trash');
 
     visible.forEach(g => {
       const target = safeParseNum(g.target);
       const current = safeParseNum(g.current);
-      // Ограничиваем процент 100 для визуала, но считаем из реальных чисел
       const pctValue = target ? (current / target) * 100 : 0;
       const pct = Math.min(100, pctValue).toFixed(0); 
       
@@ -1581,28 +1525,25 @@
           pClass = 'priority-low';
           pIcon = '<i class="fa-solid fa-leaf"></i>';
           pText = 'Низкий';
-      } else { // med
+      } else { 
           pClass = 'priority-med';
           pIcon = '<i class="fa-solid fa-bolt"></i>'; 
           pText = 'Средний';
       }
       
-      // Расчет в день, округляем до целых
       const neededPerHour = isOverdue || hoursLeft === null || hoursLeft <= 0 ? 0 : (target - current) / hoursLeft;
       const neededPerDay = neededPerHour * 24;
 
 
       const el = document.createElement('div');
-      // NEW: Добавляем класс 'done' для завершенных целей
       el.className = `goal-card ${selectedGoalIds.has(g.id) ? 'selected' : ''} ${isTrash ? 'goal-card-trash' : ''} ${g.status === 'done' ? 'done' : ''}`;
-      el.dataset.id = g.id; // Add data-id for easy access
+      el.dataset.id = g.id; 
       
-      // DRAG AND DROP ATTRIBUTES
       el.setAttribute('draggable', 'true');
       
       let controls = '';
       
-      // ИСПОЛЬЗУЕМ ИСПРАВЛЕННУЮ ПЕРЕМЕННУЮ isTrash
+      // ИЗМЕНЕНИЕ: Добавлена кнопка Пин (fa-thumbtack) в actions-row
       if (!isTrash) {
           controls = `
             <div class="quick-add">
@@ -1613,6 +1554,7 @@
             </div>
             <div class="actions-row">
                 <button class="action-icon-btn" data-act="edit" data-goal-id="${g.id}"><i class="fa-solid fa-pen"></i> <span class="desktop-only">Редактировать</span></button>
+                <button class="action-icon-btn ${g.isPinned ? 'pinned' : ''}" data-act="pin" data-goal-id="${g.id}" title="${g.isPinned ? 'Открепить' : 'Закрепить сверху'}"><i class="fa-solid fa-thumbtack"></i></button>
                 <button class="action-icon-btn" data-act="done" data-goal-id="${g.id}">
                     ${g.status === 'done' ? '<i class="fa-solid fa-rotate-left"></i> <span class="desktop-only">Вернуть</span>' : '<i class="fa-solid fa-check"></i> <span class="desktop-only">Готово</span>'}
                 </button>
@@ -1628,6 +1570,7 @@
           `;
       }
 
+      // ИЗМЕНЕНИЕ: Добавлен title для тултипа "В избранное" и иконка Пина
       el.innerHTML = `
         <div class="goal-checkbox-wrapper">
              <input type="checkbox" class="goal-select-checkbox" data-id="${g.id}" ${selectedGoalIds.has(g.id) ? 'checked' : ''}>
@@ -1635,8 +1578,9 @@
         <div class="goal-card-content">
             <div class="goal-header">
                 <div class="goal-title-wrapper">
-                   <i class="fa-${g.isFavorite ? 'solid' : 'regular'} fa-star star-icon ${g.isFavorite ? 'active' : ''}" data-act="fav" data-goal-id="${g.id}"></i>
+                   <i class="fa-${g.isFavorite ? 'solid' : 'regular'} fa-star star-icon ${g.isFavorite ? 'active' : ''}" data-act="fav" data-goal-id="${g.id}" title="${g.isFavorite ? 'Убрать из избранного' : 'В избранное'}"></i>
                    <div class="goal-title">${g.title}</div>
+                   ${g.isPinned ? '<i class="fa-solid fa-thumbtack pin-icon-status" title="Закреплено"></i>' : ''}
                 </div>
                 <div class="priority-badge ${pClass}">${pIcon} ${pText}</div>
             </div>
@@ -1676,7 +1620,6 @@
         </div>
       `;
       
-      // --- DRAG AND DROP EVENTS ---
       el.addEventListener('dragstart', (e) => {
          draggedItem = g;
          el.classList.add('dragging');
@@ -1689,7 +1632,7 @@
       });
 
       el.addEventListener('dragover', (e) => {
-         e.preventDefault(); // Necessary to allow dropping
+         e.preventDefault(); 
       });
 
       el.addEventListener('drop', (e) => {
@@ -1698,12 +1641,9 @@
              reorderGoals(draggedItem.id, g.id);
          }
       });
-      // --- END DRAG EVENTS ---
 
-      // Attach single action listeners using data-goal-id
       el.querySelectorAll('[data-act]').forEach(btn => {
         btn.onclick = (e) => {
-            // Prevent event from bubbling to the card/checkbox click handler
             e.stopPropagation(); 
             const act = btn.dataset.act;
             const goalId = btn.dataset.goalId;
@@ -1717,14 +1657,21 @@
                 save(); render();
                 showToast(g.isFavorite ? 'Добавлено в избранное' : 'Убрано из избранного');
             }
+            
+            // ИЗМЕНЕНИЕ: Обработчик для закрепления
+            if (act === 'pin') {
+                g.isPinned = !g.isPinned;
+                g.updatedAt = nowISO();
+                save(); render();
+                showToast(g.isPinned ? 'Закреплено сверху' : 'Откреплено');
+            }
 
             if (act === 'edit') openEditModal(goalId);
             if (act === 'progress') openProgressModal(goalId);
             if (act === 'done') {
                 const newStatus = g.status === 'done' ? 'active' : 'done';
                 
-                // Проверяем, если цель достигнута и пытаются ее завершить, показываем модалку поздравления.
-                if (newStatus === 'done' && safeParseNum(g.current) >= safeParseNum(g.target)) {
+                if (newStatus === 'done' && safeParseNum(g.current) >= safeParseNum(g.target) && safeParseNum(g.target) > 0) {
                     showCongratulationsModal(goalId, g.title);
                 } else {
                     openConfirmModal(`Вы действительно хотите ${newStatus === 'done' ? 'завершить' : 'вернуть в работу'} цель "${g.title}"?`, () => {
@@ -1759,10 +1706,9 @@
         }
       });
       
-      // Quick add listeners
       el.querySelectorAll('[data-add]').forEach(btn => {
         btn.onclick = (e) => {
-          e.stopPropagation(); // Stop propagation
+          e.stopPropagation(); 
           const delta = parseInt(btn.dataset.add);
           const goalId = btn.dataset.goalId;
           const g = DATA.goals.find(x => x.id === goalId);
@@ -1776,8 +1722,8 @@
           g.updatedAt = nowISO();
           save(); 
           
-          if (newCurrent >= target && g.status !== 'done') {
-              render(); // Рендер с обновленным current
+          if (newCurrent >= target && target > 0 && g.status !== 'done') {
+              render(); 
               showCongratulationsModal(g.id, g.title);
           } else {
               render();
@@ -1786,16 +1732,12 @@
         };
       });
 
-      // Checkbox listener
       el.querySelector('.goal-select-checkbox').addEventListener('change', (e) => {
-          e.stopPropagation(); // Critical to stop propagation on the checkbox itself
+          e.stopPropagation(); 
           toggleSelection(g.id);
       });
       
-      // Click listener for the card to also toggle selection, but not on inner elements
       el.addEventListener('click', (e) => {
-          // Only toggle if the click is directly on the card or the main content area, 
-          // not on buttons, links, or inputs inside.
           if (!e.target.closest('.quick-add') && !e.target.closest('.actions-row') && e.target.type !== 'checkbox') {
               toggleSelection(g.id);
           }
@@ -1806,7 +1748,6 @@
     });
   }
   
-  // NEW: Отдельная функция для обновления счетчиков
   function updateCounts() {
     const active = DATA.goals.filter(g => g.status === 'active');
     const done = DATA.goals.filter(g => g.status === 'done');
@@ -1814,7 +1755,6 @@
     const all = DATA.goals.filter(g => g.status !== 'trash');
     const fav = DATA.goals.filter(g => g.isFavorite && g.status !== 'trash');
     
-    // Общий прогресс (только для активных)
     const totalT = active.reduce((s,g) => s + safeParseNum(g.target), 0);
     const totalC = active.reduce((s,g) => s + safeParseNum(g.current), 0);
     const overall = totalT ? (totalC / totalT) * 100 : 0;
@@ -1837,7 +1777,6 @@
     if (!g) return;
     currentEditId = id;
     document.getElementById('edit-title').value = g.title || '';
-    // Форматирование при открытии (используем fmt для отображения 50 000)
     document.getElementById('edit-target').value = fmt(g.target); 
     document.getElementById('edit-current').value = fmt(g.current);
     document.getElementById('edit-deadline').value = g.deadline || '';
@@ -1854,7 +1793,6 @@
         const g = DATA.goals.find(x => x.id === currentEditId);
         if (!g) return;
         g.title = document.getElementById('edit-title').value.trim();
-        // Используем safeParseNum для преобразования отформатированного ввода в число
         g.target = safeParseNum(document.getElementById('edit-target').value); 
         const newCurrent = safeParseNum(document.getElementById('edit-current').value);
         g.deadline = document.getElementById('edit-deadline').value || null;
@@ -1862,16 +1800,14 @@
         g.notes = document.getElementById('edit-notes').value.trim();
         g.updatedAt = nowISO();
         
-        // Проверяем достижение цели
         const oldCurrent = safeParseNum(g.current);
         const target = safeParseNum(g.target);
         
         g.current = newCurrent;
         save();
         
-        // Показываем модалку, если цель достигнута, и она не была достигнута до этого изменения
-        if (newCurrent >= target && oldCurrent < target && g.status !== 'done') {
-            render(); // Рендер с обновленным current
+        if (newCurrent >= target && target > 0 && oldCurrent < target && g.status !== 'done') {
+            render(); 
             showCongratulationsModal(g.id, g.title);
         } else {
             render();
@@ -1891,7 +1827,6 @@
     const g = DATA.goals.find(x => x.id === currentProgressId);
     if (!g || g.status !== 'active') return showToast('Цель неактивна');
     
-    // Используем safeParseNum, чтобы обработать ввод типа "5к" или "5 000"
     const val = safeParseNum(document.getElementById('progress-amount').value); 
     if (val <= 0) { showToast('Введите положительную сумму!'); return; }
     
@@ -1912,8 +1847,8 @@
 
         closeModal('progress-modal');
         
-        if (newCurrent >= target && oldCurrent < target && g.status !== 'done') {
-            render(); // Рендер с обновленным current
+        if (newCurrent >= target && target > 0 && oldCurrent < target && g.status !== 'done') {
+            render(); 
             showCongratulationsModal(g.id, g.title);
         } else {
             render();
@@ -1931,7 +1866,9 @@
 
     const target = safeParseNum(document.getElementById('g-target').value);
     const current = safeParseNum(document.getElementById('g-current').value);
-    const isDone = current >= target;
+    
+    // ИЗМЕНЕНИЕ: Если target == 0, то цель не считается выполненной автоматически
+    const isDone = (target > 0) && (current >= target);
 
     const g = {
       id: Date.now().toString(36),
@@ -1941,8 +1878,9 @@
       current: current,
       deadline: document.getElementById('g-deadline').value || null,
       notes: document.getElementById('g-notes').value.trim(),
-      status: isDone ? 'done' : 'active', // Устанавливаем статус "done" если сразу достигнута
-      isFavorite: false, // Default favorite status
+      status: isDone ? 'done' : 'active', 
+      isFavorite: false, 
+      isPinned: false, // ИЗМЕНЕНИЕ: Новое поле для закрепа
       createdAt: nowISO(),
       updatedAt: nowISO()
     };
@@ -1951,7 +1889,6 @@
     save(); 
     render();
     
-    // Если цель сразу выполнена, показываем поздравление (но переносим в done уже при создании)
     if (isDone) {
         showToast('Цель создана и сразу выполнена!');
     } else {
@@ -1974,7 +1911,6 @@
   ];
 
   document.getElementById('btn-demo').onclick = () => {
-    // Добавляем цели только если их нет или для целей, которые уже не активны (чтобы не загромождать список)
     if (DATA.goals.filter(g => g.status === 'active').length > 0) {
         showToast('Активные цели уже есть. Создайте вручную!');
         return;
@@ -1984,7 +1920,7 @@
         const d = new Date();
         d.setDate(d.getDate() + 30 + Math.floor(Math.random() * 60));
         
-        const isDone = rnd.t === 'Новый iPhone 16'; // Делаем одну цель выполненной для примера
+        const isDone = rnd.t === 'Новый iPhone 16'; 
         const current = isDone ? rnd.target : rnd.cur;
 
         const g = {
@@ -1997,6 +1933,7 @@
           notes: rnd.note,
           status: isDone ? 'done' : 'active',
           isFavorite: false,
+          isPinned: false,
           createdAt: nowISO(),
           updatedAt: nowISO()
         };
@@ -2008,7 +1945,6 @@
     showToast('Демо-цели добавлены!');
   };
 
-  // --- ЛОГИКА СОХРАНЕНИЯ ТЕМЫ ---
   
   document.getElementById('theme-btn').onclick = () => {
     const isDarkNow = document.body.dataset.theme === 'dark';
@@ -2043,7 +1979,6 @@
     const reader = new FileReader();
     reader.onload = () => {
         try {
-            // Проверка, что файл содержит JSON
             JSON.parse(reader.result); 
             openConfirmModal('Загрузить данные? Текущие будут заменены!', () => {
                 localStorage.setItem(K, reader.result);
@@ -2062,25 +1997,20 @@
     tab.onclick = () => {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
-      selectedGoalIds.clear(); // Сброс выделения при смене вкладки
+      selectedGoalIds.clear(); 
       render();
     };
   });
-
-  // --- ИНИЦИАЛИЗАЦИЯ (загрузка данных и темы) ---
   
-  // 1. Применяем сохраненную тему перед загрузкой данных
   const savedTheme = localStorage.getItem('theme') || '';
   document.body.dataset.theme = savedTheme;
   
-  // 2. Устанавливаем иконку на кнопке темы в соответствии с сохраненным состоянием
   const isDark = savedTheme === 'dark';
   const themeButtonIcon = document.querySelector('#theme-btn i');
   if (themeButtonIcon) {
       themeButtonIcon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
   }
   
-  // 3. Загружаем данные
   load();
 })();
 </script>
