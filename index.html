@@ -1114,53 +1114,37 @@ td.date-cell + td.date-cell {
 
 
           <style>
-                .header-btn {
-  position: relative; /* Важно для позиционирования бейджика */
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 16px;
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  color: var(--text);
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  box-shadow: var(--shadow);
+      .header-btn {
+  position: relative; /* Обязательно для позиционирования бейджика */
+  padding-right: 40px; /* Дополнительное место справа для бейджика */
 }
 
-/* Бейджик */
-.header-badge {
+/* Прямоугольный синий бейджик "New" */
+.header-new-badge {
   position: absolute;
   top: -8px;
-  right: -8px;
-  background: #ef4444; /* Красный, как у классических уведомлений */
+  right: -12px;
+  background: var(--accent); /* Синий акцент из твоей темы */
   color: white;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
-  min-width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 6px;
+  padding: 4px 10px;
+  border-radius: 8px; /* Закруглённые углы — прямоугольник */
   box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  transition: background .3s;
+  pointer-events: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background 0.3s;
 }
 
-/* В светлой теме — чуть другой красный */
-body:not([data-theme="dark"]) .header-badge {
-  background: #dc2626;
+/* В светлой теме — подходящий синий */
+body:not([data-theme="dark"]) .header-new-badge {
+  background: #3b82f6;
 }
 
-/* Если бейджик = 0 — скрываем */
-.header-badge:empty,
-.header-badge[data-count="0"] {
-  display: none;
+/* Ховер — чуть ярче */
+.header-btn:hover .header-new-badge {
+  background: var(--accent-hover, #6a4bff);
 }
 </style>
 
