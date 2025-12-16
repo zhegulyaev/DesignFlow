@@ -1082,6 +1082,48 @@ td.date-cell + td.date-cell {
 }
       
 
+
+/* Стили для обертки кнопок */
+.header-actions{display:flex;gap:10px;align-items:center}
+
+/* Базовый стиль кнопок (новый вид) */
+.btn {
+    padding: 9px 16px;
+    border-radius: 10px;
+    background: var(--border); 
+    color: var(--text);
+    font-size: 13px;
+    cursor: pointer;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    transition: .2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.btn i { color: inherit; } 
+
+/* Стиль по умолчанию для ховера */
+.btn:hover { background: #444c56; border-color: #444c56; } 
+
+/* Стиль Secondary (для Редактировать блоки и Настроек) */
+.btn.secondary { background: transparent; border: 1px solid var(--border); }
+.btn.secondary:hover { background: var(--card); }
+
+/* Адаптация для светлой темы */
+body[data-theme="light"] .btn { 
+    background: var(--card-alt); 
+    color: var(--text); 
+    border-color: var(--border);
+}
+body[data-theme="light"] .btn:hover { background: #e2e8f0; }
+body[data-theme="light"] .btn.secondary { background: transparent; border: 1px solid var(--border); color: var(--text);}
+body[data-theme="light"] .btn.secondary:hover { background: var(--card-alt); }
+
+
 </style>
 </head>
 <body>
@@ -1134,40 +1176,25 @@ td.date-cell + td.date-cell {
         <div class="brand-sub">Трекер проектов и бюджета</div>
       </div>
     </div>
-    <div style="display:flex;gap:15px;align-items:center">
-
-
-<a href="https://zhegulyaev.github.io/DesignFlow/Goal.html"
-   class="header-btn"
-   aria-label="Трекер целей">
-
-    <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-        <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
-        <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
-    </svg>
-
-    <span class="btn-label">Трекер целей</span>
-</a>
-          
-        <button id="themeToggle" onclick="toggleTheme()" aria-label="Переключить тему">
-            <svg class="btn-icon" id="themeToggleIcon"><use href="#icon-sun"/></svg>
-            <span class="btn-label" id="themeToggleLabel"></span>
-        </button>
-        <button id="layoutEditBtn" onclick="toggleLayoutEditMode()">
-            <svg class="btn-icon" id="layoutEditIcon"><use href="#icon-pen"/></svg>
-            <span class="btn-label" id="layoutEditLabel"></span>
-        </button>
-        <button id="layoutEditCancel" class="btn-ghost" style="display:none" onclick="cancelLayoutEditMode()">
-            <svg class="btn-icon"><use href="#icon-undo"/></svg>
-            <span class="btn-label">Отмена</span>
-        </button>
-        <button onclick="openSettings()" id="openSettingsBtn">
-            <svg class="btn-icon"><use href="#icon-settings"/></svg>
-            <span class="btn-label">Настройки</span>
-        </button>
-        <select id="monthSelect" class="month-select" onchange="changeMonth(this.value)"></select>
-    </div>
+    <div class="header-actions">
+    
+    <button id="edit-blocks-btn" class="btn secondary">
+        <i class="fa-solid fa-table-columns"></i> Редактировать блоки
+    </button>
+    
+    <button id="layoutEditCancel" class="btn secondary" style="display:none" onclick="cancelLayoutEditMode()">
+        <i class="fa-solid fa-xmark"></i> Отмена
+    </button>
+    
+    <button id="settings-btn" class="btn secondary">
+        <i class="fa-solid fa-gear"></i> Настройки
+    </button>
+    
+    <button id="theme-toggle-btn" class="btn">
+        <i class="fa-solid fa-sun"></i> 
+    </button>
+    
+    <select id="monthSelect" class="month-select" onchange="changeMonth(this.value)"></select>
   </div>
 
 
@@ -2369,7 +2396,7 @@ function applyTheme(theme) {
         const mode = UI_PREFS.themeMode || 'dark';
         label.textContent = mode === 'auto'
             ? (isLight ? 'Авто · Светлая' : 'Авто · Тёмная')
-            : (isLight ? '' : '');
+            : (isLight ? 'Тёмная тема' : 'Светлая тема');
     }
 }
 
@@ -2398,15 +2425,27 @@ function applyThemeMode(mode, { silent = false, skipSave = false, respectOverrid
     }
 }
 
-function toggleTheme() {
-    if (UI_PREFS.themeMode === 'auto') {
-        const current = resolveTheme('auto');
-        const nextActual = current === 'light' ? 'dark' : 'light';
-        applyThemeMode('auto', { overrideTheme: nextActual });
-        return;
+// --- THEME & ACTIONS ---
+function setTheme(mode, savePref = true) {
+    const body = document.body;
+    // Новый ID кнопки: theme-toggle-btn
+    const icon = document.querySelector('#theme-toggle-btn i'); 
+    
+    if (mode === 'light') {
+        body.dataset.theme = 'light';
+        // Если светлая тема, показываем иконку луны для переключения на темную
+        icon.className = 'fa-solid fa-moon'; 
+        UI_PREFS.themeMode = 'light';
+    } else {
+        body.dataset.theme = 'dark';
+        // Если темная тема, показываем иконку солнца для переключения на светлую
+        icon.className = 'fa-solid fa-sun'; 
+        UI_PREFS.themeMode = 'dark';
     }
-    const next = UI_PREFS.themeMode === 'light' ? 'dark' : 'light';
-    applyThemeMode(next);
+    
+    if (savePref) {
+        save();
+    }
 }
 
 function initTheme() {
@@ -2749,7 +2788,7 @@ function updateLayoutEditButton() {
     const label = document.getElementById('layoutEditLabel');
     const cancelBtn = document.getElementById('layoutEditCancel');
     if (iconUse) iconUse.setAttribute('href', layoutEditMode ? '#icon-check' : '#icon-pen');
-    if (label) label.textContent = layoutEditMode ? 'Готово' : '';
+    if (label) label.textContent = layoutEditMode ? 'Готово' : 'Редактировать блоки';
     if (cancelBtn) cancelBtn.style.display = layoutEditMode ? 'flex' : 'none';
 }
 
@@ -5443,6 +5482,59 @@ function imp(f){
 }
 
 window.onload = init;
+
+
+// --- НОВАЯ ФУНКЦИЯ ДЛЯ СМЕНЫ ТЕМЫ ---
+function setTheme(mode, savePref = true) {
+    const body = document.body;
+    const icon = document.querySelector('#theme-toggle-btn i'); 
+    
+    if (mode === 'light') {
+        body.dataset.theme = 'light';
+        if (icon) icon.className = 'fa-solid fa-moon'; // Луна, чтобы переключиться на темную
+        UI_PREFS.themeMode = 'light';
+    } else {
+        body.dataset.theme = 'dark';
+        if (icon) icon.className = 'fa-solid fa-sun'; // Солнце, чтобы переключиться на светлую
+        UI_PREFS.themeMode = 'dark';
+    }
+    
+    if (savePref) {
+        save(); // Предполагается, что функция save() сохраняет UI_PREFS
+    }
+}// Вставьте этот блок в самом конце вашего <script> (после всех функций)
+
+// Привязка новых кнопок к функциям
+if (document.getElementById('theme-toggle-btn')) {
+    document.getElementById('theme-toggle-btn').onclick = () => {
+        const isDarkNow = document.body.dataset.theme === 'dark';
+        setTheme(isDarkNow ? 'light' : 'dark');
+    };
+}
+
+if (document.getElementById('settings-btn')) {
+    document.getElementById('settings-btn').onclick = () => {
+        // У вас в HTML было openSettings(), но вы хотите модальное окно, как в вашем коде.
+        // Я использую openSettingsModal(). Если у вас это не сработает, замените на openSettings()
+        openSettingsModal(); 
+    };
+}
+
+if (document.getElementById('edit-blocks-btn')) {
+    document.getElementById('edit-blocks-btn').onclick = () => {
+        // Новое поведение: открыть настройки сразу на вкладке "Блоки"
+        openSettingsModal();
+        const blocksTab = document.querySelector('.tabs-settings .tab[data-tab="blocks"]');
+        if (blocksTab) {
+            blocksTab.click();
+        }
+        
+        // ВАЖНО: Ваша старая кнопка вызывала toggleLayoutEditMode(). 
+        // Если вам все еще нужно запускать этот режим, раскомментируйте:
+        // toggleLayoutEditMode(); 
+    };
+}
+
 </script>
 </body>
 </html>
