@@ -1111,18 +1111,47 @@ td.date-cell + td.date-cell {
       </div>
     </div>
     <div style="display:flex;gap:15px;align-items:center">
-        <button id="themeToggle" onclick="toggleTheme()" aria-label="Переключить тему">
-            <svg class="btn-icon" id="themeToggleIcon"><use href="#icon-sun"/></svg>
-            <span class="btn-label" id="themeToggleLabel">Светлая тема</span>
-        </button>
-        <button id="layoutEditBtn" onclick="toggleLayoutEditMode()">
-            <svg class="btn-icon" id="layoutEditIcon"><use href="#icon-pen"/></svg>
-            <span class="btn-label" id="layoutEditLabel">Редактировать блоки</span>
-        </button>
-        <button id="layoutEditCancel" class="btn-ghost" style="display:none" onclick="cancelLayoutEditMode()">
-            <svg class="btn-icon"><use href="#icon-undo"/></svg>
-            <span class="btn-label">Отмена</span>
-        </button>
+
+<style>
+/* Для работы этого блока необходимы переменные из вашего CSS */
+:root{
+  --bg:#0d1117; /* Темный фон */
+  --text:#c9d1d9; /* Светлый текст (белый/светло-серый) */
+  --link-text:#58a6ff; /* Цвет для кнопок/ссылок */
+}
+
+/* Стиль контейнера для Трекера целей */
+.goal-tracker-header {
+  color: var(--text); /* Устанавливаем цвет текста в светлый */
+  background-color: var(--bg); /* Устанавливаем темный фон */
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px 0; /* Примерные отступы */
+}
+
+.goal-tracker-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* Стиль для метки 'New' */
+.goal-new-badge {
+  background-color: var(--link-text); /* Используем яркий цвет из темы */
+  color: var(--bg); /* Черный текст на ярком фоне для контраста */
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+</style>
+
+<div class="goal-tracker-header">
+    <div class="goal-tracker-title">Трекер целей</div>
+    <span class="goal-new-badge">New</span>
+</div>
+
+
         <button onclick="openSettings()" id="openSettingsBtn">
             <svg class="btn-icon"><use href="#icon-settings"/></svg>
             <span class="btn-label">Настройки</span>
