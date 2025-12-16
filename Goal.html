@@ -28,6 +28,7 @@
       --green: #22c55e;
       --celebrate-start: #facc15;
       --celebrate-end: #34d399;
+      --fav-gold: #fbbf24;
       
       /* Светлая тема для WARNING (Нейтральный стиль, как просили) */
       --warn-bg: var(--card-bg); 
@@ -299,9 +300,6 @@
       position: relative; 
     }
 
-    /* --- END TOOLTIP STYLE --- (УДАЛЕНО) */
-
-
     input, textarea, select {
       padding: 12px;
       border: 1px solid var(--border);
@@ -351,10 +349,22 @@
       border-radius: 16px;
       padding: 20px;
       background: var(--card-bg);
-      transition: transform .2s, box-shadow .2s, border-color .3s;
+      transition: transform .2s, box-shadow .2s, border-color .3s, opacity .2s;
       position: relative; /* Для позиционирования чекбокса */
       padding-left: 55px; /* Освобождаем место для чекбокса */
-      cursor: pointer;
+      cursor: grab; /* Курсор для перетаскивания */
+    }
+
+    .goal-card:active {
+        cursor: grabbing;
+    }
+    
+    /* Стили для перетаскиваемого элемента */
+    .goal-card.dragging {
+        opacity: 0.4;
+        border: 2px dashed var(--accent);
+        box-shadow: none;
+        background: var(--bg);
     }
     
     @media (max-width: 600px) {
@@ -429,6 +439,33 @@
     }
 
     .goal-header { display: flex; justify-content: space-between; align-items: start; gap: 10px; }
+    
+    .goal-title-wrapper {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    /* ЗВЕЗДОЧКА ИЗБРАННОГО */
+    .star-icon {
+        color: #cbd5e1; /* Серый по умолчанию */
+        font-size: 16px;
+        margin-top: 4px;
+        cursor: pointer;
+        transition: transform 0.2s, color 0.2s;
+    }
+    .star-icon:hover {
+        transform: scale(1.2);
+        color: var(--fav-gold);
+    }
+    .star-icon.active {
+        color: var(--fav-gold);
+    }
+    body[data-theme="dark"] .star-icon { color: #475569; }
+    body[data-theme="dark"] .star-icon:hover,
+    body[data-theme="dark"] .star-icon.active { color: var(--fav-gold); }
+
+
     .goal-title { font-size: 18px; font-weight: 700; line-height: 1.3; color: var(--text); }
 
     .goal-meta {
@@ -808,6 +845,7 @@
     <div class="tabs">
       <div class="tab active" data-filter="active">Активные <span class="count" id="active-count">0</span></div>
       <div class="tab" data-filter="done">Завершённые <span class="count" id="done-count">0</span></div>
+      <div class="tab" data-filter="favorite"><i class="fa-solid fa-star" style="color: #fbbf24;"></i> Избранное <span class="count" id="fav-count">0</span></div>
       <div class="tab" data-filter="all">Все цели <span class="count" id="total-count">0</span></div>
       <div class="tab" data-filter="trash">Корзина <span class="count" id="trash-count">0</span></div>
     </div>
@@ -1333,7 +1371,7 @@
         btnSelectAll.innerHTML = `<i class="fa-solid fa-list-check"></i> <span class="desktop-only">${selectedCount === visibleGoals.length && visibleGoals.length > 0 ? 'Снять выделение' : 'Выбрать все'}</span>`;
         actionBtnsContainer.appendChild(btnMultiRestore);
         actionBtnsContainer.appendChild(btnMultiFinalDelete);
-    } else if (filter === 'active' || filter === 'done' || filter === 'all') {
+    } else if (filter === 'active' || filter === 'done' || filter === 'all' || filter === 'favorite') {
         // Active/Done/All mode actions
         actionBtnsContainer.appendChild(btnSelectAll);
         btnSelectAll.innerHTML = `<i class="fa-solid fa-list-check"></i> <span class="desktop-only">${selectedCount === visibleGoals.length && visibleGoals.length > 0 ? 'Снять выделение' : 'Выбрать все'}</span>`;
@@ -1375,6 +1413,7 @@
             if (filter === 'active') return g.status === 'active';
             if (filter === 'done') return g.status === 'done';
             if (filter === 'trash') return g.status === 'trash';
+            if (filter === 'favorite') return g.isFavorite && g.status !== 'trash';
             if (filter === 'all') return g.status !== 'trash';
             return false;
           });
@@ -1466,6 +1505,25 @@
   }
   
   // --- END MULTI-SELECTION LOGIC ---
+  
+  // --- DRAG AND DROP LOGIC (Reordering) ---
+  
+  function reorderGoals(draggedId, targetId) {
+      // Find indices in the main DATA.goals array
+      const draggedIndex = DATA.goals.findIndex(g => g.id === draggedId);
+      const targetIndex = DATA.goals.findIndex(g => g.id === targetId);
+      
+      if (draggedIndex > -1 && targetIndex > -1) {
+          // Remove from old position
+          const [movedItem] = DATA.goals.splice(draggedIndex, 1);
+          // Insert at new position
+          DATA.goals.splice(targetIndex, 0, movedItem);
+          save();
+          render();
+      }
+  }
+
+  let draggedItem = null;
 
 
   function render() {
@@ -1478,6 +1536,7 @@
       if (filter === 'active') return g.status === 'active';
       if (filter === 'done') return g.status === 'done';
       if (filter === 'trash') return g.status === 'trash';
+      if (filter === 'favorite') return g.isFavorite && g.status !== 'trash';
       if (filter === 'all') return g.status !== 'trash';
       return false;
     });
@@ -1495,8 +1554,8 @@
     updateMultiActionBar(visible);
     updateCounts(); // Обновляем счетчики
 
-    
-    visible.sort((a,b) => (b.updatedAt || b.createdAt || '') .localeCompare(a.updatedAt || a.createdAt || ''));
+    // REMOVED SORTING BY DATE TO ALLOW MANUAL DRAG AND DROP ORDERING
+    // visible.sort((a,b) => (b.updatedAt || b.createdAt || '') .localeCompare(a.updatedAt || a.createdAt || ''));
     
     const isTrash = (filter === 'trash');
 
@@ -1538,6 +1597,9 @@
       el.className = `goal-card ${selectedGoalIds.has(g.id) ? 'selected' : ''} ${isTrash ? 'goal-card-trash' : ''} ${g.status === 'done' ? 'done' : ''}`;
       el.dataset.id = g.id; // Add data-id for easy access
       
+      // DRAG AND DROP ATTRIBUTES
+      el.setAttribute('draggable', 'true');
+      
       let controls = '';
       
       // ИСПОЛЬЗУЕМ ИСПРАВЛЕННУЮ ПЕРЕМЕННУЮ isTrash
@@ -1572,7 +1634,10 @@
         </div>
         <div class="goal-card-content">
             <div class="goal-header">
-                <div class="goal-title">${g.title}</div>
+                <div class="goal-title-wrapper">
+                   <i class="fa-${g.isFavorite ? 'solid' : 'regular'} fa-star star-icon ${g.isFavorite ? 'active' : ''}" data-act="fav" data-goal-id="${g.id}"></i>
+                   <div class="goal-title">${g.title}</div>
+                </div>
                 <div class="priority-badge ${pClass}">${pIcon} ${pText}</div>
             </div>
             <div class="goal-meta">
@@ -1611,6 +1676,30 @@
         </div>
       `;
       
+      // --- DRAG AND DROP EVENTS ---
+      el.addEventListener('dragstart', (e) => {
+         draggedItem = g;
+         el.classList.add('dragging');
+         e.dataTransfer.effectAllowed = 'move';
+      });
+
+      el.addEventListener('dragend', () => {
+         el.classList.remove('dragging');
+         draggedItem = null;
+      });
+
+      el.addEventListener('dragover', (e) => {
+         e.preventDefault(); // Necessary to allow dropping
+      });
+
+      el.addEventListener('drop', (e) => {
+         e.preventDefault();
+         if (draggedItem && draggedItem.id !== g.id) {
+             reorderGoals(draggedItem.id, g.id);
+         }
+      });
+      // --- END DRAG EVENTS ---
+
       // Attach single action listeners using data-goal-id
       el.querySelectorAll('[data-act]').forEach(btn => {
         btn.onclick = (e) => {
@@ -1621,6 +1710,13 @@
             const g = DATA.goals.find(x => x.id === goalId);
             
             if (!g) return;
+            
+            if (act === 'fav') {
+                g.isFavorite = !g.isFavorite;
+                g.updatedAt = nowISO();
+                save(); render();
+                showToast(g.isFavorite ? 'Добавлено в избранное' : 'Убрано из избранного');
+            }
 
             if (act === 'edit') openEditModal(goalId);
             if (act === 'progress') openProgressModal(goalId);
@@ -1716,6 +1812,7 @@
     const done = DATA.goals.filter(g => g.status === 'done');
     const trash = DATA.goals.filter(g => g.status === 'trash');
     const all = DATA.goals.filter(g => g.status !== 'trash');
+    const fav = DATA.goals.filter(g => g.isFavorite && g.status !== 'trash');
     
     // Общий прогресс (только для активных)
     const totalT = active.reduce((s,g) => s + safeParseNum(g.target), 0);
@@ -1728,6 +1825,7 @@
     document.getElementById('active-count').textContent = active.length;
     document.getElementById('done-count').textContent = done.length;
     document.getElementById('trash-count').textContent = trash.length;
+    document.getElementById('fav-count').textContent = fav.length;
     document.getElementById('total-count').textContent = all.length;
   }
 
@@ -1844,6 +1942,7 @@
       deadline: document.getElementById('g-deadline').value || null,
       notes: document.getElementById('g-notes').value.trim(),
       status: isDone ? 'done' : 'active', // Устанавливаем статус "done" если сразу достигнута
+      isFavorite: false, // Default favorite status
       createdAt: nowISO(),
       updatedAt: nowISO()
     };
@@ -1897,6 +1996,7 @@
           deadline: d.toISOString().slice(0,10),
           notes: rnd.note,
           status: isDone ? 'done' : 'active',
+          isFavorite: false,
           createdAt: nowISO(),
           updatedAt: nowISO()
         };
