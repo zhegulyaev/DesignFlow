@@ -1112,9 +1112,11 @@ td.date-cell + td.date-cell {
     </div>
     <div style="display:flex;gap:15px;align-items:center">
 
-<style>
-.header-btn {
-  display: flex;
+
+          <style>
+                .header-btn {
+  position: relative; /* Важно для позиционирования бейджика */
+  display: inline-flex;
   align-items: center;
   gap: 10px;
   padding: 10px 16px;
@@ -1130,39 +1132,50 @@ td.date-cell + td.date-cell {
   box-shadow: var(--shadow);
 }
 
-.header-btn:hover {
-  border-color: var(--accent);
-  background: rgba(124, 92, 255, 0.08);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(124, 92, 255, 0.15);
+/* Бейджик */
+.header-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ef4444; /* Красный, как у классических уведомлений */
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: background .3s;
 }
 
-.header-btn i {
-  font-size: 18px;
-  color: var(--accent);
+/* В светлой теме — чуть другой красный */
+body:not([data-theme="dark"]) .header-badge {
+  background: #dc2626;
 }
 
-.header-btn-text {
+/* Если бейджик = 0 — скрываем */
+.header-badge:empty,
+.header-badge[data-count="0"] {
   display: none;
-}
-
-@media (min-width: 768px) {
-  .header-btn-text {
-    display: inline;
-  }
-}
-
-/* Тёмная тема — чуть ярче ховер */
-body[data-theme="dark"] .header-btn:hover {
-  background: rgba(124, 92, 255, 0.15);
 }
 </style>
 
-      <!-- Кнопка "Трекер целей" с действием по клику -->
+
+
+
+
+<!-- Кнопка "Трекер целей" с бейджиком -->
 <button class="header-btn" onclick="window.location.href='Goal.html'" title="Трекер целей">
   <i class="fa-solid fa-bullseye"></i>
   <span class="header-btn-text">Трекер целей</span>
+  <!-- Бейджик с числом -->
+  <span class="header-badge" id="goalsBadge">3</span>
 </button>
+          
           
         <button onclick="openSettings()" id="openSettingsBtn">
             <svg class="btn-icon"><use href="#icon-settings"/></svg>
