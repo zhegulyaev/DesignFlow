@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DesignFlow Goals</title>
+  <style>
+    :root{
+    --bg:#0d1117;--card:#161b22;--card-alt:#0f141b;--text:#c9d1d9;--muted:#8b949e;--accent:#58a6ff;--green:#2ea043;--red:#da3633;
+    --gold:#d29922;--border:#30363d;--blue:#238636;--btn-blue:#2f81f7;--link-blue:#007bff;--purple:#a371f7;--btn-hover:#30363d;
+    --button-bg:#21262d;--row-hover:#1c2128;--table-border:#21262d;--input-bg:#21262d;--chart-bar-bg:#21262d;--date-hover-bg:#161b22;
+    --date-hover-border:#3a3f4b;--tab-hover:#30363d;--pill-bg:#1a1f26;--chip-bg:#121720;--link-go-bg:#1a1f26;--modal-overlay:rgba(0,0,0,0.7);
+    --date-focus-bg:#111722;--help-bg:#121720;--help-hover-bg:#1c2128;--help-border:rgba(255,255,255,0.12);--help-text:var(--muted);
+    --del-hover-bg:#1c2128;--del-hover-border:var(--border);
+    --progress-bg:linear-gradient(90deg,#11151c,#0b1017);
+    --progress-border:rgba(88,166,255,0.2);
+    --progress-shadow:inset 0 1px 0 rgba(255,255,255,0.04),0 0 0 1px rgba(15,20,27,0.65);
+    --progress-fill-start:#2ea043;
+    --progress-fill-end:#3fb950;
+    --progress-fill-shadow:0 0 14px rgba(46,160,67,0.3);
+    --record-bg:linear-gradient(90deg,#1c2128,#11151c);
+    --record-border:rgba(250,204,21,0.25);
+    --record-shadow:inset 0 1px 0 rgba(255,255,255,0.03);
+    --record-fill-start:#facc15;
+    --record-fill-end:#f9a825;
+    --record-fill-shadow:0 0 12px rgba(250,204,21,0.4);
+    --goal-pill-bg:linear-gradient(120deg,rgba(88,166,255,0.22),rgba(163,113,247,0.22));
+    --goal-pill-border:rgba(163,113,247,0.4);
+    --goal-pill-color:#dce7ff;
+    --goal-pill-shadow:0 4px 18px rgba(88,166,255,0.22);
+    --status-bg:var(--pill-bg);
+    --status-border:var(--border);
+    --status-text:var(--muted);
+  }
+
+    body[data-theme="dark"] {
+      --bg: #0b0f14;
+      --panel: #101826;
+      --panel2: #0f1724;
+      --text: #e9eef5;
+      --muted: #aab4c3;
+      --border: rgba(255,255,255,.08);
+      --accent: #7c5cff;
+      --good: #22c55e;
+      --warn: #f59e0b;
+      --bad: #ef4444;
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
+    }
+    body[data-theme="light"] {
+      --bg: #f6f7fb;
+      --panel: #ffffff;
+      --panel2: #f2f4f9;
+      --text: #0f172a;
+      --muted: #5b677a;
+      --border: rgba(15,23,42,.10);
+      --accent: #5b5cff;
+      --good: #16a34a;
+      --warn: #d97706;
+      --bad: #dc2626;
+      --shadow: 0 12px 30px rgba(15,23,42,.12);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .wrap{max-width:1100px;margin:0 auto;padding:18px;}
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:12px;padding:14px 16px;border:1px solid var(--border);
+      border-radius:16px;background:linear-gradient(180deg,var(--panel),var(--panel2));
+      box-shadow: var(--shadow);
+      position:sticky;top:12px;z-index:20;
+    }
+    .brand{display:flex;flex-direction:column;gap:2px;min-width:220px}
+    .brand .name{font-weight:800;letter-spacing:.3px}
+    .brand .sub{font-size:12px;color:var(--muted)}
+
+    .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+    .btn{
+      border:1px solid var(--border);background:transparent;color:var(--text);
+      padding:10px 12px;border-radius:12px;cursor:pointer;
+      display:inline-flex;gap:8px;align-items:center;
+      transition:transform .08s ease, background .12s ease, border-color .12s ease;
+      user-select:none;
+    }
+    .btn:hover{background:rgba(124,92,255,.08);border-color:rgba(124,92,255,.35)}
+    .btn:active{transform:translateY(1px)}
+    .btn.primary{background:rgba(124,92,255,.18);border-color:rgba(124,92,255,.45)}
+    .btn.danger{background:rgba(239,68,68,.10);border-color:rgba(239,68,68,.35)}
+    .pill{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid var(--border);color:var(--muted)}
+
+    .grid{display:grid;grid-template-columns: 1.15fr .85fr;gap:16px;margin-top:16px;}
+    @media (max-width: 960px){ .grid{grid-template-columns:1fr;} }
+
+    .card{
+      border:1px solid var(--border);border-radius:18px;background:linear-gradient(180deg,var(--panel),var(--panel2));
+      box-shadow: var(--shadow);padding:16px;
+    }
+    .card h2{margin:0 0 10px 0;font-size:16px}
+    .muted{color:var(--muted)}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .field{display:flex;flex-direction:column;gap:6px;flex:1;min-width:180px}
+    label{font-size:12px;color:var(--muted)}
+    input, textarea, select{
+      width:100%;
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--border);
+      color:var(--text);
+      padding:11px 12px;border-radius:12px;
+      outline:none;
+    }
+    body[data-theme="light"] input, body[data-theme="light"] textarea, body[data-theme="light"] select {
+      background: rgba(15,23,42,.04);
+    }
+    textarea{min-height:88px;resize:vertical}
+    .hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.35}
+
+    .list{display:flex;flex-direction:column;gap:12px}
+    .goal{
+      border:1px solid var(--border);border-radius:18px;padding:14px;
+      background:rgba(255,255,255,.02);
+    }
+    body[data-theme="light"] .goal{background: rgba(15,23,42,.03)}
+    .goal-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .goal-title{font-weight:800}
+    .goal-meta{font-size:12px;color:var(--muted);margin-top:4px}
+    .goal-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .bar{height:10px;border-radius:999px;border:1px solid var(--border);overflow:hidden;background:rgba(0,0,0,.15);margin-top:12px}
+    .bar > div{height:100%;background: rgba(124,92,255,.75);width:0%}
+    .nums{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--muted)}
+    .kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+    .kpi .k{border:1px solid var(--border);border-radius:14px;padding:10px;background:rgba(255,255,255,.02)}
+    body[data-theme="light"] .kpi .k{background: rgba(15,23,42,.03)}
+    .k .v{font-weight:800}
+    .k .t{font-size:12px;color:var(--muted);margin-top:2px}
+
+    .toast{
+      position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+      background:linear-gradient(180deg,var(--panel),var(--panel2));
+      border:1px solid var(--border);border-radius:16px;
+      box-shadow: var(--shadow);
+      padding:12px 12px;display:none;gap:10px;align-items:center;
+      z-index:50;
+      max-width:min(720px, calc(100vw - 24px));
+    }
+    .toast .msg{flex:1;color:var(--text)}
+  </style>
+</head>
+<body data-theme="dark">
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="name">DesignFlow Goals</div>
+        <div class="sub">Отдельная страница для целей. Всё сохраняется в твою базу DesignFlow.</div>
+      </div>
+      <div class="actions">
+        <span class="pill" id="stat-pill">—</span>
+        <button class="btn" id="btn-theme">Тема</button>
+        <button class="btn" id="btn-export">Скачать данные</button>
+        <button class="btn" id="btn-import">Импорт</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h2>Создать цель</h2>
+        <div class="row">
+          <div class="field" style="flex:1.6;min-width:240px">
+            <label>Название</label>
+            <input id="g-title" placeholder="Закрыть долг / накопить на поездку / дисциплина" />
+          </div>
+          <div class="field" style="max-width:180px">
+            <label>Единица</label>
+            <select id="g-unit">
+              <option value="₽">₽</option>
+              <option value="$">$</option>
+              <option value="KZT">KZT</option>
+              <option value="шт">шт</option>
+              <option value="ч">ч</option>
+              <option value="дней">дней</option>
+              <option value="раз">раз</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <div class="field">
+            <label>Цель (сколько нужно)</label>
+            <input id="g-target" placeholder="80000" inputmode="numeric" />
+          </div>
+          <div class="field">
+            <label>Уже есть (опционально)</label>
+            <input id="g-current" placeholder="0" inputmode="numeric" />
+          </div>
+          <div class="field">
+            <label>Дедлайн (опционально)</label>
+            <input id="g-deadline" type="date" />
+          </div>
+        </div>
+
+        <div class="field" style="margin-top:10px">
+          <label>Заметка</label>
+          <textarea id="g-notes" placeholder="Зачем эта цель, что будет считаться успехом, какие шаги…"></textarea>
+          <div class="hint">Подсказка: можно вести несколько целей параллельно. Прогресс обновляй кнопкой "Добавить прогресс" в карточке цели.</div>
+        </div>
+
+        <div class="row" style="margin-top:12px">
+          <button class="btn primary" id="btn-add">Добавить цель</button>
+          <button class="btn" id="btn-demo">Добавить демо</button>
+          <span class="muted" id="save-state">Сохранение: ок</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Цели</h2>
+        <div class="hint" style="margin-bottom:10px">Кнопки: прогресс, редактировать, завершить, удалить (с отменой).</div>
+        <div class="list" id="goals-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">
+    <div class="msg" id="toast-msg"></div>
+    <button class="btn" id="toast-action" style="display:none"></button>
+  </div>
+
+  <input type="file" id="file-import" accept="application/json" style="display:none" />
+
+<script>
+(() => {
+  // ==== DesignFlow storage compatibility ====
+  const K = 'grok_design_v5'; // совпадает с твоим сайтом
+  let DATA = { active:[], waiting:[], paused:[], archive:[], trash:[], goals:[] };
+  let UI_PREFS = { themeMode:'dark' };
+  let NAME_TEMPLATES = [];
+  let lastToastTimer = null;
+  let undoStack = null;
+
+  function nowISO() { return new Date().toISOString(); }
+
+  function safeParseNum(v) {
+    if (v == null) return 0;
+    const s = String(v).replace(/\s+/g,'').replace(',', '.');
+    const n = parseFloat(s);
+    return isFinite(n) ? n : 0;
+  }
+
+  function buildBackupSnapshot() {
+    return {
+      version: 2,
+      data: DATA,
+      uiPrefs: UI_PREFS,
+      nameTemplates: NAME_TEMPLATES,
+      theme: UI_PREFS.themeMode
+    };
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(K, JSON.stringify(buildBackupSnapshot()));
+      document.getElementById('save-state').textContent = 'Сохранение: ок';
+    } catch(e) {
+      console.error(e);
+      document.getElementById('save-state').textContent = 'Сохранение: ошибка';
+    }
+  }
+
+  function load() {
+    const exist = localStorage.getItem(K);
+    if (!exist) {
+      applyTheme(UI_PREFS.themeMode || 'dark', false);
+      save();
+      return;
+    }
+    try {
+      const parsed = JSON.parse(exist);
+      if (parsed && parsed.data) DATA = parsed.data;
+      else if (parsed) DATA = parsed;
+      UI_PREFS = parsed.uiPrefs || UI_PREFS;
+      NAME_TEMPLATES = parsed.nameTemplates || [];
+      if (!DATA.goals) DATA.goals = [];
+      const th = (parsed.theme || (parsed.uiPrefs && parsed.uiPrefs.themeMode) || UI_PREFS.themeMode || 'dark');
+      applyTheme(th, false);
+    } catch(e) {
+      console.error(e);
+      applyTheme('dark', false);
+    }
+  }
+
+  function applyTheme(mode, doSave=true) {
+    UI_PREFS.themeMode = (mode === 'light') ? 'light' : 'dark';
+    document.body.setAttribute('data-theme', UI_PREFS.themeMode);
+    if (doSave) save();
+  }
+
+  function toast(msg, actionText='', actionFn=null, ms=3500) {
+    const t = document.getElementById('toast');
+    const m = document.getElementById('toast-msg');
+    const b = document.getElementById('toast-action');
+    m.textContent = msg;
+    if (actionText && actionFn) {
+      b.textContent = actionText;
+      b.style.display = 'inline-flex';
+      b.onclick = () => { actionFn(); hideToast(); };
+    } else {
+      b.style.display = 'none';
+      b.onclick = null;
+    }
+    t.style.display = 'flex';
+    clearTimeout(lastToastTimer);
+    lastToastTimer = setTimeout(hideToast, ms);
+  }
+  function hideToast() {
+    document.getElementById('toast').style.display = 'none';
+  }
+
+  function fmt(n) {
+    const x = Math.round((n + Number.EPSILON) * 100) / 100;
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  }
+
+  function computePct(g) {
+    const target = Math.max(0, safeParseNum(g.target));
+    const current = Math.max(0, safeParseNum(g.current));
+    if (!target) return 0;
+    return Math.max(0, Math.min(100, (current / target) * 100));
+  }
+
+  function daysLeft(deadline) {
+    if (!deadline) return null;
+    const d = new Date(deadline + 'T23:59:59');
+    const diff = d - new Date();
+    return Math.ceil(diff / (1000*60*60*24));
+  }
+
+  function escapeHtml(s) {
+    return String(s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  }
+  function prettyTime(iso) {
+    if (!iso) return '—';
+    try {
+      const d = new Date(iso);
+      return d.toLocaleString('ru-RU', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+    } catch(e) {
+      return iso;
+    }
+  }
+
+  function render() {
+    const list = document.getElementById('goals-list');
+    list.innerHTML = '';
+    const goals = (DATA.goals || []).slice().sort((a,b) => (b.updatedAt||'').localeCompare(a.updatedAt||''));
+    const total = goals.length;
+    const done = goals.filter(g => g.status === 'done').length;
+    document.getElementById('stat-pill').textContent = `Всего целей: ${total} • Завершено: ${done}`;
+
+    goals.forEach(g => {
+      const pct = computePct(g);
+      const left = daysLeft(g.deadline);
+      const statusText = g.status === 'done' ? 'Завершено' : (left == null ? 'Без дедлайна' : (left < 0 ? 'Просрочено' : `Осталось: ${left} дн.`));
+      const unit = g.unit || '₽';
+      const target = safeParseNum(g.target);
+      const current = safeParseNum(g.current);
+
+      const el = document.createElement('div');
+      el.className = 'goal';
+
+      const notesHTML = g.notes ? `<div class="hint" style="margin-top:10px">${escapeHtml(g.notes)}</div>` : '';
+
+      el.innerHTML = `
+        <div class="goal-head">
+          <div>
+            <div class="goal-title">${escapeHtml(g.title || 'Без названия')}</div>
+            <div class="goal-meta">${escapeHtml(statusText)} • Обновлено: ${prettyTime(g.updatedAt || g.createdAt)}</div>
+          </div>
+          <div class="goal-actions">
+            <button class="btn" data-act="progress">+ Прогресс</button>
+            <button class="btn" data-act="edit">Редактировать</button>
+            <button class="btn" data-act="done">${g.status==='done'?'Вернуть':'Завершить'}</button>
+            <button class="btn danger" data-act="del">Удалить</button>
+          </div>
+        </div>
+
+        <div class="bar"><div style="width:${pct.toFixed(2)}%"></div></div>
+        <div class="nums">
+          <span>${fmt(current)} ${unit}</span>
+          <span>${fmt(target)} ${unit} • ${pct.toFixed(0)}%</span>
+        </div>
+
+        <div class="kpi">
+          <div class="k"><div class="v">${fmt(Math.max(0, target-current))} ${unit}</div><div class="t">Осталось добрать</div></div>
+          <div class="k"><div class="v">${g.deadline ? escapeHtml(g.deadline) : '—'}</div><div class="t">Дедлайн</div></div>
+          <div class="k"><div class="v">${escapeHtml(g.unit || '₽')}</div><div class="t">Единица</div></div>
+        </div>
+
+        ${notesHTML}
+      `;
+
+      el.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const act = btn.getAttribute('data-act');
+          if (act === 'progress') addProgress(g.id);
+          if (act === 'edit') editGoal(g.id);
+          if (act === 'done') toggleDone(g.id);
+          if (act === 'del') deleteGoal(g.id);
+        });
+      });
+
+      list.appendChild(el);
+    });
+
+    save(); // keep in sync with theme & goals
+  }
+
+  function newId() {
+    return 'g_' + Math.random().toString(16).slice(2) + '_' + Date.now().toString(16);
+  }
+
+  function addGoalFromForm() {
+    const title = document.getElementById('g-title').value.trim();
+    const unit = document.getElementById('g-unit').value;
+    const target = safeParseNum(document.getElementById('g-target').value);
+    const current = safeParseNum(document.getElementById('g-current').value);
+    const deadline = document.getElementById('g-deadline').value || '';
+    const notes = document.getElementById('g-notes').value.trim();
+
+    if (!title) return toast('Название цели пустое. Дай ей имя, чтобы мозг начал уважать задачу.');
+
+    const g = {
+      id: newId(),
+      title,
+      unit,
+      target: Math.max(0, target),
+      current: Math.max(0, current),
+      deadline,
+      notes,
+      status: 'active',
+      createdAt: nowISO(),
+      updatedAt: nowISO(),
+      history: []
+    };
+    DATA.goals = DATA.goals || [];
+    DATA.goals.push(g);
+    save();
+    render();
+    toast('Цель добавлена. Теперь можно добивать её по шагам.');
+
+    document.getElementById('g-title').value='';
+    document.getElementById('g-target').value='';
+    document.getElementById('g-current').value='';
+    document.getElementById('g-deadline').value='';
+    document.getElementById('g-notes').value='';
+  }
+
+  function findGoal(id) {
+    return (DATA.goals || []).find(g => g.id === id);
+  }
+
+  function addProgress(id) {
+    const g = findGoal(id);
+    if (!g) return;
+    const add = prompt('Сколько добавить к прогрессу? (можно минус, если откат)', '1000');
+    if (add === null) return;
+    const delta = safeParseNum(add);
+    g.current = Math.max(0, safeParseNum(g.current) + delta);
+    g.updatedAt = nowISO();
+    g.history = g.history || [];
+    g.history.push({ at: g.updatedAt, delta });
+    save();
+    render();
+    toast('Прогресс обновлён. Неплохо.');
+  }
+
+  function editGoal(id) {
+    const g = findGoal(id);
+    if (!g) return;
+    const title = prompt('Название цели', g.title || '');
+    if (title === null) return;
+    const target = prompt('Цель (число)', String(g.target ?? '0'));
+    if (target === null) return;
+    const unit = prompt('Единица (например ₽ / $ / KZT / ч)', g.unit || '₽');
+    if (unit === null) return;
+    const deadline = prompt('Дедлайн (YYYY-MM-DD) или пусто', g.deadline || '');
+    if (deadline === null) return;
+    const notes = prompt('Заметка (можно коротко)', g.notes || '');
+    if (notes === null) return;
+
+    g.title = title.trim() || g.title;
+    g.target = Math.max(0, safeParseNum(target));
+    g.unit = (unit || g.unit || '₽').trim();
+    g.deadline = (deadline || '').trim();
+    g.notes = (notes || '').trim();
+    g.updatedAt = nowISO();
+    save();
+    render();
+    toast('Цель обновлена.');
+  }
+
+  function toggleDone(id) {
+    const g = findGoal(id);
+    if (!g) return;
+    g.status = (g.status === 'done') ? 'active' : 'done';
+    g.updatedAt = nowISO();
+    save();
+    render();
+    toast(g.status === 'done' ? 'Завершено. Запиши себе +XP.' : 'Вернул в активные.');
+  }
+
+  function deleteGoal(id) {
+    const goals = DATA.goals || [];
+    const idx = goals.findIndex(g => g.id === id);
+    if (idx < 0) return;
+    const removed = goals.splice(idx, 1)[0];
+    DATA.goals = goals;
+    save();
+    render();
+    undoStack = removed;
+    toast('Цель удалена.', 'Отмена', () => {
+      if (!undoStack) return;
+      DATA.goals.push(undoStack);
+      undoStack = null;
+      save();
+      render();
+      toast('Вернул.');
+    }, 4500);
+  }
+
+  function exportJSON() {
+    const snap = buildBackupSnapshot();
+    const blob = new Blob([JSON.stringify(snap, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'designflow-goals-export.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function importJSON(file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(reader.result);
+        if (parsed.data) DATA = parsed.data;
+        else DATA = parsed;
+        UI_PREFS = parsed.uiPrefs || UI_PREFS;
+        NAME_TEMPLATES = parsed.nameTemplates || NAME_TEMPLATES;
+        if (!DATA.goals) DATA.goals = [];
+        save();
+        applyTheme(UI_PREFS.themeMode || 'dark', false);
+        render();
+        toast('Импорт выполнен.');
+      } catch(e) {
+        console.error(e);
+        toast('Не получилось импортировать JSON. Проверь файл.');
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function addDemo() {
+    const demo = {
+      id: newId(),
+      title: 'Накопить 80 000 ₽ за 10 дней',
+      unit: '₽',
+      target: 80000,
+      current: 0,
+      deadline: '',
+      notes: 'Спринт: каждый день закрываю 1-2 задачи на деньги. Без романтики, только результат.',
+      status: 'active',
+      createdAt: nowISO(),
+      updatedAt: nowISO(),
+      history: []
+    };
+    DATA.goals = DATA.goals || [];
+    DATA.goals.push(demo);
+    save();
+    render();
+    toast('Демо-цель добавлена.');
+  }
+
+  document.getElementById('btn-add').addEventListener('click', addGoalFromForm);
+  document.getElementById('btn-demo').addEventListener('click', addDemo);
+  document.getElementById('btn-theme').addEventListener('click', () => {
+    applyTheme(document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    render();
+  });
+  document.getElementById('btn-export').addEventListener('click', exportJSON);
+  document.getElementById('btn-import').addEventListener('click', () => document.getElementById('file-import').click());
+  document.getElementById('file-import').addEventListener('change', (e) => {
+    const f = e.target.files && e.target.files[0];
+    if (f) importJSON(f);
+    e.target.value = '';
+  });
+
+  load();
+  render();
+})();
+</script>
+</body>
+</html>
