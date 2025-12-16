@@ -287,57 +287,7 @@
       position: relative; 
     }
 
-    /* --- TOOLTIP STYLE (Для info-icon) --- */
-    .info-icon {
-      color: #cbd5e1;
-      margin-left: 6px;
-      font-size: 14px;
-      cursor: help;
-      position: relative;
-      transition: color .2s;
-      /* УЛУЧШЕНИЕ: Расширяем область наведения для устранения мерцания */
-      padding: 4px; 
-      margin: -4px 0 -4px 2px;
-    }
-    .info-icon:hover { color: var(--accent); }
-    
-    .info-icon[title]:hover::after {
-        content: attr(title);
-        position: absolute;
-        bottom: 100%;
-        left: 50%;
-        transform: translateX(-50%) translateY(-5px);
-        background: #334155;
-        color: #fff;
-        padding: 6px 10px;
-        border-radius: 6px;
-        font-size: 12px; /* Измененный размер */
-        font-weight: 500; /* Измененный вес (обычный) */
-        white-space: nowrap;
-        z-index: 10;
-        pointer-events: none;
-        opacity: 1;
-        transition: opacity 0.1s;
-    }
-    .info-icon[title]:hover::before {
-        content: '';
-        position: absolute;
-        bottom: 100%;
-        left: 50%;
-        transform: translateX(-50%) translateY(3px);
-        width: 0;
-        height: 0;
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-top: 5px solid #334155;
-        z-index: 10;
-        pointer-events: none;
-        opacity: 1;
-        transition: opacity 0.1s;
-    }
-    
-    .info-icon[title] { title: ''; }
-    /* --- END TOOLTIP STYLE --- */
+    /* --- END TOOLTIP STYLE --- (УДАЛЕНО) */
 
 
     input, textarea, select {
@@ -390,9 +340,50 @@
       padding: 20px;
       background: var(--card-bg);
       transition: transform .2s, box-shadow .2s;
+      position: relative; /* Для позиционирования чекбокса */
+      padding-left: 55px; /* Освобождаем место для чекбокса */
+      cursor: pointer;
     }
     
     .goal-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
+    
+    /* Индикатор выбора на карточке */
+    .goal-card.selected {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px rgba(124, 92, 255, 0.2), var(--shadow);
+    }
+    
+    .goal-card-content {
+        /* Вся внутренняя разметка цели */
+        position: relative; 
+        z-index: 1;
+    }
+    
+    .goal-checkbox-wrapper {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 2; /* Чекбокс должен быть кликабелен */
+        height: 18px;
+    }
+    
+    /* Стиль для самого чекбокса, чтобы он выглядел аккуратно */
+    .goal-select-checkbox {
+      margin: 0;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      flex-shrink: 0;
+      accent-color: var(--accent); /* Цвет при выборе */
+    }
+    
+    body[data-theme="dark"] .goal-select-checkbox {
+        background: #0f172a;
+        border-color: #475569;
+    }
 
     .goal-header { display: flex; justify-content: space-between; align-items: start; gap: 10px; }
     .goal-title { font-size: 18px; font-weight: 700; line-height: 1.3; color: var(--text); }
@@ -545,7 +536,32 @@
         letter-spacing: 0.2px;
     }
     /* КОНЕЦ УЛУЧШЕННЫХ СТИЛЕЙ KPI */
-
+    
+    /* --- MULTI-SELECT MODE STYLES --- */
+    /* Панель массовых действий */
+    .multi-action-bar {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px 20px;
+        margin-bottom: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        box-shadow: var(--shadow);
+    }
+    .multi-action-text {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-muted);
+    }
+    .multi-action-btns {
+        display: flex;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+    
     /* --- TOAST & MODAL --- */
     .toast {
       position: fixed;
@@ -637,6 +653,30 @@
         .warning-actions .btn {
             flex: 1;
         }
+        
+        .goal-card {
+            padding-left: 20px; /* Убираем отступ для чекбокса, в мобильной версии будет некрасиво */
+        }
+        .goal-checkbox-wrapper {
+            top: 15px; /* Сдвигаем чекбокс в угол */
+            right: 15px;
+            left: auto;
+        }
+        
+        /* Скрываем текст кнопок действий в мобильной версии */
+        .desktop-only { display: none; }
+        .multi-action-btns .btn {
+            font-size: 0;
+            padding: 8px 12px;
+        }
+        .multi-action-btns .btn i {
+            font-size: 14px;
+            margin: 0;
+        }
+    }
+    
+    @media (min-width: 601px) {
+        .desktop-only { display: inline; }
     }
   </style>
 </head>
@@ -691,18 +731,18 @@
       <h2><i class="fa-solid fa-square-plus"></i> Создать цель</h2>
       
       <div class="field">
-        <label>Название <i class="fa-regular fa-circle-question info-icon" title="Краткое и лаконичное название вашей финансовой или личной цели (например: Отпуск в Европе, Новый MacBook Pro)"></i></label>
+        <label>Название</label>
         <input id="g-title" placeholder="Например: Новый MacBook" />
       </div>
 
       <div class="form-row">
         <div class="field">
-          <label>Сумма <i class="fa-regular fa-circle-question info-icon" title="Общая целевая сумма, которую необходимо накопить для достижения цели. Используйте только числа, можно с суффиксом 'к' (например, '100к')."></i></label>
-          <input id="g-target" placeholder="100 000 или 100к" inputmode="text" />
+          <label>Сумма</label>
+          <input id="g-target" placeholder="100 000 или 100к" inputmode="numeric" />
         </div>
         <div class="field">
-          <label>Есть <i class="fa-regular fa-circle-question info-icon" title="Сумма, которую вы уже накопили или имеете на данный момент. Можно использовать 'к'."></i></label>
-          <input id="g-current" placeholder="0 или 10к" inputmode="text" />
+          <label>Есть</label>
+          <input id="g-current" placeholder="0 или 50к" inputmode="numeric" />
         </div>
       </div>
 
@@ -722,7 +762,7 @@
       </div>
       
       <div class="field">
-        <label>Шаблон срока <i class="fa-regular fa-circle-question info-icon" title="Используйте быстрые шаблоны (неделя, месяц), чтобы автоматически рассчитать и установить дату в поле 'Дедлайн'."></i></label>
+        <label>Шаблон срока</label>
         <select id="g-template">
           <option value="">Выбрать быстрый срок...</option>
           <option value="7">Через неделю (7 дн.)</option>
@@ -752,7 +792,15 @@
         <div class="progress-bar" style="margin-top:0"><div class="progress-fill" id="overall-progress" style="width:0%"></div></div>
         <div style="font-size:13px; color:var(--text-muted); text-align:right; margin-top:8px;" id="overall-text">0%</div>
       </div>
-
+      
+      <div class="multi-action-bar" id="multi-action-bar" style="display: none;">
+          <div class="multi-action-text" id="multi-action-text">Выбрано: 0</div>
+          <div class="multi-action-btns">
+              <button class="btn secondary" id="btn-select-all"><i class="fa-solid fa-list-check"></i> <span class="desktop-only">Выбрать все</span></button>
+              <button class="btn" id="btn-multi-done" title="Завершить"><i class="fa-solid fa-check"></i> <span class="desktop-only">Готово</span></button>
+              <button class="btn danger" id="btn-multi-trash" title="В корзину"><i class="fa-regular fa-trash-can"></i> <span class="desktop-only">В корзину</span></button>
+          </div>
+      </div>
       <div class="goal-list" id="goals-list"></div>
     </div>
   </div>
@@ -781,11 +829,11 @@
         <div class="form-row">
           <div class="field">
             <label>Сумма</label>
-            <input id="edit-target" inputmode="text" />
+            <input id="edit-target" inputmode="numeric" placeholder="100 000 или 100к" />
           </div>
           <div class="field">
             <label>Есть сейчас</label>
-            <input id="edit-current" inputmode="text" />
+            <input id="edit-current" inputmode="numeric" placeholder="0 или 50к" />
           </div>
         </div>
         <div class="form-row">
@@ -835,7 +883,7 @@
       <div class="modal-body">
         <div class="field">
           <label>Сумма операции</label>
-          <input id="progress-amount" placeholder="5 000 или 5к" inputmode="text" autofocus />
+          <input id="progress-amount" placeholder="5 000 или 5к" inputmode="numeric" autofocus />
         </div>
       </div>
       <div class="modal-actions" style="justify-content: space-between;">
@@ -872,6 +920,28 @@
   const toastMessage = document.getElementById('toast-message');
   
   let confirmAction = null;
+  
+  // NEW: Multi-selection state and elements
+  let selectedGoalIds = new Set();
+  const multiActionBar = document.getElementById('multi-action-bar');
+  const multiActionText = document.getElementById('multi-action-text');
+  const btnSelectAll = document.getElementById('btn-select-all');
+  const btnMultiDone = document.getElementById('btn-multi-done');
+  const btnMultiTrash = document.getElementById('btn-multi-trash');
+  
+  // New buttons for trash mode (created once to use in updateMultiActionBar)
+  const btnMultiRestore = document.createElement('button');
+  btnMultiRestore.className = 'btn';
+  btnMultiRestore.innerHTML = '<i class="fa-solid fa-rotate-left"></i> <span class="desktop-only">Восстановить</span>';
+  btnMultiRestore.title = 'Восстановить';
+  btnMultiRestore.id = 'btn-multi-restore';
+
+  const btnMultiFinalDelete = document.createElement('button');
+  btnMultiFinalDelete.className = 'btn danger';
+  btnMultiFinalDelete.innerHTML = '<i class="fa-solid fa-ban"></i> <span class="desktop-only">Удалить навсегда</span>';
+  btnMultiFinalDelete.title = 'Удалить навсегда';
+  btnMultiFinalDelete.id = 'btn-multi-final-delete';
+
 
   function showToast(msg) {
     toastMessage.textContent = msg;
@@ -881,68 +951,49 @@
 
   function nowISO() { return new Date().toISOString(); }
 
-  // ОБНОВЛЕНО: Добавлена поддержка суффикса 'к' или 'k' для тысяч
   function safeParseNum(v) {
     if (!v) return 0;
-    let s = String(v).toLowerCase().trim();
-    
-    // Добавляем поддержку "к" (кириллица) или "k" (латиница) для обозначения тысяч
-    if (s.endsWith('к') || s.endsWith('k')) {
-        s = s.slice(0, -1) + '000';
-    }
-    
     // Очистка от пробелов и замена запятой на точку для корректного parseFloat
-    return parseFloat(s.replace(/\s+/g, '').replace(/,/g, '.')) || 0;
+    // Добавлена обработка суффиксов 'к' и 'k'
+    let str = String(v).replace(/\s+/g, '').replace(/,/g, '.').toLowerCase();
+    let multiplier = 1;
+    if (str.endsWith('к') || str.endsWith('k')) {
+        str = str.slice(0, -1);
+        multiplier = 1000;
+    }
+    return (parseFloat(str) || 0) * multiplier;
+  }
+  
+  // Удаляем форматирование oninput, но оставляем onblur
+  function formatInput(e) {
+    let val = e.target.value.replace(/\s+/g, '');
+    if (!isNaN(val) && val !== '') {
+      e.target.value = Number(val).toLocaleString('ru-RU');
+    }
+  }
+
+  function handleBlurFormatting(e) {
+    let val = e.target.value;
+    const num = safeParseNum(val);
+    e.target.value = fmt(num);
   }
 
   function fmt(n) {
-    // Приведение к целому числу, если оно введено без копеек, чтобы избежать .00
     const num = safeParseNum(n);
     return Math.round(num).toLocaleString('ru-RU');
   }
 
-  function formatInput(e) {
-    // Вводим форматирование только если нет 'к' или 'k', чтобы не мешать вводу тысяч
-    const val = e.target.value.toLowerCase();
-    if (val.endsWith('к') || val.endsWith('k')) return;
-    
-    let cleanedVal = e.target.value.replace(/\s+/g, '').replace(/,/g, '.');
-    if (!isNaN(cleanedVal) && cleanedVal !== '') {
-        // Используем safeParseNum для преобразования, затем форматируем
-        e.target.value = Number(safeParseNum(e.target.value)).toLocaleString('ru-RU');
-    }
-  }
-
   ['g-target', 'g-current', 'edit-target', 'edit-current', 'progress-amount'].forEach(id => {
     const el = document.getElementById(id);
-    // Для полей g-target/g-current и edit-target/edit-current используем событие 'blur' 
-    // для форматирования после того, как пользователь закончил ввод
-    if (el) el.addEventListener('blur', formatInput);
-  });
-  
-  // Дополнительно: для поля прогресса форматирование по input, чтобы пользователь видел результат
-  document.getElementById('progress-amount')?.addEventListener('input', (e) => {
-    // Эта функция будет выполняться только для progress-amount
-    const val = e.target.value.toLowerCase();
-    if (val.endsWith('к') || val.endsWith('k')) {
-        // Если в конце 'к', не форматируем, чтобы пользователь мог завершить ввод (например, '10к')
-        return;
-    }
-    // Используем safeParseNum, чтобы получить числовое значение, и сразу же форматируем его
-    const numValue = safeParseNum(e.target.value);
-    if (numValue > 0) {
-        // Удаляем пробелы перед форматированием, чтобы избежать двойных разделителей
-        const caretPos = e.target.selectionStart;
-        e.target.value = numValue.toLocaleString('ru-RU');
-        // Попытка сохранить позицию курсора (упрощенная)
-        if (caretPos !== null) {
-             e.target.selectionEnd = caretPos;
-        }
-    } else if (e.target.value === '') {
-        e.target.value = ''; // Очистка, если ввод пуст
+    if (el) {
+        // Устанавливаем форматирование по потере фокуса (onblur)
+        el.addEventListener('blur', handleBlurFormatting);
+        // Добавляем очистку ввода для тех, кто использует 'к' на oninput, чтобы не сбивать курсор
+        el.addEventListener('input', (e) => {
+             e.target.value = e.target.value.replace(/[^\d\s\.\,\к\k]/g, '');
+        });
     }
   });
-
 
   function setupDateTemplate(selectId, customGroup, customInputId, dateInputId) {
     const select = document.getElementById(selectId);
@@ -1098,6 +1149,160 @@
       confirmAction = null;
   };
 
+  // --- NEW: MULTI-SELECTION LOGIC ---
+
+  function updateMultiActionBar(visibleGoals) {
+    const selectedCount = selectedGoalIds.size;
+    
+    // Manage visibility
+    multiActionBar.style.display = selectedCount > 0 ? 'flex' : 'none';
+    multiActionText.textContent = `Выбрано: ${selectedCount}`;
+    
+    const actionBtnsContainer = multiActionBar.querySelector('.multi-action-btns');
+    actionBtnsContainer.innerHTML = ''; // Clear previous buttons
+    
+    const filter = document.querySelector('.tab.active').dataset.filter;
+    
+    if (filter === 'trash') {
+        // Trash mode actions
+        actionBtnsContainer.appendChild(btnSelectAll);
+        btnSelectAll.innerHTML = `<i class="fa-solid fa-list-check"></i> <span class="desktop-only">${selectedCount === visibleGoals.length && visibleGoals.length > 0 ? 'Снять выделение' : 'Выбрать все'}</span>`;
+        actionBtnsContainer.appendChild(btnMultiRestore);
+        actionBtnsContainer.appendChild(btnMultiFinalDelete);
+    } else if (filter === 'active' || filter === 'done' || filter === 'all') {
+        // Active/Done/All mode actions
+        actionBtnsContainer.appendChild(btnSelectAll);
+        btnSelectAll.innerHTML = `<i class="fa-solid fa-list-check"></i> <span class="desktop-only">${selectedCount === visibleGoals.length && visibleGoals.length > 0 ? 'Снять выделение' : 'Выбрать все'}</span>`;
+
+        // Check the status of selected goals to determine which button to show for completion
+        const selected = DATA.goals.filter(g => selectedGoalIds.has(g.id));
+        const allSelectedAreDone = selected.every(g => g.status === 'done');
+        
+        btnMultiDone.innerHTML = allSelectedAreDone 
+            ? '<i class="fa-solid fa-rotate-left"></i> <span class="desktop-only">Вернуть</span>'
+            : '<i class="fa-solid fa-check"></i> <span class="desktop-only">Готово</span>';
+            
+        btnMultiDone.title = allSelectedAreDone ? 'Вернуть в работу' : 'Завершить';
+        
+        actionBtnsContainer.appendChild(btnMultiDone);
+        actionBtnsContainer.appendChild(btnMultiTrash);
+    }
+  }
+  
+  function toggleSelection(goalId) {
+    if (selectedGoalIds.has(goalId)) {
+        selectedGoalIds.delete(goalId);
+    } else {
+        selectedGoalIds.add(goalId);
+    }
+    // Re-render to update the selected class and action bar
+    render(); 
+  }
+  
+  function getSelectedGoals() {
+      return DATA.goals.filter(g => selectedGoalIds.has(g.id));
+  }
+  
+  // Select/Deselect All
+  if(btnSelectAll) {
+      btnSelectAll.onclick = () => {
+          const filter = document.querySelector('.tab.active').dataset.filter;
+          const visibleGoals = DATA.goals.filter(g => {
+            if (filter === 'active') return g.status === 'active';
+            if (filter === 'done') return g.status === 'done';
+            if (filter === 'trash') return g.status === 'trash';
+            if (filter === 'all') return g.status !== 'trash';
+            return false;
+          });
+          
+          if (selectedGoalIds.size === visibleGoals.length && visibleGoals.length > 0) {
+              selectedGoalIds.clear(); // Deselect all
+              showToast('Выделение снято');
+          } else {
+              selectedGoalIds.clear(); // Ensure clear first
+              visibleGoals.forEach(g => selectedGoalIds.add(g.id)); // Select all
+              showToast(`Выбрано ${visibleGoals.length} целей`);
+          }
+          render();
+      };
+  }
+
+  // Bulk Done / Restore (from done)
+  if(btnMultiDone) {
+      btnMultiDone.onclick = () => {
+          const selected = getSelectedGoals();
+          if (selected.length === 0) return showToast('Сначала выберите цели!');
+          
+          const allDone = selected.every(g => g.status === 'done');
+          const newStatus = allDone ? 'active' : 'done';
+          const actionText = allDone ? 'вернуть в работу' : 'завершить';
+          
+          openConfirmModal(`Вы действительно хотите ${actionText} ${selected.length} целей?`, () => {
+              selected.forEach(g => {
+                  g.status = newStatus;
+                  g.updatedAt = nowISO();
+              });
+              selectedGoalIds.clear();
+              save(); render();
+              showToast(newStatus === 'done' ? `Выполнено ${selected.length} целей!` : `Восстановлено ${selected.length} целей!`);
+          });
+      };
+  }
+
+  // Bulk Trash
+  if(btnMultiTrash) {
+      btnMultiTrash.onclick = () => {
+          const selected = getSelectedGoals();
+          if (selected.length === 0) return showToast('Сначала выберите цели!');
+          
+          openConfirmModal(`Переместить ${selected.length} целей в корзину?`, () => {
+              selected.forEach(g => {
+                  g.status = 'trash';
+                  g.updatedAt = nowISO();
+              });
+              selectedGoalIds.clear();
+              save(); render();
+              showToast(`В корзину перемещено ${selected.length} целей`);
+          });
+      };
+  }
+  
+  // Bulk Restore (from trash)
+  if(btnMultiRestore) {
+      btnMultiRestore.onclick = () => {
+          const selected = getSelectedGoals();
+          if (selected.length === 0) return showToast('Сначала выберите цели!');
+          
+          openConfirmModal(`Восстановить ${selected.length} целей из корзины?`, () => {
+              selected.forEach(g => {
+                  g.status = 'active';
+                  g.updatedAt = nowISO();
+              });
+              selectedGoalIds.clear();
+              save(); render();
+              showToast(`Восстановлено ${selected.length} целей`);
+          });
+      };
+  }
+
+  // Bulk Final Delete (from trash)
+  if(btnMultiFinalDelete) {
+      btnMultiFinalDelete.onclick = () => {
+          const selected = getSelectedGoals();
+          if (selected.length === 0) return showToast('Сначала выберите цели!');
+          
+          openConfirmModal(`Удалить ${selected.length} целей безвозвратно?`, () => {
+              const idsToDelete = Array.from(selectedGoalIds);
+              DATA.goals = DATA.goals.filter(g => !idsToDelete.includes(g.id));
+              selectedGoalIds.clear();
+              save(); render();
+              showToast(`Удалено навсегда ${selected.length} целей`);
+          }, true);
+      };
+  }
+  
+  // --- END MULTI-SELECTION LOGIC ---
+
 
   function render() {
     const list = document.getElementById('goals-list');
@@ -1110,12 +1315,18 @@
       if (filter === 'done') return g.status === 'done';
       if (filter === 'trash') return g.status === 'trash';
       if (filter === 'all') return g.status !== 'trash';
-      return true; // Should not happen, but for safety
+      return false;
     });
 
     if (visible.length === 0) {
       list.innerHTML = `<div class="empty-message"><i class="fa-regular fa-folder-open"></i><span>Список пуст</span></div>`;
+      selectedGoalIds.clear(); // Clear selection if the list is empty
+      updateMultiActionBar(visible);
+      return; // Exit render early
     }
+    
+    // NEW: Update multi-action bar here before rendering cards
+    updateMultiActionBar(visible);
 
     const active = DATA.goals.filter(g => g.status === 'active');
     const totalT = active.reduce((s,g) => s + safeParseNum(g.target), 0);
@@ -1132,7 +1343,6 @@
 
     visible.sort((a,b) => (b.updatedAt || b.createdAt || '') .localeCompare(a.updatedAt || a.createdAt || ''));
     
-    // ОПРЕДЕЛЯЕМ ПЕРЕМЕННУЮ ЗДЕСЬ, ЧТОБЫ ИСПРАВИТЬ ОШИБКУ РЕНДЕРИНГА
     const isTrash = (filter === 'trash');
 
     visible.forEach(g => {
@@ -1167,7 +1377,8 @@
 
 
       const el = document.createElement('div');
-      el.className = 'goal-card';
+      el.className = `goal-card ${selectedGoalIds.has(g.id) ? 'selected' : ''} ${isTrash ? 'goal-card-trash' : ''}`;
+      el.dataset.id = g.id; // Add data-id for easy access
       
       let controls = '';
       
@@ -1175,73 +1386,84 @@
       if (!isTrash) {
           controls = `
             <div class="quick-add">
-                <div class="quick-btn" data-add="1000">+ 1к</div>
-                <div class="quick-btn" data-add="5000">+ 5к</div>
-                <div class="quick-btn" data-add="10000">+ 10к</div>
-                <div class="quick-btn" data-act="progress"><i class="fa-solid fa-right-left"></i> +/-</div>
+                <div class="quick-btn" data-add="1000" data-goal-id="${g.id}">+ 1к</div>
+                <div class="quick-btn" data-add="5000" data-goal-id="${g.id}">+ 5к</div>
+                <div class="quick-btn" data-add="10000" data-goal-id="${g.id}">+ 10к</div>
+                <button class="quick-btn" data-act="progress" data-goal-id="${g.id}" style="flex-basis: 50px;"><i class="fa-solid fa-right-left"></i> +/-</button>
             </div>
             <div class="actions-row">
-                <button class="action-icon-btn" data-act="edit"><i class="fa-solid fa-pen"></i> Редактировать</button>
-                <button class="action-icon-btn" data-act="done">
-                    ${g.status === 'done' ? '<i class="fa-solid fa-rotate-left"></i> Вернуть' : '<i class="fa-solid fa-check"></i> Готово'}
+                <button class="action-icon-btn" data-act="edit" data-goal-id="${g.id}"><i class="fa-solid fa-pen"></i> <span class="desktop-only">Редактировать</span></button>
+                <button class="action-icon-btn" data-act="done" data-goal-id="${g.id}">
+                    ${g.status === 'done' ? '<i class="fa-solid fa-rotate-left"></i> <span class="desktop-only">Вернуть</span>' : '<i class="fa-solid fa-check"></i> <span class="desktop-only">Готово</span>'}
                 </button>
-                <button class="action-icon-btn delete" data-act="del" style="margin-left:auto"><i class="fa-regular fa-trash-can"></i> В корзину</button>
+                <button class="action-icon-btn delete" data-act="del" data-goal-id="${g.id}" style="margin-left:auto"><i class="fa-regular fa-trash-can"></i> <span class="desktop-only">В корзину</span></button>
             </div>
           `;
       } else {
           controls = `
              <div class="actions-row">
-                <button class="action-icon-btn" data-act="restore"><i class="fa-solid fa-rotate-left"></i> Восстановить</button>
-                <button class="action-icon-btn delete" data-act="del-final" style="margin-left:auto"><i class="fa-solid fa-ban"></i> Удалить навсегда</button>
+                <button class="action-icon-btn" data-act="restore" data-goal-id="${g.id}"><i class="fa-solid fa-rotate-left"></i> <span class="desktop-only">Восстановить</span></button>
+                <button class="action-icon-btn delete" data-act="del-final" data-goal-id="${g.id}" style="margin-left:auto"><i class="fa-solid fa-ban"></i> <span class="desktop-only">Удалить навсегда</span></button>
             </div>
           `;
       }
 
       el.innerHTML = `
-        <div class="goal-header">
-            <div class="goal-title">${g.title}</div>
-            <div class="priority-badge ${pClass}">${pIcon} ${pText}</div>
+        <div class="goal-checkbox-wrapper">
+             <input type="checkbox" class="goal-select-checkbox" data-id="${g.id}" ${selectedGoalIds.has(g.id) ? 'checked' : ''}>
         </div>
-        <div class="goal-meta">
-          <i class="fa-regular fa-clock"></i> ${deadlineText}
-        </div>
+        <div class="goal-card-content">
+            <div class="goal-header">
+                <div class="goal-title">${g.title}</div>
+                <div class="priority-badge ${pClass}">${pIcon} ${pText}</div>
+            </div>
+            <div class="goal-meta">
+              <i class="fa-regular fa-clock"></i> ${deadlineText}
+            </div>
 
-        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
-        <div class="numbers">
-          <span>${fmt(current)}</span>
-          <span>${fmt(target)} • ${pct}%</span>
-        </div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+            <div class="numbers">
+              <span>${fmt(current)}</span>
+              <span>${fmt(target)} • ${pct}%</span>
+            </div>
 
-        ${g.status === 'active' || g.status === 'trash' ? controls : ''}
-        
-        <div class="kpi">
-          <div class="kpi-item">
-             <div class="kpi-value">${fmt(target - current)}</div>
-             <div class="kpi-label">Осталось</div>
-          </div>
-          <div class="kpi-item">
-             <div class="kpi-value" style="color:var(--text);">${shortDate(g.deadline)}</div> 
-             <div class="kpi-label">Дедлайн</div>
-          </div>
-          ${!isOverdue && hoursLeft !== null && hoursLeft > 0 ? `
-          <div class="kpi-item">
-             <div class="kpi-value">${fmt(neededPerDay)}</div>
-             <div class="kpi-label">В день</div>
-          </div>` : `
-          <div class="kpi-item">
-             <div class="kpi-value" style="color:var(--text-muted)">—</div>
-             <div class="kpi-label">В день</div>
-          </div>`}
+            ${g.status === 'active' || g.status === 'trash' || g.status === 'done' ? controls : ''}
+            
+            <div class="kpi">
+              <div class="kpi-item">
+                 <div class="kpi-value">${fmt(target - current)}</div>
+                 <div class="kpi-label">Осталось</div>
+              </div>
+              <div class="kpi-item">
+                 <div class="kpi-value" style="color:var(--text);">${shortDate(g.deadline)}</div> 
+                 <div class="kpi-label">Дедлайн</div>
+              </div>
+              ${!isOverdue && hoursLeft !== null && hoursLeft > 0 ? `
+              <div class="kpi-item">
+                 <div class="kpi-value">${fmt(neededPerDay)}</div>
+                 <div class="kpi-label">В день</div>
+              </div>` : `
+              <div class="kpi-item">
+                 <div class="kpi-value" style="color:var(--text-muted)">—</div>
+                 <div class="kpi-label">В день</div>
+              </div>`}
+            </div>
+            
+            ${g.notes ? `<div style="margin-top:12px; font-size:13px; color:var(--text-muted); padding:10px; background:var(--bg); border-radius:8px; line-height:1.4;">${g.notes}</div>` : ''}
         </div>
-        
-        ${g.notes ? `<div style="margin-top:12px; font-size:13px; color:var(--text-muted); padding:10px; background:var(--bg); border-radius:8px; line-height:1.4;">${g.notes}</div>` : ''}
       `;
-
+      
+      // Attach single action listeners using data-goal-id
       el.querySelectorAll('[data-act]').forEach(btn => {
-        btn.onclick = () => {
+        btn.onclick = (e) => {
+            // Prevent event from bubbling to the card/checkbox click handler
+            e.stopPropagation(); 
             const act = btn.dataset.act;
-            if (act === 'edit') openEditModal(g.id);
-            if (act === 'progress') openProgressModal(g.id);
+            const goalId = btn.dataset.goalId;
+            const g = DATA.goals.find(x => x.id === goalId);
+
+            if (act === 'edit') openEditModal(goalId);
+            if (act === 'progress') openProgressModal(goalId);
             if (act === 'done') {
                 const newStatus = g.status === 'done' ? 'active' : 'done';
                 openConfirmModal(`Вы действительно хотите ${newStatus === 'done' ? 'завершить' : 'вернуть в работу'} цель "${g.title}"?`, () => {
@@ -1266,23 +1488,43 @@
             }
             if (act === 'del-final') {
                 openConfirmModal(`Удалить цель "${g.title}" безвозвратно?`, () => {
-                    DATA.goals = DATA.goals.filter(x => x.id !== g.id);
+                    DATA.goals = DATA.goals.filter(x => x.id !== goalId);
                     save(); render();
                     showToast('Удалено');
                 }, true);
             }
         }
       });
-
+      
+      // Quick add listeners
       el.querySelectorAll('[data-add]').forEach(btn => {
-        btn.onclick = () => {
+        btn.onclick = (e) => {
+          e.stopPropagation(); // Stop propagation
           const delta = parseInt(btn.dataset.add);
+          const goalId = btn.dataset.goalId;
+          const g = DATA.goals.find(x => x.id === goalId);
           g.current = safeParseNum(g.current) + delta;
           g.updatedAt = nowISO();
           save(); render();
           showToast(`+ ${fmt(delta)}`);
         };
       });
+
+      // Checkbox listener
+      el.querySelector('.goal-select-checkbox').addEventListener('change', (e) => {
+          e.stopPropagation(); // Critical to stop propagation on the checkbox itself
+          toggleSelection(g.id);
+      });
+      
+      // Click listener for the card to also toggle selection, but not on inner elements
+      el.addEventListener('click', (e) => {
+          // Only toggle if the click is directly on the card or the main content area, 
+          // not on buttons, links, or inputs inside.
+          if (!e.target.closest('.quick-add') && !e.target.closest('.actions-row') && e.target.type !== 'checkbox') {
+              toggleSelection(g.id);
+          }
+      });
+
 
       list.appendChild(el);
     });
@@ -1295,7 +1537,8 @@
     if (!g) return;
     currentEditId = id;
     document.getElementById('edit-title').value = g.title || '';
-    document.getElementById('edit-target').value = fmt(g.target);
+    // Форматирование при открытии
+    document.getElementById('edit-target').value = fmt(g.target); 
     document.getElementById('edit-current').value = fmt(g.current);
     document.getElementById('edit-deadline').value = g.deadline || '';
     document.getElementById('edit-priority').value = g.priority || 'med';
@@ -1311,8 +1554,8 @@
         const g = DATA.goals.find(x => x.id === currentEditId);
         if (!g) return;
         g.title = document.getElementById('edit-title').value.trim();
-        // Используем safeParseNum для корректного считывания 'к'
-        g.target = safeParseNum(document.getElementById('edit-target').value);
+        // Используем safeParseNum для преобразования отформатированного ввода в число
+        g.target = safeParseNum(document.getElementById('edit-target').value); 
         g.current = safeParseNum(document.getElementById('edit-current').value);
         g.deadline = document.getElementById('edit-deadline').value || null;
         g.priority = document.getElementById('edit-priority').value;
@@ -1333,8 +1576,8 @@
   function updateProgress(isSubtract) {
     const g = DATA.goals.find(x => x.id === currentProgressId);
     if (!g) return;
-    // Используем safeParseNum для корректного считывания 'к'
-    const val = safeParseNum(document.getElementById('progress-amount').value);
+    // Используем safeParseNum, чтобы обработать ввод типа "5к"
+    const val = safeParseNum(document.getElementById('progress-amount').value); 
     if (val <= 0) { showToast('Введите положительную сумму!'); return; }
     
     openConfirmModal(`${isSubtract ? 'Вычесть' : 'Добавить'} ${fmt(val)}?`, () => {
@@ -1362,7 +1605,6 @@
       id: Date.now().toString(36),
       title,
       priority: document.getElementById('g-priority').value,
-      // Используем safeParseNum для корректного считывания 'к'
       target: safeParseNum(document.getElementById('g-target').value),
       current: safeParseNum(document.getElementById('g-current').value),
       deadline: document.getElementById('g-deadline').value || null,
@@ -1398,24 +1640,16 @@
         return;
     }
     
-    // ОБНОВЛЕНО: Добавлены рандомизация сумм и уникальность ID
-    demoGoals.forEach((rnd, i) => {
+    demoGoals.forEach(rnd => {
         const d = new Date();
-        // Рандомизируем дедлайн: от 30 до 120 дней (30 + 0..90)
-        d.setDate(d.getDate() + 30 + Math.floor(Math.random() * 90));
-
-        // Рандомизируем суммы на +/- 10% и округляем до 1000 для "чистых" чисел
-        const targetRand = rnd.target * (1 + (Math.random() * 0.2 - 0.1)); 
-        const currentRand = rnd.cur * (1 + (Math.random() * 0.2 - 0.1)); 
+        d.setDate(d.getDate() + 30 + Math.floor(Math.random() * 60));
 
         const g = {
-          // Делаем ID уникальным, добавляя индекс к Date.now()
-          id: (Date.now() + i).toString(36) + Math.random().toString(36).slice(2),
+          id: Date.now().toString(36) + Math.random().toString(36).slice(2),
           title: rnd.t,
           priority: rnd.p,
-          // Округляем до ближайшей 1000
-          target: Math.round(targetRand / 1000) * 1000, 
-          current: Math.round(currentRand / 1000) * 1000,
+          target: rnd.target,
+          current: rnd.cur,
           deadline: d.toISOString().slice(0,10),
           notes: rnd.note,
           status: 'active',
@@ -1426,7 +1660,7 @@
     });
     
     save(); 
-    render(); // <--- Здесь теперь не будет сбоя
+    render(); 
     showToast('Демо-цели добавлены!');
   };
 
@@ -1484,6 +1718,7 @@
     tab.onclick = () => {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
+      selectedGoalIds.clear(); // Сброс выделения при смене вкладки
       render();
     };
   });
