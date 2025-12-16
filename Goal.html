@@ -3,606 +3,1506 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>DesignFlow Goals</title>
+  <title>DesignFlow Цели v0.1</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    :root{
-    --bg:#0d1117;--card:#161b22;--card-alt:#0f141b;--text:#c9d1d9;--muted:#8b949e;--accent:#58a6ff;--green:#2ea043;--red:#da3633;
-    --gold:#d29922;--border:#30363d;--blue:#238636;--btn-blue:#2f81f7;--link-blue:#007bff;--purple:#a371f7;--btn-hover:#30363d;
-    --button-bg:#21262d;--row-hover:#1c2128;--table-border:#21262d;--input-bg:#21262d;--chart-bar-bg:#21262d;--date-hover-bg:#161b22;
-    --date-hover-border:#3a3f4b;--tab-hover:#30363d;--pill-bg:#1a1f26;--chip-bg:#121720;--link-go-bg:#1a1f26;--modal-overlay:rgba(0,0,0,0.7);
-    --date-focus-bg:#111722;--help-bg:#121720;--help-hover-bg:#1c2128;--help-border:rgba(255,255,255,0.12);--help-text:var(--muted);
-    --del-hover-bg:#1c2128;--del-hover-border:var(--border);
-    --progress-bg:linear-gradient(90deg,#11151c,#0b1017);
-    --progress-border:rgba(88,166,255,0.2);
-    --progress-shadow:inset 0 1px 0 rgba(255,255,255,0.04),0 0 0 1px rgba(15,20,27,0.65);
-    --progress-fill-start:#2ea043;
-    --progress-fill-end:#3fb950;
-    --progress-fill-shadow:0 0 14px rgba(46,160,67,0.3);
-    --record-bg:linear-gradient(90deg,#1c2128,#11151c);
-    --record-border:rgba(250,204,21,0.25);
-    --record-shadow:inset 0 1px 0 rgba(255,255,255,0.03);
-    --record-fill-start:#facc15;
-    --record-fill-end:#f9a825;
-    --record-fill-shadow:0 0 12px rgba(250,204,21,0.4);
-    --goal-pill-bg:linear-gradient(120deg,rgba(88,166,255,0.22),rgba(163,113,247,0.22));
-    --goal-pill-border:rgba(163,113,247,0.4);
-    --goal-pill-color:#dce7ff;
-    --goal-pill-shadow:0 4px 18px rgba(88,166,255,0.22);
-    --status-bg:var(--pill-bg);
-    --status-border:var(--border);
-    --status-text:var(--muted);
-  }
+    :root {
+      --accent: #7c5cff;
+      --accent-hover: #6a4bff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --bg: #f8fafc; /* Основной фон (светлый) */
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --shadow: 0 1px 3px rgba(0,0,0,0.05);
+      --red: #ef4444;
+      --orange: #f97316;
+      --green: #22c55e;
+      
+      /* Светлая тема для WARNING (Нейтральный стиль, как просили) */
+      --warn-bg: var(--card-bg); 
+      --warn-border: var(--border); 
+      --warn-text: var(--text); 
+      --warn-icon: var(--text-muted); 
+    }
 
     body[data-theme="dark"] {
-      --bg: #0b0f14;
-      --panel: #101826;
-      --panel2: #0f1724;
-      --text: #e9eef5;
-      --muted: #aab4c3;
-      --border: rgba(255,255,255,.08);
-      --accent: #7c5cff;
-      --good: #22c55e;
-      --warn: #f59e0b;
-      --bad: #ef4444;
-      --shadow: 0 12px 30px rgba(0,0,0,.35);
-    }
-    body[data-theme="light"] {
-      --bg: #f6f7fb;
-      --panel: #ffffff;
-      --panel2: #f2f4f9;
-      --text: #0f172a;
-      --muted: #5b677a;
-      --border: rgba(15,23,42,.10);
-      --accent: #5b5cff;
-      --good: #16a34a;
-      --warn: #d97706;
-      --bad: #dc2626;
-      --shadow: 0 12px 30px rgba(15,23,42,.12);
+      --bg: #0f172a; /* Темный фон страницы */
+      --card-bg: #1e293b; /* Фон карточек в темной теме */
+      --text: #e2e8f0; /* Светлый текст */
+      --text-muted: #94a3b8;
+      --border: #334155;
+      background: #020617; /* Чуть более темный фон для body */
+      
+      /* Темная тема для WARNING (Нейтральный стиль, как просили) */
+      --warn-bg: var(--card-bg); 
+      --warn-border: var(--border);
+      --warn-text: var(--text); 
+      --warn-icon: var(--text-muted); 
     }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
+      transition: background .3s, color .3s;
+      overflow-y: scroll;
     }
 
-    .wrap{max-width:1100px;margin:0 auto;padding:18px;}
-    .topbar{
-      display:flex;align-items:center;justify-content:space-between;
-      gap:12px;padding:14px 16px;border:1px solid var(--border);
-      border-radius:16px;background:linear-gradient(180deg,var(--panel),var(--panel2));
+    /* --- HEADER --- */
+    .header-wrapper {
+        margin-top: 24px;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        transition: background .3s, border-color .3s;
+    }
+    
+    .header {
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* Цвет молнии - желтый/золотой */
+      color: #fbbf24; 
+      font-size: 20px;
+      box-shadow: 0 4px 10px rgba(124, 92, 255, 0.2);
+    }
+
+    .logo-text h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .logo-text h1 span {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-left: 6px;
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+    
+    body[data-theme="dark"] .logo-text h1 span { background: #334155; }
+
+    .logo-text p {
+      margin: 4px 0 0;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* --- BUTTONS --- */
+    .btn {
+      padding: 9px 16px;
+      border-radius: 10px;
+      background: #f1f5f9;
+      color: var(--text);
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 600;
+      border: 1px solid transparent;
+      transition: .2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    
+    /* Иконки кнопок наследуют color: var(--text) */
+    .btn i { color: inherit; } 
+
+    body[data-theme="dark"] .btn { background: #334155; border-color: #475569; }
+    .btn:hover { background: #e2e8f0; }
+    body[data-theme="dark"] .btn:hover { background: #475569; }
+
+    .btn.primary { background: var(--accent); color: white; border: none; }
+    .btn.primary:hover { background: var(--accent-hover); }
+    .btn.primary i { color: white; } /* Белые иконки на Primary кнопках */
+
+    .btn.secondary { background: transparent; border: 1px solid var(--border); }
+    .btn.secondary:hover { background: #f8fafc; }
+    body[data-theme="dark"] .btn.secondary:hover { background: #1e293b; }
+
+    .btn.danger { background: #fee2e2; color: var(--red); }
+    .btn.danger:hover { background: #fecaca; }
+
+    /* --- WARNING BLOCK (НЕЙТРАЛЬНЫЙ СТИЛЬ + ТОЧЕЧНОЕ КРАСНОЕ ВЫДЕЛЕНИЕ) --- */
+    .warning-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+    }
+    .warning {
+      background: var(--warn-bg);
+      border: 1px solid var(--warn-border);
+      padding: 16px 24px;
+      margin-top: 24px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.5;
+      display: flex;
+      justify-content: space-between; 
+      align-items: center;
+      gap: 20px;
+      color: var(--warn-text); 
+    }
+    
+    .warning-content {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    /* Дефолтный цвет иконки (серый/заглушенный) */
+    .warning i { color: var(--warn-icon); font-size: 16px; margin-top: 2px; } 
+    .warning strong { font-weight: 700; color: var(--warn-text); } 
+    
+    .warning-actions {
+        display: flex;
+        gap: 10px;
+        flex-shrink: 0; 
+    }
+
+    /* ТОЧЕЧНОЕ КРАСНОЕ ВЫДЕЛЕНИЕ */
+    .warning-red-icon,
+    .warning-red-text {
+        color: var(--red) !important;
+    }
+    .warning-red-text {
+        font-weight: 700;
+    }
+    /* КОНЕЦ ТОЧЕЧНОГО КРАСНОГО ВЫДЕЛЕНИЯ */
+
+
+    /* --- TABS --- */
+    .tabs-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+    }
+    .tabs {
+      display: flex;
+      gap: 6px;
+      padding: 20px 0 0;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      padding: 8px 14px;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .tab:hover { background: rgba(0,0,0,0.03); }
+    body[data-theme="dark"] .tab:hover { background: rgba(255,255,255,0.05); }
+
+    .tab.active { background: #e0e7ff; color: var(--accent); }
+    body[data-theme="dark"] .tab.active { background: rgba(124, 92, 255, 0.2); }
+
+    .tab .count { margin-left: 6px; opacity: 0.7; font-size: 0.9em; }
+
+    /* --- LAYOUT --- */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px 60px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 24px;
+      margin-top: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
       box-shadow: var(--shadow);
-      position:sticky;top:12px;z-index:20;
     }
-    .brand{display:flex;flex-direction:column;gap:2px;min-width:220px}
-    .brand .name{font-weight:800;letter-spacing:.3px}
-    .brand .sub{font-size:12px;color:var(--muted)}
 
-    .actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-    .btn{
-      border:1px solid var(--border);background:transparent;color:var(--text);
-      padding:10px 12px;border-radius:12px;cursor:pointer;
-      display:inline-flex;gap:8px;align-items:center;
-      transition:transform .08s ease, background .12s ease, border-color .12s ease;
-      user-select:none;
-    }
-    .btn:hover{background:rgba(124,92,255,.08);border-color:rgba(124,92,255,.35)}
-    .btn:active{transform:translateY(1px)}
-    .btn.primary{background:rgba(124,92,255,.18);border-color:rgba(124,92,255,.45)}
-    .btn.danger{background:rgba(239,68,68,.10);border-color:rgba(239,68,68,.35)}
-    .pill{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid var(--border);color:var(--muted)}
+    .card h2 { font-size: 18px; font-weight: 700; margin: 0 0 20px; display: flex; align-items: center; gap: 8px;}
+    .card h2 i { color: var(--accent); }
 
-    .grid{display:grid;grid-template-columns: 1.15fr .85fr;gap:16px;margin-top:16px;}
-    @media (max-width: 960px){ .grid{grid-template-columns:1fr;} }
+    /* --- FORM --- */
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
 
-    .card{
-      border:1px solid var(--border);border-radius:18px;background:linear-gradient(180deg,var(--panel),var(--panel2));
-      box-shadow: var(--shadow);padding:16px;
+    .form-row > * {
+        flex: 1;
     }
-    .card h2{margin:0 0 10px 0;font-size:16px}
-    .muted{color:var(--muted)}
-    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .field{display:flex;flex-direction:column;gap:6px;flex:1;min-width:180px}
-    label{font-size:12px;color:var(--muted)}
-    input, textarea, select{
-      width:100%;
-      background:rgba(255,255,255,.03);
-      border:1px solid var(--border);
-      color:var(--text);
-      padding:11px 12px;border-radius:12px;
-      outline:none;
-    }
-    body[data-theme="light"] input, body[data-theme="light"] textarea, body[data-theme="light"] select {
-      background: rgba(15,23,42,.04);
-    }
-    textarea{min-height:88px;resize:vertical}
-    .hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.35}
 
-    .list{display:flex;flex-direction:column;gap:12px}
-    .goal{
-      border:1px solid var(--border);border-radius:18px;padding:14px;
-      background:rgba(255,255,255,.02);
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    
+    label { 
+      font-size: 12px; 
+      color: var(--text-muted); 
+      font-weight: 700; 
+      text-transform: uppercase; 
+      letter-spacing: 0.5px; 
+      display: flex;
+      align-items: center;
+      position: relative; 
     }
-    body[data-theme="light"] .goal{background: rgba(15,23,42,.03)}
-    .goal-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
-    .goal-title{font-weight:800}
-    .goal-meta{font-size:12px;color:var(--muted);margin-top:4px}
-    .goal-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-    .bar{height:10px;border-radius:999px;border:1px solid var(--border);overflow:hidden;background:rgba(0,0,0,.15);margin-top:12px}
-    .bar > div{height:100%;background: rgba(124,92,255,.75);width:0%}
-    .nums{display:flex;justify-content:space-between;margin-top:8px;font-size:12px;color:var(--muted)}
-    .kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
-    .kpi .k{border:1px solid var(--border);border-radius:14px;padding:10px;background:rgba(255,255,255,.02)}
-    body[data-theme="light"] .kpi .k{background: rgba(15,23,42,.03)}
-    .k .v{font-weight:800}
-    .k .t{font-size:12px;color:var(--muted);margin-top:2px}
 
-    .toast{
-      position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
-      background:linear-gradient(180deg,var(--panel),var(--panel2));
-      border:1px solid var(--border);border-radius:16px;
-      box-shadow: var(--shadow);
-      padding:12px 12px;display:none;gap:10px;align-items:center;
-      z-index:50;
-      max-width:min(720px, calc(100vw - 24px));
+    /* --- TOOLTIP STYLE (Для info-icon) --- */
+    .info-icon {
+      color: #cbd5e1;
+      margin-left: 6px;
+      font-size: 14px;
+      cursor: help;
+      position: relative;
+      transition: color .2s;
+      /* УЛУЧШЕНИЕ: Расширяем область наведения для устранения мерцания */
+      padding: 4px; 
+      margin: -4px 0 -4px 2px;
     }
-    .toast .msg{flex:1;color:var(--text)}
+    .info-icon:hover { color: var(--accent); }
+    
+    .info-icon[title]:hover::after {
+        content: attr(title);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-5px);
+        background: #334155;
+        color: #fff;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 12px; /* Измененный размер */
+        font-weight: 500; /* Измененный вес (обычный) */
+        white-space: nowrap;
+        z-index: 10;
+        pointer-events: none;
+        opacity: 1;
+        transition: opacity 0.1s;
+    }
+    .info-icon[title]:hover::before {
+        content: '';
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%) translateY(3px);
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid #334155;
+        z-index: 10;
+        pointer-events: none;
+        opacity: 1;
+        transition: opacity 0.1s;
+    }
+    
+    .info-icon[title] { title: ''; }
+    /* --- END TOOLTIP STYLE --- */
+
+
+    input, textarea, select {
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--bg);
+      font-size: 14px;
+      color: var(--text);
+      outline: none;
+      width: 100%;
+      box-sizing: border-box;
+      transition: border-color .2s;
+    }
+
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); background: var(--card-bg); }
+
+    input::placeholder, textarea::placeholder {
+        color: var(--text-muted);
+        opacity: 0.8; 
+    }
+
+    body[data-theme="dark"] input, 
+    body[data-theme="dark"] textarea, 
+    body[data-theme="dark"] select {
+      background: #0f172a;
+    }
+    body[data-theme="dark"] input:focus { background: #1e293b; }
+    
+    body[data-theme="dark"] input::placeholder,
+    body[data-theme="dark"] textarea::placeholder {
+        color: var(--text-muted);
+        opacity: 1;
+    }
+
+
+    textarea { min-height: 80px; resize: vertical; font-family: inherit; }
+
+    .custom-days-field { display: none; margin-top: 10px; }
+
+    .btn-group { display: flex; gap: 10px; margin-top: 16px; }
+    .btn-group .btn { flex: 1; justify-content: center; padding: 12px; }
+
+    /* --- GOAL ITEMS --- */
+    .goal-list { display: flex; flex-direction: column; gap: 16px; }
+
+    .goal-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      background: var(--card-bg);
+      transition: transform .2s, box-shadow .2s;
+    }
+    
+    .goal-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
+
+    .goal-header { display: flex; justify-content: space-between; align-items: start; gap: 10px; }
+    .goal-title { font-size: 18px; font-weight: 700; line-height: 1.3; color: var(--text); }
+
+    .goal-meta {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin: 10px 0;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    
+    /* УЛУЧШЕНИЕ: выделение текста времени, чтобы он был более заметным */
+    .goal-meta > span { 
+        color: var(--text); 
+        font-weight: 600; 
+    }
+    .goal-meta > i { 
+        color: var(--text-muted);
+    }
+    .goal-meta span .fa-clock { color: inherit; }
+
+
+    .priority-badge {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px; 
+    }
+    
+    /* Цвета и иконки приоритетов */
+    .priority-badge i { font-size: 12px; } 
+
+    .priority-high { background: #fee2e2; color: var(--red); }
+    .priority-med { background: #ffedd5; color: var(--orange); }
+    .priority-low { background: #dcfce7; color: var(--green); }
+
+    /* Dark theme priority badges */
+    body[data-theme="dark"] .priority-high { background: #450a0a; color: #f87171; }
+    body[data-theme="dark"] .priority-med { background: #451a03; color: #fb923c; }
+    body[data-theme="dark"] .priority-low { background: #064e3b; color: #34d399; }
+
+    .progress-bar {
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 16px 0 10px;
+    }
+    body[data-theme="dark"] .progress-bar { background: #334155; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #c084fc); transition: width .5s; }
+
+    .numbers { display: flex; justify-content: space-between; font-size: 15px; font-weight: 700; margin-bottom: 16px; }
+    .numbers span:last-child { color: var(--text-muted); font-weight: 500; font-size: 14px; }
+
+    /* Quick Actions */
+    .quick-add { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .quick-btn {
+      padding: 8px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      flex: 1;
+      text-align: center;
+      transition: .2s;
+    }
+    .quick-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    body[data-theme="dark"] .quick-btn { background: #334155; border-color: #475569; }
+    body[data-theme="dark"] .quick-btn:hover { background: #475569; border-color: var(--accent); }
+
+
+    .actions-row { display: flex; gap: 10px; border-top: 1px solid var(--border); padding-top: 16px; }
+    .action-icon-btn {
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+      transition: .2s;
+    }
+    .action-icon-btn:hover { background: #f1f5f9; color: var(--text); }
+    .action-icon-btn.delete:hover { background: #fee2e2; color: var(--red); }
+    
+    body[data-theme="dark"] .action-icon-btn:hover { background: #334155; color: var(--text); }
+    body[data-theme="dark"] .action-icon-btn.delete:hover { background: #450a0a; color: #f87171; }
+
+
+    /* УЛУЧШЕННЫЕ СТИЛИ KPI (Новая попытка) */
+    .kpi {
+      display: flex; 
+      justify-content: space-between; /* Используем space-between */
+      gap: 15px; 
+      margin-top: 16px;
+      padding: 0;
+      background: none; 
+      text-align: center;
+    }
+    
+    .kpi-item { 
+      flex: 1; 
+      padding: 0; 
+      position: relative;
+    }
+    
+    /* Добавляем тонкий вертикальный разделитель */
+    .kpi-item:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        right: -8px; 
+        top: 5px;
+        bottom: 5px;
+        width: 1px;
+        background: var(--border); 
+    }
+    
+    .kpi-icon {
+        color: var(--accent); 
+        font-size: 16px;
+        margin-bottom: 2px;
+        display: block;
+    }
+    
+    .kpi-value { 
+        font-size: 20px; /* Крупные и заметные цифры */
+        font-weight: 700; 
+        color: var(--text); /* Используем основной цвет */
+        line-height: 1.1;
+    }
+    .kpi-label { 
+        font-size: 11px; 
+        color: var(--text-muted); 
+        margin-top: 4px;
+        font-weight: 600; 
+        text-transform: uppercase; /* Заглавные буквы */
+        letter-spacing: 0.2px;
+    }
+    /* КОНЕЦ УЛУЧШЕННЫХ СТИЛЕЙ KPI */
+
+    /* --- TOAST & MODAL --- */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--card-bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all .3s;
+      font-size: 14px;
+    }
+    body[data-theme="dark"] .toast { background: #1e293b; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(2px);
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    .modal.show { display: flex; }
+    .modal-content {
+      background: var(--card-bg);
+      border-radius: 16px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      animation: slideUp .3s ease;
+    }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .modal-header h2 { margin: 0; font-size: 18px; font-weight: 700; }
+    .modal-close { font-size: 20px; cursor: pointer; color: var(--text-muted); }
+
+    .modal-body { padding: 24px; }
+    .modal-actions { padding: 20px 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+    
+    .empty-message { text-align: center; padding: 50px; color: var(--text-muted); font-size: 15px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+
+    /* --- CONFIRM MODAL SPECIFIC --- */
+    #confirm-modal .modal-content { max-width: 400px; }
+    #confirm-modal .modal-actions { justify-content: space-between; }
+    #confirm-modal .modal-actions .btn { flex: 1; justify-content: center; padding: 12px; }
+    #confirm-modal p { font-size: 16px; text-align: center; margin: 0; }
+
+    /* --- FOOTER --- */
+    .footer {
+        padding: 40px 24px;
+        text-align: center;
+        border-top: 1px solid var(--border);
+        margin-top: 20px;
+        color: var(--text-muted);
+        font-size: 13px;
+    }
+    .footer a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .footer a:hover { text-decoration: underline; }
+    
+    /* Медиа-запрос для адаптивности блока .warning */
+    @media (max-width: 600px) {
+        .warning {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .warning-actions {
+            margin-top: 10px;
+            width: 100%;
+            justify-content: stretch;
+        }
+        .warning-actions .btn {
+            flex: 1;
+        }
+    }
   </style>
 </head>
-<body data-theme="dark">
-  <div class="wrap">
-    <div class="topbar">
-      <div class="brand">
-        <div class="name">DesignFlow Goals</div>
-        <div class="sub">Отдельная страница для целей. Всё сохраняется в твою базу DesignFlow.</div>
-      </div>
-      <div class="actions">
-        <span class="pill" id="stat-pill">—</span>
-        <button class="btn" id="btn-theme">Тема</button>
-        <button class="btn" id="btn-export">Скачать данные</button>
-        <button class="btn" id="btn-import">Импорт</button>
-      </div>
-    </div>
+<body>
 
-    <div class="grid">
-      <div class="card">
-        <h2>Создать цель</h2>
-        <div class="row">
-          <div class="field" style="flex:1.6;min-width:240px">
-            <label>Название</label>
-            <input id="g-title" placeholder="Закрыть долг / накопить на поездку / дисциплина" />
-          </div>
-          <div class="field" style="max-width:180px">
-            <label>Единица</label>
-            <select id="g-unit">
-              <option value="₽">₽</option>
-              <option value="$">$</option>
-              <option value="KZT">KZT</option>
-              <option value="шт">шт</option>
-              <option value="ч">ч</option>
-              <option value="дней">дней</option>
-              <option value="раз">раз</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="row" style="margin-top:10px">
-          <div class="field">
-            <label>Цель (сколько нужно)</label>
-            <input id="g-target" placeholder="80000" inputmode="numeric" />
-          </div>
-          <div class="field">
-            <label>Уже есть (опционально)</label>
-            <input id="g-current" placeholder="0" inputmode="numeric" />
-          </div>
-          <div class="field">
-            <label>Дедлайн (опционально)</label>
-            <input id="g-deadline" type="date" />
-          </div>
-        </div>
-
-        <div class="field" style="margin-top:10px">
-          <label>Заметка</label>
-          <textarea id="g-notes" placeholder="Зачем эта цель, что будет считаться успехом, какие шаги…"></textarea>
-          <div class="hint">Подсказка: можно вести несколько целей параллельно. Прогресс обновляй кнопкой "Добавить прогресс" в карточке цели.</div>
-        </div>
-
-        <div class="row" style="margin-top:12px">
-          <button class="btn primary" id="btn-add">Добавить цель</button>
-          <button class="btn" id="btn-demo">Добавить демо</button>
-          <span class="muted" id="save-state">Сохранение: ок</span>
+  <div class="header-wrapper">
+    <div class="header">
+      <div class="logo-container">
+        <div class="logo-icon"><i class="fa-solid fa-bolt"></i></div>
+        <div class="logo-text">
+          <h1>DesignFlow <span>v0.1</span></h1>
+          <p>Трекер целей</p>
         </div>
       </div>
-
-      <div class="card">
-        <h2>Цели</h2>
-        <div class="hint" style="margin-bottom:10px">Кнопки: прогресс, редактировать, завершить, удалить (с отменой).</div>
-        <div class="list" id="goals-list"></div>
+      <div class="header-actions">
+        <a href="https://zhegulyaev.github.io/DesignFlow/" class="btn secondary" target="_blank">
+          <i class="fa-solid fa-list-check"></i> Трекер проектов
+        </a>
+        
+        <button class="btn" id="theme-btn"><i class="fa-solid fa-moon"></i></button>
       </div>
     </div>
   </div>
 
+  <div class="warning-wrapper">
+    <div class="warning"> 
+        <div class="warning-content">
+            <i class="fa-solid fa-triangle-exclamation warning-red-icon"></i>
+            <div>
+                <strong class="warning-red-text">Важно:</strong> Данные хранятся только в вашем браузере.<br>
+                Обязательно скачивайте резервную копию перед очисткой кэша или переустановкой системы.
+            </div>
+        </div>
+        <div class="warning-actions">
+            <button class="btn" id="export-btn"><i class="fa-solid fa-download"></i> Скачать базу</button>
+            <button class="btn" id="import-btn"><i class="fa-solid fa-upload"></i> Загрузить</button>
+        </div>
+    </div>
+  </div>
+
+  <div class="tabs-wrapper">
+    <div class="tabs">
+      <div class="tab active" data-filter="active">Активные <span class="count" id="active-count">0</span></div>
+      <div class="tab" data-filter="done">Завершённые <span class="count" id="done-count">0</span></div>
+      <div class="tab" data-filter="all">Все цели <span class="count" id="total-count">0</span></div>
+      <div class="tab" data-filter="trash">Корзина <span class="count" id="trash-count">0</span></div>
+    </div>
+  </div>
+
+  <div class="container grid">
+    <div class="card">
+      <h2><i class="fa-solid fa-square-plus"></i> Создать цель</h2>
+      
+      <div class="field">
+        <label>Название <i class="fa-regular fa-circle-question info-icon" title="Краткое и лаконичное название вашей финансовой или личной цели (например: Отпуск в Европе, Новый MacBook Pro)"></i></label>
+        <input id="g-title" placeholder="Например: Новый MacBook" />
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label>Сумма <i class="fa-regular fa-circle-question info-icon" title="Общая целевая сумма, которую необходимо накопить для достижения цели. Используйте только числа, можно с суффиксом 'к' (например, '100к')."></i></label>
+          <input id="g-target" placeholder="100 000 или 100к" inputmode="text" />
+        </div>
+        <div class="field">
+          <label>Есть <i class="fa-regular fa-circle-question info-icon" title="Сумма, которую вы уже накопили или имеете на данный момент. Можно использовать 'к'."></i></label>
+          <input id="g-current" placeholder="0 или 10к" inputmode="text" />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label>Дедлайн</label>
+          <input id="g-deadline" type="date" />
+        </div>
+        <div class="field">
+          <label>Приоритет</label>
+          <select id="g-priority">
+            <option value="med">Средний</option>
+            <option value="high">Высокий</option>
+            <option value="low">Низкий</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="field">
+        <label>Шаблон срока <i class="fa-regular fa-circle-question info-icon" title="Используйте быстрые шаблоны (неделя, месяц), чтобы автоматически рассчитать и установить дату в поле 'Дедлайн'."></i></label>
+        <select id="g-template">
+          <option value="">Выбрать быстрый срок...</option>
+          <option value="7">Через неделю (7 дн.)</option>
+          <option value="14">Через 2 недели (14 дн.)</option>
+          <option value="30">Через месяц (30 дн.)</option>
+          <option value="custom">Свой вариант...</option>
+        </select>
+        <div class="custom-days-field" id="g-custom-days-field">
+          <input id="g-custom-days-input" type="number" min="1" placeholder="Введите кол-во дней" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Заметка</label>
+        <textarea id="g-notes" placeholder="План действий, ссылки, мысли..."></textarea>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn primary" id="btn-add"><i class="fa-solid fa-plus"></i> Добавить</button>
+        <button class="btn secondary" id="btn-demo"><i class="fa-solid fa-wand-magic-sparkles"></i> Демо</button>
+      </div>
+    </div>
+
+    <div>
+       <div class="card" style="margin-bottom: 24px; padding: 20px;">
+        <h2 style="font-size: 15px; margin-bottom:12px; color:var(--text-muted); font-weight:600;"><i class="fa-solid fa-chart-pie"></i> Общий прогресс</h2>
+        <div class="progress-bar" style="margin-top:0"><div class="progress-fill" id="overall-progress" style="width:0%"></div></div>
+        <div style="font-size:13px; color:var(--text-muted); text-align:right; margin-top:8px;" id="overall-text">0%</div>
+      </div>
+
+      <div class="goal-list" id="goals-list"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    DesignFlow Tracker by <a href="https://t.me/zhegulyaev" target="_blank">Zhegulyaev</a>
+  </div>
+
   <div class="toast" id="toast">
-    <div class="msg" id="toast-msg"></div>
-    <button class="btn" id="toast-action" style="display:none"></button>
+    <i class="fa-solid fa-circle-check"></i> <span id="toast-message"></span>
   </div>
 
   <input type="file" id="file-import" accept="application/json" style="display:none" />
 
+  <div class="modal" id="edit-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Редактировать</h2>
+        <span class="modal-close"><i class="fa-solid fa-xmark"></i></span>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label>Название</label>
+          <input id="edit-title" />
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Сумма</label>
+            <input id="edit-target" inputmode="text" />
+          </div>
+          <div class="field">
+            <label>Есть сейчас</label>
+            <input id="edit-current" inputmode="text" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Дедлайн</label>
+            <input id="edit-deadline" type="date" />
+          </div>
+          <div class="field">
+            <label>Приоритет</label>
+            <select id="edit-priority">
+              <option value="med">Средний</option>
+              <option value="high">Высокий</option>
+              <option value="low">Низкий</option>
+            </select>
+          </div>
+        </div>
+         <div class="field">
+          <label>Шаблон срока</label>
+          <select id="edit-template">
+            <option value="">Не менять</option>
+            <option value="7">7 дн.</option>
+            <option value="14">14 дн.</option>
+            <option value="30">Месяц</option>
+            <option value="custom">Свой</option>
+          </select>
+           <div class="custom-days-field" id="edit-custom-days-field">
+            <input id="edit-custom-days-input" type="number" min="1" placeholder="Дней" />
+          </div>
+        </div>
+        <div class="field">
+          <label>Заметка</label>
+          <textarea id="edit-notes"></textarea>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn primary" id="save-edit">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="progress-modal">
+    <div class="modal-content" style="max-width: 400px;">
+      <div class="modal-header">
+        <h2>Изменить баланс</h2>
+        <span class="modal-close"><i class="fa-solid fa-xmark"></i></span>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label>Сумма операции</label>
+          <input id="progress-amount" placeholder="5 000 или 5к" inputmode="text" autofocus />
+        </div>
+      </div>
+      <div class="modal-actions" style="justify-content: space-between;">
+        <button class="btn danger" id="btn-subtract"><i class="fa-solid fa-minus"></i> Вычесть</button>
+        <button class="btn primary" id="btn-add-progress"><i class="fa-solid fa-plus"></i> Добавить</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="confirm-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Подтвердите действие</h2>
+        <span class="modal-close"><i class="fa-solid fa-xmark"></i></span>
+      </div>
+      <div class="modal-body">
+        <p id="confirm-text"></p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn secondary" id="confirm-cancel">Отмена</button>
+        <button class="btn danger" id="confirm-ok">ОК</button>
+      </div>
+    </div>
+  </div>
+
 <script>
 (() => {
-  // ==== DesignFlow storage compatibility ====
-  const K = 'grok_design_v5'; // совпадает с твоим сайтом
-  let DATA = { active:[], waiting:[], paused:[], archive:[], trash:[], goals:[] };
-  let UI_PREFS = { themeMode:'dark' };
-  let NAME_TEMPLATES = [];
-  let lastToastTimer = null;
-  let undoStack = null;
+  const K = 'grok_design_v5'; 
+  let DATA = { goals: [] };
+  let currentEditId = null;
+  let currentProgressId = null;
+
+  const toast = document.getElementById('toast');
+  const toastMessage = document.getElementById('toast-message');
+  
+  let confirmAction = null;
+
+  function showToast(msg) {
+    toastMessage.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
 
   function nowISO() { return new Date().toISOString(); }
 
+  // ОБНОВЛЕНО: Добавлена поддержка суффикса 'к' или 'k' для тысяч
   function safeParseNum(v) {
-    if (v == null) return 0;
-    const s = String(v).replace(/\s+/g,'').replace(',', '.');
-    const n = parseFloat(s);
-    return isFinite(n) ? n : 0;
+    if (!v) return 0;
+    let s = String(v).toLowerCase().trim();
+    
+    // Добавляем поддержку "к" (кириллица) или "k" (латиница) для обозначения тысяч
+    if (s.endsWith('к') || s.endsWith('k')) {
+        s = s.slice(0, -1) + '000';
+    }
+    
+    // Очистка от пробелов и замена запятой на точку для корректного parseFloat
+    return parseFloat(s.replace(/\s+/g, '').replace(/,/g, '.')) || 0;
   }
 
-  function buildBackupSnapshot() {
-    return {
-      version: 2,
-      data: DATA,
-      uiPrefs: UI_PREFS,
-      nameTemplates: NAME_TEMPLATES,
-      theme: UI_PREFS.themeMode
-    };
+  function fmt(n) {
+    // Приведение к целому числу, если оно введено без копеек, чтобы избежать .00
+    const num = safeParseNum(n);
+    return Math.round(num).toLocaleString('ru-RU');
+  }
+
+  function formatInput(e) {
+    // Вводим форматирование только если нет 'к' или 'k', чтобы не мешать вводу тысяч
+    const val = e.target.value.toLowerCase();
+    if (val.endsWith('к') || val.endsWith('k')) return;
+    
+    let cleanedVal = e.target.value.replace(/\s+/g, '').replace(/,/g, '.');
+    if (!isNaN(cleanedVal) && cleanedVal !== '') {
+        // Используем safeParseNum для преобразования, затем форматируем
+        e.target.value = Number(safeParseNum(e.target.value)).toLocaleString('ru-RU');
+    }
+  }
+
+  ['g-target', 'g-current', 'edit-target', 'edit-current', 'progress-amount'].forEach(id => {
+    const el = document.getElementById(id);
+    // Для полей g-target/g-current и edit-target/edit-current используем событие 'blur' 
+    // для форматирования после того, как пользователь закончил ввод
+    if (el) el.addEventListener('blur', formatInput);
+  });
+  
+  // Дополнительно: для поля прогресса форматирование по input, чтобы пользователь видел результат
+  document.getElementById('progress-amount')?.addEventListener('input', (e) => {
+    // Эта функция будет выполняться только для progress-amount
+    const val = e.target.value.toLowerCase();
+    if (val.endsWith('к') || val.endsWith('k')) {
+        // Если в конце 'к', не форматируем, чтобы пользователь мог завершить ввод (например, '10к')
+        return;
+    }
+    // Используем safeParseNum, чтобы получить числовое значение, и сразу же форматируем его
+    const numValue = safeParseNum(e.target.value);
+    if (numValue > 0) {
+        // Удаляем пробелы перед форматированием, чтобы избежать двойных разделителей
+        const caretPos = e.target.selectionStart;
+        e.target.value = numValue.toLocaleString('ru-RU');
+        // Попытка сохранить позицию курсора (упрощенная)
+        if (caretPos !== null) {
+             e.target.selectionEnd = caretPos;
+        }
+    } else if (e.target.value === '') {
+        e.target.value = ''; // Очистка, если ввод пуст
+    }
+  });
+
+
+  function setupDateTemplate(selectId, customGroup, customInputId, dateInputId) {
+    const select = document.getElementById(selectId);
+    const customDiv = document.getElementById(customGroup);
+    const customInp = document.getElementById(customInputId);
+    const dateInp = document.getElementById(dateInputId);
+
+    function updateDate(days) {
+        if (!days || days <= 0) return;
+        const date = new Date();
+        date.setDate(date.getDate() + parseInt(days));
+        dateInp.value = date.toISOString().slice(0,10);
+    }
+
+    select.addEventListener('change', () => {
+        if (customDiv) customDiv.style.display = select.value === 'custom' ? 'block' : 'none';
+        if (select.value !== 'custom' && select.value !== '') {
+            updateDate(select.value);
+        }
+    });
+
+    if(customInp) customInp.addEventListener('input', () => updateDate(customInp.value));
+  }
+
+  setupDateTemplate('g-template', 'g-custom-days-field', 'g-custom-days-input', 'g-deadline');
+  setupDateTemplate('edit-template', 'edit-custom-days-field', 'edit-custom-days-input', 'edit-deadline');
+
+  // --- ФУНКЦИИ ДЛЯ РАСЧЕТА ВРЕМЕНИ И ПЛЮРАЛИЗАЦИИ ---
+
+  // Хелпер для правильного склонения слов
+  function declOfNum(number, titles) {
+    const cases = [2, 0, 1, 1, 1, 2];
+    number = Math.abs(number);
+    return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
+  }
+  
+  // Функция для расчета и форматирования оставшегося времени
+  function formatTimeLeft(deadline) {
+    if (!deadline) return { text: '—', totalHours: null };
+
+    // Устанавливаем дедлайн на конец дня (23:59:59) для точности
+    // Добавляем 'T23:59:59' к дате, чтобы расчет велся до конца дедлайн-дня
+    const deadlineTime = new Date(deadline + 'T23:59:59');
+    const now = new Date();
+    let diffMs = deadlineTime - now;
+
+    if (diffMs <= 0) {
+      // Просрочено
+      const absDays = Math.ceil(Math.abs(diffMs) / 86400000); 
+      const overdueText = absDays === 0 
+          ? `<span style="color:var(--red)">Просрочено (сегодня)</span>`
+          : `<span style="color:var(--red)">Просрочено (${absDays} ${declOfNum(absDays, ['день', 'дня', 'дней'])})</span>`;
+      return { text: overdueText, totalHours: 0 };
+    }
+
+    const MS_PER_DAY = 86400000;
+    const MS_PER_HOUR = 3600000;
+    const MS_PER_MINUTE = 60000;
+    
+    const totalHours = diffMs / MS_PER_HOUR;
+
+    let text = 'Осталось ';
+    
+    if (diffMs < MS_PER_DAY) {
+      // Менее 24 часов: часы и минуты
+      const hours = Math.floor(diffMs / MS_PER_HOUR);
+      const minutes = Math.floor((diffMs % MS_PER_HOUR) / MS_PER_MINUTE);
+      
+      if (hours === 0 && minutes === 0) {
+          text = 'Осталось менее минуты';
+      } else {
+          text += `${hours} ${declOfNum(hours, ['час', 'часа', 'часов'])}`;
+          if (minutes > 0) {
+              text += `, ${minutes} ${declOfNum(minutes, ['минута', 'минуты', 'минут'])}`;
+          }
+      }
+      
+    } else {
+      // Более 24 часов: дни и часы
+      const days = Math.floor(diffMs / MS_PER_DAY);
+      const remainingMs = diffMs % MS_PER_DAY;
+      const hours = Math.floor(remainingMs / MS_PER_HOUR);
+      
+      text += `${days} ${declOfNum(days, ['день', 'дня', 'дней'])}`;
+      if (hours > 0) {
+          // Часы добавляются только если осталось 1 или более дней
+          text += `, ${hours} ${declOfNum(hours, ['час', 'часа', 'часов'])}`;
+      }
+    }
+    
+    return { text: `<span style="color:var(--text)">${text}</span>`, totalHours: totalHours };
+  }
+
+  function shortDate(dateStr) {
+    if (!dateStr) return '—';
+    const date = new Date(dateStr);
+    // Добавление 12 часов, чтобы избежать проблем с часовыми поясами, сдвигающими дату на предыдущий день
+    date.setHours(12); 
+    const day = date.getDate();
+    const month = date.toLocaleString('ru-RU', { month: 'short' }).replace('.', '');
+    return `${day} ${month}`;
   }
 
   function save() {
     try {
-      localStorage.setItem(K, JSON.stringify(buildBackupSnapshot()));
-      document.getElementById('save-state').textContent = 'Сохранение: ок';
+        localStorage.setItem(K, JSON.stringify({data: {goals: DATA.goals}}));
     } catch(e) {
-      console.error(e);
-      document.getElementById('save-state').textContent = 'Сохранение: ошибка';
+        showToast('Ошибка сохранения данных в браузере!');
+        console.error("Local Storage Save Error:", e);
     }
   }
 
   function load() {
-    const exist = localStorage.getItem(K);
-    if (!exist) {
-      applyTheme(UI_PREFS.themeMode || 'dark', false);
-      save();
-      return;
-    }
     try {
-      const parsed = JSON.parse(exist);
-      if (parsed && parsed.data) DATA = parsed.data;
-      else if (parsed) DATA = parsed;
-      UI_PREFS = parsed.uiPrefs || UI_PREFS;
-      NAME_TEMPLATES = parsed.nameTemplates || [];
-      if (!DATA.goals) DATA.goals = [];
-      const th = (parsed.theme || (parsed.uiPrefs && parsed.uiPrefs.themeMode) || UI_PREFS.themeMode || 'dark');
-      applyTheme(th, false);
-    } catch(e) {
-      console.error(e);
-      applyTheme('dark', false);
+      const raw = localStorage.getItem(K);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        // Добавлена более надежная проверка структуры
+        DATA.goals = Array.isArray(parsed.data?.goals) ? parsed.data.goals : [];
+      }
+    } catch(e) { 
+        console.error("Local Storage Load Error:", e); 
+        showToast('Ошибка загрузки данных. Загружены пустые цели.');
     }
+    render();
   }
 
-  function applyTheme(mode, doSave=true) {
-    UI_PREFS.themeMode = (mode === 'light') ? 'light' : 'dark';
-    document.body.setAttribute('data-theme', UI_PREFS.themeMode);
-    if (doSave) save();
+  function openModal(id) { document.getElementById(id).classList.add('show'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+  function openConfirmModal(text, callback, isDestructive = false) {
+        document.getElementById('confirm-text').textContent = text;
+        confirmAction = callback;
+        const okBtn = document.getElementById('confirm-ok');
+        okBtn.className = isDestructive ? 'btn danger' : 'btn primary';
+        okBtn.textContent = isDestructive ? 'Удалить' : 'ОК';
+        openModal('confirm-modal');
   }
 
-  function toast(msg, actionText='', actionFn=null, ms=3500) {
-    const t = document.getElementById('toast');
-    const m = document.getElementById('toast-msg');
-    const b = document.getElementById('toast-action');
-    m.textContent = msg;
-    if (actionText && actionFn) {
-      b.textContent = actionText;
-      b.style.display = 'inline-flex';
-      b.onclick = () => { actionFn(); hideToast(); };
-    } else {
-      b.style.display = 'none';
-      b.onclick = null;
-    }
-    t.style.display = 'flex';
-    clearTimeout(lastToastTimer);
-    lastToastTimer = setTimeout(hideToast, ms);
-  }
-  function hideToast() {
-    document.getElementById('toast').style.display = 'none';
-  }
+  document.querySelectorAll('.modal-close').forEach(btn => {
+    btn.onclick = () => closeModal(btn.closest('.modal').id);
+  });
+  document.querySelectorAll('.modal').forEach(modal => {
+    modal.onclick = (e) => { if (e.target === modal) closeModal(modal.id); };
+  });
+  
+  document.getElementById('confirm-ok').onclick = () => {
+      if(confirmAction) confirmAction();
+      closeModal('confirm-modal');
+      confirmAction = null;
+  };
+  document.getElementById('confirm-cancel').onclick = () => {
+      closeModal('confirm-modal');
+      confirmAction = null;
+  };
 
-  function fmt(n) {
-    const x = Math.round((n + Number.EPSILON) * 100) / 100;
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-  }
-
-  function computePct(g) {
-    const target = Math.max(0, safeParseNum(g.target));
-    const current = Math.max(0, safeParseNum(g.current));
-    if (!target) return 0;
-    return Math.max(0, Math.min(100, (current / target) * 100));
-  }
-
-  function daysLeft(deadline) {
-    if (!deadline) return null;
-    const d = new Date(deadline + 'T23:59:59');
-    const diff = d - new Date();
-    return Math.ceil(diff / (1000*60*60*24));
-  }
-
-  function escapeHtml(s) {
-    return String(s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  }
-  function prettyTime(iso) {
-    if (!iso) return '—';
-    try {
-      const d = new Date(iso);
-      return d.toLocaleString('ru-RU', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
-    } catch(e) {
-      return iso;
-    }
-  }
 
   function render() {
     const list = document.getElementById('goals-list');
     list.innerHTML = '';
-    const goals = (DATA.goals || []).slice().sort((a,b) => (b.updatedAt||'').localeCompare(a.updatedAt||''));
-    const total = goals.length;
-    const done = goals.filter(g => g.status === 'done').length;
-    document.getElementById('stat-pill').textContent = `Всего целей: ${total} • Завершено: ${done}`;
 
-    goals.forEach(g => {
-      const pct = computePct(g);
-      const left = daysLeft(g.deadline);
-      const statusText = g.status === 'done' ? 'Завершено' : (left == null ? 'Без дедлайна' : (left < 0 ? 'Просрочено' : `Осталось: ${left} дн.`));
-      const unit = g.unit || '₽';
+    const filter = document.querySelector('.tab.active').dataset.filter;
+    
+    let visible = DATA.goals.filter(g => {
+      if (filter === 'active') return g.status === 'active';
+      if (filter === 'done') return g.status === 'done';
+      if (filter === 'trash') return g.status === 'trash';
+      if (filter === 'all') return g.status !== 'trash';
+      return true; // Should not happen, but for safety
+    });
+
+    if (visible.length === 0) {
+      list.innerHTML = `<div class="empty-message"><i class="fa-regular fa-folder-open"></i><span>Список пуст</span></div>`;
+    }
+
+    const active = DATA.goals.filter(g => g.status === 'active');
+    const totalT = active.reduce((s,g) => s + safeParseNum(g.target), 0);
+    const totalC = active.reduce((s,g) => s + safeParseNum(g.current), 0);
+    const overall = totalT ? (totalC / totalT) * 100 : 0;
+
+    document.getElementById('overall-progress').style.width = overall + '%';
+    document.getElementById('overall-text').textContent = `Собрано ${fmt(totalC)} из ${fmt(totalT)} (${overall.toFixed(0)}%)`;
+
+    document.getElementById('active-count').textContent = active.length;
+    document.getElementById('done-count').textContent = DATA.goals.filter(g => g.status === 'done').length;
+    document.getElementById('trash-count').textContent = DATA.goals.filter(g => g.status === 'trash').length;
+    document.getElementById('total-count').textContent = DATA.goals.filter(g => g.status !== 'trash').length;
+
+    visible.sort((a,b) => (b.updatedAt || b.createdAt || '') .localeCompare(a.updatedAt || a.createdAt || ''));
+    
+    // ОПРЕДЕЛЯЕМ ПЕРЕМЕННУЮ ЗДЕСЬ, ЧТОБЫ ИСПРАВИТЬ ОШИБКУ РЕНДЕРИНГА
+    const isTrash = (filter === 'trash');
+
+    visible.forEach(g => {
       const target = safeParseNum(g.target);
       const current = safeParseNum(g.current);
+      const pct = (target ? (current / target) * 100 : 0).toFixed(0);
+      
+      const { text: deadlineText, totalHours: hoursLeft } = formatTimeLeft(g.deadline);
+      const isOverdue = hoursLeft !== null && hoursLeft <= 0;
+      
+      let pIcon = '';
+      let pText = '';
+      let pClass = '';
+
+      if (g.priority === 'high') {
+          pClass = 'priority-high';
+          pIcon = '<i class="fa-solid fa-fire"></i>';
+          pText = 'Высокий';
+      } else if (g.priority === 'low') {
+          pClass = 'priority-low';
+          pIcon = '<i class="fa-solid fa-leaf"></i>';
+          pText = 'Низкий';
+      } else { // med
+          pClass = 'priority-med';
+          pIcon = '<i class="fa-solid fa-bolt"></i>'; 
+          pText = 'Средний';
+      }
+      
+      // Расчет в день, округляем до целых
+      const neededPerHour = isOverdue || hoursLeft === null || hoursLeft <= 0 ? 0 : (target - current) / hoursLeft;
+      const neededPerDay = neededPerHour * 24;
+
 
       const el = document.createElement('div');
-      el.className = 'goal';
-
-      const notesHTML = g.notes ? `<div class="hint" style="margin-top:10px">${escapeHtml(g.notes)}</div>` : '';
+      el.className = 'goal-card';
+      
+      let controls = '';
+      
+      // ИСПОЛЬЗУЕМ ИСПРАВЛЕННУЮ ПЕРЕМЕННУЮ isTrash
+      if (!isTrash) {
+          controls = `
+            <div class="quick-add">
+                <div class="quick-btn" data-add="1000">+ 1к</div>
+                <div class="quick-btn" data-add="5000">+ 5к</div>
+                <div class="quick-btn" data-add="10000">+ 10к</div>
+                <div class="quick-btn" data-act="progress"><i class="fa-solid fa-right-left"></i> +/-</div>
+            </div>
+            <div class="actions-row">
+                <button class="action-icon-btn" data-act="edit"><i class="fa-solid fa-pen"></i> Редактировать</button>
+                <button class="action-icon-btn" data-act="done">
+                    ${g.status === 'done' ? '<i class="fa-solid fa-rotate-left"></i> Вернуть' : '<i class="fa-solid fa-check"></i> Готово'}
+                </button>
+                <button class="action-icon-btn delete" data-act="del" style="margin-left:auto"><i class="fa-regular fa-trash-can"></i> В корзину</button>
+            </div>
+          `;
+      } else {
+          controls = `
+             <div class="actions-row">
+                <button class="action-icon-btn" data-act="restore"><i class="fa-solid fa-rotate-left"></i> Восстановить</button>
+                <button class="action-icon-btn delete" data-act="del-final" style="margin-left:auto"><i class="fa-solid fa-ban"></i> Удалить навсегда</button>
+            </div>
+          `;
+      }
 
       el.innerHTML = `
-        <div class="goal-head">
-          <div>
-            <div class="goal-title">${escapeHtml(g.title || 'Без названия')}</div>
-            <div class="goal-meta">${escapeHtml(statusText)} • Обновлено: ${prettyTime(g.updatedAt || g.createdAt)}</div>
-          </div>
-          <div class="goal-actions">
-            <button class="btn" data-act="progress">+ Прогресс</button>
-            <button class="btn" data-act="edit">Редактировать</button>
-            <button class="btn" data-act="done">${g.status==='done'?'Вернуть':'Завершить'}</button>
-            <button class="btn danger" data-act="del">Удалить</button>
-          </div>
+        <div class="goal-header">
+            <div class="goal-title">${g.title}</div>
+            <div class="priority-badge ${pClass}">${pIcon} ${pText}</div>
+        </div>
+        <div class="goal-meta">
+          <i class="fa-regular fa-clock"></i> ${deadlineText}
         </div>
 
-        <div class="bar"><div style="width:${pct.toFixed(2)}%"></div></div>
-        <div class="nums">
-          <span>${fmt(current)} ${unit}</span>
-          <span>${fmt(target)} ${unit} • ${pct.toFixed(0)}%</span>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+        <div class="numbers">
+          <span>${fmt(current)}</span>
+          <span>${fmt(target)} • ${pct}%</span>
         </div>
 
+        ${g.status === 'active' || g.status === 'trash' ? controls : ''}
+        
         <div class="kpi">
-          <div class="k"><div class="v">${fmt(Math.max(0, target-current))} ${unit}</div><div class="t">Осталось добрать</div></div>
-          <div class="k"><div class="v">${g.deadline ? escapeHtml(g.deadline) : '—'}</div><div class="t">Дедлайн</div></div>
-          <div class="k"><div class="v">${escapeHtml(g.unit || '₽')}</div><div class="t">Единица</div></div>
+          <div class="kpi-item">
+             <div class="kpi-value">${fmt(target - current)}</div>
+             <div class="kpi-label">Осталось</div>
+          </div>
+          <div class="kpi-item">
+             <div class="kpi-value" style="color:var(--text);">${shortDate(g.deadline)}</div> 
+             <div class="kpi-label">Дедлайн</div>
+          </div>
+          ${!isOverdue && hoursLeft !== null && hoursLeft > 0 ? `
+          <div class="kpi-item">
+             <div class="kpi-value">${fmt(neededPerDay)}</div>
+             <div class="kpi-label">В день</div>
+          </div>` : `
+          <div class="kpi-item">
+             <div class="kpi-value" style="color:var(--text-muted)">—</div>
+             <div class="kpi-label">В день</div>
+          </div>`}
         </div>
-
-        ${notesHTML}
+        
+        ${g.notes ? `<div style="margin-top:12px; font-size:13px; color:var(--text-muted); padding:10px; background:var(--bg); border-radius:8px; line-height:1.4;">${g.notes}</div>` : ''}
       `;
 
-      el.querySelectorAll('button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const act = btn.getAttribute('data-act');
-          if (act === 'progress') addProgress(g.id);
-          if (act === 'edit') editGoal(g.id);
-          if (act === 'done') toggleDone(g.id);
-          if (act === 'del') deleteGoal(g.id);
-        });
+      el.querySelectorAll('[data-act]').forEach(btn => {
+        btn.onclick = () => {
+            const act = btn.dataset.act;
+            if (act === 'edit') openEditModal(g.id);
+            if (act === 'progress') openProgressModal(g.id);
+            if (act === 'done') {
+                const newStatus = g.status === 'done' ? 'active' : 'done';
+                openConfirmModal(`Вы действительно хотите ${newStatus === 'done' ? 'завершить' : 'вернуть в работу'} цель "${g.title}"?`, () => {
+                    g.status = newStatus;
+                    g.updatedAt = nowISO();
+                    save(); render();
+                    showToast(newStatus === 'done' ? 'Цель выполнена!' : 'Цель активна');
+                });
+            }
+            if (act === 'del') {
+                 openConfirmModal(`Переместить цель "${g.title}" в корзину?`, () => {
+                    g.status = 'trash';
+                    g.updatedAt = nowISO();
+                    save(); render();
+                    showToast('В корзине');
+                });
+            }
+            if (act === 'restore') {
+                g.status = 'active';
+                save(); render();
+                showToast('Восстановлено');
+            }
+            if (act === 'del-final') {
+                openConfirmModal(`Удалить цель "${g.title}" безвозвратно?`, () => {
+                    DATA.goals = DATA.goals.filter(x => x.id !== g.id);
+                    save(); render();
+                    showToast('Удалено');
+                }, true);
+            }
+        }
+      });
+
+      el.querySelectorAll('[data-add]').forEach(btn => {
+        btn.onclick = () => {
+          const delta = parseInt(btn.dataset.add);
+          g.current = safeParseNum(g.current) + delta;
+          g.updatedAt = nowISO();
+          save(); render();
+          showToast(`+ ${fmt(delta)}`);
+        };
       });
 
       list.appendChild(el);
     });
-
-    save(); // keep in sync with theme & goals
   }
 
-  function newId() {
-    return 'g_' + Math.random().toString(16).slice(2) + '_' + Date.now().toString(16);
+  // --- ACTIONS ---
+
+  function openEditModal(id) {
+    const g = DATA.goals.find(x => x.id === id);
+    if (!g) return;
+    currentEditId = id;
+    document.getElementById('edit-title').value = g.title || '';
+    document.getElementById('edit-target').value = fmt(g.target);
+    document.getElementById('edit-current').value = fmt(g.current);
+    document.getElementById('edit-deadline').value = g.deadline || '';
+    document.getElementById('edit-priority').value = g.priority || 'med';
+    document.getElementById('edit-notes').value = g.notes || '';
+    document.getElementById('edit-template').value = '';
+    document.getElementById('edit-custom-days-field').style.display = 'none';
+    
+    openModal('edit-modal');
   }
 
-  function addGoalFromForm() {
+  document.getElementById('save-edit').onclick = () => {
+    openConfirmModal('Сохранить изменения в цели?', () => {
+        const g = DATA.goals.find(x => x.id === currentEditId);
+        if (!g) return;
+        g.title = document.getElementById('edit-title').value.trim();
+        // Используем safeParseNum для корректного считывания 'к'
+        g.target = safeParseNum(document.getElementById('edit-target').value);
+        g.current = safeParseNum(document.getElementById('edit-current').value);
+        g.deadline = document.getElementById('edit-deadline').value || null;
+        g.priority = document.getElementById('edit-priority').value;
+        g.notes = document.getElementById('edit-notes').value.trim();
+        g.updatedAt = nowISO();
+        save(); render();
+        closeModal('edit-modal');
+        showToast('Сохранено');
+    });
+  };
+
+  function openProgressModal(id) {
+    currentProgressId = id;
+    document.getElementById('progress-amount').value = '';
+    openModal('progress-modal');
+  }
+
+  function updateProgress(isSubtract) {
+    const g = DATA.goals.find(x => x.id === currentProgressId);
+    if (!g) return;
+    // Используем safeParseNum для корректного считывания 'к'
+    const val = safeParseNum(document.getElementById('progress-amount').value);
+    if (val <= 0) { showToast('Введите положительную сумму!'); return; }
+    
+    openConfirmModal(`${isSubtract ? 'Вычесть' : 'Добавить'} ${fmt(val)}?`, () => {
+        if (isSubtract) {
+            g.current = Math.max(0, g.current - val);
+            showToast(`Вычтено ${fmt(val)}`);
+        } else {
+            g.current = g.current + val;
+            showToast(`Добавлено ${fmt(val)}`);
+        }
+        g.updatedAt = nowISO();
+        save(); render();
+        closeModal('progress-modal');
+    });
+  }
+
+  document.getElementById('btn-add-progress').onclick = () => updateProgress(false);
+  document.getElementById('btn-subtract').onclick = () => updateProgress(true);
+
+  document.getElementById('btn-add').onclick = () => {
     const title = document.getElementById('g-title').value.trim();
-    const unit = document.getElementById('g-unit').value;
-    const target = safeParseNum(document.getElementById('g-target').value);
-    const current = safeParseNum(document.getElementById('g-current').value);
-    const deadline = document.getElementById('g-deadline').value || '';
-    const notes = document.getElementById('g-notes').value.trim();
-
-    if (!title) return toast('Название цели пустое. Дай ей имя, чтобы мозг начал уважать задачу.');
+    if (!title) { showToast('Введите название!'); return; }
 
     const g = {
-      id: newId(),
+      id: Date.now().toString(36),
       title,
-      unit,
-      target: Math.max(0, target),
-      current: Math.max(0, current),
-      deadline,
-      notes,
+      priority: document.getElementById('g-priority').value,
+      // Используем safeParseNum для корректного считывания 'к'
+      target: safeParseNum(document.getElementById('g-target').value),
+      current: safeParseNum(document.getElementById('g-current').value),
+      deadline: document.getElementById('g-deadline').value || null,
+      notes: document.getElementById('g-notes').value.trim(),
       status: 'active',
       createdAt: nowISO(),
-      updatedAt: nowISO(),
-      history: []
+      updatedAt: nowISO()
     };
-    DATA.goals = DATA.goals || [];
+
     DATA.goals.push(g);
-    save();
-    render();
-    toast('Цель добавлена. Теперь можно добивать её по шагам.');
+    save(); render();
+    showToast('Цель создана');
+    
+    ['g-title','g-target','g-current','g-deadline','g-notes','g-custom-days-input'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.value = '';
+    });
+    document.getElementById('g-template').value = '';
+    document.getElementById('g-custom-days-field').style.display = 'none';
+  };
 
-    document.getElementById('g-title').value='';
-    document.getElementById('g-target').value='';
-    document.getElementById('g-current').value='';
-    document.getElementById('g-deadline').value='';
-    document.getElementById('g-notes').value='';
-  }
+  const demoGoals = [
+      { t: 'Поездка на Бали', target: 200000, cur: 45000, p: 'high', note: 'Серфинг и отдых' },
+      { t: 'Новый iPhone 16', target: 120000, cur: 10000, p: 'med', note: 'Подарок себе на ДР' },
+      { t: 'Финансовая подушка', target: 500000, cur: 125000, p: 'high', note: '6 месяцев расходов' },
+      { t: 'Курсы английского', target: 60000, cur: 0, p: 'low', note: 'Уровень B2 к лету' }
+  ];
 
-  function findGoal(id) {
-    return (DATA.goals || []).find(g => g.id === id);
-  }
+  document.getElementById('btn-demo').onclick = () => {
+    // Добавляем цели только если их нет или для целей, которые уже не активны (чтобы не загромождать список)
+    if (DATA.goals.filter(g => g.status === 'active').length > 0) {
+        showToast('Активные цели уже есть. Создайте вручную!');
+        return;
+    }
+    
+    // ОБНОВЛЕНО: Добавлены рандомизация сумм и уникальность ID
+    demoGoals.forEach((rnd, i) => {
+        const d = new Date();
+        // Рандомизируем дедлайн: от 30 до 120 дней (30 + 0..90)
+        d.setDate(d.getDate() + 30 + Math.floor(Math.random() * 90));
 
-  function addProgress(id) {
-    const g = findGoal(id);
-    if (!g) return;
-    const add = prompt('Сколько добавить к прогрессу? (можно минус, если откат)', '1000');
-    if (add === null) return;
-    const delta = safeParseNum(add);
-    g.current = Math.max(0, safeParseNum(g.current) + delta);
-    g.updatedAt = nowISO();
-    g.history = g.history || [];
-    g.history.push({ at: g.updatedAt, delta });
-    save();
-    render();
-    toast('Прогресс обновлён. Неплохо.');
-  }
+        // Рандомизируем суммы на +/- 10% и округляем до 1000 для "чистых" чисел
+        const targetRand = rnd.target * (1 + (Math.random() * 0.2 - 0.1)); 
+        const currentRand = rnd.cur * (1 + (Math.random() * 0.2 - 0.1)); 
 
-  function editGoal(id) {
-    const g = findGoal(id);
-    if (!g) return;
-    const title = prompt('Название цели', g.title || '');
-    if (title === null) return;
-    const target = prompt('Цель (число)', String(g.target ?? '0'));
-    if (target === null) return;
-    const unit = prompt('Единица (например ₽ / $ / KZT / ч)', g.unit || '₽');
-    if (unit === null) return;
-    const deadline = prompt('Дедлайн (YYYY-MM-DD) или пусто', g.deadline || '');
-    if (deadline === null) return;
-    const notes = prompt('Заметка (можно коротко)', g.notes || '');
-    if (notes === null) return;
+        const g = {
+          // Делаем ID уникальным, добавляя индекс к Date.now()
+          id: (Date.now() + i).toString(36) + Math.random().toString(36).slice(2),
+          title: rnd.t,
+          priority: rnd.p,
+          // Округляем до ближайшей 1000
+          target: Math.round(targetRand / 1000) * 1000, 
+          current: Math.round(currentRand / 1000) * 1000,
+          deadline: d.toISOString().slice(0,10),
+          notes: rnd.note,
+          status: 'active',
+          createdAt: nowISO(),
+          updatedAt: nowISO()
+        };
+        DATA.goals.push(g);
+    });
+    
+    save(); 
+    render(); // <--- Здесь теперь не будет сбоя
+    showToast('Демо-цели добавлены!');
+  };
 
-    g.title = title.trim() || g.title;
-    g.target = Math.max(0, safeParseNum(target));
-    g.unit = (unit || g.unit || '₽').trim();
-    g.deadline = (deadline || '').trim();
-    g.notes = (notes || '').trim();
-    g.updatedAt = nowISO();
-    save();
-    render();
-    toast('Цель обновлена.');
-  }
+  // --- ЛОГИКА СОХРАНЕНИЯ ТЕМЫ ---
+  
+  document.getElementById('theme-btn').onclick = () => {
+    const isDarkNow = document.body.dataset.theme === 'dark';
+    const newTheme = isDarkNow ? '' : 'dark';
+    document.body.dataset.theme = newTheme;
+    localStorage.setItem('theme', newTheme);
+    
+    document.querySelector('#theme-btn i').className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+  };
 
-  function toggleDone(id) {
-    const g = findGoal(id);
-    if (!g) return;
-    g.status = (g.status === 'done') ? 'active' : 'done';
-    g.updatedAt = nowISO();
-    save();
-    render();
-    toast(g.status === 'done' ? 'Завершено. Запиши себе +XP.' : 'Вернул в активные.');
-  }
 
-  function deleteGoal(id) {
-    const goals = DATA.goals || [];
-    const idx = goals.findIndex(g => g.id === id);
-    if (idx < 0) return;
-    const removed = goals.splice(idx, 1)[0];
-    DATA.goals = goals;
-    save();
-    render();
-    undoStack = removed;
-    toast('Цель удалена.', 'Отмена', () => {
-      if (!undoStack) return;
-      DATA.goals.push(undoStack);
-      undoStack = null;
-      save();
-      render();
-      toast('Вернул.');
-    }, 4500);
-  }
-
-  function exportJSON() {
-    const snap = buildBackupSnapshot();
-    const blob = new Blob([JSON.stringify(snap, null, 2)], {type:'application/json'});
+  document.getElementById('export-btn').onclick = () => {
+    const dataToExport = localStorage.getItem(K);
+    if (!dataToExport) {
+        showToast('Нет данных для скачивания!');
+        return;
+    }
+    
+    const blob = new Blob([dataToExport], {type: 'application/json'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'designflow-goals-export.json';
-    document.body.appendChild(a);
+    a.download = 'designflow-goals.json';
     a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
+    showToast('Скачано');
+  };
 
-  function importJSON(file) {
+  document.getElementById('import-btn').onclick = () => document.getElementById('file-import').click();
+  document.getElementById('file-import').onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
-      try {
-        const parsed = JSON.parse(reader.result);
-        if (parsed.data) DATA = parsed.data;
-        else DATA = parsed;
-        UI_PREFS = parsed.uiPrefs || UI_PREFS;
-        NAME_TEMPLATES = parsed.nameTemplates || NAME_TEMPLATES;
-        if (!DATA.goals) DATA.goals = [];
-        save();
-        applyTheme(UI_PREFS.themeMode || 'dark', false);
-        render();
-        toast('Импорт выполнен.');
-      } catch(e) {
-        console.error(e);
-        toast('Не получилось импортировать JSON. Проверь файл.');
-      }
+        try {
+            // Проверка, что файл содержит JSON
+            JSON.parse(reader.result); 
+            openConfirmModal('Загрузить данные? Текущие будут заменены!', () => {
+                localStorage.setItem(K, reader.result);
+                load();
+                showToast('База загружена');
+            });
+        } catch(err) {
+            showToast('Ошибка: Файл поврежден или не является JSON.');
+        }
     };
     reader.readAsText(file);
-  }
-
-  function addDemo() {
-    const demo = {
-      id: newId(),
-      title: 'Накопить 80 000 ₽ за 10 дней',
-      unit: '₽',
-      target: 80000,
-      current: 0,
-      deadline: '',
-      notes: 'Спринт: каждый день закрываю 1-2 задачи на деньги. Без романтики, только результат.',
-      status: 'active',
-      createdAt: nowISO(),
-      updatedAt: nowISO(),
-      history: []
-    };
-    DATA.goals = DATA.goals || [];
-    DATA.goals.push(demo);
-    save();
-    render();
-    toast('Демо-цель добавлена.');
-  }
-
-  document.getElementById('btn-add').addEventListener('click', addGoalFromForm);
-  document.getElementById('btn-demo').addEventListener('click', addDemo);
-  document.getElementById('btn-theme').addEventListener('click', () => {
-    applyTheme(document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-    render();
-  });
-  document.getElementById('btn-export').addEventListener('click', exportJSON);
-  document.getElementById('btn-import').addEventListener('click', () => document.getElementById('file-import').click());
-  document.getElementById('file-import').addEventListener('change', (e) => {
-    const f = e.target.files && e.target.files[0];
-    if (f) importJSON(f);
     e.target.value = '';
+  };
+
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.onclick = () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      render();
+    };
   });
 
+  // --- ИНИЦИАЛИЗАЦИЯ (загрузка данных и темы) ---
+  
+  // 1. Применяем сохраненную тему перед загрузкой данных
+  const savedTheme = localStorage.getItem('theme') || '';
+  document.body.dataset.theme = savedTheme;
+  
+  // 2. Устанавливаем иконку на кнопке темы в соответствии с сохраненным состоянием
+  const isDark = savedTheme === 'dark';
+  const themeButtonIcon = document.querySelector('#theme-btn i');
+  if (themeButtonIcon) {
+      themeButtonIcon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+  }
+  
+  // 3. Загружаем данные
   load();
-  render();
 })();
 </script>
 </body>
