@@ -1113,68 +1113,33 @@ td.date-cell + td.date-cell {
     <div style="display:flex;gap:15px;align-items:center">
 
 <style>
-/* Для работы этого блока необходимы переменные из вашего CSS */
-:root{
-  --bg:#0d1117; /* Темный фон */
-  --text:#c9d1d9; /* Светлый текст (белый/светло-серый) */
-  --link-text:#58a6ff; /* Цвет для кнопок/ссылок */
-}
-
-/* Стиль контейнера для Трекера целей */
-.goal-tracker-header {
-  color: var(--text); /* Устанавливаем цвет текста в светлый */
-  background-color: var(--bg); /* Устанавливаем темный фон */
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 20px 0; /* Примерные отступы */
-}
-
-.goal-tracker-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
-/* Стиль для метки 'New' */
-/* Custom Button for Goals Tracker (Target) */
-.btn-goal {
+/* Стиль для кнопки "Трекер проектов" */
+.btn-project {
     background: transparent;
-    border: 1px solid var(--success); /* Цвет границы: зеленый (из переменной) */
-    color: var(--success); /* Цвет текста: зеленый */
-    padding-right: 12px;
+    border: 1px solid var(--accent); /* Цвет границы: синий (из переменной) */
+    color: var(--accent); /* Цвет текста: синий */
+    padding-right: 16px; 
 }
-.btn-goal:hover {
-    background: rgba(63, 185, 80, 0.1); /* Легкий зеленый фон при наведении */
+.btn-project:hover {
+    background: rgba(88, 166, 255, 0.1); /* Легкий синий фон при наведении */
 }
-.btn-goal svg {
-    fill: var(--success);
+.btn-project svg {
+    fill: var(--accent);
     width: 16px;
     height: 16px;
     margin-right: 4px;
 }
-.btn-goal-badge {
-    display: inline-block;
-    background: var(--success); /* Зеленый фон бейджа */
-    color: var(--card); /* Цвет текста бейджа (белый в темной теме) */
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-left: 8px;
-    text-transform: uppercase;
-    line-height: 1;
-}
-/* Переопределение цвета бейджа для светлой темы */
-body[data-theme="light"] .btn-goal-badge {
-    background: #008000; /* Более насыщенный зеленый для светлой темы */
-    color: #fff;
+/* Переопределение цвета для светлой темы */
+body[data-theme="light"] .btn-project {
+    border: 1px solid var(--accent);
+    color: var(--accent);
 }
 </style>
 
-<a href="https://zhegulyaev.github.io/DesignFlow/Goal.html" class="btn btn-goal" aria-label="Трекер целей">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15.93V13h2v4.93c-1.39.46-2.61.46-4 0zM12 20c-1.39 0-2.73-.35-4-.93V18h8v1.07c-1.27.58-2.61.93-4 .93zm-3-8h6v-2H9v2z"/></svg>
-    Трекер целей 
-    <span class="btn-goal-badge">New</span>
+        <a href="https://zhegulyaev.github.io/DesignFlow/Goal.html" class="btn btn-project" aria-label="Трекер проектов">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 L5 14 H11 L10 22 L19 8 H13 L14 2 Z"/></svg>
+    Трекер проектов 
+                <span class="btn-goal-badge">New</span>
 </a>
 
         <button onclick="openSettings()" id="openSettingsBtn">
