@@ -26,6 +26,8 @@
       --red: #ef4444;
       --orange: #f97316;
       --green: #22c55e;
+      --celebrate-start: #facc15;
+      --celebrate-end: #34d399;
       
       /* Светлая тема для WARNING (Нейтральный стиль, как просили) */
       --warn-bg: var(--card-bg); 
@@ -47,6 +49,8 @@
       --warn-border: var(--border);
       --warn-text: var(--text); 
       --warn-icon: var(--text-muted); 
+      --celebrate-start: #facc15;
+      --celebrate-end: #22c55e;
     }
 
     body {
@@ -347,10 +351,15 @@
       border-radius: 16px;
       padding: 20px;
       background: var(--card-bg);
-      transition: transform .2s, box-shadow .2s;
+      transition: transform .2s, box-shadow .2s, border-color .3s;
       position: relative; /* Для позиционирования чекбокса */
       padding-left: 55px; /* Освобождаем место для чекбокса */
       cursor: pointer;
+    }
+    
+    @media (max-width: 600px) {
+        /* В мобильной версии убираем этот отступ, чтобы карточка была шире */
+        .goal-card { padding-left: 20px; }
     }
     
     .goal-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
@@ -360,6 +369,24 @@
         border-color: var(--accent);
         box-shadow: 0 0 0 2px rgba(124, 92, 255, 0.2), var(--shadow);
     }
+    
+    /* НОВОЕ: Стиль для завершенной цели */
+    .goal-card.done {
+        border-color: var(--celebrate-end); /* Зеленая рамка */
+        opacity: 0.7;
+        box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3); /* Легкая зеленая тень */
+        background: #f0fdf4; /* Очень светлый зеленый фон */
+    }
+    body[data-theme="dark"] .goal-card.done {
+        background: #064e3b; /* Темно-зеленый фон */
+        border-color: #34d399;
+    }
+    .goal-card.done:hover {
+        transform: none;
+        box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3), var(--shadow);
+    }
+    /* КОНЕЦ НОВОГО СТИЛЯ */
+
     
     .goal-card-content {
         /* Вся внутренняя разметка цели */
@@ -373,6 +400,14 @@
         left: 20px;
         z-index: 2; /* Чекбокс должен быть кликабелен */
         height: 18px;
+    }
+    
+    @media (max-width: 600px) {
+        .goal-checkbox-wrapper {
+            top: 15px; /* Сдвигаем чекбокс в угол */
+            right: 15px;
+            left: auto;
+        }
     }
     
     /* Стиль для самого чекбокса, чтобы он выглядел аккуратно */
@@ -448,6 +483,13 @@
     }
     body[data-theme="dark"] .progress-bar { background: #334155; }
     .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #c084fc); transition: width .5s; }
+    
+    /* НОВОЕ: Праздничный стиль для завершенного прогресс-бара */
+    .progress-bar.done .progress-fill {
+        background: linear-gradient(90deg, var(--celebrate-start), var(--celebrate-end));
+        box-shadow: 0 0 10px var(--celebrate-end);
+    }
+
 
     .numbers { display: flex; justify-content: space-between; font-size: 15px; font-weight: 700; margin-bottom: 16px; }
     .numbers span:last-child { color: var(--text-muted); font-weight: 500; font-size: 14px; }
@@ -630,6 +672,43 @@
     #confirm-modal .modal-actions { justify-content: space-between; }
     #confirm-modal .modal-actions .btn { flex: 1; justify-content: center; padding: 12px; }
     #confirm-modal p { font-size: 16px; text-align: center; margin: 0; }
+    
+    /* НОВОЕ: CONGRATULATIONS MODAL */
+    #congratulations-modal .modal-content { max-width: 400px; padding: 40px 24px; text-align: center; }
+    #congratulations-modal .modal-header,
+    #congratulations-modal .modal-actions { display: none; }
+    
+    #congratulations-modal .modal-body { 
+        padding: 0; 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center;
+    }
+    
+    #congratulations-modal h2 { 
+        color: var(--celebrate-end); 
+        font-size: 24px; 
+        font-weight: 800;
+        margin: 15px 0 10px;
+        line-height: 1.2;
+    }
+    #congratulations-modal p { 
+        font-size: 16px; 
+        color: var(--text-muted); 
+        margin-bottom: 25px;
+    }
+    .confetti-icon {
+        font-size: 50px;
+        color: var(--celebrate-start);
+        animation: pulse 1s infinite alternate;
+    }
+    @keyframes pulse {
+        from { transform: scale(1); opacity: 0.8; }
+        to { transform: scale(1.1); opacity: 1; }
+    }
+    .congrats-actions { display: flex; gap: 10px; width: 100%; }
+    .congrats-actions .btn { flex: 1; justify-content: center; padding: 12px; }
+
 
     /* --- FOOTER --- */
     .footer {
@@ -900,6 +979,20 @@
       </div>
     </div>
   </div>
+  
+  <div class="modal" id="congratulations-modal">
+    <div class="modal-content">
+      <div class="modal-body">
+        <i class="fa-solid fa-party-horn confetti-icon"></i>
+        <h2 id="congrats-title">Цель достигнута!</h2>
+        <p>Поздравляем с завершением задачи! Что будем делать дальше?</p>
+        <div class="congrats-actions">
+            <button class="btn secondary" id="btn-congrats-cancel"><i class="fa-solid fa-rotate-left"></i> Оставить активной</button>
+            <button class="btn primary" id="btn-congrats-done"><i class="fa-solid fa-check"></i> В завершенные</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="modal" id="confirm-modal">
     <div class="modal-content">
@@ -923,11 +1016,11 @@
   let DATA = { goals: [] };
   let currentEditId = null;
   let currentProgressId = null;
+  let confirmAction = null;
+  let congratsGoalId = null; 
 
   const toast = document.getElementById('toast');
   const toastMessage = document.getElementById('toast-message');
-  
-  let confirmAction = null;
   
   // NEW: Multi-selection state and elements
   let selectedGoalIds = new Set();
@@ -971,37 +1064,73 @@
     }
     return (parseFloat(str) || 0) * multiplier;
   }
-  
-  // Удаляем форматирование oninput, но оставляем onblur
-  function formatInput(e) {
-    let val = e.target.value.replace(/\s+/g, '');
-    if (!isNaN(val) && val !== '') {
-      e.target.value = Number(val).toLocaleString('ru-RU');
-    }
-  }
-
-  function handleBlurFormatting(e) {
-    let val = e.target.value;
-    const num = safeParseNum(val);
-    e.target.value = fmt(num);
-  }
 
   function fmt(n) {
     const num = safeParseNum(n);
+    // Используем toLocaleString для форматирования с разделителем тысяч (пробелом в ru-RU)
     return Math.round(num).toLocaleString('ru-RU');
   }
 
-  ['g-target', 'g-current', 'edit-target', 'edit-current', 'progress-amount'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-        // Устанавливаем форматирование по потере фокуса (onblur)
-        el.addEventListener('blur', handleBlurFormatting);
-        // Добавляем очистку ввода для тех, кто использует 'к' на oninput, чтобы не сбивать курсор
-        el.addEventListener('input', (e) => {
-             e.target.value = e.target.value.replace(/[^\d\s\.\,\к\k]/g, '');
-        });
-    }
-  });
+  // --- НОВАЯ ЛОГИКА АВТОФОРМАТИРОВАНИЯ ЧИСЕЛ ПРИ ВВОДЕ ---
+  
+  function formatNumberInput(inputId) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+
+      input.addEventListener('input', (e) => {
+          const start = input.selectionStart;
+          const end = input.selectionEnd;
+          const oldValue = input.value;
+          const oldLength = oldValue.length;
+
+          // 1. Убираем все, кроме цифр, 'к', 'k', 'К' (для поддержки "50к")
+          let cleanNum = oldValue.replace(/[^0-9кkК]/g, '');
+          
+          // 2. Сохраняем суффикс 'к' или 'k'
+          let suffix = '';
+          if (cleanNum.toLowerCase().endsWith('к') || cleanNum.toLowerCase().endsWith('k')) {
+              suffix = cleanNum.slice(-1);
+              cleanNum = cleanNum.slice(0, -1);
+          }
+          
+          // 3. Добавляем пробелы как разделитель тысяч
+          // Регулярное выражение для вставки пробелов каждые три цифры
+          let formattedValue = cleanNum.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+
+          // 4. Возвращаем суффикс
+          formattedValue += suffix;
+
+          input.value = formattedValue;
+          
+          // 5. Корректируем позицию курсора с учетом добавленных/удаленных пробелов
+          const newLength = formattedValue.length;
+          const diff = newLength - oldLength;
+          
+          if (diff !== 0 && start !== null) {
+              // Смещаем курсор на разницу в длине, если курсор был не в самом конце
+              let newStart = start + diff;
+              input.setSelectionRange(newStart, newStart);
+          }
+      });
+      
+      // Форматируем по потере фокуса, чтобы убрать суффиксы "к" и показать чистое число,
+      // или если пользователь ввел некорректно и хочет исправить.
+      input.addEventListener('blur', (e) => {
+          let val = e.target.value;
+          const num = safeParseNum(val);
+          e.target.value = fmt(num);
+      });
+  }
+
+  // Применяем новую функцию ко всем полям ввода сумм
+  formatNumberInput('g-target');
+  formatNumberInput('g-current');
+  formatNumberInput('edit-target');
+  formatNumberInput('edit-current');
+  formatNumberInput('progress-amount');
+  
+  // --- КОНЕЦ НОВОЙ ЛОГИКИ ---
+
 
   function setupDateTemplate(selectId, customGroup, customInputId, dateInputId) {
     const select = document.getElementById(selectId);
@@ -1131,6 +1260,7 @@
 
   function openModal(id) { document.getElementById(id).classList.add('show'); }
   function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+  
   function openConfirmModal(text, callback, isDestructive = false) {
         document.getElementById('confirm-text').textContent = text;
         confirmAction = callback;
@@ -1138,6 +1268,13 @@
         okBtn.className = isDestructive ? 'btn danger' : 'btn primary';
         okBtn.textContent = isDestructive ? 'Удалить' : 'ОК';
         openModal('confirm-modal');
+  }
+  
+  // NEW: Модальное окно поздравления
+  function showCongratulationsModal(goalId, title) {
+    congratsGoalId = goalId;
+    document.getElementById('congrats-title').innerHTML = `«${title}» достигнута!`;
+    openModal('congratulations-modal');
   }
 
   document.querySelectorAll('.modal-close').forEach(btn => {
@@ -1155,6 +1292,25 @@
   document.getElementById('confirm-cancel').onclick = () => {
       closeModal('confirm-modal');
       confirmAction = null;
+  };
+  
+  // NEW: Обработчики кнопок в модальном окне поздравления
+  document.getElementById('btn-congrats-done').onclick = () => {
+      const g = DATA.goals.find(x => x.id === congratsGoalId);
+      if (g) {
+          g.status = 'done';
+          g.updatedAt = nowISO();
+          save(); render();
+          showToast('Цель перенесена в завершенные!');
+      }
+      closeModal('congratulations-modal');
+      congratsGoalId = null;
+  };
+  
+  document.getElementById('btn-congrats-cancel').onclick = () => {
+      closeModal('congratulations-modal');
+      congratsGoalId = null;
+      showToast('Цель оставлена активной');
   };
 
   // --- NEW: MULTI-SELECTION LOGIC ---
@@ -1330,25 +1486,16 @@
       list.innerHTML = `<div class="empty-message"><i class="fa-regular fa-folder-open"></i><span>Список пуст</span></div>`;
       selectedGoalIds.clear(); // Clear selection if the list is empty
       updateMultiActionBar(visible);
+      // Обновляем счетчики, даже если список пуст
+      updateCounts(); 
       return; // Exit render early
     }
     
     // NEW: Update multi-action bar here before rendering cards
     updateMultiActionBar(visible);
+    updateCounts(); // Обновляем счетчики
 
-    const active = DATA.goals.filter(g => g.status === 'active');
-    const totalT = active.reduce((s,g) => s + safeParseNum(g.target), 0);
-    const totalC = active.reduce((s,g) => s + safeParseNum(g.current), 0);
-    const overall = totalT ? (totalC / totalT) * 100 : 0;
-
-    document.getElementById('overall-progress').style.width = overall + '%';
-    document.getElementById('overall-text').textContent = `Собрано ${fmt(totalC)} из ${fmt(totalT)} (${overall.toFixed(0)}%)`;
-
-    document.getElementById('active-count').textContent = active.length;
-    document.getElementById('done-count').textContent = DATA.goals.filter(g => g.status === 'done').length;
-    document.getElementById('trash-count').textContent = DATA.goals.filter(g => g.status === 'trash').length;
-    document.getElementById('total-count').textContent = DATA.goals.filter(g => g.status !== 'trash').length;
-
+    
     visible.sort((a,b) => (b.updatedAt || b.createdAt || '') .localeCompare(a.updatedAt || a.createdAt || ''));
     
     const isTrash = (filter === 'trash');
@@ -1356,7 +1503,9 @@
     visible.forEach(g => {
       const target = safeParseNum(g.target);
       const current = safeParseNum(g.current);
-      const pct = (target ? (current / target) * 100 : 0).toFixed(0);
+      // Ограничиваем процент 100 для визуала, но считаем из реальных чисел
+      const pctValue = target ? (current / target) * 100 : 0;
+      const pct = Math.min(100, pctValue).toFixed(0); 
       
       const { text: deadlineText, totalHours: hoursLeft } = formatTimeLeft(g.deadline);
       const isOverdue = hoursLeft !== null && hoursLeft <= 0;
@@ -1385,7 +1534,8 @@
 
 
       const el = document.createElement('div');
-      el.className = `goal-card ${selectedGoalIds.has(g.id) ? 'selected' : ''} ${isTrash ? 'goal-card-trash' : ''}`;
+      // NEW: Добавляем класс 'done' для завершенных целей
+      el.className = `goal-card ${selectedGoalIds.has(g.id) ? 'selected' : ''} ${isTrash ? 'goal-card-trash' : ''} ${g.status === 'done' ? 'done' : ''}`;
       el.dataset.id = g.id; // Add data-id for easy access
       
       let controls = '';
@@ -1429,17 +1579,17 @@
               <i class="fa-regular fa-clock"></i> ${deadlineText}
             </div>
 
-            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+            <div class="progress-bar ${g.status === 'done' ? 'done' : ''}"><div class="progress-fill" style="width:${pct}%"></div></div>
             <div class="numbers">
               <span>${fmt(current)}</span>
-              <span>${fmt(target)} • ${pct}%</span>
+              <span>${fmt(target)} • ${pctValue.toFixed(0)}%</span>
             </div>
 
             ${g.status === 'active' || g.status === 'trash' || g.status === 'done' ? controls : ''}
             
             <div class="kpi">
               <div class="kpi-item">
-                 <div class="kpi-value">${fmt(target - current)}</div>
+                 <div class="kpi-value">${fmt(Math.max(0, target - current))}</div>
                  <div class="kpi-label">Осталось</div>
               </div>
               <div class="kpi-item">
@@ -1469,17 +1619,25 @@
             const act = btn.dataset.act;
             const goalId = btn.dataset.goalId;
             const g = DATA.goals.find(x => x.id === goalId);
+            
+            if (!g) return;
 
             if (act === 'edit') openEditModal(goalId);
             if (act === 'progress') openProgressModal(goalId);
             if (act === 'done') {
                 const newStatus = g.status === 'done' ? 'active' : 'done';
-                openConfirmModal(`Вы действительно хотите ${newStatus === 'done' ? 'завершить' : 'вернуть в работу'} цель "${g.title}"?`, () => {
-                    g.status = newStatus;
-                    g.updatedAt = nowISO();
-                    save(); render();
-                    showToast(newStatus === 'done' ? 'Цель выполнена!' : 'Цель активна');
-                });
+                
+                // Проверяем, если цель достигнута и пытаются ее завершить, показываем модалку поздравления.
+                if (newStatus === 'done' && safeParseNum(g.current) >= safeParseNum(g.target)) {
+                    showCongratulationsModal(goalId, g.title);
+                } else {
+                    openConfirmModal(`Вы действительно хотите ${newStatus === 'done' ? 'завершить' : 'вернуть в работу'} цель "${g.title}"?`, () => {
+                        g.status = newStatus;
+                        g.updatedAt = nowISO();
+                        save(); render();
+                        showToast(newStatus === 'done' ? 'Цель выполнена!' : 'Цель активна');
+                    });
+                }
             }
             if (act === 'del') {
                  openConfirmModal(`Переместить цель "${g.title}" в корзину?`, () => {
@@ -1491,6 +1649,7 @@
             }
             if (act === 'restore') {
                 g.status = 'active';
+                g.updatedAt = nowISO();
                 save(); render();
                 showToast('Восстановлено');
             }
@@ -1511,10 +1670,23 @@
           const delta = parseInt(btn.dataset.add);
           const goalId = btn.dataset.goalId;
           const g = DATA.goals.find(x => x.id === goalId);
-          g.current = safeParseNum(g.current) + delta;
+          
+          if (!g || g.status !== 'active') return showToast('Цель неактивна');
+
+          const newCurrent = safeParseNum(g.current) + delta;
+          const target = safeParseNum(g.target);
+          
+          g.current = newCurrent;
           g.updatedAt = nowISO();
-          save(); render();
-          showToast(`+ ${fmt(delta)}`);
+          save(); 
+          
+          if (newCurrent >= target && g.status !== 'done') {
+              render(); // Рендер с обновленным current
+              showCongratulationsModal(g.id, g.title);
+          } else {
+              render();
+              showToast(`+ ${fmt(delta)}`);
+          }
         };
       });
 
@@ -1537,6 +1709,28 @@
       list.appendChild(el);
     });
   }
+  
+  // NEW: Отдельная функция для обновления счетчиков
+  function updateCounts() {
+    const active = DATA.goals.filter(g => g.status === 'active');
+    const done = DATA.goals.filter(g => g.status === 'done');
+    const trash = DATA.goals.filter(g => g.status === 'trash');
+    const all = DATA.goals.filter(g => g.status !== 'trash');
+    
+    // Общий прогресс (только для активных)
+    const totalT = active.reduce((s,g) => s + safeParseNum(g.target), 0);
+    const totalC = active.reduce((s,g) => s + safeParseNum(g.current), 0);
+    const overall = totalT ? (totalC / totalT) * 100 : 0;
+
+    document.getElementById('overall-progress').style.width = overall + '%';
+    document.getElementById('overall-text').textContent = `Собрано ${fmt(totalC)} из ${fmt(totalT)} (${overall.toFixed(0)}%)`;
+
+    document.getElementById('active-count').textContent = active.length;
+    document.getElementById('done-count').textContent = done.length;
+    document.getElementById('trash-count').textContent = trash.length;
+    document.getElementById('total-count').textContent = all.length;
+  }
+
 
   // --- ACTIONS ---
 
@@ -1545,7 +1739,7 @@
     if (!g) return;
     currentEditId = id;
     document.getElementById('edit-title').value = g.title || '';
-    // Форматирование при открытии
+    // Форматирование при открытии (используем fmt для отображения 50 000)
     document.getElementById('edit-target').value = fmt(g.target); 
     document.getElementById('edit-current').value = fmt(g.current);
     document.getElementById('edit-deadline').value = g.deadline || '';
@@ -1564,14 +1758,28 @@
         g.title = document.getElementById('edit-title').value.trim();
         // Используем safeParseNum для преобразования отформатированного ввода в число
         g.target = safeParseNum(document.getElementById('edit-target').value); 
-        g.current = safeParseNum(document.getElementById('edit-current').value);
+        const newCurrent = safeParseNum(document.getElementById('edit-current').value);
         g.deadline = document.getElementById('edit-deadline').value || null;
         g.priority = document.getElementById('edit-priority').value;
         g.notes = document.getElementById('edit-notes').value.trim();
         g.updatedAt = nowISO();
-        save(); render();
-        closeModal('edit-modal');
-        showToast('Сохранено');
+        
+        // Проверяем достижение цели
+        const oldCurrent = safeParseNum(g.current);
+        const target = safeParseNum(g.target);
+        
+        g.current = newCurrent;
+        save();
+        
+        // Показываем модалку, если цель достигнута, и она не была достигнута до этого изменения
+        if (newCurrent >= target && oldCurrent < target && g.status !== 'done') {
+            render(); // Рендер с обновленным current
+            showCongratulationsModal(g.id, g.title);
+        } else {
+            render();
+            closeModal('edit-modal');
+            showToast('Сохранено');
+        }
     });
   };
 
@@ -1583,22 +1791,36 @@
 
   function updateProgress(isSubtract) {
     const g = DATA.goals.find(x => x.id === currentProgressId);
-    if (!g) return;
-    // Используем safeParseNum, чтобы обработать ввод типа "5к"
+    if (!g || g.status !== 'active') return showToast('Цель неактивна');
+    
+    // Используем safeParseNum, чтобы обработать ввод типа "5к" или "5 000"
     const val = safeParseNum(document.getElementById('progress-amount').value); 
     if (val <= 0) { showToast('Введите положительную сумму!'); return; }
     
     openConfirmModal(`${isSubtract ? 'Вычесть' : 'Добавить'} ${fmt(val)}?`, () => {
+        const target = safeParseNum(g.target);
+        const oldCurrent = safeParseNum(g.current);
+        let newCurrent = oldCurrent;
+        
         if (isSubtract) {
-            g.current = Math.max(0, g.current - val);
-            showToast(`Вычтено ${fmt(val)}`);
+            newCurrent = Math.max(0, oldCurrent - val);
         } else {
-            g.current = g.current + val;
-            showToast(`Добавлено ${fmt(val)}`);
+            newCurrent = oldCurrent + val;
         }
+        
+        g.current = newCurrent;
         g.updatedAt = nowISO();
-        save(); render();
+        save(); 
+
         closeModal('progress-modal');
+        
+        if (newCurrent >= target && oldCurrent < target && g.status !== 'done') {
+            render(); // Рендер с обновленным current
+            showCongratulationsModal(g.id, g.title);
+        } else {
+            render();
+            showToast(`${isSubtract ? 'Вычтено' : 'Добавлено'} ${fmt(val)}`);
+        }
     });
   }
 
@@ -1609,22 +1831,33 @@
     const title = document.getElementById('g-title').value.trim();
     if (!title) { showToast('Введите название!'); return; }
 
+    const target = safeParseNum(document.getElementById('g-target').value);
+    const current = safeParseNum(document.getElementById('g-current').value);
+    const isDone = current >= target;
+
     const g = {
       id: Date.now().toString(36),
       title,
       priority: document.getElementById('g-priority').value,
-      target: safeParseNum(document.getElementById('g-target').value),
-      current: safeParseNum(document.getElementById('g-current').value),
+      target: target,
+      current: current,
       deadline: document.getElementById('g-deadline').value || null,
       notes: document.getElementById('g-notes').value.trim(),
-      status: 'active',
+      status: isDone ? 'done' : 'active', // Устанавливаем статус "done" если сразу достигнута
       createdAt: nowISO(),
       updatedAt: nowISO()
     };
 
     DATA.goals.push(g);
-    save(); render();
-    showToast('Цель создана');
+    save(); 
+    render();
+    
+    // Если цель сразу выполнена, показываем поздравление (но переносим в done уже при создании)
+    if (isDone) {
+        showToast('Цель создана и сразу выполнена!');
+    } else {
+        showToast('Цель создана');
+    }
     
     ['g-title','g-target','g-current','g-deadline','g-notes','g-custom-days-input'].forEach(id => {
         const el = document.getElementById(id);
@@ -1651,16 +1884,19 @@
     demoGoals.forEach(rnd => {
         const d = new Date();
         d.setDate(d.getDate() + 30 + Math.floor(Math.random() * 60));
+        
+        const isDone = rnd.t === 'Новый iPhone 16'; // Делаем одну цель выполненной для примера
+        const current = isDone ? rnd.target : rnd.cur;
 
         const g = {
           id: Date.now().toString(36) + Math.random().toString(36).slice(2),
           title: rnd.t,
           priority: rnd.p,
           target: rnd.target,
-          current: rnd.cur,
+          current: current,
           deadline: d.toISOString().slice(0,10),
           notes: rnd.note,
-          status: 'active',
+          status: isDone ? 'done' : 'active',
           createdAt: nowISO(),
           updatedAt: nowISO()
         };
