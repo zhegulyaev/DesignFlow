@@ -809,9 +809,7 @@
               <button class="btn danger" id="btn-multi-trash" title="В корзину"><i class="fa-regular fa-trash-can"></i> <span class="desktop-only">В корзину</span></button>
           </div>
       </div>
-      
       <div class="goal-list" id="goals-list"></div>
-
     </div>
   </div>
 
@@ -860,21 +858,19 @@
             </select>
           </div>
         </div>
-        
-        <div class="field">
-            <label>Шаблон срока</label>
-            <select id="edit-template">
-                <option value="">Не менять</option>
-                <option value="7">7 дн.</option>
-                <option value="14">14 дн.</option>
-                <option value="30">Месяц</option>
-                <option value="custom">Свой</option>
-            </select>
-            <div class="custom-days-field" id="edit-custom-days-field">
-                <input id="edit-custom-days-input" type="number" min="1" placeholder="Дней" />
-            </div>
+         <div class="field">
+          <label>Шаблон срока</label>
+          <select id="edit-template">
+            <option value="">Не менять</option>
+            <option value="7">7 дн.</option>
+            <option value="14">14 дн.</option>
+            <option value="30">Месяц</option>
+            <option value="custom">Свой</option>
+          </select>
+           <div class="custom-days-field" id="edit-custom-days-field">
+            <input id="edit-custom-days-input" type="number" min="1" placeholder="Дней" />
+          </div>
         </div>
-        
         <div class="field">
           <label>Заметка</label>
           <textarea id="edit-notes"></textarea>
@@ -923,793 +919,833 @@
 
 <script>
 (() => {
-    // --- УНИКАЛЬНЫЕ КЛЮЧИ LOCAL STORAGE (ИСПРАВЛЕНИЕ КОНФЛИКТА) ---
-    const K = 'designFlowGoalTrackerData';     // НОВЫЙ УНИКАЛЬНЫЙ КЛЮЧ
-    const HISTORY_K = 'designFlowGoalHistoryData'; // НОВЫЙ УНИКАЛЬНЫЙ КЛЮЧ
-    const DRAFT_K = 'designFlowGoalDraftData';   // НОВЫЙ УНИКАЛЬНЫЙ КЛЮЧ
-    const BATCH_K = 'designFlowGoalBatchData';   // НОВЫЙ УНИКАЛЬНЫЙ КЛЮЧ
-    const THEME_K = 'designFlowGoalThemeFinal'; // НОВЫЙ УНИКАЛЬНЫЙ КЛЮЧ ДЛЯ ТЕМЫ
-    // --- КОНЕЦ УНИКАЛЬНЫХ КЛЮЧЕЙ ---
+  const K = 'designFlowGoalData'; 
+  let DATA = { goals: [] };
+  let currentEditId = null;
+  let currentProgressId = null;
+
+  const toast = document.getElementById('toast');
+  const toastMessage = document.getElementById('toast-message');
+  
+  let confirmAction = null;
+  
+  // NEW: Multi-selection state and elements
+  let selectedGoalIds = new Set();
+  const multiActionBar = document.getElementById('multi-action-bar');
+  const multiActionText = document.getElementById('multi-action-text');
+  const btnSelectAll = document.getElementById('btn-select-all');
+  const btnMultiDone = document.getElementById('btn-multi-done');
+  const btnMultiTrash = document.getElementById('btn-multi-trash');
+  
+  // New buttons for trash mode (created once to use in updateMultiActionBar)
+  const btnMultiRestore = document.createElement('button');
+  btnMultiRestore.className = 'btn';
+  btnMultiRestore.innerHTML = '<i class="fa-solid fa-rotate-left"></i> <span class="desktop-only">Восстановить</span>';
+  btnMultiRestore.title = 'Восстановить';
+  btnMultiRestore.id = 'btn-multi-restore';
+
+  const btnMultiFinalDelete = document.createElement('button');
+  btnMultiFinalDelete.className = 'btn danger';
+  btnMultiFinalDelete.innerHTML = '<i class="fa-solid fa-ban"></i> <span class="desktop-only">Удалить навсегда</span>';
+  btnMultiFinalDelete.title = 'Удалить навсегда';
+  btnMultiFinalDelete.id = 'btn-multi-final-delete';
+
+
+  function showToast(msg) {
+    toastMessage.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  function nowISO() { return new Date().toISOString(); }
+
+  function safeParseNum(v) {
+    if (!v) return 0;
+    // Очистка от пробелов и замена запятой на точку для корректного parseFloat
+    // Добавлена обработка суффиксов 'к' и 'k'
+    let str = String(v).replace(/\s+/g, '').replace(/,/g, '.').toLowerCase();
+    let multiplier = 1;
+    if (str.endsWith('к') || str.endsWith('k')) {
+        str = str.slice(0, -1);
+        multiplier = 1000;
+    }
+    return (parseFloat(str) || 0) * multiplier;
+  }
+  
+  // Удаляем форматирование oninput, но оставляем onblur
+  function formatInput(e) {
+    let val = e.target.value.replace(/\s+/g, '');
+    if (!isNaN(val) && val !== '') {
+      e.target.value = Number(val).toLocaleString('ru-RU');
+    }
+  }
+
+  function handleBlurFormatting(e) {
+    let val = e.target.value;
+    const num = safeParseNum(val);
+    e.target.value = fmt(num);
+  }
+
+  function fmt(n) {
+    const num = safeParseNum(n);
+    return Math.round(num).toLocaleString('ru-RU');
+  }
+
+  ['g-target', 'g-current', 'edit-target', 'edit-current', 'progress-amount'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+        // Устанавливаем форматирование по потере фокуса (onblur)
+        el.addEventListener('blur', handleBlurFormatting);
+        // Добавляем очистку ввода для тех, кто использует 'к' на oninput, чтобы не сбивать курсор
+        el.addEventListener('input', (e) => {
+             e.target.value = e.target.value.replace(/[^\d\s\.\,\к\k]/g, '');
+        });
+    }
+  });
+
+  function setupDateTemplate(selectId, customGroup, customInputId, dateInputId) {
+    const select = document.getElementById(selectId);
+    const customDiv = document.getElementById(customGroup);
+    const customInp = document.getElementById(customInputId);
+    const dateInp = document.getElementById(dateInputId);
+
+    function updateDate(days) {
+        if (!days || days <= 0) return;
+        const date = new Date();
+        date.setDate(date.getDate() + parseInt(days));
+        dateInp.value = date.toISOString().slice(0,10);
+    }
+
+    select.addEventListener('change', () => {
+        if (customDiv) customDiv.style.display = select.value === 'custom' ? 'block' : 'none';
+        if (select.value !== 'custom' && select.value !== '') {
+            updateDate(select.value);
+        }
+    });
+
+    if(customInp) customInp.addEventListener('input', () => updateDate(customInp.value));
+  }
+
+  setupDateTemplate('g-template', 'g-custom-days-field', 'g-custom-days-input', 'g-deadline');
+  setupDateTemplate('edit-template', 'edit-custom-days-field', 'edit-custom-days-input', 'edit-deadline');
+
+  // --- ФУНКЦИИ ДЛЯ РАСЧЕТА ВРЕМЕНИ И ПЛЮРАЛИЗАЦИИ ---
+
+  // Хелпер для правильного склонения слов
+  function declOfNum(number, titles) {
+    const cases = [2, 0, 1, 1, 1, 2];
+    number = Math.abs(number);
+    return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
+  }
+  
+  // Функция для расчета и форматирования оставшегося времени
+  function formatTimeLeft(deadline) {
+    if (!deadline) return { text: '—', totalHours: null };
+
+    // Устанавливаем дедлайн на конец дня (23:59:59) для точности
+    // Добавляем 'T23:59:59' к дате, чтобы расчет велся до конца дедлайн-дня
+    const deadlineTime = new Date(deadline + 'T23:59:59');
+    const now = new Date();
+    let diffMs = deadlineTime - now;
+
+    if (diffMs <= 0) {
+      // Просрочено
+      const absDays = Math.ceil(Math.abs(diffMs) / 86400000); 
+      const overdueText = absDays === 0 
+          ? `<span style="color:var(--red)">Просрочено (сегодня)</span>`
+          : `<span style="color:var(--red)">Просрочено (${absDays} ${declOfNum(absDays, ['день', 'дня', 'дней'])})</span>`;
+      return { text: overdueText, totalHours: 0 };
+    }
+
+    const MS_PER_DAY = 86400000;
+    const MS_PER_HOUR = 3600000;
+    const MS_PER_MINUTE = 60000;
     
-    let DATA = { goals: [] };
-    let currentEditId = null;
-    let currentProgressId = null;
+    const totalHours = diffMs / MS_PER_HOUR;
+
+    let text = 'Осталось ';
     
-    const toast = document.getElementById('toast');
-    const toastMessage = document.getElementById('toast-message');
-    let confirmAction = null;
-
-    // NEW: Multi-selection state and elements
-    let selectedGoalIds = new Set();
-    const multiActionBar = document.getElementById('multi-action-bar');
-    const multiActionText = document.getElementById('multi-action-text');
-    const btnSelectAll = document.getElementById('btn-select-all');
-    const btnMultiDone = document.getElementById('btn-multi-done');
-    const btnMultiTrash = document.getElementById('btn-multi-trash');
-
-    // New buttons for trash mode (created once to use in updateMultiActionBar)
-    const btnMultiRestore = document.createElement('button');
-    btnMultiRestore.className = 'btn';
-    btnMultiRestore.innerHTML = '<i class="fa-solid fa-rotate-left"></i> <span class="desktop-only">Восстановить</span>';
-    btnMultiRestore.title = 'Восстановить';
-    btnMultiRestore.id = 'btn-multi-restore';
-
-    const btnMultiFinalDelete = document.createElement('button');
-    btnMultiFinalDelete.className = 'btn danger';
-    btnMultiFinalDelete.innerHTML = '<i class="fa-solid fa-ban"></i> <span class="desktop-only">Удалить навсегда</span>';
-    btnMultiFinalDelete.title = 'Удалить навсегда';
-    btnMultiFinalDelete.id = 'btn-multi-final-delete';
-
-
-    function showToast(msg) {
-        toastMessage.textContent = msg;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 3000);
-    }
-
-    function nowISO() {
-        return new Date().toISOString();
-    }
-
-    // Хелпер для безопасного парсинга чисел (поддерживает "100к" и "100 000")
-    function safeParseNum(v) {
-        if (!v) return 0;
-        let str = String(v).replace(/\s+/g, '').replace(/,/g, '.').toLowerCase();
-        let multiplier = 1;
-        
-        if (str.endsWith('к') || str.endsWith('k')) {
-            multiplier = 1000;
-            str = str.slice(0, -1);
-        }
-        
-        const num = parseFloat(str);
-        return isNaN(num) ? 0 : Math.round(num * multiplier);
+    if (diffMs < MS_PER_DAY) {
+      // Менее 24 часов: часы и минуты
+      const hours = Math.floor(diffMs / MS_PER_HOUR);
+      const minutes = Math.floor((diffMs % MS_PER_HOUR) / MS_PER_MINUTE);
+      
+      if (hours === 0 && minutes === 0) {
+          text = 'Осталось менее минуты';
+      } else {
+          text += `${hours} ${declOfNum(hours, ['час', 'часа', 'часов'])}`;
+          if (minutes > 0) {
+              text += `, ${minutes} ${declOfNum(minutes, ['минута', 'минуты', 'минут'])}`;
+          }
+      }
+      
+    } else {
+      // Более 24 часов: дни и часы
+      const days = Math.floor(diffMs / MS_PER_DAY);
+      const remainingMs = diffMs % MS_PER_DAY;
+      const hours = Math.floor(remainingMs / MS_PER_HOUR);
+      
+      text += `${days} ${declOfNum(days, ['день', 'дня', 'дней'])}`;
+      if (hours > 0) {
+          // Часы добавляются только если осталось 1 или более дней
+          text += `, ${hours} ${declOfNum(hours, ['час', 'часа', 'часов'])}`;
+      }
     }
     
-    // Хелпер для форматирования числа (100000 -> 100 000)
-    function formatNumber(num) {
-        if (typeof num !== 'number') return '0';
-        return num.toLocaleString('ru-RU');
+    return { text: `<span style="color:var(--text)">${text}</span>`, totalHours: totalHours };
+  }
+
+  function shortDate(dateStr) {
+    if (!dateStr) return '—';
+    const date = new Date(dateStr);
+    // Добавление 12 часов, чтобы избежать проблем с часовыми поясами, сдвигающими дату на предыдущий день
+    date.setHours(12); 
+    const day = date.getDate();
+    const month = date.toLocaleString('ru-RU', { month: 'short' }).replace('.', '');
+    return `${day} ${month}`;
+  }
+
+  function save() {
+    try {
+        localStorage.setItem(K, JSON.stringify({data: {goals: DATA.goals}}));
+    } catch(e) {
+        showToast('Ошибка сохранения данных в браузере!');
+        console.error("Local Storage Save Error:", e);
     }
+  }
 
-    // --- LOCAL STORAGE FUNCTIONS ---
-
-    function save() {
-        localStorage.setItem(K, JSON.stringify(DATA));
-        // Сохраняем черновик
-        if (DATA.goals.length === 0) {
-            localStorage.removeItem(DRAFT_K);
-            localStorage.removeItem(BATCH_K);
-        }
+  function load() {
+    try {
+      const raw = localStorage.getItem(K);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        // Добавлена более надежная проверка структуры
+        DATA.goals = Array.isArray(parsed.data?.goals) ? parsed.data.goals : [];
+      }
+    } catch(e) { 
+        console.error("Local Storage Load Error:", e); 
+        showToast('Ошибка загрузки данных. Загружены пустые цели.');
     }
+    render();
+  }
 
-    function load() {
-        const json = localStorage.getItem(K);
-        if (json) {
-            try {
-                DATA = JSON.parse(json);
-                if (!DATA.goals) DATA.goals = [];
-            } catch (e) {
-                console.error("Ошибка загрузки данных:", e);
-                DATA = { goals: [] };
-            }
-        } else {
-            DATA = { goals: [] };
-        }
-        render();
-    }
-
-    // --- MODALS & UI HELPERS ---
-
-    function openModal(id, goalId = null) {
-        const modal = document.getElementById(id);
-        if (modal) {
-            modal.classList.add('show');
-            // Для модалок редактирования/прогресса
-            if (goalId) {
-                if (id === 'edit-modal') currentEditId = goalId;
-                if (id === 'progress-modal') currentProgressId = goalId;
-            }
-        }
-    }
-
-    function closeModal(id) {
-        const modal = document.getElementById(id);
-        if (modal) {
-            modal.classList.remove('show');
-            if (id === 'edit-modal') currentEditId = null;
-            if (id === 'progress-modal') {
-                currentProgressId = null;
-                document.getElementById('progress-amount').value = '';
-            }
-        }
-    }
-
-    function openConfirmModal(text, onConfirm, goalId = null) {
+  function openModal(id) { document.getElementById(id).classList.add('show'); }
+  function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+  function openConfirmModal(text, callback, isDestructive = false) {
         document.getElementById('confirm-text').textContent = text;
-        confirmAction = () => {
-            onConfirm(goalId);
-            closeModal('confirm-modal');
-        };
+        confirmAction = callback;
+        const okBtn = document.getElementById('confirm-ok');
+        okBtn.className = isDestructive ? 'btn danger' : 'btn primary';
+        okBtn.textContent = isDestructive ? 'Удалить' : 'ОК';
         openModal('confirm-modal');
-    }
+  }
 
-    document.getElementById('confirm-ok').onclick = () => {
-        if (confirmAction) confirmAction();
-    };
-    document.getElementById('confirm-cancel').onclick = () => closeModal('confirm-modal');
-    document.querySelectorAll('.modal-close').forEach(btn => {
-        btn.onclick = (e) => closeModal(e.target.closest('.modal').id);
+  document.querySelectorAll('.modal-close').forEach(btn => {
+    btn.onclick = () => closeModal(btn.closest('.modal').id);
+  });
+  document.querySelectorAll('.modal').forEach(modal => {
+    modal.onclick = (e) => { if (e.target === modal) closeModal(modal.id); };
+  });
+  
+  document.getElementById('confirm-ok').onclick = () => {
+      if(confirmAction) confirmAction();
+      closeModal('confirm-modal');
+      confirmAction = null;
+  };
+  document.getElementById('confirm-cancel').onclick = () => {
+      closeModal('confirm-modal');
+      confirmAction = null;
+  };
+
+  // --- NEW: MULTI-SELECTION LOGIC ---
+
+  function updateMultiActionBar(visibleGoals) {
+    const selectedCount = selectedGoalIds.size;
+    
+    // Manage visibility
+    multiActionBar.style.display = selectedCount > 0 ? 'flex' : 'none';
+    multiActionText.textContent = `Выбрано: ${selectedCount}`;
+    
+    const actionBtnsContainer = multiActionBar.querySelector('.multi-action-btns');
+    actionBtnsContainer.innerHTML = ''; // Clear previous buttons
+    
+    const filter = document.querySelector('.tab.active').dataset.filter;
+    
+    if (filter === 'trash') {
+        // Trash mode actions
+        actionBtnsContainer.appendChild(btnSelectAll);
+        btnSelectAll.innerHTML = `<i class="fa-solid fa-list-check"></i> <span class="desktop-only">${selectedCount === visibleGoals.length && visibleGoals.length > 0 ? 'Снять выделение' : 'Выбрать все'}</span>`;
+        actionBtnsContainer.appendChild(btnMultiRestore);
+        actionBtnsContainer.appendChild(btnMultiFinalDelete);
+    } else if (filter === 'active' || filter === 'done' || filter === 'all') {
+        // Active/Done/All mode actions
+        actionBtnsContainer.appendChild(btnSelectAll);
+        btnSelectAll.innerHTML = `<i class="fa-solid fa-list-check"></i> <span class="desktop-only">${selectedCount === visibleGoals.length && visibleGoals.length > 0 ? 'Снять выделение' : 'Выбрать все'}</span>`;
+
+        // Check the status of selected goals to determine which button to show for completion
+        const selected = DATA.goals.filter(g => selectedGoalIds.has(g.id));
+        const allSelectedAreDone = selected.every(g => g.status === 'done');
+        
+        btnMultiDone.innerHTML = allSelectedAreDone 
+            ? '<i class="fa-solid fa-rotate-left"></i> <span class="desktop-only">Вернуть</span>'
+            : '<i class="fa-solid fa-check"></i> <span class="desktop-only">Готово</span>';
+            
+        btnMultiDone.title = allSelectedAreDone ? 'Вернуть в работу' : 'Завершить';
+        
+        actionBtnsContainer.appendChild(btnMultiDone);
+        actionBtnsContainer.appendChild(btnMultiTrash);
+    }
+  }
+  
+  function toggleSelection(goalId) {
+    if (selectedGoalIds.has(goalId)) {
+        selectedGoalIds.delete(goalId);
+    } else {
+        selectedGoalIds.add(goalId);
+    }
+    // Re-render to update the selected class and action bar
+    render(); 
+  }
+  
+  function getSelectedGoals() {
+      return DATA.goals.filter(g => selectedGoalIds.has(g.id));
+  }
+  
+  // Select/Deselect All
+  if(btnSelectAll) {
+      btnSelectAll.onclick = () => {
+          const filter = document.querySelector('.tab.active').dataset.filter;
+          const visibleGoals = DATA.goals.filter(g => {
+            if (filter === 'active') return g.status === 'active';
+            if (filter === 'done') return g.status === 'done';
+            if (filter === 'trash') return g.status === 'trash';
+            if (filter === 'all') return g.status !== 'trash';
+            return false;
+          });
+          
+          if (selectedGoalIds.size === visibleGoals.length && visibleGoals.length > 0) {
+              selectedGoalIds.clear(); // Deselect all
+              showToast('Выделение снято');
+          } else {
+              selectedGoalIds.clear(); // Ensure clear first
+              visibleGoals.forEach(g => selectedGoalIds.add(g.id)); // Select all
+              showToast(`Выбрано ${visibleGoals.length} целей`);
+          }
+          render();
+      };
+  }
+
+  // Bulk Done / Restore (from done)
+  if(btnMultiDone) {
+      btnMultiDone.onclick = () => {
+          const selected = getSelectedGoals();
+          if (selected.length === 0) return showToast('Сначала выберите цели!');
+          
+          const allDone = selected.every(g => g.status === 'done');
+          const newStatus = allDone ? 'active' : 'done';
+          const actionText = allDone ? 'вернуть в работу' : 'завершить';
+          
+          openConfirmModal(`Вы действительно хотите ${actionText} ${selected.length} целей?`, () => {
+              selected.forEach(g => {
+                  g.status = newStatus;
+                  g.updatedAt = nowISO();
+              });
+              selectedGoalIds.clear();
+              save(); render();
+              showToast(newStatus === 'done' ? `Выполнено ${selected.length} целей!` : `Восстановлено ${selected.length} целей!`);
+          });
+      };
+  }
+
+  // Bulk Trash
+  if(btnMultiTrash) {
+      btnMultiTrash.onclick = () => {
+          const selected = getSelectedGoals();
+          if (selected.length === 0) return showToast('Сначала выберите цели!');
+          
+          openConfirmModal(`Переместить ${selected.length} целей в корзину?`, () => {
+              selected.forEach(g => {
+                  g.status = 'trash';
+                  g.updatedAt = nowISO();
+              });
+              selectedGoalIds.clear();
+              save(); render();
+              showToast(`В корзину перемещено ${selected.length} целей`);
+          });
+      };
+  }
+  
+  // Bulk Restore (from trash)
+  if(btnMultiRestore) {
+      btnMultiRestore.onclick = () => {
+          const selected = getSelectedGoals();
+          if (selected.length === 0) return showToast('Сначала выберите цели!');
+          
+          openConfirmModal(`Восстановить ${selected.length} целей из корзины?`, () => {
+              selected.forEach(g => {
+                  g.status = 'active';
+                  g.updatedAt = nowISO();
+              });
+              selectedGoalIds.clear();
+              save(); render();
+              showToast(`Восстановлено ${selected.length} целей`);
+          });
+      };
+  }
+
+  // Bulk Final Delete (from trash)
+  if(btnMultiFinalDelete) {
+      btnMultiFinalDelete.onclick = () => {
+          const selected = getSelectedGoals();
+          if (selected.length === 0) return showToast('Сначала выберите цели!');
+          
+          openConfirmModal(`Удалить ${selected.length} целей безвозвратно?`, () => {
+              const idsToDelete = Array.from(selectedGoalIds);
+              DATA.goals = DATA.goals.filter(g => !idsToDelete.includes(g.id));
+              selectedGoalIds.clear();
+              save(); render();
+              showToast(`Удалено навсегда ${selected.length} целей`);
+          }, true);
+      };
+  }
+  
+  // --- END MULTI-SELECTION LOGIC ---
+
+
+  function render() {
+    const list = document.getElementById('goals-list');
+    list.innerHTML = '';
+
+    const filter = document.querySelector('.tab.active').dataset.filter;
+    
+    let visible = DATA.goals.filter(g => {
+      if (filter === 'active') return g.status === 'active';
+      if (filter === 'done') return g.status === 'done';
+      if (filter === 'trash') return g.status === 'trash';
+      if (filter === 'all') return g.status !== 'trash';
+      return false;
     });
 
-    // --- DATA MANIPULATION ---
-
-    function getGoals(filter) {
-        switch(filter) {
-            case 'active':
-                return DATA.goals.filter(g => !g.done && !g.deleted).sort(sortGoals);
-            case 'done':
-                return DATA.goals.filter(g => g.done && !g.deleted).sort(sortGoals);
-            case 'trash':
-                return DATA.goals.filter(g => g.deleted).sort(sortGoals);
-            case 'all':
-            default:
-                return DATA.goals.filter(g => !g.deleted).sort(sortGoals);
-        }
+    if (visible.length === 0) {
+      list.innerHTML = `<div class="empty-message"><i class="fa-regular fa-folder-open"></i><span>Список пуст</span></div>`;
+      selectedGoalIds.clear(); // Clear selection if the list is empty
+      updateMultiActionBar(visible);
+      return; // Exit render early
     }
     
-    function sortGoals(a, b) {
-        const priorityOrder = { high: 1, med: 2, low: 3 };
-        
-        // 1. Сначала по приоритету
-        const priorityA = priorityOrder[a.priority] || 4;
-        const priorityB = priorityOrder[b.priority] || 4;
-        if (priorityA !== priorityB) return priorityA - priorityB;
+    // NEW: Update multi-action bar here before rendering cards
+    updateMultiActionBar(visible);
 
-        // 2. Затем по дедлайну (самый близкий в начале, или null в конце)
-        const dateA = a.deadline ? new Date(a.deadline).getTime() : Infinity;
-        const dateB = b.deadline ? new Date(b.deadline).getTime() : Infinity;
-        if (dateA !== dateB) return dateA - dateB;
+    const active = DATA.goals.filter(g => g.status === 'active');
+    const totalT = active.reduce((s,g) => s + safeParseNum(g.target), 0);
+    const totalC = active.reduce((s,g) => s + safeParseNum(g.current), 0);
+    const overall = totalT ? (totalC / totalT) * 100 : 0;
 
-        // 3. Затем по дате создания (самый новый в конце, для стабильности)
-        const createdA = new Date(a.created).getTime();
-        const createdB = new Date(b.created).getTime();
-        return createdA - createdB;
-    }
+    document.getElementById('overall-progress').style.width = overall + '%';
+    document.getElementById('overall-text').textContent = `Собрано ${fmt(totalC)} из ${fmt(totalT)} (${overall.toFixed(0)}%)`;
 
+    document.getElementById('active-count').textContent = active.length;
+    document.getElementById('done-count').textContent = DATA.goals.filter(g => g.status === 'done').length;
+    document.getElementById('trash-count').textContent = DATA.goals.filter(g => g.status === 'trash').length;
+    document.getElementById('total-count').textContent = DATA.goals.filter(g => g.status !== 'trash').length;
 
-    function addGoal(title, target, current, deadline, priority, notes) {
-        const newGoal = {
-            id: 'g_' + Date.now() + Math.random().toString(36).substring(2, 9),
-            title: title || 'Новая цель',
-            target: safeParseNum(target),
-            current: safeParseNum(current),
-            deadline: deadline || null,
-            priority: priority || 'med',
-            notes: notes || '',
-            created: nowISO(),
-            done: false,
-            deleted: false
-        };
-        DATA.goals.push(newGoal);
-        save();
-        render();
-        showToast('Цель "' + newGoal.title + '" добавлена!');
-        return newGoal;
-    }
-
-    function updateGoal(id, updates) {
-        const goal = DATA.goals.find(g => g.id === id);
-        if (goal) {
-            Object.assign(goal, updates);
-            // Если цель достигнута, ставим done = true
-            if (goal.current >= goal.target && !goal.done) {
-                goal.done = true;
-                showToast('Цель "' + goal.title + '" достигнута! 🎉');
-            } else if (goal.current < goal.target && goal.done) {
-                 // Если цель была "done", но прогресс откатился, возвращаем ее в active
-                 goal.done = false;
-            }
-            save();
-            render();
-            return true;
-        }
-        return false;
-    }
+    visible.sort((a,b) => (b.updatedAt || b.createdAt || '') .localeCompare(a.updatedAt || a.createdAt || ''));
     
-    // --- TEMPLATE LOGIC ---
-    function setDeadlineByTemplate(deadlineInput, templateSelect, customDaysInput) {
-        const template = templateSelect.value;
-        const today = new Date();
-        const customDaysField = customDaysInput.closest('.custom-days-field');
+    const isTrash = (filter === 'trash');
 
-        // Сброс
-        deadlineInput.value = '';
-        customDaysField.style.display = 'none';
+    visible.forEach(g => {
+      const target = safeParseNum(g.target);
+      const current = safeParseNum(g.current);
+      const pct = (target ? (current / target) * 100 : 0).toFixed(0);
+      
+      const { text: deadlineText, totalHours: hoursLeft } = formatTimeLeft(g.deadline);
+      const isOverdue = hoursLeft !== null && hoursLeft <= 0;
+      
+      let pIcon = '';
+      let pText = '';
+      let pClass = '';
 
-        if (template === 'custom') {
-            customDaysField.style.display = 'flex';
-            const days = parseInt(customDaysInput.value) || 0;
-            if (days > 0) {
-                const deadline = new Date(today);
-                deadline.setDate(today.getDate() + days);
-                deadlineInput.value = deadline.toISOString().split('T')[0];
-            }
-        } else if (template) {
-            const days = parseInt(template);
-            if (!isNaN(days) && days > 0) {
-                const deadline = new Date(today);
-                deadline.setDate(today.getDate() + days);
-                deadlineInput.value = deadline.toISOString().split('T')[0];
-            }
-        }
-    }
-    
-    // --- RENDER FUNCTIONS ---
+      if (g.priority === 'high') {
+          pClass = 'priority-high';
+          pIcon = '<i class="fa-solid fa-fire"></i>';
+          pText = 'Высокий';
+      } else if (g.priority === 'low') {
+          pClass = 'priority-low';
+          pIcon = '<i class="fa-solid fa-leaf"></i>';
+          pText = 'Низкий';
+      } else { // med
+          pClass = 'priority-med';
+          pIcon = '<i class="fa-solid fa-bolt"></i>'; 
+          pText = 'Средний';
+      }
+      
+      // Расчет в день, округляем до целых
+      const neededPerHour = isOverdue || hoursLeft === null || hoursLeft <= 0 ? 0 : (target - current) / hoursLeft;
+      const neededPerDay = neededPerHour * 24;
 
-    function getActiveFilter() {
-        return document.querySelector('.tab.active').dataset.filter;
-    }
 
-    function render() {
-        const filter = getActiveFilter();
-        const filteredGoals = getGoals(filter);
-        const list = document.getElementById('goals-list');
-        list.innerHTML = '';
-        
-        // Обновление счетчиков
-        document.getElementById('active-count').textContent = getGoals('active').length;
-        document.getElementById('done-count').textContent = getGoals('done').length;
-        document.getElementById('total-count').textContent = getGoals('active').length + getGoals('done').length;
-        document.getElementById('trash-count').textContent = getGoals('trash').length;
-        
-        // Общий прогресс
-        renderOverallProgress();
-        
-        // Рендер элементов
-        if (filteredGoals.length === 0) {
-            list.innerHTML = renderEmptyState(filter);
-        } else {
-            filteredGoals.forEach(goal => {
-                list.appendChild(renderGoalCard(goal, filter));
-            });
-        }
-        
-        // Рендер панели массового выбора
-        updateMultiActionBar(filter);
-    }
-    
-    function renderOverallProgress() {
-        const activeGoals = getGoals('active');
-        let totalTarget = 0;
-        let totalCurrent = 0;
-        
-        activeGoals.forEach(g => {
-            totalTarget += g.target;
-            totalCurrent += g.current;
-        });
-
-        const progressPercent = totalTarget > 0 ? Math.min(100, Math.round((totalCurrent / totalTarget) * 100)) : 0;
-        
-        const progressBar = document.getElementById('overall-progress');
-        const progressText = document.getElementById('overall-text');
-
-        progressBar.style.width = progressPercent + '%';
-        progressText.innerHTML = `${progressPercent}% достигнуто (Цель: ${formatNumber(totalTarget)}, Есть: ${formatNumber(totalCurrent)})`;
-    }
-
-    function renderEmptyState(filter) {
-        let text = 'Пока пусто.';
-        let icon = 'fa-solid fa-face-smile';
-
-        if (filter === 'done') {
-            text = 'Нет завершенных целей. Пора поработать!';
-            icon = 'fa-solid fa-trophy';
-        } else if (filter === 'trash') {
-            text = 'Корзина пуста. Отличная чистота!';
-            icon = 'fa-solid fa-hand-sparkles';
-        } else if (filter === 'active' || filter === 'all') {
-            text = 'Создайте свою первую цель!';
-            icon = 'fa-solid fa-rocket';
-        }
-
-        return `
-            <div class="empty-message">
-                <i class="${icon}" style="font-size: 32px; color: var(--accent);"></i>
-                <p>${text}</p>
+      const el = document.createElement('div');
+      el.className = `goal-card ${selectedGoalIds.has(g.id) ? 'selected' : ''} ${isTrash ? 'goal-card-trash' : ''}`;
+      el.dataset.id = g.id; // Add data-id for easy access
+      
+      let controls = '';
+      
+      // ИСПОЛЬЗУЕМ ИСПРАВЛЕННУЮ ПЕРЕМЕННУЮ isTrash
+      if (!isTrash) {
+          controls = `
+            <div class="quick-add">
+                <div class="quick-btn" data-add="1000" data-goal-id="${g.id}">+ 1к</div>
+                <div class="quick-btn" data-add="5000" data-goal-id="${g.id}">+ 5к</div>
+                <div class="quick-btn" data-add="10000" data-goal-id="${g.id}">+ 10к</div>
+                <button class="quick-btn" data-act="progress" data-goal-id="${g.id}" style="flex-basis: 50px;"><i class="fa-solid fa-right-left"></i> +/-</button>
             </div>
-        `;
-    }
-
-    function renderGoalCard(goal, filter) {
-        const card = document.createElement('div');
-        card.className = 'goal-card';
-        card.dataset.id = goal.id;
-        if (selectedGoalIds.has(goal.id)) {
-            card.classList.add('selected');
-        }
-
-        const percent = goal.target > 0 ? Math.min(100, Math.round((goal.current / goal.target) * 100)) : 0;
-        
-        const isDone = goal.done;
-        const isDeleted = goal.deleted;
-        
-        // Priority Badge
-        const priorityIcon = goal.priority === 'high' ? 'fa-solid fa-fire' : 
-                             goal.priority === 'med' ? 'fa-solid fa-star' : 
-                             'fa-solid fa-leaf';
-        const priorityText = goal.priority === 'high' ? 'Высокий' : 
-                             goal.priority === 'med' ? 'Средний' : 
-                             'Низкий';
-        const priorityBadge = `<span class="priority-badge priority-${goal.priority}"><i class="${priorityIcon}"></i>${priorityText}</span>`;
-
-        // Deadline
-        let deadlineHtml = '';
-        if (goal.deadline) {
-            const daysLeft = Math.ceil((new Date(goal.deadline) - new Date()) / (1000 * 60 * 60 * 24));
-            let timeText = `Дедлайн: <span>${goal.deadline}</span>`;
-            
-            if (isDone) {
-                timeText = `Завершена`;
-            } else if (daysLeft < 0) {
-                timeText = `<span style="color: var(--red); font-weight: 700;">Просрочено на ${Math.abs(daysLeft)} дн.</span>`;
-            } else if (daysLeft <= 7) {
-                timeText = `<span style="color: var(--orange); font-weight: 700;">Осталось ${daysLeft} дн.</span>`;
-            } else {
-                timeText = `Осталось <span>${daysLeft} дн.</span>`;
-            }
-            
-            deadlineHtml = `<span title="Дедлайн"><i class="fa-regular fa-calendar-days"></i> ${timeText}</span>`;
-        }
-
-        // Notes Button
-        const notesButton = goal.notes ? `<button class="action-icon-btn secondary" onclick="showToast('${goal.notes.replace(/'/g, "\\'")}', 6000)"><i class="fa-solid fa-note-sticky"></i> <span class="desktop-only">Заметка</span></button>` : '';
-
-
-        // Actions based on filter
-        let actionsHtml = '';
-        if (filter === 'trash') {
-            // Действия в корзине
-            actionsHtml = `
-                <button class="action-icon-btn secondary" data-action="restore"><i class="fa-solid fa-rotate-left"></i> <span class="desktop-only">Восстановить</span></button>
-                <button class="action-icon-btn delete" data-action="final-delete"><i class="fa-solid fa-ban"></i> <span class="desktop-only">Удалить навсегда</span></button>
-            `;
-        } else {
-            // Действия для активных/завершенных
-            actionsHtml = `
-                ${notesButton}
-                ${!isDone ? `<button class="action-icon-btn secondary" data-action="progress"><i class="fa-solid fa-arrow-up-right-dots"></i> <span class="desktop-only">Баланс</span></button>` : ''}
-                <button class="action-icon-btn secondary" data-action="edit"><i class="fa-solid fa-pen"></i> <span class="desktop-only">Редактировать</span></button>
-                <button class="action-icon-btn ${isDone ? 'secondary' : 'primary'}" data-action="${isDone ? 'undone' : 'done'}"><i class="fa-solid fa-${isDone ? 'arrow-rotate-left' : 'check'}"></i> <span class="desktop-only">${isDone ? 'Вернуть' : 'Готово'}</span></button>
-                <button class="action-icon-btn delete" data-action="trash"><i class="fa-regular fa-trash-can"></i> <span class="desktop-only">В корзину</span></button>
-            `;
-        }
-        
-        card.innerHTML = `
-            <div class="goal-checkbox-wrapper">
-                <input type="checkbox" class="goal-select-checkbox" data-id="${goal.id}" ${selectedGoalIds.has(goal.id) ? 'checked' : ''}>
+            <div class="actions-row">
+                <button class="action-icon-btn" data-act="edit" data-goal-id="${g.id}"><i class="fa-solid fa-pen"></i> <span class="desktop-only">Редактировать</span></button>
+                <button class="action-icon-btn" data-act="done" data-goal-id="${g.id}">
+                    ${g.status === 'done' ? '<i class="fa-solid fa-rotate-left"></i> <span class="desktop-only">Вернуть</span>' : '<i class="fa-solid fa-check"></i> <span class="desktop-only">Готово</span>'}
+                </button>
+                <button class="action-icon-btn delete" data-act="del" data-goal-id="${g.id}" style="margin-left:auto"><i class="fa-regular fa-trash-can"></i> <span class="desktop-only">В корзину</span></button>
             </div>
-            <div class="goal-card-content">
-                <div class="goal-header">
-                    <div class="goal-title">${goal.title}</div>
-                    <div>${priorityBadge}</div>
-                </div>
-                
-                <div class="goal-meta">
-                    ${deadlineHtml}
-                </div>
-                
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width:${percent}%"></div>
-                </div>
-                <div class="numbers">
-                    <span>${formatNumber(goal.current)}</span>
-                    <span>/ ${formatNumber(goal.target)}</span>
-                </div>
-                <div class="actions-row">
-                    ${actionsHtml}
-                </div>
+          `;
+      } else {
+          controls = `
+             <div class="actions-row">
+                <button class="action-icon-btn" data-act="restore" data-goal-id="${g.id}"><i class="fa-solid fa-rotate-left"></i> <span class="desktop-only">Восстановить</span></button>
+                <button class="action-icon-btn delete" data-act="del-final" data-goal-id="${g.id}" style="margin-left:auto"><i class="fa-solid fa-ban"></i> <span class="desktop-only">Удалить навсегда</span></button>
             </div>
-        `;
+          `;
+      }
 
-        // Attach event listeners to the action buttons inside the card
-        card.querySelectorAll('.action-icon-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Предотвращаем срабатывание обработчика на самой карточке
-                const action = btn.dataset.action;
-                handleGoalAction(goal.id, action);
-            });
-        });
+      el.innerHTML = `
+        <div class="goal-checkbox-wrapper">
+             <input type="checkbox" class="goal-select-checkbox" data-id="${g.id}" ${selectedGoalIds.has(g.id) ? 'checked' : ''}>
+        </div>
+        <div class="goal-card-content">
+            <div class="goal-header">
+                <div class="goal-title">${g.title}</div>
+                <div class="priority-badge ${pClass}">${pIcon} ${pText}</div>
+            </div>
+            <div class="goal-meta">
+              <i class="fa-regular fa-clock"></i> ${deadlineText}
+            </div>
 
-        // Attach event listener for the selection checkbox
-        const checkbox = card.querySelector('.goal-select-checkbox');
-        checkbox.addEventListener('click', (e) => e.stopPropagation()); // Остановить всплытие
-        checkbox.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                selectedGoalIds.add(goal.id);
-            } else {
-                selectedGoalIds.delete(goal.id);
-            }
-            card.classList.toggle('selected', e.target.checked);
-            updateMultiActionBar(filter);
-        });
-        
-        // Attach event listener for card click to toggle selection (if not deleting/editing)
-        card.addEventListener('click', (e) => {
-             // Игнорируем клики на элементах управления внутри карточки
-            if (e.target.closest('.action-icon-btn')) return;
+            <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+            <div class="numbers">
+              <span>${fmt(current)}</span>
+              <span>${fmt(target)} • ${pct}%</span>
+            </div>
+
+            ${g.status === 'active' || g.status === 'trash' || g.status === 'done' ? controls : ''}
             
-            checkbox.checked = !checkbox.checked;
-            checkbox.dispatchEvent(new Event('change'));
-        });
-
-
-        return card;
-    }
-
-    function handleGoalAction(id, action) {
-        const goal = DATA.goals.find(g => g.id === id);
-        if (!goal) return;
-
-        switch (action) {
-            case 'edit':
-                populateEditModal(goal);
-                openModal('edit-modal', id);
-                break;
-            case 'progress':
-                openModal('progress-modal', id);
-                document.getElementById('progress-amount').focus();
-                break;
-            case 'done':
-                updateGoal(id, { done: true });
-                break;
-            case 'undone':
-                updateGoal(id, { done: false });
-                break;
-            case 'trash':
-                openConfirmModal(`Переместить цель "${goal.title}" в корзину?`, () => {
-                    updateGoal(id, { deleted: true, done: false });
-                    showToast(`Цель "${goal.title}" перемещена в корзину`);
-                }, id);
-                break;
-            case 'restore':
-                openConfirmModal(`Восстановить цель "${goal.title}"?`, () => {
-                    updateGoal(id, { deleted: false, done: false });
-                    showToast(`Цель "${goal.title}" восстановлена`);
-                }, id);
-                break;
-            case 'final-delete':
-                 openConfirmModal(`Удалить цель "${goal.title}" НАВСЕГДА? Это действие необратимо.`, () => {
-                    DATA.goals = DATA.goals.filter(g => g.id !== id);
-                    save();
-                    render();
-                    showToast(`Цель "${goal.title}" удалена навсегда`);
-                }, id);
-                break;
-        }
-    }
-    
-    // --- MULTI-SELECT ACTIONS ---
-
-    function updateMultiActionBar(filter) {
-        const count = selectedGoalIds.size;
-        multiActionText.textContent = `Выбрано: ${count}`;
-        multiActionBar.style.display = count > 0 ? 'flex' : 'none';
-        
-        // Обновление кнопок в зависимости от вкладки
-        const multiActionBtnsContainer = multiActionBar.querySelector('.multi-action-btns');
-        multiActionBtnsContainer.innerHTML = ''; // Очистка
-        
-        if (filter === 'trash') {
-            multiActionBtnsContainer.appendChild(btnMultiRestore);
-            multiActionBtnsContainer.appendChild(btnMultiFinalDelete);
-        } else {
-            multiActionBtnsContainer.appendChild(btnMultiDone);
-            multiActionBtnsContainer.appendChild(btnMultiTrash);
-        }
-         // Кнопка "Выбрать все" всегда слева (для удобства)
-        multiActionBtnsContainer.prepend(btnSelectAll);
-    }
-    
-    function applyMultiAction(action) {
-        if (selectedGoalIds.size === 0) return;
-        
-        selectedGoalIds.forEach(id => {
-            const goal = DATA.goals.find(g => g.id === id);
-            if (!goal) return;
+            <div class="kpi">
+              <div class="kpi-item">
+                 <div class="kpi-value">${fmt(target - current)}</div>
+                 <div class="kpi-label">Осталось</div>
+              </div>
+              <div class="kpi-item">
+                 <div class="kpi-value" style="color:var(--text);">${shortDate(g.deadline)}</div> 
+                 <div class="kpi-label">Дедлайн</div>
+              </div>
+              ${!isOverdue && hoursLeft !== null && hoursLeft > 0 ? `
+              <div class="kpi-item">
+                 <div class="kpi-value">${fmt(neededPerDay)}</div>
+                 <div class="kpi-label">В день</div>
+              </div>` : `
+              <div class="kpi-item">
+                 <div class="kpi-value" style="color:var(--text-muted)">—</div>
+                 <div class="kpi-label">В день</div>
+              </div>`}
+            </div>
             
-            switch(action) {
-                case 'done':
-                    updateGoal(id, { done: true });
-                    break;
-                case 'trash':
-                    updateGoal(id, { deleted: true, done: false });
-                    break;
-                case 'restore':
-                    updateGoal(id, { deleted: false, done: false });
-                    break;
-                case 'final-delete':
-                    DATA.goals = DATA.goals.filter(g => g.id !== id);
-                    break;
-            }
-        });
+            ${g.notes ? `<div style="margin-top:12px; font-size:13px; color:var(--text-muted); padding:10px; background:var(--bg); border-radius:8px; line-height:1.4;">${g.notes}</div>` : ''}
+        </div>
+      `;
+      
+      // Attach single action listeners using data-goal-id
+      el.querySelectorAll('[data-act]').forEach(btn => {
+        btn.onclick = (e) => {
+            // Prevent event from bubbling to the card/checkbox click handler
+            e.stopPropagation(); 
+            const act = btn.dataset.act;
+            const goalId = btn.dataset.goalId;
+            const g = DATA.goals.find(x => x.id === goalId);
 
-        const actionText = action === 'done' ? 'завершено' : 
-                           action === 'trash' ? 'отправлено в корзину' : 
-                           action === 'restore' ? 'восстановлено' : 'удалено навсегда';
-        
-        showToast(`${selectedGoalIds.size} целей ${actionText}.`);
-        selectedGoalIds.clear(); // Сброс
-        save();
-        render(); // Перерисовка после сохранения
-    }
-
-
-    // --- MODAL DATA HANDLERS ---
-    
-    function populateEditModal(goal) {
-        document.getElementById('edit-title').value = goal.title;
-        document.getElementById('edit-target').value = formatNumber(goal.target);
-        document.getElementById('edit-current').value = formatNumber(goal.current);
-        document.getElementById('edit-deadline').value = goal.deadline || '';
-        document.getElementById('edit-priority').value = goal.priority;
-        document.getElementById('edit-notes').value = goal.notes;
-        
-        // Сброс поля шаблона при открытии
-        document.getElementById('edit-template').value = '';
-        document.getElementById('edit-custom-days-field').style.display = 'none';
-        document.getElementById('edit-custom-days-input').value = '';
-    }
-
-    // --- EVENT LISTENERS ---
-
-    // 1. Добавление новой цели
-    document.getElementById('btn-add').onclick = () => {
-        const title = document.getElementById('g-title').value || 'Новая цель';
-        const target = document.getElementById('g-target').value;
-        const current = document.getElementById('g-current').value;
-        const deadline = document.getElementById('g-deadline').value;
-        const priority = document.getElementById('g-priority').value;
-        const notes = document.getElementById('g-notes').value;
-
-        if (safeParseNum(target) <= 0) {
-            showToast('Целевая сумма должна быть больше 0!');
-            return;
-        }
-
-        addGoal(title, target, current, deadline, priority, notes);
-
-        // Очистка формы
-        document.getElementById('g-title').value = '';
-        document.getElementById('g-target').value = '';
-        document.getElementById('g-current').value = '';
-        document.getElementById('g-deadline').value = '';
-        document.getElementById('g-priority').value = 'med';
-        document.getElementById('g-notes').value = '';
-        document.getElementById('g-template').value = '';
-        document.getElementById('g-custom-days-field').style.display = 'none';
-        document.getElementById('g-custom-days-input').value = '';
-    };
-    
-    // 2. Шаблон срока (Create)
-    const gTemplate = document.getElementById('g-template');
-    const gCustomDays = document.getElementById('g-custom-days-input');
-    const gDeadline = document.getElementById('g-deadline');
-    
-    gTemplate.onchange = () => setDeadlineByTemplate(gDeadline, gTemplate, gCustomDays);
-    gCustomDays.oninput = () => setDeadlineByTemplate(gDeadline, gTemplate, gCustomDays);
-    
-    // 3. Сохранение изменений
-    document.getElementById('save-edit').onclick = () => {
-        if (!currentEditId) return;
-
-        const goal = DATA.goals.find(g => g.id === currentEditId);
-        if (!goal) return;
-        
-        const targetValue = safeParseNum(document.getElementById('edit-target').value);
-        if (targetValue <= 0) {
-            showToast('Целевая сумма должна быть больше 0!');
-            return;
-        }
-
-        // Обновление дедлайна через шаблон, если он был выбран
-        const editTemplate = document.getElementById('edit-template');
-        const editCustomDays = document.getElementById('edit-custom-days-input');
-        const editDeadline = document.getElementById('edit-deadline');
-
-        if (editTemplate.value) {
-            // Применяем логику шаблона
-            setDeadlineByTemplate(editDeadline, editTemplate, editCustomDays);
-        }
-
-        updateGoal(currentEditId, {
-            title: document.getElementById('edit-title').value,
-            target: targetValue,
-            current: safeParseNum(document.getElementById('edit-current').value),
-            deadline: editDeadline.value || null,
-            priority: document.getElementById('edit-priority').value,
-            notes: document.getElementById('edit-notes').value
-        });
-        closeModal('edit-modal');
-        showToast('Цель обновлена');
-    };
-    
-    // 4. Шаблон срока (Edit)
-    const editTemplate = document.getElementById('edit-template');
-    const editCustomDays = document.getElementById('edit-custom-days-input');
-    const editDeadline = document.getElementById('edit-deadline');
-    
-    editTemplate.onchange = () => setDeadlineByTemplate(editDeadline, editTemplate, editCustomDays);
-    editCustomDays.oninput = () => setDeadlineByTemplate(editDeadline, editTemplate, editCustomDays);
-
-    // 5. Обновление прогресса
-    document.getElementById('btn-add-progress').onclick = () => handleProgressUpdate('add');
-    document.getElementById('btn-subtract').onclick = () => handleProgressUpdate('subtract');
-    
-    function handleProgressUpdate(type) {
-        if (!currentProgressId) return;
-        const goal = DATA.goals.find(g => g.id === currentProgressId);
-        if (!goal) return;
-
-        const amount = safeParseNum(document.getElementById('progress-amount').value);
-        if (amount <= 0) {
-            showToast('Сумма должна быть больше 0!');
-            return;
-        }
-        
-        let newCurrent;
-        if (type === 'add') {
-            newCurrent = goal.current + amount;
-            showToast(`Добавлено ${formatNumber(amount)} к "${goal.title}"`);
-        } else {
-            newCurrent = Math.max(0, goal.current - amount); // Не уходим в минус
-            showToast(`Вычтено ${formatNumber(amount)} из "${goal.title}"`);
-        }
-        
-        updateGoal(currentProgressId, { current: newCurrent });
-        closeModal('progress-modal');
-    }
-    
-    // 6. Кнопка ДЕМО
-    document.getElementById('btn-demo').onclick = () => {
-        openConfirmModal('Добавить 3 демо-цели? Текущие данные не пострадают.', () => {
-            addGoal('Накопить на отпуск', '150к', '50к', '2026-06-01', 'high', 'Начать откладывать по 10 тыс. в месяц.');
-            addGoal('Изучить Python', '50', '20', null, 'med', 'Пройти курс "Python для начинающих" (50 уроков).');
-            addGoal('Купить новую камеру', '80000', '80000', '2025-05-20', 'low', 'Цель достигнута, жду доставку.');
-            
-            // Отмечаем последнюю как выполненную
-            DATA.goals[DATA.goals.length - 1].done = true;
-            save();
-            render();
-            showToast('Демо-цели добавлены');
-        });
-    };
-    
-    // 7. Импорт/Экспорт
-    document.getElementById('export-btn').onclick = () => {
-        const dataStr = JSON.stringify(DATA, null, 2);
-        const blob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `designFlow_goals_backup_${new Date().toISOString().split('T')[0]}.json`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        showToast('База скачана');
-    };
-
-    document.getElementById('import-btn').onclick = () => {
-        document.getElementById('file-import').click();
-    };
-
-    document.getElementById('file-import').onchange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = () => {
-            try {
-                // Проверка, что файл содержит JSON
-                JSON.parse(reader.result); 
-                openConfirmModal('Загрузить данные? Текущие будут заменены!', () => {
-                    localStorage.setItem(K, reader.result);
-                    load();
-                    showToast('База загружена');
+            if (act === 'edit') openEditModal(goalId);
+            if (act === 'progress') openProgressModal(goalId);
+            if (act === 'done') {
+                const newStatus = g.status === 'done' ? 'active' : 'done';
+                openConfirmModal(`Вы действительно хотите ${newStatus === 'done' ? 'завершить' : 'вернуть в работу'} цель "${g.title}"?`, () => {
+                    g.status = newStatus;
+                    g.updatedAt = nowISO();
+                    save(); render();
+                    showToast(newStatus === 'done' ? 'Цель выполнена!' : 'Цель активна');
                 });
-            } catch(err) {
-                showToast('Ошибка: Файл поврежден или не является JSON.');
             }
+            if (act === 'del') {
+                 openConfirmModal(`Переместить цель "${g.title}" в корзину?`, () => {
+                    g.status = 'trash';
+                    g.updatedAt = nowISO();
+                    save(); render();
+                    showToast('В корзине');
+                });
+            }
+            if (act === 'restore') {
+                g.status = 'active';
+                save(); render();
+                showToast('Восстановлено');
+            }
+            if (act === 'del-final') {
+                openConfirmModal(`Удалить цель "${g.title}" безвозвратно?`, () => {
+                    DATA.goals = DATA.goals.filter(x => x.id !== goalId);
+                    save(); render();
+                    showToast('Удалено');
+                }, true);
+            }
+        }
+      });
+      
+      // Quick add listeners
+      el.querySelectorAll('[data-add]').forEach(btn => {
+        btn.onclick = (e) => {
+          e.stopPropagation(); // Stop propagation
+          const delta = parseInt(btn.dataset.add);
+          const goalId = btn.dataset.goalId;
+          const g = DATA.goals.find(x => x.id === goalId);
+          g.current = safeParseNum(g.current) + delta;
+          g.updatedAt = nowISO();
+          save(); render();
+          showToast(`+ ${fmt(delta)}`);
         };
-        reader.readAsText(file);
-        e.target.value = '';
-    };
+      });
 
-    // 8. Переключение вкладок
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.onclick = () => {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            selectedGoalIds.clear(); // Сброс выделения при смене вкладки
-            render();
-        };
+      // Checkbox listener
+      el.querySelector('.goal-select-checkbox').addEventListener('change', (e) => {
+          e.stopPropagation(); // Critical to stop propagation on the checkbox itself
+          toggleSelection(g.id);
+      });
+      
+      // Click listener for the card to also toggle selection, but not on inner elements
+      el.addEventListener('click', (e) => {
+          // Only toggle if the click is directly on the card or the main content area, 
+          // not on buttons, links, or inputs inside.
+          if (!e.target.closest('.quick-add') && !e.target.closest('.actions-row') && e.target.type !== 'checkbox') {
+              toggleSelection(g.id);
+          }
+      });
+
+
+      list.appendChild(el);
     });
+  }
 
-    // 9. Переключение темы
-    function toggleTheme() {
-        const currentTheme = document.body.dataset.theme;
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        document.body.dataset.theme = newTheme;
-        localStorage.setItem(THEME_K, newTheme); // ИСПОЛЬЗУЕМ УНИКАЛЬНЫЙ КЛЮЧ
-        
-        // Обновление иконки
-        const icon = document.querySelector('#theme-btn i');
-        if (icon) {
-            icon.className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-        }
-    }
-    document.getElementById('theme-btn').onclick = toggleTheme;
+  // --- ACTIONS ---
 
-    // 10. Multi-select buttons
-    btnSelectAll.onclick = () => {
-        const filter = getActiveFilter();
-        const filteredGoalIds = getGoals(filter).map(g => g.id);
-        
-        if (selectedGoalIds.size === filteredGoalIds.length && filteredGoalIds.length > 0) {
-            // Если все выбраны, снять выделение
-            selectedGoalIds.clear();
+  function openEditModal(id) {
+    const g = DATA.goals.find(x => x.id === id);
+    if (!g) return;
+    currentEditId = id;
+    document.getElementById('edit-title').value = g.title || '';
+    // Форматирование при открытии
+    document.getElementById('edit-target').value = fmt(g.target); 
+    document.getElementById('edit-current').value = fmt(g.current);
+    document.getElementById('edit-deadline').value = g.deadline || '';
+    document.getElementById('edit-priority').value = g.priority || 'med';
+    document.getElementById('edit-notes').value = g.notes || '';
+    document.getElementById('edit-template').value = '';
+    document.getElementById('edit-custom-days-field').style.display = 'none';
+    
+    openModal('edit-modal');
+  }
+
+  document.getElementById('save-edit').onclick = () => {
+    openConfirmModal('Сохранить изменения в цели?', () => {
+        const g = DATA.goals.find(x => x.id === currentEditId);
+        if (!g) return;
+        g.title = document.getElementById('edit-title').value.trim();
+        // Используем safeParseNum для преобразования отформатированного ввода в число
+        g.target = safeParseNum(document.getElementById('edit-target').value); 
+        g.current = safeParseNum(document.getElementById('edit-current').value);
+        g.deadline = document.getElementById('edit-deadline').value || null;
+        g.priority = document.getElementById('edit-priority').value;
+        g.notes = document.getElementById('edit-notes').value.trim();
+        g.updatedAt = nowISO();
+        save(); render();
+        closeModal('edit-modal');
+        showToast('Сохранено');
+    });
+  };
+
+  function openProgressModal(id) {
+    currentProgressId = id;
+    document.getElementById('progress-amount').value = '';
+    openModal('progress-modal');
+  }
+
+  function updateProgress(isSubtract) {
+    const g = DATA.goals.find(x => x.id === currentProgressId);
+    if (!g) return;
+    // Используем safeParseNum, чтобы обработать ввод типа "5к"
+    const val = safeParseNum(document.getElementById('progress-amount').value); 
+    if (val <= 0) { showToast('Введите положительную сумму!'); return; }
+    
+    openConfirmModal(`${isSubtract ? 'Вычесть' : 'Добавить'} ${fmt(val)}?`, () => {
+        if (isSubtract) {
+            g.current = Math.max(0, g.current - val);
+            showToast(`Вычтено ${fmt(val)}`);
         } else {
-            // Иначе выбрать все
-            selectedGoalIds = new Set(filteredGoalIds);
+            g.current = g.current + val;
+            showToast(`Добавлено ${fmt(val)}`);
         }
-        render();
+        g.updatedAt = nowISO();
+        save(); render();
+        closeModal('progress-modal');
+    });
+  }
+
+  document.getElementById('btn-add-progress').onclick = () => updateProgress(false);
+  document.getElementById('btn-subtract').onclick = () => updateProgress(true);
+
+  document.getElementById('btn-add').onclick = () => {
+    const title = document.getElementById('g-title').value.trim();
+    if (!title) { showToast('Введите название!'); return; }
+
+    const g = {
+      id: Date.now().toString(36),
+      title,
+      priority: document.getElementById('g-priority').value,
+      target: safeParseNum(document.getElementById('g-target').value),
+      current: safeParseNum(document.getElementById('g-current').value),
+      deadline: document.getElementById('g-deadline').value || null,
+      notes: document.getElementById('g-notes').value.trim(),
+      status: 'active',
+      createdAt: nowISO(),
+      updatedAt: nowISO()
     };
+
+    DATA.goals.push(g);
+    save(); render();
+    showToast('Цель создана');
     
-    btnMultiDone.onclick = () => openConfirmModal(`Завершить ${selectedGoalIds.size} целей?`, () => applyMultiAction('done'));
-    btnMultiTrash.onclick = () => openConfirmModal(`Отправить ${selectedGoalIds.size} целей в корзину?`, () => applyMultiAction('trash'));
-    btnMultiRestore.onclick = () => openConfirmModal(`Восстановить ${selectedGoalIds.size} целей?`, () => applyMultiAction('restore'));
-    btnMultiFinalDelete.onclick = () => openConfirmModal(`Удалить ${selectedGoalIds.size} целей НАВСЕГДА?`, () => applyMultiAction('final-delete'));
+    ['g-title','g-target','g-current','g-deadline','g-notes','g-custom-days-input'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.value = '';
+    });
+    document.getElementById('g-template').value = '';
+    document.getElementById('g-custom-days-field').style.display = 'none';
+  };
 
+  const demoGoals = [
+      { t: 'Поездка на Бали', target: 200000, cur: 45000, p: 'high', note: 'Серфинг и отдых' },
+      { t: 'Новый iPhone 16', target: 120000, cur: 10000, p: 'med', note: 'Подарок себе на ДР' },
+      { t: 'Финансовая подушка', target: 500000, cur: 125000, p: 'high', note: '6 месяцев расходов' },
+      { t: 'Курсы английского', target: 60000, cur: 0, p: 'low', note: 'Уровень B2 к лету' }
+  ];
 
-    // --- ИНИЦИАЛИЗАЦИЯ (загрузка данных и темы) ---
-    
-    function init() {
-        // 1. Применяем сохраненную тему перед загрузкой данных
-        const savedTheme = localStorage.getItem(THEME_K) || ''; // ИСПОЛЬЗУЕМ УНИКАЛЬНЫЙ КЛЮЧ
-        document.body.dataset.theme = savedTheme;
-        
-        // 2. Устанавливаем иконку на кнопке темы в соответствии с сохраненным состоянием
-        const isDark = savedTheme === 'dark';
-        const themeButtonIcon = document.querySelector('#theme-btn i');
-        if (themeButtonIcon) {
-            themeButtonIcon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-        }
-
-        // 3. Загружаем основные данные
-        load();
+  document.getElementById('btn-demo').onclick = () => {
+    // Добавляем цели только если их нет или для целей, которые уже не активны (чтобы не загромождать список)
+    if (DATA.goals.filter(g => g.status === 'active').length > 0) {
+        showToast('Активные цели уже есть. Создайте вручную!');
+        return;
     }
     
-    init();
+    demoGoals.forEach(rnd => {
+        const d = new Date();
+        d.setDate(d.getDate() + 30 + Math.floor(Math.random() * 60));
 
+        const g = {
+          id: Date.now().toString(36) + Math.random().toString(36).slice(2),
+          title: rnd.t,
+          priority: rnd.p,
+          target: rnd.target,
+          current: rnd.cur,
+          deadline: d.toISOString().slice(0,10),
+          notes: rnd.note,
+          status: 'active',
+          createdAt: nowISO(),
+          updatedAt: nowISO()
+        };
+        DATA.goals.push(g);
+    });
+    
+    save(); 
+    render(); 
+    showToast('Демо-цели добавлены!');
+  };
+
+  // --- ЛОГИКА СОХРАНЕНИЯ ТЕМЫ ---
+  
+  document.getElementById('theme-btn').onclick = () => {
+    const isDarkNow = document.body.dataset.theme === 'dark';
+    const newTheme = isDarkNow ? '' : 'dark';
+    document.body.dataset.theme = newTheme;
+    localStorage.setItem('theme', newTheme);
+    
+    document.querySelector('#theme-btn i').className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+  };
+
+
+  document.getElementById('export-btn').onclick = () => {
+    const dataToExport = localStorage.getItem(K);
+    if (!dataToExport) {
+        showToast('Нет данных для скачивания!');
+        return;
+    }
+    
+    const blob = new Blob([dataToExport], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'designflow-goals.json';
+    a.click();
+    showToast('Скачано');
+  };
+
+  document.getElementById('import-btn').onclick = () => document.getElementById('file-import').click();
+  document.getElementById('file-import').onchange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+        try {
+            // Проверка, что файл содержит JSON
+            JSON.parse(reader.result); 
+            openConfirmModal('Загрузить данные? Текущие будут заменены!', () => {
+                localStorage.setItem(K, reader.result);
+                load();
+                showToast('База загружена');
+            });
+        } catch(err) {
+            showToast('Ошибка: Файл поврежден или не является JSON.');
+        }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
+
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.onclick = () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      selectedGoalIds.clear(); // Сброс выделения при смене вкладки
+      render();
+    };
+  });
+
+  // --- ИНИЦИАЛИЗАЦИЯ (загрузка данных и темы) ---
+  
+  // 1. Применяем сохраненную тему перед загрузкой данных
+  const savedTheme = localStorage.getItem('theme') || '';
+  document.body.dataset.theme = savedTheme;
+  
+  // 2. Устанавливаем иконку на кнопке темы в соответствии с сохраненным состоянием
+  const isDark = savedTheme === 'dark';
+  const themeButtonIcon = document.querySelector('#theme-btn i');
+  if (themeButtonIcon) {
+      themeButtonIcon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+  }
+  
+  // 3. Загружаем данные
+  load();
 })();
 </script>
 </body>
