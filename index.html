@@ -1147,8 +1147,12 @@ td.date-cell + td.date-cell {
 }
 
 
-
-      .btn.secondary:hover { background: var(--card); }
+.btn.secondary:hover { 
+    /* Используем более заметный серый цвет, как у стандартных кнопок при ховере */
+    background: #444c56; 
+    /* Также убедимся, что цвет границы не исчезает */
+    border-color: #444c56;
+}
       
       
 </style>
