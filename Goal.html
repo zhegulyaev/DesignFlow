@@ -167,6 +167,22 @@
 
     .btn.danger { background: #fee2e2; color: var(--red); }
     .btn.danger:hover { background: #fecaca; }
+    
+    /* Icon Only Button (Trash in History) */
+    .btn-icon {
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        cursor: pointer;
+        padding: 6px;
+        border-radius: 6px;
+        transition: .2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .btn-icon:hover { background: #fee2e2; color: var(--red); }
+    body[data-theme="dark"] .btn-icon:hover { background: #450a0a; color: #f87171; }
 
     /* --- WARNING BLOCK --- */
     .warning-wrapper {
@@ -341,7 +357,6 @@
       background: var(--card-bg);
       transition: transform .2s, box-shadow .2s, border-color .3s, opacity .2s;
       position: relative; 
-      padding-left: 55px;
       cursor: grab;
     }
 
@@ -354,10 +369,6 @@
         background: var(--bg);
     }
     
-    @media (max-width: 600px) {
-        .goal-card { padding-left: 20px; }
-    }
-    
     .goal-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
     
     .goal-card.selected {
@@ -368,7 +379,7 @@
     /* Стили для завершенной цели */
     .goal-card.done {
         border-color: var(--celebrate-end);
-        opacity: 0.8; /* Чуть менее прозрачный, чтобы было видно победную шкалу */
+        opacity: 0.8; 
         box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.3);
         background: #f0fdf4;
     }
@@ -387,30 +398,30 @@
         z-index: 1;
     }
     
+    /* ИСПРАВЛЕНИЕ: Чекбокс теперь аккуратно в углу */
     .goal-checkbox-wrapper {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        z-index: 2;
+        /* position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 5;
         height: 18px;
-        opacity: 0; /* ИЗМЕНЕНИЕ: Скрыто по умолчанию */
-        transition: opacity 0.2s ease;
+        opacity: 0;
+        transition: opacity 0.2s ease; */
+        display: flex;
+        align-items: center;
+        height: 24px; /* Match height of title */
     }
     
-    /* ИЗМЕНЕНИЕ: Показываем чекбокс при наведении или если карточка выбрана */
-    .goal-card:hover .goal-checkbox-wrapper,
+    /* .goal-card:hover .goal-checkbox-wrapper,
     .goal-card.selected .goal-checkbox-wrapper {
         opacity: 1;
     }
     
     @media (max-width: 600px) {
         .goal-checkbox-wrapper {
-            top: 15px; 
-            right: 15px;
-            left: auto;
-            opacity: 1; /* На мобильном всегда показываем, т.к. нет ховера */
+            opacity: 1; 
         }
-    }
+    } */
     
     .goal-select-checkbox {
       margin: 0;
@@ -419,13 +430,18 @@
       cursor: pointer;
       border-radius: 4px;
       border: 1px solid var(--border);
-      background: var(--bg);
+      background: var(--card-bg); /* Чтобы не просвечивал фон */
       flex-shrink: 0;
       accent-color: var(--accent);
+      /* box-shadow: 0 1px 3px rgba(0,0,0,0.1); */
+      transition: border-color 0.2s;
+    }
+    .goal-select-checkbox:hover {
+        border-color: var(--accent);
     }
     
     body[data-theme="dark"] .goal-select-checkbox {
-        background: #0f172a;
+        background: #1e293b;
         border-color: #475569;
     }
 
@@ -440,9 +456,12 @@
     .star-icon {
         color: #cbd5e1;
         font-size: 16px;
-        margin-top: 4px;
+        /* margin-top: 4px; */
         cursor: pointer;
         transition: transform 0.2s, color 0.2s;
+        display: flex;
+        align-items: center;
+        height: 24px; /* Match height of title */
     }
     .star-icon:hover {
         transform: scale(1.2);
@@ -453,7 +472,6 @@
     body[data-theme="dark"] .star-icon:hover,
     body[data-theme="dark"] .star-icon.active { color: var(--fav-gold); }
     
-    /* ИЗМЕНЕНИЕ: Иконка закрепления теперь кликабельна */
     .pin-icon {
         color: #cbd5e1;
         font-size: 16px;
@@ -470,6 +488,14 @@
     body[data-theme="dark"] .pin-icon { color: #475569; }
     body[data-theme="dark"] .pin-icon:hover,
     body[data-theme="dark"] .pin-icon.active { color: var(--accent); }
+
+    /* ИЗМЕНЕНИЕ: Иконка закрепления */
+    .pin-icon-status {
+        color: var(--accent);
+        font-size: 14px;
+        margin-top: 5px;
+        transform: rotate(45deg);
+    }
 
     .goal-title { font-size: 18px; font-weight: 700; line-height: 1.3; color: var(--text); }
 
@@ -553,7 +579,12 @@
       flex: 1;
       text-align: center;
       transition: .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
+    .quick-btn i { color: inherit; }
     .quick-btn:hover { border-color: var(--accent); color: var(--accent); }
 
     body[data-theme="dark"] .quick-btn { background: #334155; border-color: #475569; }
@@ -771,6 +802,13 @@
     .history-info { display: flex; flex-direction: column; gap: 2px; }
     .history-date { font-size: 11px; color: var(--text-muted); }
     .history-comment { font-size: 13px; font-weight: 500; color: var(--text); }
+    
+    .history-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
     .history-amount { font-weight: 700; font-size: 14px; }
     .history-amount.plus { color: var(--green); }
     .history-amount.minus { color: var(--red); }
@@ -804,15 +842,6 @@
         }
         .warning-actions .btn {
             flex: 1;
-        }
-        
-        .goal-card {
-            padding-left: 20px; 
-        }
-        .goal-checkbox-wrapper {
-            top: 15px; 
-            right: 15px;
-            left: auto;
         }
         
         .desktop-only { display: none; }
@@ -1268,10 +1297,14 @@
       const days = Math.floor(diffMs / MS_PER_DAY);
       const remainingMs = diffMs % MS_PER_DAY;
       const hours = Math.floor(remainingMs / MS_PER_HOUR);
+      const minutes = Math.floor((remainingMs % MS_PER_HOUR) / MS_PER_MINUTE);
       
       text += `${days} ${declOfNum(days, ['день', 'дня', 'дней'])}`;
       if (hours > 0) {
           text += `, ${hours} ${declOfNum(hours, ['час', 'часа', 'часов'])}`;
+      }
+      if (minutes > 0) {
+          text += `, ${minutes} ${declOfNum(minutes, ['минута', 'минуты', 'минут'])}`;
       }
     }
     
@@ -1598,14 +1631,10 @@
       
       let controls = '';
       
-      // ИЗМЕНЕНИЕ: Убрал иконку закрепления из нижнего ряда, добавил кнопку истории
       if (!isTrash) {
           controls = `
             <div class="quick-add">
-                <div class="quick-btn" data-add="1000" data-goal-id="${g.id}">+ 1к</div>
-                <div class="quick-btn" data-add="5000" data-goal-id="${g.id}">+ 5к</div>
-                <div class="quick-btn" data-add="10000" data-goal-id="${g.id}">+ 10к</div>
-                <button class="quick-btn" data-act="progress" data-goal-id="${g.id}" style="flex-basis: 50px;"><i class="fa-solid fa-right-left"></i> +/-</button>
+                <button class="quick-btn" data-act="progress" data-goal-id="${g.id}"><i class="fa-solid fa-right-left"></i> Изменить баланс</button>
             </div>
             <div class="actions-row">
                 <button class="action-icon-btn" data-act="edit" data-goal-id="${g.id}"><i class="fa-solid fa-pen"></i> <span class="desktop-only">Редактировать</span></button>
@@ -1625,7 +1654,6 @@
           `;
       }
 
-      // ИЗМЕНЕНИЕ: Иконка Пина теперь в заголовке, кликабельная
       el.innerHTML = `
         <div class="goal-checkbox-wrapper">
              <input type="checkbox" class="goal-select-checkbox" data-id="${g.id}" ${selectedGoalIds.has(g.id) ? 'checked' : ''}>
@@ -1777,7 +1805,6 @@
           g.current = newCurrent;
           g.updatedAt = nowISO();
           
-          // Добавляем запись в историю
           if (!g.history) g.history = [];
           g.history.push({
               id: Date.now().toString(36),
@@ -1859,19 +1886,35 @@
     openConfirmModal('Сохранить изменения в цели?', () => {
         const g = DATA.goals.find(x => x.id === currentEditId);
         if (!g) return;
+        
         g.title = document.getElementById('edit-title').value.trim();
         g.target = safeParseNum(document.getElementById('edit-target').value); 
+        
         const newCurrent = safeParseNum(document.getElementById('edit-current').value);
+        const oldCurrent = safeParseNum(g.current);
+        const diff = newCurrent - oldCurrent;
+        
         g.deadline = document.getElementById('edit-deadline').value || null;
         g.priority = document.getElementById('edit-priority').value;
         g.notes = document.getElementById('edit-notes').value.trim();
         g.updatedAt = nowISO();
         
-        const oldCurrent = safeParseNum(g.current);
-        const target = safeParseNum(g.target);
-        
-        // Manual Edit doesn't log history automatically as it's an "edit", not transaction
         g.current = newCurrent;
+        
+        // --- ADDED: History log for manual edits ---
+        if (diff !== 0) {
+            if (!g.history) g.history = [];
+            g.history.push({
+                id: Date.now().toString(36),
+                date: nowISO(),
+                amount: diff,
+                type: 'edit',
+                comment: 'Ручное изменение'
+            });
+        }
+        
+        const target = safeParseNum(g.target);
+
         save();
         
         if (newCurrent >= target && target > 0 && oldCurrent < target && g.status !== 'done') {
@@ -1915,7 +1958,6 @@
         g.current = newCurrent;
         g.updatedAt = nowISO();
         
-        // Add to history
         if (!g.history) g.history = [];
         g.history.push({
             id: Date.now().toString(36),
@@ -1943,6 +1985,17 @@
   document.getElementById('btn-subtract').onclick = () => updateProgress(true);
   
   // --- HISTORY LOGIC ---
+  function deleteHistoryItem(goalId, historyId) {
+      const g = DATA.goals.find(x => x.id === goalId);
+      if (!g || !g.history) return;
+      
+      // Just delete the log entry, do not revert balance (safer for manual edits)
+      g.history = g.history.filter(h => h.id !== historyId);
+      save();
+      openHistoryModal(goalId); // Re-render modal
+      showToast('Запись удалена');
+  }
+
   function openHistoryModal(goalId) {
       currentHistoryId = goalId;
       const g = DATA.goals.find(x => x.id === goalId);
@@ -1957,12 +2010,22 @@
           const list = document.createElement('div');
           list.className = 'history-list';
           
-          // Sort new first
           const sortedHistory = [...g.history].sort((a,b) => new Date(b.date) - new Date(a.date));
           
           sortedHistory.forEach(h => {
-             const dateObj = new Date(h.date);
-             const dateStr = dateObj.toLocaleString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+             // FIX: Proper date parsing
+             let dateStr = "Неизвестная дата";
+             try {
+                 const dateObj = new Date(h.date);
+                 if (!isNaN(dateObj.getTime())) {
+                     dateStr = dateObj.toLocaleString('ru-RU', { 
+                         month: 'short', 
+                         day: 'numeric', 
+                         hour: '2-digit', 
+                         minute: '2-digit' 
+                     });
+                 }
+             } catch(e) {}
              
              const isPositive = h.amount > 0;
              const sign = isPositive ? '+' : '';
@@ -1975,8 +2038,20 @@
                     <div class="history-comment">${h.comment || (isPositive ? 'Пополнение' : 'Расход')}</div>
                     <div class="history-date">${dateStr}</div>
                 </div>
-                <div class="history-amount ${colorClass}">${sign}${fmt(h.amount)}</div>
+                <div class="history-right">
+                    <div class="history-amount ${colorClass}">${sign}${fmt(h.amount)}</div>
+                    <button class="btn-icon" title="Удалить запись"><i class="fa-regular fa-trash-can"></i></button>
+                </div>
              `;
+             
+             // Add click listener to delete button
+             const delBtn = item.querySelector('.btn-icon');
+             delBtn.onclick = () => {
+                 openConfirmModal('Удалить эту запись из истории?', () => {
+                     deleteHistoryItem(goalId, h.id);
+                 });
+             };
+             
              list.appendChild(item);
           });
           
@@ -1994,7 +2069,6 @@
     const target = safeParseNum(document.getElementById('g-target').value);
     const current = safeParseNum(document.getElementById('g-current').value);
     
-    // ИЗМЕНЕНИЕ: Если target == 0, то цель не считается выполненной автоматически
     const isDone = (target > 0) && (current >= target);
 
     const g = {
@@ -2008,12 +2082,11 @@
       status: isDone ? 'done' : 'active', 
       isFavorite: false, 
       isPinned: false, 
-      history: [], // Init empty history
+      history: [], 
       createdAt: nowISO(),
       updatedAt: nowISO()
     };
     
-    // Initial history entry if created with balance
     if (current > 0) {
         g.history.push({
             id: Date.now().toString(36),
