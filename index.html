@@ -1170,34 +1170,33 @@ body:not([data-theme="dark"]) .header-new-badge {
   </div>
 
 
-  <div class="top-panel" id="backup-panel" data-editable data-block-key="backup">
-    <div class="backup-info">
-      <b>⚠ Важно:</b> Данные хранятся только в вашем браузере. <br>
-      Обязательно скачивайте резервную копию перед очисткой кэша или переустановкой системы.
-    </div>
- <div class="btns">
-  <button onclick="exp()" title="Сохранить резервную копию JSON">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-      <path d="M8 12l-4-4h2.5V2h3v6H12L8 12zM2 13h12v1H2v-1z"/>
-    </svg>
-    <span>Скачать базу</span>
-  </button>
-
-  <button onclick="document.getElementById('importFile').click()" title="Восстановить из JSON">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-      <path d="M8 4L4 8h2.5v6h3V8H12L8 4zM2 3h12V2H2v1z"/>
-    </svg>
-    <span>Загрузить базу</span>
-  </button>
-  
-  <input type="file" id="importFile" style="display:none" onchange="imp(this.files[0])">
-
-  <button id="themeToggle" onclick="toggleTheme()">
-    <span id="themeToggleIcon"></span>
-    <span id="themeToggleLabel">Тема</span>
-  </button>
-</div>
+<div class="top-panel">
+  <div class="backup-info">
+    ⚠ <b>Важно:</b> Данные хранятся только в вашем браузере. Обязательно скачивайте резервную копию перед очисткой кэша или переустановкой системы.
   </div>
+  
+  <div class="btns">
+    <button class="btn-outline" onclick="exp()" title="Сохранить JSON">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
+      <span>Скачать базу</span>
+    </button>
+
+    <button class="btn-outline" onclick="document.getElementById('importFile').click()" title="Загрузить из JSON">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="17 8 12 3 7 8"></polyline>
+        <line x1="12" y1="3" x2="12" y2="15"></line>
+      </svg>
+      <span>Загрузить базу</span>
+    </button>
+    
+    <input type="file" id="importFile" style="display:none" onchange="imp(this.files[0])">
+  </div>
+</div>
 
   <div class="tabs-container">
     <div class="tabs">
