@@ -453,13 +453,23 @@
     body[data-theme="dark"] .star-icon:hover,
     body[data-theme="dark"] .star-icon.active { color: var(--fav-gold); }
     
-    /* ИЗМЕНЕНИЕ: Иконка закрепления */
-    .pin-icon-status {
-        color: var(--accent);
-        font-size: 14px;
-        margin-top: 5px;
+    /* ИЗМЕНЕНИЕ: Иконка закрепления теперь кликабельна */
+    .pin-icon {
+        color: #cbd5e1;
+        font-size: 16px;
+        margin-top: 4px;
+        cursor: pointer;
+        transition: transform 0.2s, color 0.2s;
         transform: rotate(45deg);
     }
+    .pin-icon:hover {
+        transform: rotate(45deg) scale(1.2);
+        color: var(--accent);
+    }
+    .pin-icon.active { color: var(--accent); }
+    body[data-theme="dark"] .pin-icon { color: #475569; }
+    body[data-theme="dark"] .pin-icon:hover,
+    body[data-theme="dark"] .pin-icon.active { color: var(--accent); }
 
     .goal-title { font-size: 18px; font-weight: 700; line-height: 1.3; color: var(--text); }
 
@@ -743,6 +753,28 @@
     .congrats-actions { display: flex; gap: 10px; width: 100%; }
     .congrats-actions .btn { flex: 1; justify-content: center; padding: 12px; }
 
+    /* --- HISTORY MODAL --- */
+    .history-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 10px;
+    }
+    .history-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--border);
+    }
+    .history-item:last-child { border-bottom: none; }
+    .history-info { display: flex; flex-direction: column; gap: 2px; }
+    .history-date { font-size: 11px; color: var(--text-muted); }
+    .history-comment { font-size: 13px; font-weight: 500; color: var(--text); }
+    .history-amount { font-weight: 700; font-size: 14px; }
+    .history-amount.plus { color: var(--green); }
+    .history-amount.minus { color: var(--red); }
+
 
     /* --- FOOTER --- */
     .footer {
@@ -1005,10 +1037,28 @@
           <label>Сумма операции</label>
           <input id="progress-amount" placeholder="5 000 или 5к" inputmode="numeric" autofocus />
         </div>
+        <div class="field">
+            <label>Комментарий (опционально)</label>
+            <input id="progress-comment" placeholder="Например: Потратил на отель" />
+        </div>
       </div>
       <div class="modal-actions" style="justify-content: space-between;">
         <button class="btn danger" id="btn-subtract"><i class="fa-solid fa-minus"></i> Вычесть</button>
         <button class="btn primary" id="btn-add-progress"><i class="fa-solid fa-plus"></i> Добавить</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal" id="history-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>История операций</h2>
+        <span class="modal-close"><i class="fa-solid fa-xmark"></i></span>
+      </div>
+      <div class="modal-body" id="history-list-container">
+        </div>
+      <div class="modal-actions">
+          <button class="btn secondary modal-close">Закрыть</button>
       </div>
     </div>
   </div>
@@ -1049,6 +1099,7 @@
   let DATA = { goals: [] };
   let currentEditId = null;
   let currentProgressId = null;
+  let currentHistoryId = null;
   let confirmAction = null;
   let congratsGoalId = null; 
 
@@ -1251,6 +1302,10 @@
       if (raw) {
         const parsed = JSON.parse(raw);
         DATA.goals = Array.isArray(parsed.data?.goals) ? parsed.data.goals : [];
+        // Migration for history
+        DATA.goals.forEach(g => {
+            if (!g.history) g.history = [];
+        });
       }
     } catch(e) { 
         console.error("Local Storage Load Error:", e); 
@@ -1484,7 +1539,7 @@
       return false;
     });
     
-    // ИЗМЕНЕНИЕ: Сортировка - закрепленные (isPinned) всегда сверху
+    // Сортировка - закрепленные (isPinned) всегда сверху
     visible.sort((a, b) => {
         if (a.isPinned === b.isPinned) return 0;
         return a.isPinned ? -1 : 1;
@@ -1543,7 +1598,7 @@
       
       let controls = '';
       
-      // ИЗМЕНЕНИЕ: Добавлена кнопка Пин (fa-thumbtack) в actions-row
+      // ИЗМЕНЕНИЕ: Убрал иконку закрепления из нижнего ряда, добавил кнопку истории
       if (!isTrash) {
           controls = `
             <div class="quick-add">
@@ -1554,7 +1609,7 @@
             </div>
             <div class="actions-row">
                 <button class="action-icon-btn" data-act="edit" data-goal-id="${g.id}"><i class="fa-solid fa-pen"></i> <span class="desktop-only">Редактировать</span></button>
-                <button class="action-icon-btn ${g.isPinned ? 'pinned' : ''}" data-act="pin" data-goal-id="${g.id}" title="${g.isPinned ? 'Открепить' : 'Закрепить сверху'}"><i class="fa-solid fa-thumbtack"></i></button>
+                <button class="action-icon-btn" data-act="history" data-goal-id="${g.id}"><i class="fa-solid fa-list-ul"></i> <span class="desktop-only">История</span></button>
                 <button class="action-icon-btn" data-act="done" data-goal-id="${g.id}">
                     ${g.status === 'done' ? '<i class="fa-solid fa-rotate-left"></i> <span class="desktop-only">Вернуть</span>' : '<i class="fa-solid fa-check"></i> <span class="desktop-only">Готово</span>'}
                 </button>
@@ -1570,7 +1625,7 @@
           `;
       }
 
-      // ИЗМЕНЕНИЕ: Добавлен title для тултипа "В избранное" и иконка Пина
+      // ИЗМЕНЕНИЕ: Иконка Пина теперь в заголовке, кликабельная
       el.innerHTML = `
         <div class="goal-checkbox-wrapper">
              <input type="checkbox" class="goal-select-checkbox" data-id="${g.id}" ${selectedGoalIds.has(g.id) ? 'checked' : ''}>
@@ -1579,8 +1634,8 @@
             <div class="goal-header">
                 <div class="goal-title-wrapper">
                    <i class="fa-${g.isFavorite ? 'solid' : 'regular'} fa-star star-icon ${g.isFavorite ? 'active' : ''}" data-act="fav" data-goal-id="${g.id}" title="${g.isFavorite ? 'Убрать из избранного' : 'В избранное'}"></i>
-                   <div class="goal-title">${g.title}</div>
-                   ${g.isPinned ? '<i class="fa-solid fa-thumbtack pin-icon-status" title="Закреплено"></i>' : ''}
+                   <i class="fa-solid fa-thumbtack pin-icon ${g.isPinned ? 'active' : ''}" data-act="pin" data-goal-id="${g.id}" title="${g.isPinned ? 'Открепить' : 'Закрепить сверху'}"></i>
+                   <div class="goal-title" style="margin-left: 4px;">${g.title}</div>
                 </div>
                 <div class="priority-badge ${pClass}">${pIcon} ${pText}</div>
             </div>
@@ -1658,7 +1713,6 @@
                 showToast(g.isFavorite ? 'Добавлено в избранное' : 'Убрано из избранного');
             }
             
-            // ИЗМЕНЕНИЕ: Обработчик для закрепления
             if (act === 'pin') {
                 g.isPinned = !g.isPinned;
                 g.updatedAt = nowISO();
@@ -1668,6 +1722,7 @@
 
             if (act === 'edit') openEditModal(goalId);
             if (act === 'progress') openProgressModal(goalId);
+            if (act === 'history') openHistoryModal(goalId);
             if (act === 'done') {
                 const newStatus = g.status === 'done' ? 'active' : 'done';
                 
@@ -1715,11 +1770,23 @@
           
           if (!g || g.status !== 'active') return showToast('Цель неактивна');
 
-          const newCurrent = safeParseNum(g.current) + delta;
+          const oldCurrent = safeParseNum(g.current);
+          const newCurrent = oldCurrent + delta;
           const target = safeParseNum(g.target);
           
           g.current = newCurrent;
           g.updatedAt = nowISO();
+          
+          // Добавляем запись в историю
+          if (!g.history) g.history = [];
+          g.history.push({
+              id: Date.now().toString(36),
+              date: nowISO(),
+              amount: delta,
+              type: 'add',
+              comment: 'Быстрое пополнение'
+          });
+
           save(); 
           
           if (newCurrent >= target && target > 0 && g.status !== 'done') {
@@ -1803,6 +1870,7 @@
         const oldCurrent = safeParseNum(g.current);
         const target = safeParseNum(g.target);
         
+        // Manual Edit doesn't log history automatically as it's an "edit", not transaction
         g.current = newCurrent;
         save();
         
@@ -1820,6 +1888,7 @@
   function openProgressModal(id) {
     currentProgressId = id;
     document.getElementById('progress-amount').value = '';
+    document.getElementById('progress-comment').value = '';
     openModal('progress-modal');
   }
 
@@ -1828,6 +1897,8 @@
     if (!g || g.status !== 'active') return showToast('Цель неактивна');
     
     const val = safeParseNum(document.getElementById('progress-amount').value); 
+    const comment = document.getElementById('progress-comment').value.trim();
+    
     if (val <= 0) { showToast('Введите положительную сумму!'); return; }
     
     openConfirmModal(`${isSubtract ? 'Вычесть' : 'Добавить'} ${fmt(val)}?`, () => {
@@ -1843,6 +1914,17 @@
         
         g.current = newCurrent;
         g.updatedAt = nowISO();
+        
+        // Add to history
+        if (!g.history) g.history = [];
+        g.history.push({
+            id: Date.now().toString(36),
+            date: nowISO(),
+            amount: isSubtract ? -val : val,
+            type: isSubtract ? 'sub' : 'add',
+            comment: comment || (isSubtract ? 'Уменьшение баланса' : 'Пополнение')
+        });
+
         save(); 
 
         closeModal('progress-modal');
@@ -1859,6 +1941,51 @@
 
   document.getElementById('btn-add-progress').onclick = () => updateProgress(false);
   document.getElementById('btn-subtract').onclick = () => updateProgress(true);
+  
+  // --- HISTORY LOGIC ---
+  function openHistoryModal(goalId) {
+      currentHistoryId = goalId;
+      const g = DATA.goals.find(x => x.id === goalId);
+      if (!g) return;
+      
+      const container = document.getElementById('history-list-container');
+      container.innerHTML = '';
+      
+      if (!g.history || g.history.length === 0) {
+          container.innerHTML = '<div class="empty-message" style="padding: 20px;">Нет операций</div>';
+      } else {
+          const list = document.createElement('div');
+          list.className = 'history-list';
+          
+          // Sort new first
+          const sortedHistory = [...g.history].sort((a,b) => new Date(b.date) - new Date(a.date));
+          
+          sortedHistory.forEach(h => {
+             const dateObj = new Date(h.date);
+             const dateStr = dateObj.toLocaleString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+             
+             const isPositive = h.amount > 0;
+             const sign = isPositive ? '+' : '';
+             const colorClass = isPositive ? 'plus' : 'minus';
+             
+             const item = document.createElement('div');
+             item.className = 'history-item';
+             item.innerHTML = `
+                <div class="history-info">
+                    <div class="history-comment">${h.comment || (isPositive ? 'Пополнение' : 'Расход')}</div>
+                    <div class="history-date">${dateStr}</div>
+                </div>
+                <div class="history-amount ${colorClass}">${sign}${fmt(h.amount)}</div>
+             `;
+             list.appendChild(item);
+          });
+          
+          container.appendChild(list);
+      }
+      
+      openModal('history-modal');
+  }
+
 
   document.getElementById('btn-add').onclick = () => {
     const title = document.getElementById('g-title').value.trim();
@@ -1880,10 +2007,22 @@
       notes: document.getElementById('g-notes').value.trim(),
       status: isDone ? 'done' : 'active', 
       isFavorite: false, 
-      isPinned: false, // ИЗМЕНЕНИЕ: Новое поле для закрепа
+      isPinned: false, 
+      history: [], // Init empty history
       createdAt: nowISO(),
       updatedAt: nowISO()
     };
+    
+    // Initial history entry if created with balance
+    if (current > 0) {
+        g.history.push({
+            id: Date.now().toString(36),
+            date: nowISO(),
+            amount: current,
+            type: 'set',
+            comment: 'Начальный баланс'
+        });
+    }
 
     DATA.goals.push(g);
     save(); 
@@ -1934,9 +2073,14 @@
           status: isDone ? 'done' : 'active',
           isFavorite: false,
           isPinned: false,
+          history: [],
           createdAt: nowISO(),
           updatedAt: nowISO()
         };
+        
+        if (current > 0) {
+            g.history.push({ id: Date.now().toString(36), date: nowISO(), amount: current, type: 'set', comment: 'Начальный баланс' });
+        }
         DATA.goals.push(g);
     });
     
