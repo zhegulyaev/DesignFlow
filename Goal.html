@@ -2092,9 +2092,24 @@
           
           // Если группа сменилась, рисуем заголовок
           if (groupLabel !== lastGroupLabel) {
+              // --- ИЗМЕНЕНИЕ: Считаем сумму за день для этой группы ---
+              const groupItems = visibleEntries.filter(item => getGroupLabel(item.date) === groupLabel);
+              const dayInc = groupItems.reduce((acc, curr) => curr.amount > 0 ? acc + curr.amount : acc, 0);
+              const dayExp = groupItems.reduce((acc, curr) => curr.amount < 0 ? acc + curr.amount : acc, 0);
+
               const header = document.createElement('div');
               header.className = 'history-group-header';
-              header.textContent = groupLabel;
+              // Делаем так, чтобы дата была слева, а суммы справа
+              header.style.justifyContent = 'space-between';
+
+              let sumsHtml = '<div>';
+              if (dayInc > 0) sumsHtml += `<span style="color:var(--green); margin-left:10px;">+${fmt(dayInc)}</span>`;
+              if (dayExp < 0) sumsHtml += `<span style="color:var(--red); margin-left:10px;">${fmt(dayExp)}</span>`;
+              // Если вдруг всё по нулям (редкий случай)
+              if (dayInc === 0 && dayExp === 0) sumsHtml += `<span style="color:var(--text-muted); margin-left:10px;">0</span>`;
+              sumsHtml += '</div>';
+
+              header.innerHTML = `<span>${groupLabel}</span>${sumsHtml}`;
               container.appendChild(header);
               lastGroupLabel = groupLabel;
           }
