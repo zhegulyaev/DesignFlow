@@ -180,8 +180,11 @@
         align-items: center;
         justify-content: center;
     }
-    .btn-icon:hover { background: #fee2e2; color: var(--red); }
-    body[data-theme="dark"] .btn-icon:hover { background: #450a0a; color: #f87171; }
+    .btn-icon:hover { background: #f1f5f9; color: var(--text); }
+    body[data-theme="dark"] .btn-icon:hover { background: #334155; color: var(--text); }
+    
+    .btn-icon.del:hover { background: #fee2e2; color: var(--red); }
+    body[data-theme="dark"] .btn-icon.del:hover { background: #450a0a; color: #f87171; }
 
     /* --- WARNING BLOCK --- */
     .warning-wrapper {
@@ -700,6 +703,30 @@
     #confirm-modal .modal-actions .btn { flex: 1; justify-content: center; padding: 12px; }
     #confirm-modal p { font-size: 16px; text-align: center; margin: 0; }
     
+    /* --- DELETE HISTORY MODAL (CUSTOM) --- */
+    #history-delete-modal .modal-content { max-width: 400px; }
+    #history-delete-modal .modal-body { text-align: center; }
+    #history-delete-modal .modal-body h3 { margin: 0 0 10px; font-size: 16px; color: var(--text); }
+    #history-delete-modal .modal-body p { margin: 0; color: var(--text-muted); font-size: 14px; }
+    #history-delete-modal .history-delete-actions {
+        display: flex; flex-direction: column; gap: 10px; margin-top: 24px;
+    }
+    #history-delete-modal .history-delete-actions .btn {
+        width: 100%; justify-content: center;
+    }
+    
+    /* --- EDIT HISTORY MODAL (CUSTOM) --- */
+    #history-edit-modal .modal-content { max-width: 400px; }
+    
+    .edited-mark {
+        font-size: 11px;
+        color: var(--text-muted);
+        opacity: 0.7;
+        margin-left: 6px;
+        cursor: help;
+        border-bottom: 1px dotted var(--text-muted);
+    }
+    
     /* CONGRATULATIONS MODAL */
     #congratulations-modal .modal-content { max-width: 400px; padding: 40px 24px; text-align: center; }
     #congratulations-modal .modal-header,
@@ -1013,8 +1040,8 @@
           <label>Шаблон срока</label>
           <select id="edit-template">
             <option value="">Не менять</option>
-            <option value="7">7 дн.</option>
-            <option value="14">14 дн.</option>
+            <option value="7">Через неделю (7 дн.)</option>
+            <option value="14">Через 2 недели (14 дн.)</option>
             <option value="30">Месяц</option>
             <option value="custom">Свой</option>
           </select>
@@ -1080,6 +1107,57 @@
     </div>
   </div>
   
+  <div class="modal" id="history-delete-modal">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h2>Удаление записи</h2>
+              <span class="modal-close"><i class="fa-solid fa-xmark"></i></span>
+          </div>
+          <div class="modal-body">
+              <h3 id="hd-amount-display"></h3>
+              <p>Вы хотите просто удалить эту запись из истории или также отменить её влияние на текущий баланс цели?</p>
+              
+              <div class="history-delete-actions">
+                  <button class="btn primary" id="btn-hd-revert">
+                      <i class="fa-solid fa-rotate-left"></i> Удалить и вернуть деньги
+                  </button>
+                  <button class="btn secondary" id="btn-hd-delete-only">
+                      <i class="fa-regular fa-trash-can"></i> Только удалить запись
+                  </button>
+                  <button class="btn" style="background: transparent; border: 1px solid var(--border);" id="btn-hd-cancel">
+                      Отмена
+                  </button>
+              </div>
+          </div>
+      </div>
+  </div>
+  
+  <div class="modal" id="history-edit-modal">
+    <div class="modal-content" style="max-width: 400px;">
+      <div class="modal-header">
+        <h2>Редактировать запись</h2>
+        <span class="modal-close"><i class="fa-solid fa-xmark"></i></span>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label>Сумма операции</label>
+          <input id="he-amount" inputmode="numeric" />
+        </div>
+        <div class="field">
+            <label>Комментарий</label>
+            <input id="he-comment" />
+        </div>
+        <div style="font-size:12px; color:var(--text-muted); margin-top:8px; line-height:1.4">
+            При изменении суммы баланс цели будет автоматически скорректирован.
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn secondary modal-close">Отмена</button>
+        <button class="btn primary" id="btn-he-save">Сохранить</button>
+      </div>
+    </div>
+  </div>
+  
   <div class="modal" id="congratulations-modal">
     <div class="modal-content">
       <div class="modal-body">
@@ -1122,6 +1200,8 @@
   let hLimit = 10;
   let hFilterDate = null;
   let hPicker = null;
+  let hItemToDelete = null; 
+  let hItemToEdit = null;
 
   let confirmAction = null;
   let congratsGoalId = null; 
@@ -1257,6 +1337,7 @@
   formatNumberInput('edit-target');
   formatNumberInput('edit-current');
   formatNumberInput('progress-amount');
+  formatNumberInput('he-amount');
 
   function setupDateTemplate(selectId, customGroup, customInputId, dateInputId) {
     const select = document.getElementById(selectId);
@@ -1977,21 +2058,106 @@
   document.getElementById('btn-add-progress').onclick = () => updateProgress(false);
   document.getElementById('btn-subtract').onclick = () => updateProgress(true);
   
-  // --- HISTORY LOGIC (REWRITTEN) ---
+  // --- HISTORY LOGIC ---
   
-  // Функция удаления (не меняем логику, только добавим перерисовку)
-  function deleteHistoryItem(goalId, historyId) {
+  // Модальное окно для выбора способа удаления истории
+  function openHistoryDeleteModal(historyItem) {
+      hItemToDelete = historyItem;
+      const displayAmount = (historyItem.amount > 0 ? '+' : '') + fmt(historyItem.amount);
+      document.getElementById('hd-amount-display').textContent = `${historyItem.comment}: ${displayAmount}`;
+      openModal('history-delete-modal');
+  }
+
+  // Обработчики кнопок модального окна удаления истории
+  document.getElementById('btn-hd-cancel').onclick = () => {
+      closeModal('history-delete-modal');
+      hItemToDelete = null;
+  };
+  
+  document.getElementById('btn-hd-delete-only').onclick = () => {
+      if (hCurrentGoalId && hItemToDelete) {
+          performHistoryDelete(hCurrentGoalId, hItemToDelete.id, false);
+      }
+      closeModal('history-delete-modal');
+  };
+
+  document.getElementById('btn-hd-revert').onclick = () => {
+      if (hCurrentGoalId && hItemToDelete) {
+          performHistoryDelete(hCurrentGoalId, hItemToDelete.id, true);
+      }
+      closeModal('history-delete-modal');
+  };
+
+
+  // Функция выполнения удаления
+  function performHistoryDelete(goalId, historyId, revertBalance) {
       const g = DATA.goals.find(x => x.id === goalId);
       if (!g || !g.history) return;
+      
+      const item = g.history.find(h => h.id === historyId);
+      if (!item) return;
+
+      // Если нужно вернуть деньги на счет
+      if (revertBalance) {
+          // Если это было добавление (+1000), то надо отнять (current - 1000)
+          // Если это был расход (-1000), то надо прибавить (current - (-1000) = current + 1000)
+          const newCurrent = Math.max(0, safeParseNum(g.current) - item.amount);
+          g.current = newCurrent;
+      }
       
       // Удаляем из массива
       g.history = g.history.filter(h => h.id !== historyId);
       save();
       
-      // Перерисовываем список
+      // Обновляем UI
       renderHistoryList();
-      showToast('Запись удалена');
+      render(); // Обновляем основную карточку, так как баланс мог измениться
+      
+      const msg = revertBalance 
+        ? 'Запись удалена, баланс скорректирован' 
+        : 'Запись удалена из истории';
+      showToast(msg);
   }
+  
+  // --- HISTORY EDIT LOGIC ---
+  function openHistoryEditModal(historyItem) {
+      hItemToEdit = historyItem;
+      // В инпут подставляем само число, можно с пробелами
+      document.getElementById('he-amount').value = new Intl.NumberFormat('ru-RU').format(historyItem.amount);
+      document.getElementById('he-comment').value = historyItem.comment || '';
+      openModal('history-edit-modal');
+  }
+  
+  document.getElementById('btn-he-save').onclick = () => {
+      if (hCurrentGoalId && hItemToEdit) {
+          const g = DATA.goals.find(x => x.id === hCurrentGoalId);
+          if (!g) return;
+          
+          const item = g.history.find(h => h.id === hItemToEdit.id);
+          if (!item) return;
+          
+          const newAmount = safeParseNum(document.getElementById('he-amount').value);
+          const newComment = document.getElementById('he-comment').value.trim();
+          
+          // Корректировка основного баланса
+          const oldAmount = item.amount;
+          const diff = newAmount - oldAmount;
+          
+          if (diff !== 0) {
+              g.current = Math.max(0, safeParseNum(g.current) + diff);
+          }
+          
+          item.amount = newAmount;
+          item.comment = newComment || (newAmount > 0 ? 'Пополнение' : 'Расход');
+          item.editedAt = nowISO(); // Ставим метку редактирования
+          
+          save();
+          renderHistoryList();
+          render();
+          showToast('Запись изменена');
+          closeModal('history-edit-modal');
+      }
+  };
 
   // Открытие модального окна истории
   function openHistoryModal(goalId) {
@@ -2092,19 +2258,31 @@
           
           // Если группа сменилась, рисуем заголовок
           if (groupLabel !== lastGroupLabel) {
-              // --- ИЗМЕНЕНИЕ: Считаем сумму за день для этой группы ---
+              // --- Считаем сумму за день для этой группы ---
               const groupItems = visibleEntries.filter(item => getGroupLabel(item.date) === groupLabel);
               const dayInc = groupItems.reduce((acc, curr) => curr.amount > 0 ? acc + curr.amount : acc, 0);
               const dayExp = groupItems.reduce((acc, curr) => curr.amount < 0 ? acc + curr.amount : acc, 0);
+              
+              // NEW: Считаем чистое сальдо (net)
+              const net = dayInc + dayExp;
 
               const header = document.createElement('div');
               header.className = 'history-group-header';
               // Делаем так, чтобы дата была слева, а суммы справа
               header.style.justifyContent = 'space-between';
 
-              let sumsHtml = '<div>';
+              let sumsHtml = '<div style="display:flex; align-items:center;">';
               if (dayInc > 0) sumsHtml += `<span style="color:var(--green); margin-left:10px;">+${fmt(dayInc)}</span>`;
               if (dayExp < 0) sumsHtml += `<span style="color:var(--red); margin-left:10px;">${fmt(dayExp)}</span>`;
+              
+              // NEW: Если есть и доход и расход, показываем "Итого"
+              if (dayInc !== 0 && dayExp !== 0) {
+                  sumsHtml += ` <span style="color:var(--text-muted); margin: 0 4px;">=</span> `;
+                  const netColor = net >= 0 ? 'var(--green)' : 'var(--red)';
+                  const netSign = net > 0 ? '+' : '';
+                  sumsHtml += `<span style="color:${netColor}; font-weight:800; border:1px solid var(--border); padding:0 4px; border-radius:4px; background:var(--bg)">${netSign}${fmt(net)}</span>`;
+              }
+              
               // Если вдруг всё по нулям (редкий случай)
               if (dayInc === 0 && dayExp === 0) sumsHtml += `<span style="color:var(--text-muted); margin-left:10px;">0</span>`;
               sumsHtml += '</div>';
@@ -2124,26 +2302,38 @@
           try {
              timeStr = new Date(h.date).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
           } catch(e) {}
+          
+          // Проверка на редактирование
+          let editedHtml = '';
+          if (h.editedAt) {
+              const editTime = new Date(h.editedAt).toLocaleString('ru-RU');
+              editedHtml = `<span class="edited-mark" title="Изменено: ${editTime}">(ред.)</span>`;
+          }
 
           const item = document.createElement('div');
           item.className = 'history-item';
           item.innerHTML = `
             <div class="history-info">
                 <div class="history-comment">${h.comment || (isPositive ? 'Пополнение' : 'Расход')}</div>
-                <div class="history-date">${timeStr}</div>
+                <div class="history-date">${timeStr}${editedHtml}</div>
             </div>
             <div class="history-right">
                 <div class="history-amount ${colorClass}">${sign}${fmt(h.amount)}</div>
-                <button class="btn-icon" title="Удалить запись"><i class="fa-regular fa-trash-can"></i></button>
+                <button class="btn-icon" style="margin-right:2px;" title="Редактировать"><i class="fa-solid fa-pencil"></i></button>
+                <button class="btn-icon del" title="Удалить запись"><i class="fa-regular fa-trash-can"></i></button>
             </div>
           `;
           
-          // Клик на удаление
-          const delBtn = item.querySelector('.btn-icon');
+          // Клик на редактирование
+          const editBtn = item.querySelector('.btn-icon:not(.del)');
+          editBtn.onclick = () => {
+              openHistoryEditModal(h);
+          };
+
+          // Клик на удаление (NEW: Вызов новой функции)
+          const delBtn = item.querySelector('.btn-icon.del');
           delBtn.onclick = () => {
-             openConfirmModal('Удалить эту запись из истории?', () => {
-                 deleteHistoryItem(g.id, h.id);
-             });
+             openHistoryDeleteModal(h);
           };
           
           container.appendChild(item);
