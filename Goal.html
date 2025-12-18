@@ -5,13 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>DesignFlow — Трекер целей</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="icon" type="image/svg+xml"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' ry='6' fill='%230d1117'/%3E%3Cpath d='M11 2 L5 14 H10 L9 22 L19 8 H13 L14 2 Z' fill='%23facc15'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' ry='6' fill='%230d1117'/%3E%3Cpath d='M11 2 L5 14 H10 L9 22 L19 8 H13 L14 2 Z' fill='%23facc15'/%3E%3C/svg%3E">
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
   
   <style>
     :root {
@@ -737,24 +736,45 @@
     .congrats-actions { display: flex; gap: 10px; width: 100%; }
     .congrats-actions .btn { flex: 1; justify-content: center; padding: 12px; }
 
-    /* --- HISTORY MODAL --- */
+    /* --- HISTORY MODAL (НОВЫЕ СТИЛИ) --- */
+    .history-filter-container {
+        display: flex;
+        gap: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 15px;
+    }
+
+    .history-group-header {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin: 20px 0 10px;
+        display: flex;
+        align-items: center;
+    }
+    .history-group-header:first-of-type { margin-top: 5px; }
+
     .history-list {
         display: flex;
         flex-direction: column;
-        gap: 15px;
+        gap: 0;
         margin-top: 10px;
     }
     .history-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding-bottom: 12px;
+        padding: 12px 0;
         border-bottom: 1px solid var(--border);
     }
     .history-item:last-child { border-bottom: none; }
-    .history-info { display: flex; flex-direction: column; gap: 2px; }
+    
+    .history-info { display: flex; flex-direction: column; gap: 4px; }
     .history-date { font-size: 11px; color: var(--text-muted); }
-    .history-comment { font-size: 13px; font-weight: 500; color: var(--text); }
+    .history-comment { font-size: 13px; font-weight: 600; color: var(--text); }
     
     .history-right {
         display: flex;
@@ -765,6 +785,11 @@
     .history-amount { font-weight: 700; font-size: 14px; }
     .history-amount.plus { color: var(--green); }
     .history-amount.minus { color: var(--red); }
+    
+    #history-load-more-container {
+        margin-top: 20px;
+        text-align: center;
+    }
 
 
     /* --- FOOTER --- */
@@ -1034,11 +1059,21 @@
   <div class="modal" id="history-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>История операций</h2>
+        <h2 id="history-modal-title">История операций</h2>
         <span class="modal-close"><i class="fa-solid fa-xmark"></i></span>
       </div>
-      <div class="modal-body" id="history-list-container">
+      <div class="modal-body">
+        <div class="history-filter-container">
+            <input id="history-date-filter" placeholder="Фильтр по дате..." readonly style="cursor: pointer; background: var(--bg);" />
+            <button class="btn secondary" id="history-clear-filter" title="Сбросить фильтр"><i class="fa-solid fa-rotate-left"></i></button>
         </div>
+
+        <div id="history-list-container" style="max-height: 50vh; overflow-y: auto; padding-right: 5px;"></div>
+        
+        <div id="history-load-more-container" style="display:none;">
+            <button class="btn secondary" id="btn-history-load-more" style="width:100%">Показать еще</button>
+        </div>
+      </div>
       <div class="modal-actions">
           <button class="btn secondary modal-close">Закрыть</button>
       </div>
@@ -1081,7 +1116,13 @@
   let DATA = { goals: [] };
   let currentEditId = null;
   let currentProgressId = null;
-  let currentHistoryId = null;
+  
+  // Переменные для истории
+  let hCurrentGoalId = null;
+  let hLimit = 10;
+  let hFilterDate = null;
+  let hPicker = null;
+
   let confirmAction = null;
   let congratsGoalId = null; 
 
@@ -1133,26 +1174,81 @@
     return Math.round(num).toLocaleString('ru-RU');
   }
 
-  // Обновленная логика форматирования: работает при потере фокуса, чтобы не сбивать ввод
+  // --- ОБНОВЛЕННАЯ ФУНКЦИЯ ФОРМАТИРОВАНИЯ И КАЛЬКУЛЯТОРА ---
   function formatNumberInput(inputId) {
       const input = document.getElementById(inputId);
       if (!input) return;
-      
-      // При фокусе убираем форматирование для удобного редактирования
-      input.addEventListener('focus', (e) => {
-          const val = e.target.value;
-          // Убираем все пробелы, оставляем только цифры
-          const clean = val.replace(/\s/g, '');
-          // Если там было "0", можно его убрать, чтобы писать новое, или оставить. Оставим clean.
-          if (clean === '0') e.target.value = ''; 
-          else e.target.value = clean;
+
+      let calcTimeout;
+
+      // 1. Форматирование при вводе (моментально)
+      input.addEventListener('input', (e) => {
+          clearTimeout(calcTimeout);
+          
+          let val = e.target.value;
+          // Если есть мат. знаки (+ - * /), значит это формула - не форматируем, ждем
+          if (/[+\-*/]/.test(val)) {
+              // Запускаем таймер на вычисление (1 секунда бездействия)
+              calcTimeout = setTimeout(() => {
+                   calculateAndSet(e.target);
+              }, 1000);
+              return; 
+          }
+
+          // Если просто число - форматируем пробелы сразу
+          // Удаляем всё кроме цифр и запятой/точки
+          let clean = val.replace(/[^\d.,]/g, '');
+          if (!clean) return;
+
+          // Пробуем отформатировать
+          let num = safeParseNum(clean);
+          if (!isNaN(num)) {
+             // Сохраняем позицию курсора (упрощенно: если в конце, то пусть будет в конце)
+             // Если число изменилось (добавился пробел), обновляем
+             let formatted = new Intl.NumberFormat('ru-RU').format(num);
+             // Чтобы можно было писать 0.5 или запятую, проверяем
+             if (!val.includes('.') && !val.includes(',')) {
+                 if (val.replace(/\s/g,'') == formatted.replace(/\s/g,'')) {
+                     // Только добавляем пробелы, если контент тот же
+                     e.target.value = formatted;
+                 }
+             }
+          }
       });
 
-      // При потере фокуса применяем красивое форматирование
-      input.addEventListener('blur', (e) => {
+      // 2. Функция вычисления
+      const calculateAndSet = (target) => {
+          let val = target.value;
+          // Безопасное вычисление
+          try {
+             let safe = val.replace(/\s/g, '').replace(/,/g, '.');
+             // Разрешаем только цифры и мат. операторы
+             if (/[^0-9+\-*/().]/.test(safe)) return; 
+             
+             let result = new Function('return ' + safe)();
+             if (result !== undefined && !isNaN(result) && isFinite(result)) {
+                 target.value = new Intl.NumberFormat('ru-RU').format(Math.round(result));
+             }
+          } catch(e) {}
+      };
+
+      // 3. Также вычисляем при потере фокуса (на всякий случай)
+      input.addEventListener('blur', (e) => calculateAndSet(e.target));
+      
+      // 4. И по Enter
+      input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+              calculateAndSet(e.target);
+              e.target.blur();
+          }
+      });
+      
+      // 5. Убираем пробелы при фокусе для удобного редактирования
+      input.addEventListener('focus', (e) => {
           let val = e.target.value;
-          const num = safeParseNum(val);
-          e.target.value = fmt(num);
+          if (!/[+\-*/]/.test(val)) {
+             e.target.value = val.replace(/\s/g, '');
+          }
       });
   }
 
@@ -1881,81 +1977,170 @@
   document.getElementById('btn-add-progress').onclick = () => updateProgress(false);
   document.getElementById('btn-subtract').onclick = () => updateProgress(true);
   
-  // --- HISTORY LOGIC ---
+  // --- HISTORY LOGIC (REWRITTEN) ---
+  
+  // Функция удаления (не меняем логику, только добавим перерисовку)
   function deleteHistoryItem(goalId, historyId) {
       const g = DATA.goals.find(x => x.id === goalId);
       if (!g || !g.history) return;
       
-      // Just delete the log entry, do not revert balance (safer for manual edits)
+      // Удаляем из массива
       g.history = g.history.filter(h => h.id !== historyId);
       save();
-      openHistoryModal(goalId); // Re-render modal
+      
+      // Перерисовываем список
+      renderHistoryList();
       showToast('Запись удалена');
   }
 
+  // Открытие модального окна истории
   function openHistoryModal(goalId) {
-      currentHistoryId = goalId;
+      hCurrentGoalId = goalId;
+      hLimit = 10; // Сбрасываем лимит при открытии
+      hFilterDate = null; // Сбрасываем фильтр
+
       const g = DATA.goals.find(x => x.id === goalId);
       if (!g) return;
       
+      document.getElementById('history-modal-title').textContent = `История: ${g.title}`;
+
+      // Инициализируем календарь, если еще не был создан
+      if (!hPicker) {
+        hPicker = flatpickr("#history-date-filter", {
+            locale: "ru",
+            dateFormat: "Y-m-d",
+            onChange: (selectedDates, dateStr) => {
+                hFilterDate = dateStr;
+                hLimit = 10; // При фильтрации сбрасываем пагинацию
+                renderHistoryList();
+            }
+        });
+      } else {
+        hPicker.clear(); // Очищаем поле при новом открытии
+      }
+
+      renderHistoryList();
+      openModal('history-modal');
+  }
+  
+  // Кнопка сброса фильтра
+  document.getElementById('history-clear-filter').onclick = () => {
+      if (hPicker) hPicker.clear();
+      hFilterDate = null;
+      hLimit = 10;
+      renderHistoryList();
+  };
+  
+  // Кнопка "Показать еще"
+  document.getElementById('btn-history-load-more').onclick = () => {
+      hLimit += 15;
+      renderHistoryList();
+  };
+
+  // Основная функция отрисовки списка истории
+  function renderHistoryList() {
       const container = document.getElementById('history-list-container');
+      const loadMoreBtn = document.getElementById('history-load-more-container');
       container.innerHTML = '';
       
-      if (!g.history || g.history.length === 0) {
+      const g = DATA.goals.find(x => x.id === hCurrentGoalId);
+      if (!g || !g.history || g.history.length === 0) {
           container.innerHTML = '<div class="empty-message" style="padding: 20px;">Нет операций</div>';
-      } else {
-          const list = document.createElement('div');
-          list.className = 'history-list';
-          
-          const sortedHistory = [...g.history].sort((a,b) => new Date(b.date) - new Date(a.date));
-          
-          sortedHistory.forEach(h => {
-             // FIX: Proper date parsing
-             let dateStr = "Неизвестная дата";
-             try {
-                 const dateObj = new Date(h.date);
-                 if (!isNaN(dateObj.getTime())) {
-                     dateStr = dateObj.toLocaleString('ru-RU', { 
-                         month: 'short', 
-                         day: 'numeric', 
-                         hour: '2-digit', 
-                         minute: '2-digit' 
-                     });
-                 }
-             } catch(e) {}
-             
-             const isPositive = h.amount > 0;
-             const sign = isPositive ? '+' : '';
-             const colorClass = isPositive ? 'plus' : 'minus';
-             
-             const item = document.createElement('div');
-             item.className = 'history-item';
-             item.innerHTML = `
-                <div class="history-info">
-                    <div class="history-comment">${h.comment || (isPositive ? 'Пополнение' : 'Расход')}</div>
-                    <div class="history-date">${dateStr}</div>
-                </div>
-                <div class="history-right">
-                    <div class="history-amount ${colorClass}">${sign}${fmt(h.amount)}</div>
-                    <button class="btn-icon" title="Удалить запись"><i class="fa-regular fa-trash-can"></i></button>
-                </div>
-             `;
-             
-             // Add click listener to delete button
-             const delBtn = item.querySelector('.btn-icon');
-             delBtn.onclick = () => {
-                 openConfirmModal('Удалить эту запись из истории?', () => {
-                     deleteHistoryItem(goalId, h.id);
-                 });
-             };
-             
-             list.appendChild(item);
-          });
-          
-          container.appendChild(list);
+          loadMoreBtn.style.display = 'none';
+          return;
       }
       
-      openModal('history-modal');
+      // 1. Сортируем (новые сверху)
+      let entries = [...g.history].sort((a,b) => new Date(b.date) - new Date(a.date));
+      
+      // 2. Фильтруем по дате (если выбрана)
+      if (hFilterDate) {
+          entries = entries.filter(h => h.date.startsWith(hFilterDate));
+      }
+      
+      const totalEntries = entries.length;
+      
+      // 3. Пагинация (берем только hLimit штук)
+      const visibleEntries = entries.slice(0, hLimit);
+      
+      if (visibleEntries.length === 0) {
+           container.innerHTML = '<div class="empty-message" style="padding: 20px;">Ничего не найдено за эту дату</div>';
+           loadMoreBtn.style.display = 'none';
+           return;
+      }
+      
+      // 4. Группировка
+      // Вспомогательная функция для заголовка группы
+      const getGroupLabel = (dateIso) => {
+          const d = new Date(dateIso);
+          const today = new Date();
+          const yesterday = new Date();
+          yesterday.setDate(yesterday.getDate() - 1);
+          
+          const dStr = d.toDateString();
+          if (dStr === today.toDateString()) return 'Сегодня';
+          if (dStr === yesterday.toDateString()) return 'Вчера';
+          
+          return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+      };
+
+      let lastGroupLabel = '';
+      
+      visibleEntries.forEach(h => {
+          // Определяем группу
+          const groupLabel = getGroupLabel(h.date);
+          
+          // Если группа сменилась, рисуем заголовок
+          if (groupLabel !== lastGroupLabel) {
+              const header = document.createElement('div');
+              header.className = 'history-group-header';
+              header.textContent = groupLabel;
+              container.appendChild(header);
+              lastGroupLabel = groupLabel;
+          }
+          
+          // Рисуем элемент
+          const isPositive = h.amount > 0;
+          const sign = isPositive ? '+' : '';
+          const colorClass = isPositive ? 'plus' : 'minus';
+          
+          // Форматируем время (ЧЧ:ММ)
+          let timeStr = '';
+          try {
+             timeStr = new Date(h.date).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+          } catch(e) {}
+
+          const item = document.createElement('div');
+          item.className = 'history-item';
+          item.innerHTML = `
+            <div class="history-info">
+                <div class="history-comment">${h.comment || (isPositive ? 'Пополнение' : 'Расход')}</div>
+                <div class="history-date">${timeStr}</div>
+            </div>
+            <div class="history-right">
+                <div class="history-amount ${colorClass}">${sign}${fmt(h.amount)}</div>
+                <button class="btn-icon" title="Удалить запись"><i class="fa-regular fa-trash-can"></i></button>
+            </div>
+          `;
+          
+          // Клик на удаление
+          const delBtn = item.querySelector('.btn-icon');
+          delBtn.onclick = () => {
+             openConfirmModal('Удалить эту запись из истории?', () => {
+                 deleteHistoryItem(g.id, h.id);
+             });
+          };
+          
+          container.appendChild(item);
+      });
+      
+      // 5. Показываем кнопку "Показать еще", если есть скрытые записи
+      if (totalEntries > hLimit) {
+          loadMoreBtn.style.display = 'block';
+          document.getElementById('btn-history-load-more').textContent = `Показать еще (${totalEntries - hLimit})`;
+      } else {
+          loadMoreBtn.style.display = 'none';
+      }
   }
 
 
