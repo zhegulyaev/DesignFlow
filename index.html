@@ -290,7 +290,8 @@
   .wait-active-btn:hover { background: var(--purple); color: #fff; border-color: var(--purple);}
   .pause-active-btn:hover { background: var(--link-blue); color: #fff; border-color: var(--link-blue);}
 
-  .link-btn { padding: 6px; margin: 0; background: var(--chip-bg); border: 1px solid var(--border); color: var(--muted); cursor: pointer; font-size: 12px; flex-shrink: 0; border-radius: 8px; transition: .2s; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
+  .link-btn { padding: 6px; margin: 0; background: var(--chip-bg); border: 1px solid var(--border); color: var(--muted); cursor: pointer; font-size: 12px; flex-shrink: 0; border-radius: 8px; transition: .2s; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+  .link-btn svg { width: 14px; height: 14px; }
   .link-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--link-go-bg); box-shadow: 0 4px 10px rgba(59,130,246,0.12); }
   .link-btn-active { color: var(--accent); border-color: var(--border); background: var(--link-go-bg); border-radius: 8px; box-shadow: 0 4px 12px rgba(17,24,39,0.08); }
   .link-btn-go { border: 1px solid var(--border); border-radius: 8px; background: var(--link-go-bg); color: var(--accent); font-weight: 700; box-shadow: 0 4px 12px rgba(17,24,39,0.06); }
@@ -994,6 +995,9 @@ body.light .pace-block.critical {
   .modal.modal-centered { align-items: center; }
   .template-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; max-height: 60vh; overflow: auto; padding-right: 6px; }
   .template-empty { color: var(--muted); font-weight: 700; font-size: 14px; padding: 12px; border: 1px dashed var(--border); border-radius: 12px; background: var(--pill-bg); }
+  .deadline-clear-btn { padding: 9px 12px; border-radius: 10px; border: 1px dashed var(--border); background: transparent; color: var(--muted); font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
+  .deadline-clear-btn svg { width: 14px; height: 14px; }
+  .deadline-clear-btn:hover { border-color: var(--accent); color: var(--accent); }
   .template-row { display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--pill-bg); cursor: grab; transition: border-color .15s, box-shadow .15s, background .15s; }
   .template-row:active { cursor: grabbing; }
   .template-row.drag-over { box-shadow: 0 0 0 2px var(--accent); }
@@ -1073,14 +1077,14 @@ td.date-cell + td.date-cell {
     <symbol id="icon-moon" viewBox="0 0 24 24"><path fill="currentColor" d="M21.74 15.34a1 1 0 0 0-1.11-.27A7.5 7.5 0 0 1 9.06 4.5a1 1 0 0 0-.76-1.2a9 9 0 1 0 13.44 12.36Z"/></symbol>
     <symbol id="icon-pen" viewBox="0 0 20 20"><path fill="currentColor" d="M2.5 13.793V17.5h3.707L16.1 7.607l-3.707-3.707Zm13.94-8.233l-.633.634l-3.707-3.707l.633-.633a1.5 1.5 0 0 1 2.122 0l1.585 1.585a1.5 1.5 0 0 1 0 2.121Z"/></symbol>
     <symbol id="icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="m16.707 6.293-7.25 7.25a1 1 0 0 1-1.414 0l-4-4a1 1 0 1 1 1.414-1.414L8.5 11.672l6.543-6.543a1 1 0 0 1 1.414 1.164a.99.99 0 0 1-.25.293Z"/></symbol>
-    <symbol id="icon-settings" viewBox="0 0 24 24"><path fill="currentColor" d="M10.325 2.55a2 2 0 0 1 3.35 0l.72 1.08a2 2 0 0 0 1.362.89l1.284.214a2 2 0 0 1 1.64 1.64l.214 1.284a2 2 0 0 0 .89 1.362l1.08.72a2 2 0 0 1 0 3.35l-1.08.72a2 2 0 0 0-.89 1.362l-.214 1.284a2 2 0 0 1-1.64 1.64l-1.284.214a2 2 0 0 0-1.362.89l-.72 1.08a2 2 0 0 1-3.35 0l-.72-1.08a2 2 0 0 0-1.362-.89l-1.284-.214a2 2 0 0 1-1.64-1.64l-.214-1.284a2 2 0 0 0-.89-1.362l-1.08-.72a2 2 0 0 1 0-3.35l1.08-.72a2 2 0 0 0 .89-1.362l.214-1.284a2 2 0 0 1 1.64-1.64l1.284-.214a2 2 0 0 0 1.362-.89Zm.462 10.548a3 3 0 1 0 4.426-4.096a3 3 0 0 0-4.426 4.096Z"/></symbol>
+    <symbol id="icon-settings" viewBox="0 0 24 24"><path fill="currentColor" d="M6 7a2 2 0 1 1 3.874-.658L17 6.342A1.75 1.75 0 0 1 18.75 8.5A1.75 1.75 0 0 1 17 10.658l-7.126-.316A2 2 0 1 1 6 7Zm0 10a2 2 0 0 1 3.874-.658L17 16.342A1.75 1.75 0 0 1 18.75 18.5A1.75 1.75 0 0 1 17 20.658l-7.126-.316A2 2 0 1 1 6 17Z"/></symbol>
     <symbol id="icon-drag" viewBox="0 0 24 24"><path fill="currentColor" d="M10 4a2 2 0 1 1-4 0a2 2 0 0 1 4 0Zm4 0a2 2 0 1 1 4 0a2 2 0 0 1-4 0ZM8 12a2 2 0 1 0-4 0a2 2 0 0 0 4 0Zm8 0a2 2 0 1 0-4 0a2 2 0 0 0 4 0Zm-6 6a2 2 0 1 1-4 0a2 2 0 0 1 4 0Zm4 0a2 2 0 1 1 4 0a2 2 0 0 1-4 0Z"/></symbol>
     <symbol id="icon-grip" viewBox="0 0 24 24"><path fill="currentColor" d="M10 5a1 1 0 0 1-1 1H7a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1Zm7-1h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2Zm0 6h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2Zm0 6h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2Zm-8-4H7a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2Zm0 6H7a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2Zm0-12H7a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2Z"/></symbol>
     <symbol id="icon-close" viewBox="0 0 24 24"><path fill="currentColor" d="M6.34 4.93a1 1 0 0 0-1.41 1.41L10.59 12l-5.66 5.66a1 1 0 1 0 1.41 1.41L12 13.41l5.66 5.66a1 1 0 0 0 1.41-1.41L13.41 12l5.66-5.66a1 1 0 1 0-1.41-1.41L12 10.59Z"/></symbol>
     <symbol id="icon-hide" viewBox="0 0 24 24"><path fill="currentColor" d="M4.52 3.1a1 1 0 0 0-1.42 1.41l16 16a1 1 0 0 0 1.42-1.41l-2.03-2.03A11.3 11.3 0 0 0 21.89 12a11.29 11.29 0 0 0-3.67-4.91A9.3 9.3 0 0 0 12 5A9.4 9.4 0 0 0 8.6 5.6Zm5.58 5.58l2.11 2.1a2 2 0 0 0-2.1-2.1Zm-5.42-1.5A9.27 9.27 0 0 0 2.11 12a11.29 11.29 0 0 0 3.67 4.91A9.3 9.3 0 0 0 12 19a9.4 9.4 0 0 0 1.61-.14l-2.44-2.45A4 4 0 0 1 7.6 9.18Z"/></symbol>
     <symbol id="icon-active" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM3 8a5 5 0 0 1 10 0 5 5 0 0 1-10 0Z"/></symbol>
     <symbol id="icon-all" viewBox="0 0 16 16"><path fill="currentColor" d="M2.5 2.5A.5.5 0 0 1 3 2h4.5a.5.5 0 0 1 .5.5V7a.5.5 0 0 1-.5.5H3A.5.5 0 0 1 2.5 7Zm6 0A.5.5 0 0 1 9 2h4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-.5.5H9a.5.5 0 0 1-.5-.5Zm-6 6A.5.5 0 0 1 3 8h4.5a.5.5 0 0 1 .5.5V13a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5Zm8 0A.5.5 0 0 1 11 8h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5Z"/></symbol>
-    <symbol id="icon-waiting" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM8 4a1 1 0 0 1 1 1v3.5a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1 0-1H8V5a1 1 0 0 1 1-1Z"/></symbol>
+    <symbol id="icon-waiting" viewBox="0 0 16 16"><path fill="currentColor" d="M8 1.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13Zm0 1.5a5 5 0 1 1 0 10a5 5 0 0 1 0-10Zm-.5 1.25c0-.276.224-.5.5-.5s.5.224.5.5v2.6l2 1.2a.5.5 0 1 1-.5.866l-2.25-1.35A.5.5 0 0 1 7.5 7V4.25Z"/></symbol>
     <symbol id="icon-potential" viewBox="0 0 16 16"><path fill="currentColor" d="M3 1.5A.5.5 0 0 1 3.5 1h7a.5.5 0 0 1 .4.8L9.6 4l1.3 2.2a.5.5 0 0 1-.43.8H5.5V14a.5.5 0 0 1-1 0z"/></symbol>
     <symbol id="icon-paused" viewBox="0 0 16 16"><path fill="currentColor" d="M5 2.5a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0V3a.5.5 0 0 1 .5-.5Zm6 0a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0V3a.5.5 0 0 1 .5-.5Z"/></symbol>
     <symbol id="icon-archive" viewBox="0 0 16 16"><path fill="currentColor" d="M13 1.75a.75.75 0 0 0-.75-.75H3.75a.75.75 0 0 0-.75.75v12.5c0 .414.336.75.75.75h8.5a.75.75 0 0 0 .75-.75Zm-1.5 8.75a.5.5 0 0 1-1 0V6.707L6.464 10.464a.5.5 0 0 1-.708-.708L10.793 6H7.5a.5.5 0 0 1 0-1h4.5a.5.5 0 0 1 .5.5v4.5Z"/></symbol>
@@ -1089,6 +1093,9 @@ td.date-cell + td.date-cell {
       <path fill="currentColor" d="M10 11a1 1 0 0 0-1 1v4a1 1 0 1 0 2 0v-4a1 1 0 0 0-1-1Zm4 0a1 1 0 0 0-1 1v4a1 1 0 1 0 2 0v-4a1 1 0 0 0-1-1Z"/>
     </symbol>
     <symbol id="icon-duplicate" viewBox="0 0 16 16"><path fill="currentColor" d="M2.25 1.75a.75.75 0 0 1 .75-.75h7.25a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0V2.5h-6.5v8h2a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1-.75-.75Zm4.5 4a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 .75.75v8a.75.75 0 0 1-.75.75h-6a.75.75 0 0 1-.75-.75v-8Z"/></symbol>
+    <symbol id="icon-link" viewBox="0 0 24 24"><path fill="currentColor" d="M13.06 3.94a5.5 5.5 0 0 1 7.78 7.78l-2.12 2.12a5.5 5.5 0 0 1-7.78 0a1 1 0 0 1 1.42-1.42a3.5 3.5 0 0 0 4.94 0l2.12-2.12a3.5 3.5 0 0 0-4.94-4.94l-.88.88a1 1 0 1 1-1.42-1.42Zm-6.72 6.72a5.5 5.5 0 0 1 7.78 0a1 1 0 1 1-1.42 1.42a3.5 3.5 0 0 0-4.94 0l-2.12 2.12a3.5 3.5 0 0 0 4.94 4.94l.88-.88a1 1 0 0 1 1.42 1.42l-.88.88a5.5 5.5 0 0 1-7.78-7.78Z"/></symbol>
+    <symbol id="icon-external" viewBox="0 0 24 24"><path fill="currentColor" d="M14 4a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 0 1-1-1Z"/><path fill="currentColor" d="M5 6a1 1 0 0 1 1-1h5a1 1 0 1 1 0 2H7v10h10v-4a1 1 0 1 1 2 0v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1Z"/></symbol>
+    <symbol id="icon-calendar-off" viewBox="0 0 24 24"><path fill="currentColor" d="M7 2a1 1 0 0 0-1 1v1H5a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3h-1V3a1 1 0 1 0-2 0v1H8V3a1 1 0 0 0-1-1Zm12 6v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V8h14Z"/><path fill="currentColor" d="M9.7 10.3a1 1 0 0 0-1.4 1.4L10.6 14l-2.3 2.3a1 1 0 0 0 1.4 1.4L12 15.4l2.3 2.3a1 1 0 0 0 1.4-1.4L13.4 14l2.3-2.3a1 1 0 1 0-1.4-1.4L12 12.6Z"/></symbol>
     <symbol id="icon-calendar" viewBox="0 0 16 16"><path fill="currentColor" d="M3 2.75A.75.75 0 0 1 3.75 2h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 3 2.75ZM12.25 2a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5c0-.414.336-.75.75-.75ZM2 5.5a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 5.5Zm12.5 2.25v7.25c0 .414-.336.75-.75.75H2.25a.75.75 0 0 1-.75-.75V7.75c0-.414.336-.75.75-.75h11.5c.414 0 .75.336.75.75Z"/></symbol>
     <symbol id="icon-clock" viewBox="0 0 16 16"><path fill="currentColor" d="M8 1.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13Zm0 1.5a5 5 0 1 1 0 10a5 5 0 0 1 0-10Zm-.5 1.25c0-.276.224-.5.5-.5s.5.224.5.5v2.6l2 1.2a.5.5 0 1 1-.5.866l-2.25-1.35A.5.5 0 0 1 7.5 7V4.25Z"/></symbol>
     <symbol id="icon-undo" viewBox="0 0 20 20"><path fill="currentColor" d="M9.5 3a7.5 7.5 0 1 1-5.303 12.803a.75.75 0 0 1 1.06-1.061A6 6 0 1 0 7 5.233V7.5a.75.75 0 0 1-1.28.53l-3-3a.75.75 0 0 1 0-1.06l3-3A.75.75 0 0 1 7 1.97V4.2A7.47 7.47 0 0 1 9.5 3Z"/></symbol>
@@ -1277,13 +1284,12 @@ body:not([data-theme="dark"]) .header-new-badge {
                 <th class="select-col">№</th>
               <th width="20%" data-type="waiting" data-key="c" onclick="sortData('waiting', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
               <th width="30%" data-type="waiting" data-key="n" onclick="sortData('waiting', 'n', 'string')">Проект <span class="sort-icon"></span></th>
-              <th width="15%" data-type="waiting" data-key="dl" onclick="sortData('waiting', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
-              <th width="15%" data-type="waiting" data-key="p" onclick="sortData('waiting', 'p', 'number')">Сумма <span class="sort-icon"></span></th>
-              <th width="15%"></th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-            <tfoot id="total-row-waiting"><tr><td colspan="4">Итого:</td><td></td><td></td></tr></tfoot>
+              <th width="18%" data-type="waiting" data-key="p" onclick="sortData('waiting', 'p', 'number')">Сумма <span class="sort-icon"></span></th>
+              <th width="22%"></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+            <tfoot id="total-row-waiting"><tr><td colspan="3">Итого:</td><td></td><td></td></tr></tfoot>
           </table>
         </div>
     </div>
@@ -1722,11 +1728,15 @@ body:not([data-theme="dark"]) .header-new-badge {
                         <div class="date-duo-card">
                             <div class="inp-group">
                                  <label>🏁 Дедлайн</label>
-                                 <div class="date-input-wrap date-chip" id="add-proj-dl-display" onclick="openDateInModal('add-proj-dl-val')">
-                                    <svg class="date-icon"><use href="#icon-calendar"/></svg>
-                                    <span class="date-text-display">Сегодня</span>
-                                 </div>
-                                <input type="hidden" id="add-proj-dl-val" value="">
+                                <div class="date-input-wrap date-chip" id="add-proj-dl-display" onclick="openDateInModal('add-proj-dl-val')">
+                                   <svg class="date-icon"><use href="#icon-calendar"/></svg>
+                                   <span class="date-text-display">Сегодня</span>
+                                </div>
+                               <input type="hidden" id="add-proj-dl-val" value="">
+                                <button type="button" class="deadline-clear-btn" onclick="clearNewProjectDeadline()">
+                                    <svg><use href="#icon-calendar-off"/></svg>
+                                    <span>Дедлайн не установлен</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1749,7 +1759,10 @@ body:not([data-theme="dark"]) .header-new-badge {
                         </div>
                     </div>
                     <div class="deadline-links-row">
-                        <button type="button" class="template-create-inline link-inline-btn" id="new-project-link-btn" onclick="openLink('new')">🔗 Добавить ссылку</button>
+                        <button type="button" class="template-create-inline link-inline-btn" id="new-project-link-btn" onclick="openLink('new')">
+                            <svg class="btn-icon"><use href="#icon-link"/></svg>
+                            <span>Добавить ссылку</span>
+                        </button>
                     </div>
                     <div class="link-preview" id="new-project-link-preview" style="display:none">
                         <div class="link-preview-url" id="new-project-link-text"></div>
@@ -2899,6 +2912,7 @@ function refreshTemplateSelects() {
 
 function persistNameTemplates() {
     localStorage.setItem(NAME_TEMPLATES_KEY, JSON.stringify(NAME_TEMPLATES.slice(0, 20)));
+    save();
 }
 
 function setTemplateHelper(message, state = '', autoReset = false) {
@@ -3207,9 +3221,10 @@ let DATA = {
     active: [], archive: [], paused: [], waiting: [], potential: [], requests: [], trash: []
 };
 
-let SORT = { active: 'dl', archive: 'date', potential: 'p', waiting: 'dl', paused: 'dl', requests: 'created' };
+let SORT = { active: 'dl', archive: 'date', potential: 'p', waiting: 'p', paused: 'dl', requests: 'created' };
 let queue = { type: null, idx: null, field: null, targetId: null };
 let previousDeadlineValue = '';
+let deadlineUnset = false;
 let toastTimeout = null;
 let templateHelperTimeout = null;
 let lastPermanentDeletion = null;
@@ -3280,8 +3295,8 @@ let selectedRows = {}; // {active: Set(), waiting: Set(), ...}
 
 function renderLinkControls(item, idx, type) {
     const hasLink = !!item.link;
-    const editBtn = `<button class="link-btn ${hasLink ? 'link-btn-active' : ''}" onclick="openLink('${type}',${idx})" title="${hasLink ? 'Изменить ссылку' : 'Добавить ссылку'}">🔗</button>`;
-    const goBtn = hasLink ? `<button class="link-btn link-btn-go" onclick="openProjectLink(${idx}, '${type}')" title="Открыть ссылку">↗</button>` : '';
+    const editBtn = `<button class="link-btn ${hasLink ? 'link-btn-active' : ''}" onclick="openLink('${type}',${idx})" title="${hasLink ? 'Изменить ссылку' : 'Добавить ссылку'}"><svg><use href="#icon-link"/></svg></button>`;
+    const goBtn = hasLink ? `<button class="link-btn link-btn-go" onclick="openProjectLink(${idx}, '${type}')" title="Открыть ссылку"><svg><use href="#icon-external"/></svg></button>` : '';
     return editBtn + goBtn;
 }
 
@@ -3824,7 +3839,7 @@ function renderActive(){
             `<div class="done-btn action-btn-base" onclick="mv(${i},'active','archive')" title="Выполнено"><svg class="btn-icon"><use href="#icon-check"/></svg></div>`
         ];
         if (isTableEnabled('waiting')) actionButtons.push(`<div class="wait-active-btn action-btn-base" onclick="mv(${i},'active','waiting')" title="В ожидании"><svg class="btn-icon"><use href="#icon-waiting"/></svg></div>`);
-        if (isTableEnabled('paused')) actionButtons.push(`<div class="pause-active-btn action-btn-base" onclick="mv(${i},'active','paused')" title="На паузе"><svg class="btn-icon"><use href="#icon-paused"/></svg></div>`);
+        if (isTableEnabled('paused')) actionButtons.push(`<div class="pause-active-btn action-btn-base" onclick="mv(${i},'active','paused')" title="Редактировать/пауза"><svg class="btn-icon"><use href="#icon-pen"/></svg></div>`);
 
         tr.innerHTML = `
             <td class="select-col">
@@ -3952,6 +3967,7 @@ function renderSimple(type){
     const tbody = document.querySelector(`#t-${type} tbody`);
     tbody.innerHTML = '';
     let tot = 0;
+    const hasDeadline = type !== 'waiting';
     DATA[type].forEach((item, i) => {
         tot += toNumeric(item.p);
         const tr = document.createElement('tr');
@@ -3959,11 +3975,10 @@ function renderSimple(type){
 
         const isSelected = selectedRows[type]?.has(i.toString());
         if (isSelected) tr.classList.add('row-selected');
-        
+
         const linkIcon = renderLinkControls(item, i, type);
-                                      
-        const rem = getTimeRemaining(item.dl);
-        
+        const rem = hasDeadline ? getTimeRemaining(item.dl) : null;
+
         tr.innerHTML = `
             <td class="select-col">
                 <div class="row-index">${i + 1}</div>
@@ -3980,7 +3995,7 @@ function renderSimple(type){
             <td class="project-name-wrap">
                 <span class="project-name" contenteditable onblur="updVal('${type}',${i},'n',this.innerText)">${item.n}</span>
             </td>
-            <td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('${type}',${i},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.dl)} (${rem.txt})</span></div></td>
+            ${hasDeadline ? `<td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('${type}',${i},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.dl)} (${rem.txt})</span></div></td>` : ''}
             <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('${type}',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td><div class="action-btns" style="justify-content:flex-end">
                 <div class="action-btn-base" onclick="mv(${i},'${type}','active')" title="В работу"><svg class="btn-icon"><use href="#icon-arrow-right"/></svg></div>
@@ -3994,7 +4009,7 @@ function renderSimple(type){
     });
     const footer = document.querySelector(`#total-row-${type}`);
     footer.innerHTML = `<tr>
-        <td colspan="4" class="footer-total-toggle" onclick="toggleFooterSelection('${type}')">Всего ${DATA[type].length} проектов</td>
+        <td colspan="${hasDeadline ? 4 : 3}" class="footer-total-toggle" onclick="toggleFooterSelection('${type}')">Всего ${DATA[type].length} проектов</td>
         <td>
             <div class="footer-note">Сумма</div>
             <div>${formatCurrency(tot)}</div>
@@ -4128,7 +4143,7 @@ function renderArchive(){
     const tbody = document.querySelector('#t-archive tbody');
     tbody.innerHTML = '';
     let tP = 0, tPr = 0, tContr = 0, tTax = 0;
-    const visibleItems = DATA.archive.filter(i => (i.date||'').startsWith(currentMonth));
+    const visibleItems = getArchiveByMonth();
     visibleItems.forEach((item, i) => {
         const realIdx = DATA.archive.indexOf(item);
         item.pr = calcNet(item);
@@ -4218,9 +4233,10 @@ function renderAll(){
     if (!tbody) return;
     tbody.innerHTML = '';
     const allItems = [];
-    ['active','waiting','paused','archive'].forEach(type => {
+    ['active','waiting','paused'].forEach(type => {
         DATA[type].forEach((item, idx) => allItems.push({ item, __type: type, idx }));
     });
+    getArchiveByMonth().forEach(item => allItems.push({ item, __type: 'archive', idx: DATA.archive.indexOf(item) }));
 
     let totalGross = 0, totalNet = 0, totalExp = 0, totalTax = 0;
 
@@ -4518,6 +4534,7 @@ function openAddModal(){
     document.getElementById('add-proj-start-val').value = today;
     document.getElementById('add-proj-dl-val').value = today;
     previousDeadlineValue = today;
+    deadlineUnset = false;
     document.getElementById('add-proj-dl-days').value = '';
     document.getElementById('add-proj-dl-custom').value = '';
     const presetTimeInput = document.getElementById('add-proj-dl-time');
@@ -4538,12 +4555,13 @@ function saveNewProject(){
     const tax = +document.getElementById('add-proj-tax').value || 0;
     const type = document.getElementById('add-proj-type').value;
     const start = document.getElementById('add-proj-start-val').value || today;
-    const dl = document.getElementById('add-proj-dl-val').value || today;
+    const rawDeadline = document.getElementById('add-proj-dl-val').value;
+    const dl = deadlineUnset ? '' : (rawDeadline || today);
 
     const item = {
         n: name, c: client, p: price, contractor: contr, contractorMode: contrMode, taxPrc: tax, link: newProjectLink,
         start: type==='active'? start : undefined,
-        dl: type==='active' || type==='waiting' || type==='paused' ? dl : undefined,
+        dl: type==='active' || type==='waiting' || type==='paused' ? dl || undefined : undefined,
         paid: (type==='active'||type==='archive'? (type==='archive'?100:50) : 0),
         date: type==='archive' ? today : undefined
     };
@@ -4564,6 +4582,7 @@ function applyDeadlinePreset() {
     const select = document.getElementById('add-proj-dl-days');
     const customInput = document.getElementById('add-proj-dl-custom');
     const timeInput = document.getElementById('add-proj-dl-time');
+    deadlineUnset = false;
     const currentStart = document.getElementById('add-proj-start-val').value || today;
     const currentDl = document.getElementById('add-proj-dl-val').value || currentStart || today;
     const startTime = currentStart && currentStart.includes('T') ? currentStart.slice(11, 16) : '';
@@ -4617,6 +4636,17 @@ function applyDeadlinePreset() {
     previousDeadlineValue = deadlineValue;
 }
 
+function clearNewProjectDeadline() {
+    deadlineUnset = true;
+    document.getElementById('add-proj-dl-val').value = '';
+    document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = 'Без дедлайна';
+    document.getElementById('add-proj-dl-days').value = '';
+    document.getElementById('add-proj-dl-custom').value = '';
+    previousDeadlineValue = '';
+    const presetTimeInput = document.getElementById('add-proj-dl-time');
+    if (presetTimeInput) presetTimeInput.value = '';
+}
+
 function handleStatusChange(status) {
     const dateBlocks = document.querySelectorAll('.status-dates');
     dateBlocks.forEach(block => block.style.display = status === 'potential' ? 'none' : '');
@@ -4633,6 +4663,7 @@ function openDate(type, idx, field){
 }
 function openDateInModal(targetInputId){
     const val = document.getElementById(targetInputId).value;
+    if (targetInputId === 'add-proj-dl-val') deadlineUnset = false;
     queue = {type: null, idx: null, field: null, targetId: targetInputId};
     openDateBase(val);
 }
@@ -4700,6 +4731,7 @@ function saveDate(){
         document.getElementById(queue.targetId).value = result;
         const displayId = queue.targetId.replace('-val', '-display');
         document.getElementById(displayId).querySelector('.date-text-display').innerHTML = formatDateDisplay(result);
+        if (queue.targetId === 'add-proj-dl-val') deadlineUnset = false;
         if (queue.targetId === 'add-proj-start-val') {
             const presetTimeInput = document.getElementById('add-proj-dl-time');
             if (presetTimeInput && result.includes('T')) {
@@ -4920,6 +4952,10 @@ function getTimeRemaining(dl){
     }
     if(dayDiff <= 3) return {txt: dayDiff + ' дн.', cls:'days-warning', days: dayDiff};
     return {txt: dayDiff + ' дн.', cls:'days-normal', days: dayDiff};
+}
+
+function getArchiveByMonth(month = currentMonth) {
+    return DATA.archive.filter(i => (i.date || '').startsWith(month));
 }
 
 function changeMonth(m){ 
@@ -5209,7 +5245,7 @@ function scrollToReputation(){
 function getScopedDataForStats() {
     return {
         active: DATA.active,
-        archive: DATA.archive,
+        archive: getArchiveByMonth(),
         paused: DATA.paused,
         waiting: DATA.waiting,
         potential: DATA.potential,
@@ -5229,7 +5265,7 @@ function calcStats(){
         });
     });
 
-    const archiveThisMonth = scope.archive.filter(i=>(i.date||'').startsWith(currentMonth));
+    const archiveThisMonth = scope.archive;
     archiveThisMonth.forEach(i => {
         const net = calcNet(i);
         fact += net;
@@ -5313,7 +5349,7 @@ function updateCharts(fact, plan, scope){
 
     const dataL = new Array(daysInM).fill(0);
 
-    scope.archive.filter(i=>(i.date||'').startsWith(currentMonth)).forEach(i => {
+    scope.archive.forEach(i => {
         const d = parseInt(i.date.split('-')[2]) - 1;
         if(d>=0 && d<daysInM) dataL[d] += calcNet(i);
     });
