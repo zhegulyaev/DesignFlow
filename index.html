@@ -257,15 +257,20 @@
   /* Actions */
   .client-wrap{display:flex;align-items:center;gap:8px; width: 100%;}
   .client-name, .project-name { display:block; line-height:1.3; white-space:pre-wrap; -webkit-line-clamp:unset; -webkit-box-orient:vertical; overflow:visible; text-overflow:unset; word-break: break-word; }
-  .client-name { max-width: 210px; font-weight:700; color:var(--text); }
+  .client-name { max-width: 260px; font-weight:700; color:var(--text); }
   .project-name-wrap { display: flex; align-items: center; gap: 8px; overflow: visible; }
-  .project-name { max-width: 320px; font-weight:600; }
+  .project-name { max-width: 380px; font-weight:600; }
 
   .sort-icon { color: var(--muted); font-size: 11px; margin-left: 6px; opacity: 0.5; }
   th.sorted .sort-icon { opacity: 1; color: var(--text); }
   th.sorted.asc .sort-icon::after { content: '↑'; }
   th.sorted.desc .sort-icon::after { content: '↓'; }
   th .sort-icon::after { content: '↕'; }
+
+  /* Compact columns for taxes/expenses */
+  #t-active th.tax-col, #t-active td.tax-col { text-align: center; width: 4%; }
+  #t-active th.expense-col, #t-active td.expense-col { width: 5%; text-align: right; }
+  #t-active td.tax-col .tax-select { min-width: 68px; width: 100%; margin: 0 auto; display: inline-flex; justify-content: center; }
   
   .dup-icon { opacity: 0; transition: opacity 0.2s; cursor: pointer; color: var(--muted); width: 16px; height: 16px; flex-shrink: 0;}
   tr:hover .dup-icon { opacity: 1; }
@@ -1146,15 +1151,15 @@ td.date-cell + td.date-cell {
           <thead>
             <tr>
               <th class="select-col">№</th>
-              <th width="18%" data-type="active" data-key="c" onclick="sortData('active', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
-              <th width="19%" data-type="active" data-key="n" onclick="sortData('active', 'n', 'string')">Проект <span class="sort-icon"></span></th>
-              <th width="8%" data-type="active" data-key="start" onclick="sortData('active', 'start', 'date')">Старт <span class="sort-icon"></span></th>
-              <th width="8%" data-type="active" data-key="dl" onclick="sortData('active', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
+              <th width="22%" data-type="active" data-key="c" onclick="sortData('active', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
+              <th width="22%" data-type="active" data-key="n" onclick="sortData('active', 'n', 'string')">Проект <span class="sort-icon"></span></th>
+              <th width="7%" data-type="active" data-key="start" onclick="sortData('active', 'start', 'date')">Старт <span class="sort-icon"></span></th>
+              <th width="7%" data-type="active" data-key="dl" onclick="sortData('active', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
               <th width="6%" data-type="active" data-key="rem" onclick="sortData('active', 'rem', 'number')">Осталось <span class="sort-icon"></span></th>
-              <th width="4%" data-type="active" data-key="taxPrc" onclick="sortData('active', 'taxPrc', 'number')">Налог % <span class="sort-icon"></span></th>
-              <th width="6%" data-type="active" data-key="contractor" onclick="sortData('active', 'contractor', 'number')" style="text-align:right;">Расходы <span class="sort-icon"></span></th>
-              <th width="8%" data-type="active" data-key="p" onclick="sortData('active', 'p', 'number')" style="text-align:right;">Сумма <span class="sort-icon"></span></th>
-              <th width="8%" style="text-align:right;">Чистыми</th>
+              <th class="tax-col" data-type="active" data-key="taxPrc" onclick="sortData('active', 'taxPrc', 'number')">Налог % <span class="sort-icon"></span></th>
+              <th class="expense-col" data-type="active" data-key="contractor" onclick="sortData('active', 'contractor', 'number')" style="text-align:right;">Расходы <span class="sort-icon"></span></th>
+              <th width="7%" data-type="active" data-key="p" onclick="sortData('active', 'p', 'number')" style="text-align:right;">Сумма <span class="sort-icon"></span></th>
+              <th width="7%" style="text-align:right;">Чистыми</th>
               <th width="6%" style="text-align:right;">Оплачено</th>
               <th width="4%"></th>
             </tr>
@@ -3666,14 +3671,14 @@ function renderActive(){
             
             <td class="mono"><div class="${rem.cls}">${rem.txt}</div></td>
             
-            <td><select class="tax-select" onchange="updVal('active',${i},'taxPrc',this.value)">
+            <td class="tax-col"><select class="tax-select" onchange="updVal('active',${i},'taxPrc',this.value)">
                 <option value="0" ${+item.taxPrc===0?'selected':''}>0%</option>
                 <option value="4" ${+item.taxPrc===4?'selected':''}>4%</option>
                 <option value="6" ${+item.taxPrc===6?'selected':''}>6%</option>
                 <option value="13" ${+item.taxPrc===13?'selected':''}>13%</option>
             </select></td>
-            
-            <td style="text-align:right;">
+
+            <td class="expense-col" style="text-align:right;">
                 <div class="price-cell-wrap expense-cell">
                     <input type="text" value="${contractorValue}" ${contractorMode === 'none' ? 'disabled' : ''} oninput="formatNumberInput(this)" onblur="updateContractorValue('active',${i},this.value)">
                     <span class="currency-symbol ${contractorSymbolClass}">${contractorSymbol || 'нет'}</span>
