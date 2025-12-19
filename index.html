@@ -243,6 +243,7 @@
   .expense-cell { gap: 4px; }
   .expense-mode { background: var(--pill-bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 4px 6px; font-size: 12px; cursor: pointer; min-width: 54px; }
   .expense-helper { color: var(--muted); font-size: 11px; margin-top: 2px; text-align: right; line-height: 1.2; }
+  .helper-label { color: var(--muted); font-size: 12px; margin-top: 6px; line-height: 1.4; font-weight: 600; }
 
   .paid-amount { font-size: 12px; color: var(--muted); margin-top: 4px; text-align: right; }
 
@@ -291,17 +292,25 @@
   .wait-active-btn:hover { background: var(--purple); color: #fff; border-color: var(--purple);}
   .pause-active-btn:hover { background: var(--link-blue); color: #fff; border-color: var(--link-blue);}
 
-  .link-btn { padding: 6px; margin: 0; background: var(--chip-bg); border: 1px solid var(--border); color: var(--muted); cursor: pointer; font-size: 12px; flex-shrink: 0; border-radius: 8px; transition: .2s; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
+  .link-btn { padding: 6px; margin: 0; background: var(--chip-bg); border: 1px solid var(--border); color: var(--muted); cursor: pointer; font-size: 12px; flex-shrink: 0; border-radius: 8px; transition: .2s; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+  .link-btn svg { width: 14px; height: 14px; }
   .link-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--link-go-bg); box-shadow: 0 4px 10px rgba(59,130,246,0.12); }
   .link-btn-active { color: var(--accent); border-color: var(--border); background: var(--link-go-bg); border-radius: 8px; box-shadow: 0 4px 12px rgba(17,24,39,0.08); }
   .link-btn-go { border: 1px solid var(--border); border-radius: 8px; background: var(--link-go-bg); color: var(--accent); font-weight: 700; box-shadow: 0 4px 12px rgba(17,24,39,0.06); }
   .link-btn-go:hover { border-color: var(--accent); color: var(--accent); background: #f0f4ff; box-shadow: 0 6px 16px rgba(59,130,246,0.18); }
-  .client-wrap .link-btn { opacity: 0; pointer-events: none; }
-  tr:hover .client-wrap .link-btn, .row-selected .client-wrap .link-btn { opacity: 1; pointer-events: auto; }
+  .client-wrap .link-btn { opacity: 1; pointer-events: auto; }
   
   .del-btn{color:var(--text);cursor:pointer;opacity:0.7; margin-left: 8px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 6px; border: 1px solid transparent; border-radius: 8px; transition: .2s; background: transparent;}
   .del-btn svg { width: 16px; height: 16px; }
   .del-btn:hover{opacity:1; border-color: var(--del-hover-border); background: var(--del-hover-bg); color: var(--red);}
+
+  .delegation-pill { background: rgba(88,166,255,0.14); color: var(--accent); border: 1px solid rgba(88,166,255,0.35); padding: 4px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: 0.2px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
+  .delegation-pill svg { width: 12px; height: 12px; }
+
+  .action-move-select { background: var(--pill-bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; font-size: 12px; font-weight: 700; cursor: pointer; min-width: 150px; }
+  .action-move-select:hover { border-color: var(--accent); }
+
+  .row-pulse { box-shadow: inset 0 0 0 2px var(--accent); }
   
   /* Pacing Block Updated (Fire) */
   .pace-block {
@@ -1105,7 +1114,10 @@ td.date-cell + td.date-cell {
     <symbol id="icon-pen" viewBox="0 0 20 20"><path fill="currentColor" d="M2.5 13.793V17.5h3.707L16.1 7.607l-3.707-3.707Zm13.94-8.233l-.633.634l-3.707-3.707l.633-.633a1.5 1.5 0 0 1 2.122 0l1.585 1.585a1.5 1.5 0 0 1 0 2.121Z"/></symbol>
     <symbol id="icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="m16.707 6.293-7.25 7.25a1 1 0 0 1-1.414 0l-4-4a1 1 0 1 1 1.414-1.414L8.5 11.672l6.543-6.543a1 1 0 0 1 1.414 1.164a.99.99 0 0 1-.25.293Z"/></symbol>
     <symbol id="icon-checklist" viewBox="0 0 24 24"><path fill="currentColor" d="M7 5a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H8a1 1 0 0 1-1-1Zm0 7a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H8a1 1 0 0 1-1-1Zm0 7a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H8a1 1 0 0 1-1-1ZM4.707 4.293a1 1 0 0 1 0 1.414L3.414 7l1.293 1.293a1 1 0 0 1-1.414 1.414L1.586 7.999a1 1 0 0 1 0-1.414l1.707-1.707a1 1 0 0 1 1.414 0Zm0 7a1 1 0 0 1 0 1.414L3.414 14l1.293 1.293a1 1 0 0 1-1.414 1.414L1.586 14.999a1 1 0 0 1 0-1.414l1.707-1.707a1 1 0 0 1 1.414 0Zm0 7a1 1 0 0 1 0 1.414L3.414 21l1.293 1.293a1 1 0 0 1-1.414 1.414L1.586 20.999a1 1 0 0 1 0-1.414l1.707-1.707a1 1 0 0 1 1.414 0Z"/></symbol>
-    <symbol id="icon-settings" viewBox="0 0 24 24"><path fill="currentColor" d="M10.325 2.55a2 2 0 0 1 3.35 0l.72 1.08a2 2 0 0 0 1.362.89l1.284.214a2 2 0 0 1 1.64 1.64l.214 1.284a2 2 0 0 0 .89 1.362l1.08.72a2 2 0 0 1 0 3.35l-1.08.72a2 2 0 0 0-.89 1.362l-.214 1.284a2 2 0 0 1-1.64 1.64l-1.284.214a2 2 0 0 0-1.362.89l-.72 1.08a2 2 0 0 1-3.35 0l-.72-1.08a2 2 0 0 0-1.362-.89l-1.284-.214a2 2 0 0 1-1.64-1.64l-.214-1.284a2 2 0 0 0-.89-1.362l-1.08-.72a2 2 0 0 1 0-3.35l1.08-.72a2 2 0 0 0 .89-1.362l.214-1.284a2 2 0 0 1 1.64-1.64l1.284-.214a2 2 0 0 0 1.362-.89Zm.462 10.548a3 3 0 1 0 4.426-4.096a3 3 0 0 0-4.426 4.096Z"/></symbol>
+    <symbol id="icon-settings" viewBox="0 0 24 24"><path fill="currentColor" d="M5 6a2 2 0 0 1 2-2h1.586l.707-.707A1 1 0 0 1 10 3h4a1 1 0 0 1 .707.293L15.414 4H17a2 2 0 0 1 2 2v1.586l.707.707A1 1 0 0 1 20 10v4a1 1 0 0 1-.293.707L19 15.414V17a2 2 0 0 1-2 2h-1.586l-.707.707A1 1 0 0 1 14 20h-4a1 1 0 0 1-.707-.293L8.586 19H7a2 2 0 0 1-2-2v-1.586l-.707-.707A1 1 0 0 1 4 14v-4a1 1 0 0 1 .293-.707L5 7.586Z"/><path fill="currentColor" d="M9 12a3 3 0 1 1 6 0a3 3 0 0 1-6 0Zm8-6h-1.586l-.707-.707A1 1 0 0 0 14 5h-4a1 1 0 0 0-.707.293L8.586 6H7a1 1 0 0 0-1 1v1.586l-.707.707A1 1 0 0 0 5 10v4a1 1 0 0 0 .293.707L6 15.414V17a1 1 0 0 0 1 1h1.586l.707.707A1 1 0 0 0 10 19h4a1 1 0 0 0 .707-.293l.707-.707H17a1 1 0 0 0 1-1v-1.586l.707-.707A1 1 0 0 0 19 14v-4a1 1 0 0 0-.293-.707L18 8.586V7a1 1 0 0 0-1-1Z" opacity=".4"/></symbol>
+    <symbol id="icon-link-create" viewBox="0 0 24 24"><path fill="currentColor" d="M9.172 14.828a4 4 0 0 1 0-5.656l1.414-1.414a4 4 0 0 1 5.656 0l.172.172a1 1 0 1 1-1.414 1.414l-.172-.172a2 2 0 0 0-2.828 0l-1.414 1.414a2 2 0 0 0 0 2.828l.172.172a1 1 0 0 1-1.414 1.414l-.172-.172Z"/><path fill="currentColor" d="M11.514 16.657a4 4 0 0 0 5.657 0l1.414-1.414a4 4 0 0 0 0-5.657l-.172-.172a1 1 0 1 0-1.414 1.414l.172.172a2 2 0 0 1 0 2.828l-1.414 1.414a2 2 0 0 1-2.829 0l-.171-.172a1 1 0 0 0-1.414 1.414l.171.172Z"/></symbol>
+    <symbol id="icon-external" viewBox="0 0 24 24"><path fill="currentColor" d="M5 5a2 2 0 0 1 2-2h5a1 1 0 1 1 0 2H7v12h12v-5a1 1 0 1 1 2 0v5a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2Z"/><path fill="currentColor" d="M21 3a1 1 0 0 0-1-1h-5a1 1 0 1 0 0 2h2.586l-6.293 6.293a1 1 0 0 0 1.414 1.414L19 5.414V8a1 1 0 1 0 2 0Z"/></symbol>
+    <symbol id="icon-handshake" viewBox="0 0 24 24"><path fill="currentColor" d="M12.879 6.121a3 3 0 0 0-4.243 0l-1.465 1.465L6 7.414A2 2 0 0 0 4.586 7H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h1.172a2 2 0 0 0 1.414-.586L7 13.414l2.707 2.707a3 3 0 0 0 4.243 0l3.536-3.536a2 2 0 0 0 0-2.828Z"/><path fill="currentColor" d="M16.95 5.464A5 5 0 0 0 9.95 4.05l-.637.637A2 2 0 0 1 8 5H5.414l-.707-.707A3 3 0 0 0 2.586 3H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h1.172a3 3 0 0 0 2.122-.879l1.232-1.232l.586.586a4 4 0 0 0 5.657 0l3.536-3.536a4 4 0 0 0 0-5.657Z" opacity=".35"/></symbol>
     <symbol id="icon-drag" viewBox="0 0 24 24"><path fill="currentColor" d="M10 4a2 2 0 1 1-4 0a2 2 0 0 1 4 0Zm4 0a2 2 0 1 1 4 0a2 2 0 0 1-4 0ZM8 12a2 2 0 1 0-4 0a2 2 0 0 0 4 0Zm8 0a2 2 0 1 0-4 0a2 2 0 0 0 4 0Zm-6 6a2 2 0 1 1-4 0a2 2 0 0 1 4 0Zm4 0a2 2 0 1 1 4 0a2 2 0 0 1-4 0Z"/></symbol>
     <symbol id="icon-grip" viewBox="0 0 24 24"><path fill="currentColor" d="M10 5a1 1 0 0 1-1 1H7a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1Zm7-1h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2Zm0 6h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2Zm0 6h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2Zm-8-4H7a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2Zm0 6H7a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2Zm0-12H7a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2Z"/></symbol>
     <symbol id="icon-close" viewBox="0 0 24 24"><path fill="currentColor" d="M6.34 4.93a1 1 0 0 0-1.41 1.41L10.59 12l-5.66 5.66a1 1 0 1 0 1.41 1.41L12 13.41l5.66 5.66a1 1 0 0 0 1.41-1.41L13.41 12l5.66-5.66a1 1 0 1 0-1.41-1.41L12 10.59Z"/></symbol>
@@ -1234,6 +1246,7 @@ body:not([data-theme="dark"]) .header-new-badge {
     <div class="tabs">
         <div class="tab" id="tab-all" onclick="switchTab('all')"><svg><use href="#icon-all"/></svg> Все проекты <span class="tab-count" id="count-all">0</span></div>
         <div class="tab active" id="tab-active" onclick="switchTab('active')"><svg><use href="#icon-active"/></svg> В работе <span class="tab-count" id="count-active">0</span></div>
+        <div class="tab" id="tab-delegation" onclick="switchTab('delegation')"><svg><use href="#icon-handshake"/></svg> Делегирование <span class="tab-count" id="count-delegation">0</span></div>
         <div class="tab" id="tab-waiting" onclick="switchTab('waiting')"><svg><use href="#icon-waiting"/></svg> Ожидает <span class="tab-count" id="count-waiting">0</span></div>
         <div class="tab" id="tab-potential" onclick="switchTab('potential')"><svg><use href="#icon-potential"/></svg> Потенциал <span class="tab-count" id="count-potential">0</span></div>
         <div class="tab" id="tab-requests" onclick="switchTab('requests')"><svg><use href="#icon-all"/></svg> Заявки <span class="tab-count" id="count-requests">0</span></div>
@@ -1301,6 +1314,27 @@ body:not([data-theme="dark"]) .header-new-badge {
       </div>
     </div>
 
+    <div id="view-delegation" style="display:none">
+      <div class="table-wrap">
+        <table id="t-delegation">
+          <thead>
+            <tr>
+              <th class="select-col">№</th>
+              <th width="18%">Клиент</th>
+              <th width="22%">Проект</th>
+              <th width="10%">Старт</th>
+              <th width="10%">Дедлайн</th>
+              <th width="8%">Осталось</th>
+              <th width="12%">Сумма</th>
+              <th width="20%"></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+          <tfoot id="total-row-delegation"><tr><td colspan="5">Итого:</td><td></td><td></td><td></td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+
     <div id="view-waiting" style="display:none">
         <div class="table-wrap">
           <table id="t-waiting">
@@ -1309,13 +1343,12 @@ body:not([data-theme="dark"]) .header-new-badge {
                 <th class="select-col">№</th>
               <th width="20%" data-type="waiting" data-key="c" onclick="sortData('waiting', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
               <th width="30%" data-type="waiting" data-key="n" onclick="sortData('waiting', 'n', 'string')">Проект <span class="sort-icon"></span></th>
-              <th width="15%" data-type="waiting" data-key="dl" onclick="sortData('waiting', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
-              <th width="15%" data-type="waiting" data-key="p" onclick="sortData('waiting', 'p', 'number')">Сумма <span class="sort-icon"></span></th>
-              <th width="15%"></th>
+              <th width="20%" data-type="waiting" data-key="p" onclick="sortData('waiting', 'p', 'number')">Сумма <span class="sort-icon"></span></th>
+              <th width="20%"></th>
               </tr>
             </thead>
             <tbody></tbody>
-            <tfoot id="total-row-waiting"><tr><td colspan="4">Итого:</td><td></td><td></td></tr></tfoot>
+            <tfoot id="total-row-waiting"><tr><td colspan="3">Итого:</td><td></td><td></td></tr></tfoot>
           </table>
         </div>
     </div>
@@ -1688,6 +1721,10 @@ body:not([data-theme="dark"]) .header-new-badge {
                     </select>
                 </div>
                 <div class="inp-group">
+                    <label class="no-deadline-toggle"><input type="checkbox" id="add-proj-delegated"> Делегировано</label>
+                    <div class="helper-label">Оставляет проект во «В работе», но добавляет в раздел делегирования.</div>
+                </div>
+                <div class="inp-group">
                     <label>Имя клиента</label>
                     <input type="text" id="add-proj-client" placeholder="Иван Иванов">
                 </div>
@@ -1845,6 +1882,8 @@ body:not([data-theme="dark"]) .header-new-badge {
                 </div>
             </div>
         </div>
+
+        <label class="no-deadline-toggle" style="margin-bottom: 8px;"><input type="checkbox" id="editor-delegated"> Проект делегирован</label>
 
         <div class="add-modal-actions">
             <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveProjectEditor()">Сохранить изменения</button>
@@ -2331,6 +2370,7 @@ let currentMonth = today.slice(0,7);
 let currentTab = 'active';
 const TAB_DESCRIPTIONS = {
     active: "Проекты в работе. Следите за дедлайнами и фиксируйте предоплату.",
+    delegation: "Проекты, которые вы делегировали. Контролируйте сроки и статусы.",
     waiting: "Ожидают реакции клиента или материалов.",
     potential: "Лиды и переговоры. Ещё не начаты.",
     requests: "Новые заявки и обращения с каналов.",
@@ -2905,7 +2945,7 @@ function isTableEnabled(key) {
 }
 
 function getEnabledTabs() {
-    return ['all','active','waiting','potential','requests','paused','archive','trash'].filter(tab => {
+    return ['all','active','delegation','waiting','potential','requests','paused','archive','trash'].filter(tab => {
         if (['waiting','requests','paused'].includes(tab)) return isTableEnabled(tab);
         return true;
     });
@@ -3005,6 +3045,7 @@ function refreshTemplateSelects() {
 
 function persistNameTemplates() {
     localStorage.setItem(NAME_TEMPLATES_KEY, JSON.stringify(NAME_TEMPLATES.slice(0, 20)));
+    save();
 }
 
 function setTemplateHelper(message, state = '', autoReset = false) {
@@ -3313,7 +3354,7 @@ let DATA = {
     active: [], archive: [], paused: [], waiting: [], potential: [], requests: [], trash: []
 };
 
-let SORT = { active: 'dl', archive: 'date', potential: 'p', waiting: 'dl', paused: 'dl', requests: 'created' };
+let SORT = { active: 'dl', delegation: 'dl', archive: 'date', potential: 'p', waiting: 'p', paused: 'dl', requests: 'created' };
 let queue = { type: null, idx: null, field: null, targetId: null };
 let previousDeadlineValue = '';
 let toastTimeout = null;
@@ -3389,9 +3430,16 @@ let selectedRows = {}; // {active: Set(), waiting: Set(), ...}
 
 function renderLinkControls(item, idx, type) {
     const hasLink = !!item.link;
-    const editBtn = `<button class="link-btn ${hasLink ? 'link-btn-active' : ''}" onclick="openLink('${type}',${idx})" title="${hasLink ? 'Изменить ссылку' : 'Добавить ссылку'}">🔗</button>`;
-    const goBtn = hasLink ? `<button class="link-btn link-btn-go" onclick="openProjectLink(${idx}, '${type}')" title="Открыть ссылку">↗</button>` : '';
+    const editLabel = hasLink ? 'Изменить ссылку' : 'Добавить ссылку';
+    const editBtn = `<button class="link-btn ${hasLink ? 'link-btn-active' : ''}" onclick="openLink('${type}',${idx})" title="${editLabel}" aria-label="${editLabel}"><svg class="btn-icon lg"><use href="#icon-link-create"/></svg></button>`;
+    const goBtn = hasLink ? `<button class="link-btn link-btn-go" onclick="openProjectLink(${idx}, '${type}')" title="Открыть ссылку" aria-label="Открыть ссылку"><svg class="btn-icon lg"><use href="#icon-external"/></svg></button>` : '';
     return editBtn + goBtn;
+}
+
+function getDelegationItems() {
+    return DATA.active
+        .map((item, idx) => ({ item, idx }))
+        .filter(({ item }) => !!item.delegated);
 }
 
 function normalizeLinkValue(raw, isTelegram = false) {
@@ -3641,9 +3689,10 @@ function bulkMove(from, to) {
         const itemIndex = DATA[from].findIndex((_, i) => i === idx);
         if (itemIndex > -1) {
             const item = DATA[from].splice(itemIndex, 1)[0];
-            if(to === 'active') { item.start = item.start || today; item.dl = item.dl || today; item.paid = item.paid || 50; delete item.date; }
-            if(to === 'archive') { item.date = today; item.paid = 100; delete item.start; delete item.dl; }
-            if(to === 'potential' || to === 'waiting' || to === 'paused') { delete item.date; delete item.start; delete item.dl; item.paid = 0; }
+            if(from === 'active' && to !== 'active') { item.delegated = false; }
+            if(to === 'active') { item.start = item.start || today; item.dl = item.dl || today; item.paid = item.paid || 50; delete item.date; item.delegated = item.delegated || false; }
+            if(to === 'archive') { item.date = today; item.paid = 100; delete item.start; delete item.dl; item.delegated = false; }
+            if(to === 'potential' || to === 'waiting' || to === 'paused') { delete item.date; delete item.start; delete item.dl; item.paid = 0; item.delegated = false; }
             DATA[to].unshift(item);
         }
     });
@@ -3675,6 +3724,7 @@ function init(){
                     if(i.contractor === undefined) i.contractor = 0;
                     if(i.taxPrc === undefined) i.taxPrc = 0;
                     if(!i.contractorMode) i.contractorMode = i.contractor ? 'amount' : 'none';
+                    if(i.delegated === undefined) i.delegated = false;
                  });
             });
             if (payload.uiPrefs) {
@@ -3814,7 +3864,7 @@ function switchTab(t){
     currentTab = t;
     document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
     document.getElementById(`tab-${t}`).classList.add('active');
-    ['active','waiting','potential','requests','paused','archive','all','trash'].forEach(k => {
+    ['active','delegation','waiting','potential','requests','paused','archive','all','trash'].forEach(k => {
         const el = document.getElementById(`view-${k}`);
         if(el) el.style.display = (k === t) ? 'block' : 'none';
         const cb = document.getElementById(`selectAll${k.charAt(0).toUpperCase() + k.slice(1)}`);
@@ -3841,6 +3891,7 @@ function getTabSummary(type, baseText) {
 function updateTabCounts() {
     const counts = {
         active: DATA.active.length,
+        delegation: getDelegationItems().length,
         waiting: DATA.waiting.length,
         potential: DATA.potential.length,
         requests: DATA.requests.length,
@@ -3880,6 +3931,7 @@ function sortData(type, key, dataType, initial = false) {
 }
 
 function updateSortIndicators(type) {
+    if (!DATA[type]) return;
     const activeKey = SORT[type];
     const dir = DATA[type].sortDirection || 1;
     document.querySelectorAll(`th[data-type="${type}"]`).forEach(th => th.classList.remove('sorted', 'asc', 'desc'));
@@ -3892,6 +3944,7 @@ function updateSortIndicators(type) {
 
 function upd(){
     renderActive();
+    renderDelegation();
     renderSimple('waiting');
     renderSimple('paused');
     renderPotential();
@@ -3934,6 +3987,7 @@ function renderActive(){
         if (isSelected) tr.classList.add('row-selected');
 
         const linkIcon = renderLinkControls(item, i, 'active');
+        const delegationBadge = item.delegated ? `<span class="delegation-pill" onclick="openDelegationTab(${i})"><svg class="btn-icon"><use href="#icon-handshake"/></svg>Делегирование</span>` : '';
         const paidAmount = Math.round(gross * ((toNumeric(item.paid) || 0) / 100));
         totalPaidGross += paidAmount;
         const contractorMode = item.contractorMode || 'none';
@@ -3945,9 +3999,16 @@ function renderActive(){
             `<div class="done-btn action-btn-base" onclick="mv(${i},'active','archive')" title="Выполнено"><svg class="btn-icon"><use href="#icon-check"/></svg></div>`
         ];
         if (isTableEnabled('waiting')) actionButtons.push(`<div class="wait-active-btn action-btn-base" onclick="mv(${i},'active','waiting')" title="В ожидании"><svg class="btn-icon"><use href="#icon-waiting"/></svg></div>`);
-        if (isTableEnabled('paused')) actionButtons.push(`<div class="pause-active-btn action-btn-base" onclick="mv(${i},'active','paused')" title="На паузе"><svg class="btn-icon"><use href="#icon-paused"/></svg></div>`);
         actionButtons.push(`<div class="action-btn-base" onclick="openProjectEditor('active',${i})" title="Редактировать проект"><svg class="btn-icon"><use href="#icon-pen"/></svg></div>`);
         actionButtons.push(`<div class="action-btn-base" onclick="openTaskJournal('active',${i})" title="Журнал задач"><svg class="btn-icon"><use href="#icon-checklist"/></svg></div>`);
+        const moveSelect = `<select class="action-move-select" onchange="moveFromActive(${i}, this.value, this)">
+                <option value="">Перенести...</option>
+                <option value="delegation">В делегирование</option>
+                <option value="clear-delegation" ${item.delegated ? '' : 'disabled'}>Убрать делегирование</option>
+                ${isTableEnabled('waiting') ? '<option value="waiting">В ожидание</option>' : ''}
+                ${isTableEnabled('paused') ? '<option value="paused">На паузу</option>' : ''}
+                <option value="potential">В потенциал</option>
+            </select>`;
 
         tr.innerHTML = `
             <td class="select-col">
@@ -3965,6 +4026,7 @@ function renderActive(){
             <td class="project-name-wrap">
                 <span class="project-name" contenteditable onblur="updVal('active',${i},'n',this.innerText)">${item.n}</span>
                 ${renderTaskBadge(item)}
+                ${delegationBadge}
             </td>
             
             <td class="date-cell"><div class="date-input-wrap" onclick="openDate('active',${i},'start')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.start)}</span></div></td>
@@ -4006,6 +4068,7 @@ function renderActive(){
             
             <td><div class="action-btns">
                 ${actionButtons.join('')}
+                ${moveSelect}
                 <button class="del-btn" onclick="askDel('active',${i})" title="Удалить" aria-label="Удалить в корзину">
                     <svg><use href="#icon-trash"/></svg>
                 </button>
@@ -4072,6 +4135,93 @@ function renderActive(){
     }
 }
 
+function moveFromActive(idx, target, el){
+    if (!target) return;
+    const item = DATA.active[idx];
+    if (!item) { if (el) el.value = ''; return; }
+
+    if (target === 'delegation') {
+        item.delegated = true;
+        save(); upd(); switchTab('delegation');
+    } else if (target === 'clear-delegation') {
+        item.delegated = false;
+        save(); upd();
+    } else {
+        item.delegated = false;
+        mv(idx,'active',target);
+    }
+
+    if (el) el.value = '';
+}
+
+function moveFromDelegation(idx, target, el){
+    moveFromActive(idx, target, el);
+}
+
+function openDelegationTab(idx){
+    switchTab('delegation');
+    setTimeout(() => {
+        const row = document.querySelector(`#t-delegation tbody tr[data-index="${idx}"]`);
+        if (row) {
+            row.classList.add('row-pulse');
+            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => row.classList.remove('row-pulse'), 1200);
+        }
+    }, 60);
+}
+
+function renderDelegation(){
+    const tbody = document.querySelector('#t-delegation tbody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    let total = 0;
+
+    const list = getDelegationItems();
+    list.forEach(({ item, idx }, order) => {
+        const rem = getTimeRemaining(item.dl, item.noDeadline);
+        const tr = document.createElement('tr');
+        tr.dataset.index = idx;
+        total += toNumeric(item.p);
+        const linkIcon = renderLinkControls(item, idx, 'active');
+        const moveSelect = `<select class="action-move-select" onchange="moveFromDelegation(${idx}, this.value, this)">
+                <option value="">Действие...</option>
+                <option value="clear-delegation">Убрать делегирование</option>
+                ${isTableEnabled('waiting') ? '<option value="waiting">В ожидание</option>' : ''}
+                ${isTableEnabled('paused') ? '<option value="paused">На паузу</option>' : ''}
+                <option value="potential">В потенциал</option>
+                <option value="archive">В архив</option>
+            </select>`;
+        tr.innerHTML = `
+            <td class="select-col"><div class="row-index">${order + 1}</div></td>
+            <td><div class="client-wrap">
+                <span contenteditable onblur="updVal('active',${idx},'c',this.innerText)" class="${getClientNameClass(item)}">${item.c}</span>
+                ${linkIcon}
+            </div></td>
+            <td class="project-name-wrap">
+                <span class="project-name" contenteditable onblur="updVal('active',${idx},'n',this.innerText)">${item.n}</span>
+                ${renderTaskBadge(item)}
+                <span class="delegation-pill"><svg class="btn-icon"><use href="#icon-handshake"/></svg>Делегирование</span>
+            </td>
+            <td class="date-cell"><div class="date-input-wrap" onclick="openDate('active',${idx},'start')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.start)}</span></div></td>
+            <td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('active',${idx},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.dl, item.noDeadline)}</span></div></td>
+            <td class="mono"><div class="${rem.cls}">${rem.txt}</div></td>
+            <td style="text-align:right;">${formatCurrency(item.p || 0)}</td>
+            <td><div class="action-btns" style="justify-content:flex-end; gap: 8px;">
+                <div class="done-btn action-btn-base" onclick="mv(${idx},'active','archive')" title="Выполнено"><svg class="btn-icon"><use href="#icon-check"/></svg></div>
+                ${moveSelect}
+                <div class="action-btn-base" onclick="openProjectEditor('active',${idx})" title="Редактировать проект"><svg class="btn-icon"><use href="#icon-pen"/></svg></div>
+                <div class="action-btn-base" onclick="openTaskJournal('active',${idx})" title="Журнал задач"><svg class="btn-icon"><use href="#icon-checklist"/></svg></div>
+            </div></td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    const footer = document.querySelector('#total-row-delegation');
+    if (footer) {
+        footer.innerHTML = `<tr><td colspan="5" class="footer-total-toggle">Всего ${list.length} проектов</td><td></td><td>${formatCurrency(total)}</td><td></td></tr>`;
+    }
+}
+
 function renderSimple(type){
     const tbody = document.querySelector(`#t-${type} tbody`);
     tbody.innerHTML = '';
@@ -4083,11 +4233,12 @@ function renderSimple(type){
 
         const isSelected = selectedRows[type]?.has(i.toString());
         if (isSelected) tr.classList.add('row-selected');
-        
+
         const linkIcon = renderLinkControls(item, i, type);
-                                      
-        const rem = getTimeRemaining(item.dl, item.noDeadline);
-        
+        const showDeadline = type !== 'waiting';
+        const rem = showDeadline ? getTimeRemaining(item.dl, item.noDeadline) : { txt: '', cls: '' };
+        const deadlineCell = showDeadline ? `<td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('${type}',${i},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.dl, item.noDeadline)} (${rem.txt})</span></div></td>` : '';
+
         tr.innerHTML = `
             <td class="select-col">
                 <div class="row-index">${i + 1}</div>
@@ -4105,7 +4256,7 @@ function renderSimple(type){
                 <span class="project-name" contenteditable onblur="updVal('${type}',${i},'n',this.innerText)">${item.n}</span>
                 ${renderTaskBadge(item)}
             </td>
-            <td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('${type}',${i},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.dl, item.noDeadline)} (${rem.txt})</span></div></td>
+            ${deadlineCell}
             <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('${type}',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td><div class="action-btns" style="justify-content:flex-end">
                 <div class="action-btn-base" onclick="mv(${i},'${type}','active')" title="В работу"><svg class="btn-icon"><use href="#icon-arrow-right"/></svg></div>
@@ -4121,7 +4272,7 @@ function renderSimple(type){
     });
     const footer = document.querySelector(`#total-row-${type}`);
     footer.innerHTML = `<tr>
-        <td colspan="4" class="footer-total-toggle" onclick="toggleFooterSelection('${type}')">Всего ${DATA[type].length} проектов</td>
+        <td colspan="${type === 'waiting' ? 3 : 4}" class="footer-total-toggle" onclick="toggleFooterSelection('${type}')">Всего ${DATA[type].length} проектов</td>
         <td>
             <div class="footer-note">Сумма</div>
             <div>${formatCurrency(tot)}</div>
@@ -4377,6 +4528,9 @@ function renderAll(){
         const dateDisplay = formatDateDisplay(deadlineValue, item.noDeadline);
         const dateCls = wrap.__type === 'archive' ? '' : rem.cls;
         const linkIcon = renderLinkControls(item, wrap.idx, wrap.__type);
+        const delegationBadge = wrap.__type === 'active' && item.delegated
+            ? `<span class="delegation-pill" onclick="openDelegationTab(${wrap.idx})"><svg class="btn-icon"><use href="#icon-handshake"/></svg>Делегирование</span>`
+            : '';
 
         const contractorMode = item.contractorMode || 'none';
         const contractorSymbol = contractorMode === 'percent' ? '%' : contractorMode === 'none' ? '' : '₽';
@@ -4388,7 +4542,7 @@ function renderAll(){
             <td class="select-col"><div class="row-index">${i + 1}</div></td>
             <td><span class="status-pill ${status.cls}">${status.label}</span></td>
             <td><div class="client-wrap">${item.c || '—'}${linkIcon}</div></td>
-            <td class="project-name-wrap">${item.n || '—'}${renderTaskBadge(item)}</td>
+            <td class="project-name-wrap">${item.n || '—'}${renderTaskBadge(item)}${delegationBadge}</td>
             <td class="date-cell"><div class="date-input-wrap ${dateCls}" onclick="openDate('${wrap.__type}',${wrap.idx},'${dateField}')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${dateDisplay}${remText}</span></div></td>
             <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(gross)}" oninput="formatNumberInput(this)" onblur="updVal('${wrap.__type}',${wrap.idx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td style="text-align:right;">
@@ -4542,7 +4696,8 @@ function updateContractorMode(type, idx, mode) {
 function mv(idx, from, to){
     const item = DATA[from][idx];
     DATA[from].splice(idx, 1);
-    if(to === 'active') { item.start = item.start || today; if(!item.noDeadline) item.dl = item.dl || today; item.paid = item.paid || 50; delete item.date; }
+    if(from === 'active' && to !== 'active') { item.delegated = false; }
+    if(to === 'active') { item.start = item.start || today; if(!item.noDeadline) item.dl = item.dl || today; item.paid = item.paid || 50; delete item.date; item.delegated = item.delegated || false; }
     if(to === 'archive') { item.date = today; item.paid = 100; delete item.start; delete item.dl; item.noDeadline = false; }
     if(to === 'potential' || to === 'waiting' || to === 'paused') { delete item.date; delete item.start; delete item.dl; item.noDeadline = false; item.paid = 0; }
     
@@ -4846,6 +5001,12 @@ function openProjectEditor(type, idx) {
     if (timeInput) timeInput.value = dlVal && dlVal.includes('T') ? dlVal.slice(11, 16) : '';
     const noDeadlineToggle = document.getElementById('editor-no-deadline');
     if (noDeadlineToggle) noDeadlineToggle.checked = !!item.noDeadline;
+    const delegatedToggle = document.getElementById('editor-delegated');
+    if (delegatedToggle) {
+        delegatedToggle.checked = !!item.delegated;
+        delegatedToggle.disabled = type !== 'active';
+        delegatedToggle.title = type !== 'active' ? 'Доступно только в статусе «В работе»' : '';
+    }
     document.getElementById('editor-dl-days').value = '';
     document.getElementById('editor-dl-custom').value = '';
     toggleEditorDeadline();
@@ -4867,10 +5028,12 @@ function saveProjectEditor() {
     const startVal = document.getElementById('editor-start-val').value;
     const dlVal = document.getElementById('editor-dl-val').value;
     const noDeadline = document.getElementById('editor-no-deadline')?.checked;
+    const delegated = document.getElementById('editor-delegated')?.checked;
 
     item.start = startVal || '';
     item.dl = noDeadline ? '' : dlVal;
     item.noDeadline = !!noDeadline;
+    item.delegated = type === 'active' ? !!delegated : false;
 
     if (type === 'potential') {
         delete item.start;
@@ -4910,6 +5073,8 @@ function openAddModal(){
     document.getElementById('add-proj-contractor-mode').value = 'none';
     handleNewContractorModeChange('none');
     document.getElementById('add-proj-type').value = 'active';
+    const delegatedToggle = document.getElementById('add-proj-delegated');
+    if (delegatedToggle) delegatedToggle.checked = false;
     document.getElementById('add-proj-start-val').value = today;
     document.getElementById('add-proj-dl-val').value = today;
     previousDeadlineValue = today;
@@ -4940,6 +5105,7 @@ function saveNewProject(){
     const start = document.getElementById('add-proj-start-val').value || today;
     const noDeadline = document.getElementById('add-proj-no-deadline')?.checked;
     const dl = noDeadline ? '' : (document.getElementById('add-proj-dl-val').value || today);
+    const delegated = document.getElementById('add-proj-delegated')?.checked;
 
     const item = {
         n: name, c: client, p: price, contractor: contr, contractorMode: contrMode, taxPrc: tax, link: newProjectLink,
@@ -4947,6 +5113,7 @@ function saveNewProject(){
         dl: type==='active' || type==='waiting' || type==='paused' ? dl : undefined,
         noDeadline: type==='active' || type==='waiting' || type==='paused' ? !!noDeadline : false,
         paid: (type==='active'||type==='archive'? (type==='archive'?100:50) : 0),
+        delegated: type === 'active' ? !!delegated : false,
         date: type==='archive' ? today : undefined
     };
 
@@ -5024,6 +5191,11 @@ function applyDeadlinePreset() {
 function handleStatusChange(status) {
     const dateBlocks = document.querySelectorAll('.status-dates');
     dateBlocks.forEach(block => block.style.display = status === 'potential' ? 'none' : '');
+    const delegationInput = document.getElementById('add-proj-delegated');
+    if (delegationInput) {
+        delegationInput.disabled = status !== 'active';
+        if (status !== 'active') delegationInput.checked = false;
+    }
     if (status === 'potential') {
         document.getElementById('add-proj-dl-days').value = '';
         document.getElementById('add-proj-dl-custom').value = '';
@@ -5347,6 +5519,12 @@ function renderMonthSelect(){
         if(i.date) months.add(i.date.slice(0,7));
         if(i.start) months.add(i.start.slice(0,7));
     });
+    ['waiting','paused','potential'].forEach(type => {
+        DATA[type].forEach(i => {
+            if(i.dl) months.add(i.dl.slice(0,7));
+            if(i.start) months.add(i.start.slice(0,7));
+        });
+    });
     Object.keys(DATA.monthlyGoals).forEach(m => months.add(m));
 
     sel.innerHTML = '';
@@ -5616,13 +5794,20 @@ function scrollToReputation(){
     }
 }
 
+function isInCurrentMonth(item = {}) {
+    const dates = [item.date, item.start, item.dl];
+    if (!dates.some(Boolean)) return true;
+    return dates.some(d => (d || '').startsWith(currentMonth));
+}
+
 function getScopedDataForStats() {
+    const filterByMonth = (list) => list.filter(isInCurrentMonth);
     return {
-        active: DATA.active,
-        archive: DATA.archive,
-        paused: DATA.paused,
-        waiting: DATA.waiting,
-        potential: DATA.potential,
+        active: filterByMonth(DATA.active),
+        archive: filterByMonth(DATA.archive),
+        paused: filterByMonth(DATA.paused),
+        waiting: filterByMonth(DATA.waiting),
+        potential: filterByMonth(DATA.potential),
     };
 }
 
