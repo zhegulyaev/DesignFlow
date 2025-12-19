@@ -140,8 +140,8 @@
   .tab-desc-block { margin-bottom: 15px; } 
 
   /* Main Layout & Tables */
-  .table-wrap{overflow:visible;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:5px 12px 5px 18px; margin-top: 10px; position: relative;}
-  table{width:100%;border-collapse:collapse; min-width: 1380px;}
+  .table-wrap{overflow:visible;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:5px 10px; margin-top: 10px; position: relative;}
+  table{width:100%;border-collapse:collapse;}
   th{text-align:left;color:var(--muted);font-size:12px;text-transform:uppercase;padding:11px 8px;border-bottom:1px solid var(--border);user-select:none; white-space: nowrap; cursor: pointer;}
   
   /* Выравнивание заголовков для Active */
@@ -1282,12 +1282,13 @@ td.date-cell + td.date-cell {
               <th width="15%" data-type="archive" data-key="date" onclick="sortData('archive', 'date', 'date')">Дата сдачи <span class="sort-icon"></span></th>
               <th width="10%" data-type="archive" data-key="p" onclick="sortData('archive', 'p', 'number')">Сумма <span class="sort-icon"></span></th>
               <th width="10%" data-type="archive" data-key="contractor" onclick="sortData('archive', 'contractor', 'number')">Расходы <span class="sort-icon"></span></th>
+              <th width="10%">Налог</th>
               <th width="10%">Чистыми</th>
               <th width="10%"></th>
             </tr>
           </thead>
           <tbody></tbody>
-          <tfoot id="total-row-archive"><tr><td colspan="4">Итого:</td><td></td><td></td><td></td><td></td></tr></tfoot>
+          <tfoot id="total-row-archive"><tr><td colspan="4">Итого:</td><td></td><td></td><td></td><td></td><td></td></tr></tfoot>
         </table>
       </div>
     </div>
@@ -3643,6 +3644,7 @@ function renderActive(){
         const contractorSymbolClass = contractorSymbol ? '' : 'symbol-empty';
         const contractorValue = contractorMode === 'none' ? '' : formatPlainNumber(item.contractor ?? 0);
         const contractorHelper = contractorMode === 'none' ? 'Расходы не учитываются' : `≈ ${formatCurrency(contractorAmount)}`;
+        const taxAmount = toNumeric(item.p) * ((toNumeric(item.taxPrc) || 0) / 100);
         const actionButtons = [
             `<div class="done-btn action-btn-base" onclick="mv(${i},'active','archive')" title="Выполнено">✓</div>`
         ];
@@ -4003,6 +4005,9 @@ function renderArchive(){
                 </div>
                 <div class="expense-helper">${contractorHelper}</div>
             </td>
+            <td style="text-align:right;">
+                <div class="net-display-wrap">${formatCurrency(taxAmount)}<span class="net-prc-val">(${item.taxPrc || 0}%)</span></div>
+            </td>
             <td><div class="net-display-wrap">${formatCurrency(item.pr)}<span class="net-prc-val">(${calcMarginPrc(item)}%)</span></div></td>
             <td><div class="action-btns" style="justify-content:flex-end">
                 <div class="action-btn-base" title="Вернуть" onclick="mv(${realIdx},'archive','active')">
@@ -4016,8 +4021,8 @@ function renderArchive(){
         attachRowSelection(tr, 'archive', realIdx, `check-archive-${realIdx}`);
         tbody.appendChild(tr);
     });
-    const footer = document.querySelector('#total-row-archive');
-    footer.innerHTML = `<tr>
+        const footer = document.querySelector('#total-row-archive');
+        footer.innerHTML = `<tr>
         <td colspan="4" class="footer-total-toggle" onclick="toggleFooterSelection('archive')">Всего ${visibleItems.length} проектов</td>
         <td style="text-align:right;">
             <div class="footer-note">Сумма</div>
@@ -4028,9 +4033,12 @@ function renderArchive(){
             <div>${formatCurrency(tContr)}</div>
         </td>
         <td style="text-align:right;">
+            <div class="footer-note">Налоги</div>
+            <div>${formatCurrency(tTax)}</div>
+        </td>
+        <td style="text-align:right;">
             <div class="footer-note">Чистыми</div>
             <div>${formatCurrency(tPr)}</div>
-            <div class="footer-note">Налоги: ${formatCurrency(tTax)}</div>
         </td>
         <td></td>
     </tr>`;
