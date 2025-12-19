@@ -204,6 +204,7 @@
   .days-critical { color: var(--red); font-weight: 700; }
   .days-warning { color: var(--gold); font-weight: 700; }
   .days-normal { color: var(--muted); }
+  .days-muted { color: var(--muted); font-weight: 600; opacity: 0.8; }
   
   /* Price/Contractor/Net Styling */
   .price-cell-wrap { display: flex; align-items: center; justify-content: flex-end; gap: 4px; height: 100%; padding: 2px 0;}
@@ -1057,6 +1058,36 @@ td.date-cell + td.date-cell {
     padding-left: 10px !important;
 }
 
+  .task-journal { display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
+  .task-journal-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .task-journal-header h3 { margin: 0; font-size: 16px; }
+  .task-row { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--pill-bg); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .task-row input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-color: var(--accent); }
+  .task-row .task-text { width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; background: var(--card); color: var(--text); font-weight: 600; }
+  .task-row .task-text:focus { outline: none; border-color: var(--accent); }
+  .task-row .task-delete { border: 1px solid transparent; background: transparent; color: var(--muted); padding: 6px 10px; border-radius: 8px; cursor: pointer; font-weight: 700; }
+  .task-row .task-delete:hover { border-color: var(--del-hover-border); color: var(--red); background: var(--del-hover-bg); }
+  .task-empty { text-align: center; color: var(--muted); font-size: 14px; padding: 12px; border: 1px dashed var(--border); border-radius: 12px; background: var(--pill-bg); }
+  .journal-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
+  .journal-actions .inline-note { color: var(--muted); font-size: 13px; }
+  .journal-add { display: grid; grid-template-columns: 1fr auto; gap: 8px; width: 100%; }
+  .journal-add input { width: 100%; border-radius: 10px; border: 1px solid var(--border); padding: 10px 12px; background: var(--card); color: var(--text); font-weight: 700; }
+  .journal-add input:focus { outline: none; border-color: var(--accent); }
+  .journal-add button { min-width: 120px; justify-content: center; }
+  .task-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 8px; background: var(--pill-bg); color: var(--muted); font-weight: 700; font-size: 12px; border: 1px solid var(--border); }
+  .task-badge .task-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+  .no-deadline-toggle { display: flex; align-items: center; gap: 10px; margin-top: 6px; font-weight: 700; color: var(--muted); }
+  .no-deadline-toggle input { width: 16px; height: 16px; }
+  .deadline-disabled .date-input-wrap { opacity: 0.6; cursor: not-allowed; }
+  .deadline-disabled .date-input-wrap:hover { background: transparent; border-color: var(--border); }
+  .deadline-disabled .deadline-presets select,
+  .deadline-disabled .deadline-presets input { opacity: 0.5; pointer-events: none; }
+
+  .project-editor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .project-editor-note { color: var(--muted); font-size: 13px; margin-top: -4px; margin-bottom: 10px; }
+
+
 
 </style>
 </head>
@@ -1073,6 +1104,7 @@ td.date-cell + td.date-cell {
     <symbol id="icon-moon" viewBox="0 0 24 24"><path fill="currentColor" d="M21.74 15.34a1 1 0 0 0-1.11-.27A7.5 7.5 0 0 1 9.06 4.5a1 1 0 0 0-.76-1.2a9 9 0 1 0 13.44 12.36Z"/></symbol>
     <symbol id="icon-pen" viewBox="0 0 20 20"><path fill="currentColor" d="M2.5 13.793V17.5h3.707L16.1 7.607l-3.707-3.707Zm13.94-8.233l-.633.634l-3.707-3.707l.633-.633a1.5 1.5 0 0 1 2.122 0l1.585 1.585a1.5 1.5 0 0 1 0 2.121Z"/></symbol>
     <symbol id="icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="m16.707 6.293-7.25 7.25a1 1 0 0 1-1.414 0l-4-4a1 1 0 1 1 1.414-1.414L8.5 11.672l6.543-6.543a1 1 0 0 1 1.414 1.164a.99.99 0 0 1-.25.293Z"/></symbol>
+    <symbol id="icon-checklist" viewBox="0 0 24 24"><path fill="currentColor" d="M7 5a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H8a1 1 0 0 1-1-1Zm0 7a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H8a1 1 0 0 1-1-1Zm0 7a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H8a1 1 0 0 1-1-1ZM4.707 4.293a1 1 0 0 1 0 1.414L3.414 7l1.293 1.293a1 1 0 0 1-1.414 1.414L1.586 7.999a1 1 0 0 1 0-1.414l1.707-1.707a1 1 0 0 1 1.414 0Zm0 7a1 1 0 0 1 0 1.414L3.414 14l1.293 1.293a1 1 0 0 1-1.414 1.414L1.586 14.999a1 1 0 0 1 0-1.414l1.707-1.707a1 1 0 0 1 1.414 0Zm0 7a1 1 0 0 1 0 1.414L3.414 21l1.293 1.293a1 1 0 0 1-1.414 1.414L1.586 20.999a1 1 0 0 1 0-1.414l1.707-1.707a1 1 0 0 1 1.414 0Z"/></symbol>
     <symbol id="icon-settings" viewBox="0 0 24 24"><path fill="currentColor" d="M10.325 2.55a2 2 0 0 1 3.35 0l.72 1.08a2 2 0 0 0 1.362.89l1.284.214a2 2 0 0 1 1.64 1.64l.214 1.284a2 2 0 0 0 .89 1.362l1.08.72a2 2 0 0 1 0 3.35l-1.08.72a2 2 0 0 0-.89 1.362l-.214 1.284a2 2 0 0 1-1.64 1.64l-1.284.214a2 2 0 0 0-1.362.89l-.72 1.08a2 2 0 0 1-3.35 0l-.72-1.08a2 2 0 0 0-1.362-.89l-1.284-.214a2 2 0 0 1-1.64-1.64l-.214-1.284a2 2 0 0 0-.89-1.362l-1.08-.72a2 2 0 0 1 0-3.35l1.08-.72a2 2 0 0 0 .89-1.362l.214-1.284a2 2 0 0 1 1.64-1.64l1.284-.214a2 2 0 0 0 1.362-.89Zm.462 10.548a3 3 0 1 0 4.426-4.096a3 3 0 0 0-4.426 4.096Z"/></symbol>
     <symbol id="icon-drag" viewBox="0 0 24 24"><path fill="currentColor" d="M10 4a2 2 0 1 1-4 0a2 2 0 0 1 4 0Zm4 0a2 2 0 1 1 4 0a2 2 0 0 1-4 0ZM8 12a2 2 0 1 0-4 0a2 2 0 0 0 4 0Zm8 0a2 2 0 1 0-4 0a2 2 0 0 0 4 0Zm-6 6a2 2 0 1 1-4 0a2 2 0 0 1 4 0Zm4 0a2 2 0 1 1 4 0a2 2 0 0 1-4 0Z"/></symbol>
     <symbol id="icon-grip" viewBox="0 0 24 24"><path fill="currentColor" d="M10 5a1 1 0 0 1-1 1H7a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1Zm7-1h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2Zm0 6h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2Zm0 6h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2Zm-8-4H7a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2Zm0 6H7a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2Zm0-12H7a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2Z"/></symbol>
@@ -1719,7 +1751,7 @@ body:not([data-theme="dark"]) .header-new-badge {
                                  <input type="hidden" id="add-proj-start-val" value="">
                             </div>
                         </div>
-                        <div class="date-duo-card">
+                        <div class="date-duo-card" id="add-deadline-card">
                             <div class="inp-group">
                                  <label>🏁 Дедлайн</label>
                                  <div class="date-input-wrap date-chip" id="add-proj-dl-display" onclick="openDateInModal('add-proj-dl-val')">
@@ -1727,6 +1759,7 @@ body:not([data-theme="dark"]) .header-new-badge {
                                     <span class="date-text-display">Сегодня</span>
                                  </div>
                                 <input type="hidden" id="add-proj-dl-val" value="">
+                                <label class="no-deadline-toggle"><input type="checkbox" id="add-proj-no-deadline" onchange="toggleAddNoDeadline()"> Дедлайн не установлен</label>
                             </div>
                         </div>
                     </div>
@@ -1764,6 +1797,79 @@ body:not([data-theme="dark"]) .header-new-badge {
 
         <div class="add-modal-actions">
             <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveNewProject()">Создать новый проект</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="projectEditorModal">
+    <div class="modal-content modal-wide">
+        <span class="close-modal-x" onclick="closeProjectEditor()">×</span>
+        <h3 style="margin-bottom: 6px;">Редактор проекта</h3>
+        <div class="project-editor-note" id="project-editor-name">Настройте сроки и примените шаблон.</div>
+        <div class="project-editor-grid">
+            <div class="date-duo-card">
+                <div class="inp-group">
+                    <label>⚡ Старт</label>
+                    <div class="date-input-wrap date-chip" id="editor-start-display" onclick="openDateInModal('editor-start-val')">
+                        <svg class="date-icon"><use href="#icon-calendar"/></svg>
+                        <span class="date-text-display">Сегодня</span>
+                    </div>
+                    <input type="hidden" id="editor-start-val" value="">
+                </div>
+            </div>
+            <div class="date-duo-card" id="editor-deadline-card">
+                <div class="inp-group">
+                    <label>🏁 Дедлайн</label>
+                    <div class="date-input-wrap date-chip" id="editor-dl-display" onclick="openDateInModal('editor-dl-val')">
+                        <svg class="date-icon"><use href="#icon-calendar"/></svg>
+                        <span class="date-text-display">Сегодня</span>
+                    </div>
+                    <input type="hidden" id="editor-dl-val" value="">
+                    <label class="no-deadline-toggle"><input type="checkbox" id="editor-no-deadline" onchange="toggleEditorDeadline()"> Дедлайн не установлен</label>
+                </div>
+            </div>
+            <div class="inp-group">
+                <label>Шаблон срока</label>
+                <div class="deadline-presets">
+                    <select id="editor-dl-days" onchange="applyEditorDeadlinePreset()">
+                        <option value="">Не выбрано</option>
+                        <option value="1">1 день</option>
+                        <option value="2">2 дня</option>
+                        <option value="3">3 дня</option>
+                        <option value="5">5 дней</option>
+                        <option value="7">7 дней</option>
+                        <option value="custom">Свои дни</option>
+                    </select>
+                    <input type="number" id="editor-dl-custom" placeholder="Свои дни" oninput="applyEditorDeadlinePreset()">
+                    <input type="time" id="editor-dl-time" class="deadline-time" step="300" aria-label="Время дедлайна" oninput="applyEditorDeadlinePreset()">
+                </div>
+            </div>
+        </div>
+
+        <div class="add-modal-actions">
+            <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveProjectEditor()">Сохранить изменения</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="taskJournalModal">
+    <div class="modal-content modal-wide">
+        <span class="close-modal-x" onclick="closeTaskJournal()">×</span>
+        <div class="task-journal-header">
+            <h3>Журнал задач · <span id="journal-project-name">Проект</span></h3>
+            <div class="task-badge" id="journal-progress-pill" style="display:none"><span class="task-dot"></span><span id="journal-progress-text"></span></div>
+        </div>
+        <div class="project-editor-note">Отмечайте готовые пункты, редактируйте текст или удаляйте лишнее.</div>
+        <div class="journal-add">
+            <input type="text" id="journal-new-task" placeholder="Добавить пункт списка..." onkeydown="if(event.key==='Enter'){event.preventDefault(); addJournalTask();}">
+            <button class="save-stg" type="button" onclick="addJournalTask()">+ Добавить</button>
+        </div>
+        <div class="task-journal" id="journal-list"></div>
+        <div class="journal-actions">
+            <div class="inline-note" id="journal-empty-note"></div>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <button class="save-stg" type="button" onclick="closeTaskJournal()">Готово</button>
+            </div>
         </div>
     </div>
 </div>
@@ -3216,6 +3322,9 @@ let lastPermanentDeletion = null;
 let newProjectLink = '';
 let datePicker = null;
 let timePicker = null;
+let journalContext = null;
+let projectEditorContext = null;
+let editorPreviousDeadline = '';
 
 function buildBackupSnapshot() {
     return {
@@ -3637,7 +3746,8 @@ function cleanupTrash(){
 
 function formatCurrency(n) { return new Intl.NumberFormat('ru-RU').format(Math.round(n)) + ' ₽'; }
 
-function formatDateDisplay(str) {
+function formatDateDisplay(str, noDeadline = false) {
+    if (noDeadline) return 'Нет срока';
     if (!str || str.startsWith('0000')) return '—';
     const hasTime = str.includes('T') && str.length > 10;
     const dateObj = new Date(str.replace(' ', 'T'));
@@ -3656,6 +3766,10 @@ function formatDateWithTime(dateObj, timeStr) {
     const d = String(dateObj.getDate()).padStart(2, '0');
     const base = `${y}-${m}-${d}`;
     return timeStr ? `${base}T${timeStr}` : base;
+}
+
+function escapeHtml(str = '') {
+    return str.replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
 }
 
 function calcContractorAmount(item) {
@@ -3750,8 +3864,8 @@ function sortData(type, key, dataType, initial = false) {
     DATA[type].sort((a, b) => {
         let va = a[key], vb = b[key];
         if (type === 'active' && (key === 'dl' || initial)) {
-             const remA = getTimeRemaining(a.dl).days || Infinity;
-             const remB = getTimeRemaining(b.dl).days || Infinity;
+             const remA = getTimeRemaining(a.dl, a.noDeadline).days || Infinity;
+             const remB = getTimeRemaining(b.dl, b.noDeadline).days || Infinity;
              if (remA !== remB) return direction * (remA - remB);
         }
         if (dataType === 'date') return direction * (new Date((va || '9999').replace(' ', 'T')) - new Date((vb || '9999').replace(' ', 'T')));
@@ -3792,6 +3906,13 @@ function upd(){
     updateTabCounts();
 }
 
+function renderTaskBadge(item) {
+    const tasks = Array.isArray(item.tasks) ? item.tasks : [];
+    if (!tasks.length) return '';
+    const done = tasks.filter(t => t.done).length;
+    return `<span class="task-badge" title="Журнал задач">${done}/${tasks.length}<span class="task-dot"></span></span>`;
+}
+
 function renderActive(){
     const tbody = document.querySelector('#t-active tbody');
     tbody.innerHTML = '';
@@ -3805,7 +3926,7 @@ function renderActive(){
         totalContr += contractorAmount;
         totalTax += gross * ((toNumeric(item.taxPrc) || 0) / 100);
 
-        const rem = getTimeRemaining(item.dl);
+        const rem = getTimeRemaining(item.dl, item.noDeadline);
         const tr = document.createElement('tr');
         tr.dataset.index = i;
 
@@ -3825,6 +3946,8 @@ function renderActive(){
         ];
         if (isTableEnabled('waiting')) actionButtons.push(`<div class="wait-active-btn action-btn-base" onclick="mv(${i},'active','waiting')" title="В ожидании"><svg class="btn-icon"><use href="#icon-waiting"/></svg></div>`);
         if (isTableEnabled('paused')) actionButtons.push(`<div class="pause-active-btn action-btn-base" onclick="mv(${i},'active','paused')" title="На паузе"><svg class="btn-icon"><use href="#icon-paused"/></svg></div>`);
+        actionButtons.push(`<div class="action-btn-base" onclick="openProjectEditor('active',${i})" title="Редактировать проект"><svg class="btn-icon"><use href="#icon-pen"/></svg></div>`);
+        actionButtons.push(`<div class="action-btn-base" onclick="openTaskJournal('active',${i})" title="Журнал задач"><svg class="btn-icon"><use href="#icon-checklist"/></svg></div>`);
 
         tr.innerHTML = `
             <td class="select-col">
@@ -3841,10 +3964,11 @@ function renderActive(){
             </div></td>
             <td class="project-name-wrap">
                 <span class="project-name" contenteditable onblur="updVal('active',${i},'n',this.innerText)">${item.n}</span>
+                ${renderTaskBadge(item)}
             </td>
             
             <td class="date-cell"><div class="date-input-wrap" onclick="openDate('active',${i},'start')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.start)}</span></div></td>
-            <td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('active',${i},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.dl)}</span></div></td>
+            <td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('active',${i},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.dl, item.noDeadline)}</span></div></td>
             
             <td class="mono"><div class="${rem.cls}">${rem.txt}</div></td>
             
@@ -3921,7 +4045,7 @@ function renderActive(){
     updatePaceReputation(repState);
 
     const paceBlock = document.getElementById('pace-indicator');
-    const urgent = DATA.active.filter(x => getTimeRemaining(x.dl).cls.includes('critical')).length;
+    const urgent = DATA.active.filter(x => getTimeRemaining(x.dl, x.noDeadline).cls.includes('critical')).length;
     
     if (currentTab === 'active') {
         if (urgent > 0) {
@@ -3962,7 +4086,7 @@ function renderSimple(type){
         
         const linkIcon = renderLinkControls(item, i, type);
                                       
-        const rem = getTimeRemaining(item.dl);
+        const rem = getTimeRemaining(item.dl, item.noDeadline);
         
         tr.innerHTML = `
             <td class="select-col">
@@ -3979,11 +4103,14 @@ function renderSimple(type){
             </div></td>
             <td class="project-name-wrap">
                 <span class="project-name" contenteditable onblur="updVal('${type}',${i},'n',this.innerText)">${item.n}</span>
+                ${renderTaskBadge(item)}
             </td>
-            <td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('${type}',${i},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.dl)} (${rem.txt})</span></div></td>
+            <td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('${type}',${i},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.dl, item.noDeadline)} (${rem.txt})</span></div></td>
             <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('${type}',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td><div class="action-btns" style="justify-content:flex-end">
                 <div class="action-btn-base" onclick="mv(${i},'${type}','active')" title="В работу"><svg class="btn-icon"><use href="#icon-arrow-right"/></svg></div>
+                <div class="action-btn-base" onclick="openProjectEditor('${type}',${i})" title="Редактировать проект"><svg class="btn-icon"><use href="#icon-pen"/></svg></div>
+                <div class="action-btn-base" onclick="openTaskJournal('${type}',${i})" title="Журнал задач"><svg class="btn-icon"><use href="#icon-checklist"/></svg></div>
                 <button class="del-btn" onclick="askDel('${type}',${i})" aria-label="Удалить в корзину">
                     <svg><use href="#icon-trash"/></svg>
                 </button>
@@ -4032,10 +4159,13 @@ function renderPotential(){
             </div></td>
             <td class="project-name-wrap">
                 <span class="project-name" contenteditable onblur="updVal('potential',${i},'n',this.innerText)">${item.n}</span>
+                ${renderTaskBadge(item)}
             </td>
             <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('potential',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td><div class="action-btns" style="justify-content:flex-end">
                 <div class="done-btn action-btn-base" onclick="mv(${i},'potential','active')" title="В работу"><svg class="btn-icon"><use href="#icon-arrow-right"/></svg><span class="btn-label">В работу</span></div>
+                <div class="action-btn-base" onclick="openProjectEditor('potential',${i})" title="Редактировать проект"><svg class="btn-icon"><use href="#icon-pen"/></svg></div>
+                <div class="action-btn-base" onclick="openTaskJournal('potential',${i})" title="Журнал задач"><svg class="btn-icon"><use href="#icon-checklist"/></svg></div>
                 <button class="del-btn" onclick="askDel('potential',${i})" aria-label="Удалить в корзину">
                     <svg><use href="#icon-trash"/></svg>
                 </button>
@@ -4165,6 +4295,7 @@ function renderArchive(){
             </div></td>
             <td class="project-name-wrap">
                 <span class="project-name" contenteditable onblur="updVal('archive',${realIdx},'n',this.innerText)">${item.n}</span>
+                ${renderTaskBadge(item)}
             </td>
             <td class="date-cell"><div class="date-input-wrap" onclick="openDate('archive',${realIdx},'date')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.date)}</span></div></td>
             <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('archive',${realIdx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
@@ -4185,6 +4316,8 @@ function renderArchive(){
                 <div class="action-btn-base" title="Вернуть" onclick="mv(${realIdx},'archive','active')">
                     <svg style="width:16px;height:16px;"><use href="#icon-undo"/></svg>
                 </div>
+                <div class="action-btn-base" onclick="openProjectEditor('archive',${realIdx})" title="Редактировать проект"><svg class="btn-icon"><use href="#icon-pen"/></svg></div>
+                <div class="action-btn-base" onclick="openTaskJournal('archive',${realIdx})" title="Журнал задач"><svg class="btn-icon"><use href="#icon-checklist"/></svg></div>
                 <button class="del-btn" onclick="askDel('archive',${realIdx})" aria-label="Удалить в корзину">
                     <svg><use href="#icon-trash"/></svg>
                 </button>
@@ -4239,9 +4372,9 @@ function renderAll(){
         const tr = document.createElement('tr');
         const deadlineValue = wrap.__type === 'archive' ? item.date : (item.dl || item.date || item.start);
         const dateField = wrap.__type === 'archive' ? 'date' : 'dl';
-        const rem = wrap.__type === 'archive' ? { cls: '', txt: '' } : getTimeRemaining(deadlineValue);
+        const rem = wrap.__type === 'archive' ? { cls: '', txt: '' } : getTimeRemaining(deadlineValue, item.noDeadline);
         const remText = wrap.__type === 'archive' || rem.txt === '—' ? '' : ` (${rem.txt})`;
-        const dateDisplay = deadlineValue ? formatDateDisplay(deadlineValue) : '—';
+        const dateDisplay = formatDateDisplay(deadlineValue, item.noDeadline);
         const dateCls = wrap.__type === 'archive' ? '' : rem.cls;
         const linkIcon = renderLinkControls(item, wrap.idx, wrap.__type);
 
@@ -4255,7 +4388,7 @@ function renderAll(){
             <td class="select-col"><div class="row-index">${i + 1}</div></td>
             <td><span class="status-pill ${status.cls}">${status.label}</span></td>
             <td><div class="client-wrap">${item.c || '—'}${linkIcon}</div></td>
-            <td class="project-name-wrap">${item.n || '—'}</td>
+            <td class="project-name-wrap">${item.n || '—'}${renderTaskBadge(item)}</td>
             <td class="date-cell"><div class="date-input-wrap ${dateCls}" onclick="openDate('${wrap.__type}',${wrap.idx},'${dateField}')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${dateDisplay}${remText}</span></div></td>
             <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(gross)}" oninput="formatNumberInput(this)" onblur="updVal('${wrap.__type}',${wrap.idx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td style="text-align:right;">
@@ -4409,9 +4542,9 @@ function updateContractorMode(type, idx, mode) {
 function mv(idx, from, to){
     const item = DATA[from][idx];
     DATA[from].splice(idx, 1);
-    if(to === 'active') { item.start = item.start || today; item.dl = item.dl || today; item.paid = item.paid || 50; delete item.date; }
-    if(to === 'archive') { item.date = today; item.paid = 100; delete item.start; delete item.dl; }
-    if(to === 'potential' || to === 'waiting' || to === 'paused') { delete item.date; delete item.start; delete item.dl; item.paid = 0; }
+    if(to === 'active') { item.start = item.start || today; if(!item.noDeadline) item.dl = item.dl || today; item.paid = item.paid || 50; delete item.date; }
+    if(to === 'archive') { item.date = today; item.paid = 100; delete item.start; delete item.dl; item.noDeadline = false; }
+    if(to === 'potential' || to === 'waiting' || to === 'paused') { delete item.date; delete item.start; delete item.dl; item.noDeadline = false; item.paid = 0; }
     
     DATA[to].unshift(item);
     sortData('active', 'dl', 'date', true);
@@ -4493,6 +4626,268 @@ function clearNewProjectLink() {
     updateNewProjectLinkButton();
 }
 
+function toggleAddNoDeadline() {
+    const checkbox = document.getElementById('add-proj-no-deadline');
+    const display = document.getElementById('add-proj-dl-display');
+    const input = document.getElementById('add-proj-dl-val');
+    const card = document.getElementById('add-deadline-card');
+    const controls = ['add-proj-dl-days', 'add-proj-dl-custom', 'add-proj-dl-time'].map(id => document.getElementById(id));
+    if (!checkbox || !display || !input || !card) return;
+
+    if (checkbox.checked) {
+        previousDeadlineValue = input.value || previousDeadlineValue || today;
+        input.value = '';
+        display.querySelector('.date-text-display').innerHTML = formatDateDisplay('', true);
+        controls.forEach(ctrl => { if (ctrl) { ctrl.disabled = true; ctrl.value = ''; } });
+        card.classList.add('deadline-disabled');
+    } else {
+        const restoreVal = previousDeadlineValue || today;
+        input.value = restoreVal;
+        display.querySelector('.date-text-display').innerHTML = formatDateDisplay(restoreVal);
+        controls.forEach(ctrl => { if (ctrl) ctrl.disabled = false; });
+        card.classList.remove('deadline-disabled');
+    }
+}
+
+function openTaskJournal(type, idx) {
+    const item = DATA[type]?.[idx];
+    if (!item) return;
+    journalContext = { type, idx };
+    const title = document.getElementById('journal-project-name');
+    if (title) title.textContent = item.n || 'Без названия';
+    const input = document.getElementById('journal-new-task');
+    if (input) input.value = '';
+    renderJournalTasks(item.tasks || []);
+    const modal = document.getElementById('taskJournalModal');
+    if (modal) modal.style.display = 'flex';
+}
+
+function renderJournalTasks(tasks = []) {
+    const list = document.getElementById('journal-list');
+    const note = document.getElementById('journal-empty-note');
+    if (!list) return;
+    list.innerHTML = '';
+    if (!tasks.length) {
+        list.innerHTML = '<div class="task-empty">Добавьте пункты, чтобы фиксировать прогресс.</div>';
+        if (note) note.textContent = 'Нет элементов в журнале';
+        updateJournalProgress(tasks);
+        return;
+    }
+
+    tasks.forEach((task, idx) => {
+        const row = document.createElement('div');
+        row.className = 'task-row';
+        row.dataset.index = idx;
+        row.innerHTML = `
+            <input type="checkbox" ${task.done ? 'checked' : ''} onchange="persistJournalTasks()">
+            <input type="text" class="task-text" value="${escapeHtml(task.text || '')}" oninput="persistJournalTasks()" onblur="persistJournalTasks()">
+            <button type="button" class="task-delete" onclick="deleteJournalRow(${idx})">×</button>
+        `;
+        list.appendChild(row);
+    });
+
+    if (note) note.textContent = `${tasks.filter(t => t.done).length}/${tasks.length} выполнено`;
+    updateJournalProgress(tasks);
+}
+
+function collectJournalTasks() {
+    const rows = document.querySelectorAll('#journal-list .task-row');
+    const tasks = [];
+    rows.forEach(row => {
+        const text = row.querySelector('.task-text')?.value.trim() || '';
+        const done = row.querySelector('input[type="checkbox"]')?.checked || false;
+        if (text) tasks.push({ text, done });
+    });
+    return tasks;
+}
+
+function updateJournalProgress(tasks = []) {
+    const pill = document.getElementById('journal-progress-pill');
+    const text = document.getElementById('journal-progress-text');
+    const total = tasks.length;
+    const done = tasks.filter(t => t.done).length;
+    if (pill && text) {
+        if (!total) {
+            pill.style.display = 'none';
+        } else {
+            pill.style.display = 'inline-flex';
+            text.textContent = `${done}/${total}`;
+        }
+    }
+}
+
+function persistJournalTasks() {
+    const tasks = collectJournalTasks();
+    updateJournalProgress(tasks);
+    if (!journalContext) return;
+    const { type, idx } = journalContext;
+    const item = DATA[type]?.[idx];
+    if (!item) return;
+    item.tasks = tasks;
+    save(); upd();
+}
+
+function addJournalTask() {
+    const input = document.getElementById('journal-new-task');
+    if (!input) return;
+    const val = input.value.trim();
+    const tasks = collectJournalTasks();
+    tasks.push({ text: val || `Пункт ${tasks.length + 1}`, done: false });
+    input.value = '';
+    renderJournalTasks(tasks);
+    persistJournalTasks();
+}
+
+function deleteJournalRow(idx) {
+    const tasks = collectJournalTasks();
+    tasks.splice(idx, 1);
+    renderJournalTasks(tasks);
+    persistJournalTasks();
+}
+
+function closeTaskJournal() {
+    journalContext = null;
+    const modal = document.getElementById('taskJournalModal');
+    if (modal) modal.style.display = 'none';
+}
+
+function toggleEditorDeadline() {
+    const checkbox = document.getElementById('editor-no-deadline');
+    const display = document.getElementById('editor-dl-display');
+    const input = document.getElementById('editor-dl-val');
+    const card = document.getElementById('editor-deadline-card');
+    const controls = ['editor-dl-days', 'editor-dl-custom', 'editor-dl-time'].map(id => document.getElementById(id));
+    if (!checkbox || !display || !input || !card) return;
+
+    if (checkbox.checked) {
+        editorPreviousDeadline = input.value || editorPreviousDeadline || today;
+        input.value = '';
+        display.querySelector('.date-text-display').innerHTML = formatDateDisplay('', true);
+        controls.forEach(ctrl => { if (ctrl) { ctrl.disabled = true; ctrl.value = ''; } });
+        card.classList.add('deadline-disabled');
+    } else {
+        const restoreVal = editorPreviousDeadline || today;
+        input.value = restoreVal;
+        display.querySelector('.date-text-display').innerHTML = formatDateDisplay(restoreVal);
+        controls.forEach(ctrl => { if (ctrl) ctrl.disabled = false; });
+        card.classList.remove('deadline-disabled');
+    }
+}
+
+function applyEditorDeadlinePreset() {
+    const select = document.getElementById('editor-dl-days');
+    const customInput = document.getElementById('editor-dl-custom');
+    const timeInput = document.getElementById('editor-dl-time');
+    const currentStart = document.getElementById('editor-start-val').value || today;
+    const currentDl = document.getElementById('editor-dl-val').value || currentStart || today;
+    const startTime = currentStart && currentStart.includes('T') ? currentStart.slice(11, 16) : '';
+    const manualTime = (timeInput?.value || '').trim();
+    const finalTime = manualTime || startTime;
+
+    if (document.getElementById('editor-no-deadline')?.checked) return;
+
+    if (!editorPreviousDeadline) {
+        editorPreviousDeadline = currentDl;
+    }
+
+    if (document.activeElement === customInput && select.value !== 'custom') {
+        select.value = 'custom';
+    }
+
+    if (select.value === '') {
+        const restoreVal = editorPreviousDeadline || currentDl;
+        document.getElementById('editor-dl-val').value = restoreVal;
+        document.getElementById('editor-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(restoreVal);
+        customInput.value = '';
+        editorPreviousDeadline = '';
+        return;
+    }
+
+    if (select.value === 'custom' && customInput.value.trim() === '') {
+        select.value = '';
+        document.getElementById('editor-dl-val').value = editorPreviousDeadline || currentDl;
+        const restoredDl = document.getElementById('editor-dl-val').value || currentDl;
+        document.getElementById('editor-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(restoredDl);
+        editorPreviousDeadline = '';
+        return;
+    }
+
+    let days = parseInt(select.value, 10);
+    if (select.value === 'custom') {
+        days = parseInt(customInput.value, 10);
+    }
+
+    if (!days || days <= 0) return;
+    const startRaw = document.getElementById('editor-start-val').value || today;
+    const baseDate = new Date(startRaw.replace(' ', 'T'));
+    if (isNaN(baseDate)) return;
+    const dlDate = new Date(baseDate);
+    dlDate.setDate(dlDate.getDate() + days);
+    const deadlineValue = formatDateWithTime(dlDate, finalTime);
+    document.getElementById('editor-dl-val').value = deadlineValue;
+    document.getElementById('editor-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(deadlineValue);
+    editorPreviousDeadline = deadlineValue;
+}
+
+function openProjectEditor(type, idx) {
+    const item = DATA[type]?.[idx];
+    if (!item) return;
+    projectEditorContext = { type, idx };
+    const nameLabel = document.getElementById('project-editor-name');
+    if (nameLabel) nameLabel.textContent = `${item.n || 'Проект'} · ${item.c || 'Клиент'}`;
+    const startVal = item.start || today;
+    const dlVal = item.dl || '';
+    editorPreviousDeadline = dlVal || startVal;
+    document.getElementById('editor-start-val').value = startVal;
+    document.getElementById('editor-dl-val').value = dlVal;
+    document.getElementById('editor-start-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(startVal);
+    document.getElementById('editor-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(dlVal, item.noDeadline);
+    const timeInput = document.getElementById('editor-dl-time');
+    if (timeInput) timeInput.value = dlVal && dlVal.includes('T') ? dlVal.slice(11, 16) : '';
+    const noDeadlineToggle = document.getElementById('editor-no-deadline');
+    if (noDeadlineToggle) noDeadlineToggle.checked = !!item.noDeadline;
+    document.getElementById('editor-dl-days').value = '';
+    document.getElementById('editor-dl-custom').value = '';
+    toggleEditorDeadline();
+    const modal = document.getElementById('projectEditorModal');
+    if (modal) modal.style.display = 'flex';
+}
+
+function closeProjectEditor() {
+    projectEditorContext = null;
+    const modal = document.getElementById('projectEditorModal');
+    if (modal) modal.style.display = 'none';
+}
+
+function saveProjectEditor() {
+    if (!projectEditorContext) return;
+    const { type, idx } = projectEditorContext;
+    const item = DATA[type]?.[idx];
+    if (!item) return;
+    const startVal = document.getElementById('editor-start-val').value;
+    const dlVal = document.getElementById('editor-dl-val').value;
+    const noDeadline = document.getElementById('editor-no-deadline')?.checked;
+
+    item.start = startVal || '';
+    item.dl = noDeadline ? '' : dlVal;
+    item.noDeadline = !!noDeadline;
+
+    if (type === 'potential') {
+        delete item.start;
+        delete item.dl;
+        delete item.noDeadline;
+    }
+
+    if (type === 'archive') {
+        item.noDeadline = false;
+    }
+
+    sortData('active', 'dl', 'date', true);
+    save(); upd();
+    closeProjectEditor();
+    showToast('Изменения сохранены');
+}
+
 function wipeAllData() {
     const ok = confirm('Стереть всю базу, включая шаблоны? Отменить действие нельзя.');
     if (!ok) return;
@@ -4518,6 +4913,11 @@ function openAddModal(){
     document.getElementById('add-proj-start-val').value = today;
     document.getElementById('add-proj-dl-val').value = today;
     previousDeadlineValue = today;
+    const noDeadlineToggle = document.getElementById('add-proj-no-deadline');
+    if (noDeadlineToggle) {
+        noDeadlineToggle.checked = false;
+        toggleAddNoDeadline();
+    }
     document.getElementById('add-proj-dl-days').value = '';
     document.getElementById('add-proj-dl-custom').value = '';
     const presetTimeInput = document.getElementById('add-proj-dl-time');
@@ -4538,12 +4938,14 @@ function saveNewProject(){
     const tax = +document.getElementById('add-proj-tax').value || 0;
     const type = document.getElementById('add-proj-type').value;
     const start = document.getElementById('add-proj-start-val').value || today;
-    const dl = document.getElementById('add-proj-dl-val').value || today;
+    const noDeadline = document.getElementById('add-proj-no-deadline')?.checked;
+    const dl = noDeadline ? '' : (document.getElementById('add-proj-dl-val').value || today);
 
     const item = {
         n: name, c: client, p: price, contractor: contr, contractorMode: contrMode, taxPrc: tax, link: newProjectLink,
         start: type==='active'? start : undefined,
         dl: type==='active' || type==='waiting' || type==='paused' ? dl : undefined,
+        noDeadline: type==='active' || type==='waiting' || type==='paused' ? !!noDeadline : false,
         paid: (type==='active'||type==='archive'? (type==='archive'?100:50) : 0),
         date: type==='archive' ? today : undefined
     };
@@ -4551,6 +4953,7 @@ function saveNewProject(){
     if (type === 'potential') {
         delete item.start;
         delete item.dl;
+        delete item.noDeadline;
     }
 
     DATA[type].unshift(item);
@@ -4566,6 +4969,7 @@ function applyDeadlinePreset() {
     const timeInput = document.getElementById('add-proj-dl-time');
     const currentStart = document.getElementById('add-proj-start-val').value || today;
     const currentDl = document.getElementById('add-proj-dl-val').value || currentStart || today;
+    if (document.getElementById('add-proj-no-deadline')?.checked) return;
     const startTime = currentStart && currentStart.includes('T') ? currentStart.slice(11, 16) : '';
     const manualTime = (timeInput?.value || '').trim();
     const finalTime = manualTime || startTime;
@@ -4623,6 +5027,11 @@ function handleStatusChange(status) {
     if (status === 'potential') {
         document.getElementById('add-proj-dl-days').value = '';
         document.getElementById('add-proj-dl-custom').value = '';
+        const noDeadlineToggle = document.getElementById('add-proj-no-deadline');
+        if (noDeadlineToggle) {
+            noDeadlineToggle.checked = false;
+            toggleAddNoDeadline();
+        }
     }
 }
 
@@ -4901,7 +5310,8 @@ function pluralize(num, forms){
     return forms[2];
 }
 
-function getTimeRemaining(dl){
+function getTimeRemaining(dl, noDeadline = false){
+    if (noDeadline) return {txt:'Нет срока', cls:'days-muted', days: Infinity};
     if(!dl) return {txt:'—', cls:'days-normal', days: Infinity};
     const targetDay = new Date(dl.slice(0, 10) + 'T00:00:00');
     const todayNormalized = new Date(today + 'T00:00:00');
@@ -4975,7 +5385,7 @@ function analyzeReputation(){
     const overdue = [];
     projectTypes.forEach(type => {
         DATA[type].forEach(item => {
-            const rem = getTimeRemaining(item.dl);
+            const rem = getTimeRemaining(item.dl, item.noDeadline);
             if (rem.days < 0) {
                 overdue.push({
                     name: item.n || 'Без названия',
@@ -4991,7 +5401,7 @@ function analyzeReputation(){
     const avg = total ? Math.round(overdue.reduce((acc, cur) => acc + cur.days, 0) / total) : 0;
     const activeCount = DATA.active.length;
     const nearDeadline = DATA.active.filter(item => {
-        const rem = getTimeRemaining(item.dl);
+        const rem = getTimeRemaining(item.dl, item.noDeadline);
         return rem.days >= 0 && rem.days <= 2;
     }).length;
     const onTime = Math.max(activeCount - total - nearDeadline, 0);
