@@ -557,9 +557,9 @@ body.light .pace-block.critical {
   .deadline-presets input { background: var(--input-bg); border: 1px solid var(--border); padding: 10px 12px; border-radius: 10px; color: var(--text); min-height: 44px; font-weight: 800; transition: .15s; }
   .deadline-presets select:focus,
   .deadline-presets input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 2px rgba(88,166,255,0.14); }
-  .deadline-presets select { min-width: 150px; max-width: 190px; white-space: nowrap; flex: 0 1 170px; }
-  .deadline-presets input { min-width: 120px; max-width: 150px; flex: 1 1 120px; }
-  .deadline-time { min-width: 120px; max-width: 150px; flex: 0 0 130px; padding: 10px 12px; }
+  .deadline-presets select { min-width: 130px; max-width: 160px; white-space: nowrap; flex: 0 0 150px; }
+  .deadline-presets input { min-width: 100px; max-width: 140px; flex: 0 1 120px; }
+  .deadline-time { min-width: 110px; max-width: 140px; flex: 0 0 120px; padding: 10px 12px; }
   .modal-deadline-presets { flex-wrap: wrap; justify-content: flex-start; margin: 12px 0 6px; }
   .modal-deadline-presets select { min-width: 170px; }
   .modal-deadline-presets input { flex: 0 1 160px; }
@@ -569,15 +569,15 @@ body.light .pace-block.critical {
   .date-duo-card { flex: 1 1 220px; min-width: 0; padding: 0; border-radius: 14px; border: none; background: transparent; box-shadow: none; }
   .date-duo .inp-group label { display: flex; align-items: center; gap: 6px; color: var(--muted); font-weight: 700; }
   .date-chip { margin-top: 8px; }
-  .deadline-display { display: flex; flex-direction: column; gap: 2px; line-height: 1.15; align-items: flex-start; }
-  .deadline-display .date-text { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .deadline-display { display: inline-flex; align-items: center; gap: 8px; line-height: 1.2; }
+  .deadline-display .date-text { display: inline-flex; align-items: center; gap: 6px; flex-wrap: nowrap; }
   .deadline-delta { color: var(--muted); font-size: 12px; font-weight: 750; letter-spacing: -0.1px; }
   .deadline-delta.overdue { color: var(--red); }
 
   .timeline-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; margin-bottom: 10px; align-items: start; }
   .timeline-pair { display: grid; grid-template-columns: repeat(2, minmax(200px, 1fr)); column-gap: 12px; row-gap: 0; align-items: stretch; }
   .timeline-row .inp-group { margin-bottom: 0; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
-  .timeline-row .deadline-presets { justify-content: flex-start; }
+  .timeline-row .deadline-presets { justify-content: flex-start; flex-wrap: nowrap; }
   .timeline-row .date-input-wrap { width: 100%; }
 
   .add-modal-grid {
@@ -597,7 +597,7 @@ body.light .pace-block.critical {
   .link-manage-btn:hover { border-color: var(--accent); color: var(--accent); }
   .link-manage-btn.link-active { border-color: var(--accent); color: var(--accent); background: rgba(88,166,255,0.08); }
   .add-modal-compact { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; align-items: start; }
-  .add-modal-compact.price-tax-row { grid-template-columns: 1fr 0.9fr 1fr 0.85fr; align-items: start; column-gap: 12px; }
+  .add-modal-compact.price-tax-row { grid-template-columns: 1fr 0.85fr 1.1fr 0.85fr; align-items: start; column-gap: 12px; }
   .price-tax-row .inp-group { display: flex; flex-direction: column; gap: 5px; margin: 0; }
   .price-tax-row .inp-group label { margin-bottom: 0; }
   .price-tax-row .tax-group select { min-height: 44px; }
@@ -617,6 +617,7 @@ body.light .pace-block.critical {
   @media(max-width: 900px) {
     .timeline-pair { grid-template-columns: 1fr; }
     .deadline-presets { flex-wrap: wrap; }
+    .timeline-row .deadline-presets { flex-wrap: wrap; }
     .timeline-row { grid-template-columns: 1fr; }
   }
 
@@ -1098,7 +1099,9 @@ td.date-cell + td.date-cell {
     <symbol id="icon-moon" viewBox="0 0 24 24"><path fill="currentColor" d="M21.74 15.34a1 1 0 0 0-1.11-.27A7.5 7.5 0 0 1 9.06 4.5a1 1 0 0 0-.76-1.2a9 9 0 1 0 13.44 12.36Z"/></symbol>
     <symbol id="icon-pen" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="m5 15.5 9.9-9.9a1.8 1.8 0 0 1 2.55 0l1.95 1.95a1.8 1.8 0 0 1 0 2.55L9.5 20H4v-5.5Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M14 6l4 4"/></symbol>
     <symbol id="icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="m16.707 6.293-7.25 7.25a1 1 0 0 1-1.414 0l-4-4a1 1 0 1 1 1.414-1.414L8.5 11.672l6.543-6.543a1 1 0 0 1 1.414 1.164a.99.99 0 0 1-.25.293Z"/></symbol>
-    <symbol id="icon-settings" viewBox="0 0 24 24"><path fill="currentColor" d="M6 7a2 2 0 1 1 3.874-.658L17 6.342A1.75 1.75 0 0 1 18.75 8.5A1.75 1.75 0 0 1 17 10.658l-7.126-.316A2 2 0 1 1 6 7Zm0 10a2 2 0 0 1 3.874-.658L17 16.342A1.75 1.75 0 0 1 18.75 18.5A1.75 1.75 0 0 1 17 20.658l-7.126-.316A2 2 0 1 1 6 17Z"/></symbol>
+    <symbol id="icon-settings" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12 2.5a1.25 1.25 0 0 1 1.19.88l.44 1.5a7.1 7.1 0 0 1 1.48.62l1.47-.61a1.25 1.25 0 0 1 1.6.58l1 1.9a1.25 1.25 0 0 1-.24 1.48l-1.18 1.14c.07.33.13.66.16 1l1.5.7a1.25 1.25 0 0 1 .63 1.65l-.9 2.04a1.25 1.25 0 0 1-1.5.68l-1.54-.47a7.17 7.17 0 0 1-1.33.9l-.2 1.58a1.25 1.25 0 0 1-1.23 1.09h-2.1a1.25 1.25 0 0 1-1.23-1.09l-.2-1.58a7.17 7.17 0 0 1-1.33-.9l-1.54.47a1.25 1.25 0 0 1-1.5-.68l-.9-2.04a1.25 1.25 0 0 1 .63-1.65l1.5-.7c.03-.34.09-.67.16-1l-1.18-1.14a1.25 1.25 0 0 1-.24-1.48l1-1.9a1.25 1.25 0 0 1 1.6-.58l1.47.61c.5-.25.99-.45 1.48-.62l.44-1.5A1.25 1.25 0 0 1 12 2.5Zm0 6.5a3 3 0 1 0 0 6a3 3 0 0 0 0-6Z"/>
+    </symbol>
     <symbol id="icon-drag" viewBox="0 0 24 24"><path fill="currentColor" d="M10 4a2 2 0 1 1-4 0a2 2 0 0 1 4 0Zm4 0a2 2 0 1 1 4 0a2 2 0 0 1-4 0ZM8 12a2 2 0 1 0-4 0a2 2 0 0 0 4 0Zm8 0a2 2 0 1 0-4 0a2 2 0 0 0 4 0Zm-6 6a2 2 0 1 1-4 0a2 2 0 0 1 4 0Zm4 0a2 2 0 1 1 4 0a2 2 0 0 1-4 0Z"/></symbol>
     <symbol id="icon-grip" viewBox="0 0 24 24"><path fill="currentColor" d="M10 5a1 1 0 0 1-1 1H7a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1Zm7-1h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2Zm0 6h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2Zm0 6h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2Zm-8-4H7a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2Zm0 6H7a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2Zm0-12H7a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2Z"/></symbol>
     <symbol id="icon-close" viewBox="0 0 24 24"><path fill="currentColor" d="M6.34 4.93a1 1 0 0 0-1.41 1.41L10.59 12l-5.66 5.66a1 1 0 1 0 1.41 1.41L12 13.41l5.66 5.66a1 1 0 0 0 1.41-1.41L13.41 12l5.66-5.66a1 1 0 1 0-1.41-1.41L12 10.59Z"/></symbol>
@@ -1293,9 +1296,9 @@ body:not([data-theme="dark"]) .header-new-badge {
               <th width="6%" data-type="active" data-key="rem" onclick="sortData('active', 'rem', 'number')">Осталось <span class="sort-icon"></span></th>
               <th width="4%" data-type="active" data-key="taxPrc" onclick="sortData('active', 'taxPrc', 'number')">Налог % <span class="sort-icon"></span></th>
               <th width="6%" data-type="active" data-key="contractor" onclick="sortData('active', 'contractor', 'number')" style="text-align:right;">Расходы <span class="sort-icon"></span></th>
-              <th width="8%" data-type="active" data-key="p" onclick="sortData('active', 'p', 'number')" style="text-align:right;">Сумма <span class="sort-icon"></span></th>
+              <th width="10%" data-type="active" data-key="p" onclick="sortData('active', 'p', 'number')" style="text-align:right;">Сумма <span class="sort-icon"></span></th>
               <th width="8%" style="text-align:right;">Чистыми</th>
-              <th width="6%" style="text-align:right;">Оплачено</th>
+              <th width="4%" style="text-align:right;">Оплачено</th>
               <th width="4%"></th>
             </tr>
           </thead>
@@ -3681,7 +3684,7 @@ function init(){
     setupDatePickers();
     document.getElementById('saveLinkBtn').onclick = saveLink;
     document.getElementById('add-proj-start-val').value = today;
-    document.getElementById('add-proj-dl-val').value = today;
+    document.getElementById('add-proj-dl-val').value = '';
     sortData('active', 'dl', 'date', true);
     ['active','waiting','potential','paused','archive'].forEach(t => {
         DATA[t].sortDirection = DATA[t].sortDirection || 1;
@@ -3750,8 +3753,8 @@ function formatDeadlineDelta(dateObj) {
     if (days) parts.push(`${days} д`);
     if (hours) parts.push(`${hours} ч`);
 
-    const prefix = overdue ? 'назад' : 'через';
-    return `${prefix} ${parts.join(' ')}`.trim();
+    const sign = overdue ? '−' : '';
+    return `${sign}${parts.join(' ')}`.trim();
 }
 
 function formatDateWithTime(dateObj, timeStr) {
@@ -4666,14 +4669,14 @@ function openAddModal(type = null, idx = null){
         document.getElementById('add-proj-paid').value = '50';
         document.getElementById('add-proj-type').value = 'active';
         document.getElementById('add-proj-start-val').value = today;
-        document.getElementById('add-proj-dl-val').value = today;
-        previousDeadlineValue = today;
-        deadlineUnset = false;
+        document.getElementById('add-proj-dl-val').value = '';
+        previousDeadlineValue = '';
+        deadlineUnset = true;
         document.getElementById('add-proj-dl-days').value = '';
         document.getElementById('add-proj-dl-custom').value = '';
         if (presetTimeInput) presetTimeInput.value = '';
         document.getElementById('add-proj-start-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
-        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDeadlineDisplay(today);
+        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDeadlineDisplay('');
         handleStatusChange('active');
         newProjectLink = '';
     }
@@ -4913,8 +4916,12 @@ function openDateBase(val) {
 
     const clearBtn = document.getElementById('date-modal-clear');
     const isDeadlineContext = (queue?.targetId && queue.targetId.includes('dl')) || queue?.field === 'dl';
+    const presetBlock = document.querySelector('.modal-deadline-presets');
     if (clearBtn) {
         clearBtn.style.display = isDeadlineContext ? 'inline-flex' : 'none';
+    }
+    if (presetBlock) {
+        presetBlock.style.display = isDeadlineContext ? 'flex' : 'none';
     }
     document.getElementById('dateModal').style.display = 'flex';
 }
