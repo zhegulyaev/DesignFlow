@@ -140,7 +140,7 @@
   .tab-desc-block { margin-bottom: 18px; }
 
   /* Main Layout & Tables */
-  .table-wrap{overflow-x:auto;overflow-y:visible;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:6px 10px; margin-top: 18px; position: relative;}
+  .table-wrap{overflow-x:auto;overflow-y:visible;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:6px 10px; margin-top: 12px; position: relative;}
   table{width:100%;border-collapse:collapse; min-width: 1200px;}
   th{text-align:left;color:var(--muted);font-size:12px;text-transform:uppercase;padding:11px 8px;border-bottom:1px solid var(--border);user-select:none; white-space: nowrap; cursor: pointer;}
   
@@ -155,7 +155,7 @@
 
   th:first-child, td:first-child { width: 24px; cursor: default; text-align: center; }
   td.select-col { position: relative; }
-  td{ padding: 9px 10px; border-bottom:1px solid var(--table-border); vertical-align:middle; font-size:15px; position: relative; }
+  td{ padding: 6px 9px; border-bottom:1px solid var(--table-border); vertical-align:middle; font-size:15px; position: relative; }
   tr:last-child td{border-bottom:none;}
   tr:hover td{background:var(--row-hover);}
 
@@ -180,8 +180,9 @@
   th:last-child, td:last-child { width: 96px; }
 
   /* Table Footer (Totals) */
-  tfoot td { padding: 18px 12px; border-top: 1px solid var(--border); background: var(--card-alt); font-weight: 600; color: var(--muted); text-align: right; font-size: 14px; white-space: nowrap; }
-  tfoot td:first-child { text-align: left; color: var(--text); font-size: 15px; }
+  tfoot td { padding: 12px 10px; border-top: 1px solid var(--table-border); background: var(--card); font-weight: 600; color: var(--muted); text-align: right; font-size: 13px; white-space: nowrap; }
+  tfoot td:first-child { text-align: left; color: var(--muted); font-size: 13px; }
+  tfoot tr { background: var(--card); }
   tfoot td:nth-last-child(3) { color: var(--gold); } /* Total gross (Archive) */
   tfoot td:nth-last-child(2) { color: var(--green); } /* Total net (Archive) */
   /* Active table footer fix */
@@ -252,10 +253,10 @@
   }
   .expense-cell .price-cell-wrap input { text-align: left; min-width: 80px; }
   .expense-mode { background: var(--pill-bg); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 6px 10px; font-size: 12px; cursor: pointer; min-width: 64px; font-weight: 700; }
-  .expense-helper { color: var(--muted); font-size: 12px; margin-top: 6px; text-align: right; line-height: 1.25; font-weight: 600; }
+  .expense-helper { color: var(--muted); font-size: 12px; margin-top: 4px; text-align: right; line-height: 1.2; font-weight: 600; }
   .helper-label { color: var(--muted); font-size: 12px; margin-top: 6px; line-height: 1.4; font-weight: 600; }
 
-  .paid-amount { font-size: 12px; color: var(--muted); margin-top: 4px; text-align: right; }
+  .paid-amount { font-size: 12px; color: var(--muted); margin-top: 2px; text-align: right; }
 
   .paid-cell { text-align: right; }
   .paid-cell .paid-select { margin-left: auto; display: inline-flex; }
@@ -265,9 +266,9 @@
   .paid-select, .tax-select { background: var(--pill-bg); color: var(--text); border: 1px solid var(--border); padding: 8px 10px; border-radius: 10px; font-size: 13px; cursor: pointer; outline: none; transition: .2s; text-align: center; font-weight: 800; letter-spacing: -0.1px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
   .paid-select:hover, .tax-select:hover { background: var(--btn-hover); border-color: var(--date-hover-border); }
   .paid-select option, .tax-select option { background: var(--card); }
-  .tax-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 6px 0; text-align: left; min-width: 90px; }
+  .tax-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; padding: 4px 0; text-align: left; min-width: 90px; }
   .tax-cell .tax-select { width: 100px; justify-self: flex-start; }
-  .tax-helper { color: var(--green); font-size: 13px; margin-top: 2px; text-align: left; width: 100%; font-weight: 800; letter-spacing: -0.2px; }
+  .tax-helper { color: var(--muted); font-size: 12px; margin-top: 0; text-align: left; width: 100%; font-weight: 700; letter-spacing: -0.2px; }
 
   /* Actions */
   .client-wrap{display:flex;align-items:center;gap:8px; width: 100%;}
@@ -296,6 +297,16 @@
 
 
   .action-btns{display:flex;gap:6px;align-items:center;justify-content:flex-end;}
+  .table-wrap th:last-child,
+  .table-wrap td:last-child {
+    position: sticky;
+    right: 0;
+    background: linear-gradient(90deg, transparent 0%, var(--card) 40%);
+    box-shadow: -1px 0 0 var(--border);
+    z-index: 2;
+    min-width: 120px;
+  }
+  .table-wrap th:last-child { z-index: 3; }
   .action-btn-base { padding: 6px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; user-select: none; min-width: 32px; text-align: center; transition: .2s; }
   .action-btn-base:hover { border-color: var(--accent); color: var(--accent); background: var(--tab-hover); }
   .done-btn:hover { background: var(--green); color: #fff; border-color: var(--green);} 
@@ -327,7 +338,7 @@
   #t-paused th:nth-child(2), #t-paused td:nth-child(2),
   #t-potential th:nth-child(2), #t-potential td:nth-child(2),
   #t-archive th:nth-child(2), #t-archive td:nth-child(2),
-  #t-all th:nth-child(2), #t-all td:nth-child(2) { min-width: 210px; }
+  #t-all th:nth-child(2), #t-all td:nth-child(2) { min-width: 170px; }
 
   #t-active th:nth-child(3), #t-active td:nth-child(3),
   #t-delegation th:nth-child(3), #t-delegation td:nth-child(3),
@@ -1369,8 +1380,8 @@ body:not([data-theme="dark"]) .header-new-badge {
           <thead>
             <tr>
               <th class="select-col" aria-label="Столбец выбора"></th>
-              <th width="20%" data-type="active" data-key="c" onclick="sortData('active', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
-              <th width="28%" data-type="active" data-key="n" onclick="sortData('active', 'n', 'string')">Проект <span class="sort-icon"></span></th>
+              <th width="16%" data-type="active" data-key="c" onclick="sortData('active', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
+              <th width="30%" data-type="active" data-key="n" onclick="sortData('active', 'n', 'string')">Проект <span class="sort-icon"></span></th>
               <th width="8%" data-type="active" data-key="start" onclick="sortData('active', 'start', 'date')">Старт <span class="sort-icon"></span></th>
               <th width="8%" data-type="active" data-key="dl" onclick="sortData('active', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
               <th width="6%" data-type="active" data-key="rem" onclick="sortData('active', 'rem', 'number')">Осталось <span class="sort-icon"></span></th>
@@ -1379,7 +1390,7 @@ body:not([data-theme="dark"]) .header-new-badge {
               <th width="7%" data-type="active" data-key="p" onclick="sortData('active', 'p', 'number')" style="text-align:right;">Сумма <span class="sort-icon"></span></th>
               <th width="7%" style="text-align:right;">Чистыми</th>
               <th width="6%" style="text-align:right;">Оплачено</th>
-              <th width="4%"></th>
+              <th width="8%"></th>
             </tr>
           </thead>
           <tbody></tbody>
