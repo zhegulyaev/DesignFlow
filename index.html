@@ -2319,9 +2319,19 @@ const STATUS_META = {
 };
 
 const toNumeric = (val) => {
-    const cleaned = String(val || '').replace(/\s+/g, '').replace(',', '.');
-    const num = parseFloat(cleaned);
-    return isNaN(num) ? 0 : num;
+    const cleaned = String(val || '').replace(/\s+/g, '').replace(/,/g, '.');
+    if (!cleaned) return 0;
+
+    // Разрешаем простые математические выражения (+ - * / и скобки)
+    if (/[^0-9+\-*/().]/.test(cleaned)) return 0;
+
+    try {
+        const result = new Function('return ' + cleaned)();
+        const num = typeof result === 'number' ? result : parseFloat(result);
+        return isFinite(num) ? num : 0;
+    } catch {
+        return 0;
+    }
 };
 
 function formatPlainNumber(val) {
@@ -2937,7 +2947,48 @@ function updateScrollToggle() {
 
 function formatNumberInput(inputEl) {
     if (!inputEl) return;
-    inputEl.value = formatPlainNumber(inputEl.value);
+
+    // Инициализация состояния для таймера калькулятора
+    if (!inputEl.__calcState) {
+        inputEl.__calcState = { timeout: null };
+
+        const applyCalculation = () => {
+            const raw = String(inputEl.value || '').replace(/\s+/g, '').replace(/,/g, '.');
+            if (!raw || /[^0-9+\-*/().]/.test(raw)) return;
+            try {
+                const result = new Function('return ' + raw)();
+                if (result !== undefined && isFinite(result)) {
+                    inputEl.value = formatPlainNumber(result);
+                }
+            } catch (e) {}
+        };
+
+        inputEl.addEventListener('blur', applyCalculation);
+        inputEl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                applyCalculation();
+                inputEl.blur();
+            }
+        });
+    }
+
+    const val = String(inputEl.value || '');
+    const state = inputEl.__calcState;
+
+    // Если пользователь вводит выражение, оставляем операторы и считаем позже
+    if (/[+\-*/]/.test(val)) {
+        const cleaned = val.replace(/[^0-9+\-*/().,]/g, '');
+        inputEl.value = cleaned;
+        clearTimeout(state.timeout);
+        state.timeout = setTimeout(() => {
+            if (document.activeElement === inputEl) return;
+            state.timeout = null;
+            inputEl.dispatchEvent(new Event('blur'));
+        }, 1000);
+        return;
+    }
+
+    inputEl.value = formatPlainNumber(val);
 }
 
 const DEFAULT_NAME_TEMPLATES = [
