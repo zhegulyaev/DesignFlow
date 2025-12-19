@@ -257,7 +257,9 @@
   .paid-select, .tax-select { background: transparent; color: var(--text); border: 1px solid transparent; padding: 5px; border-radius: 6px; font-size: 13px; cursor: pointer; outline: none; transition: .2s; text-align: center;}
   .paid-select:hover, .tax-select:hover { background: var(--btn-hover); border-color: var(--border); }
   .paid-select option, .tax-select option { background: var(--card); }
-  .tax-helper { color: var(--muted); font-size: 12px; margin-top: 4px; text-align: center; }
+  .tax-cell { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .tax-cell .tax-select { width: 100%; min-width: 88px; }
+  .tax-helper { color: var(--muted); font-size: 12px; margin-top: 2px; text-align: right; width: 100%; }
 
   /* Actions */
   .client-wrap{display:flex;align-items:center;gap:8px; width: 100%;}
@@ -736,6 +738,7 @@ body.light .pace-block.critical {
   body.light .drag-ghost { background: #fff; box-shadow: 0 16px 38px rgba(17,24,39,0.1); border-color: #d8e1f0; }
 
   .footer-note { color: var(--muted); font-size: 12px; font-weight: 600; }
+  .footer-note-sub { color: var(--muted); font-size: 12px; margin-top: 6px; text-align: right; }
   .helper-note { color: var(--muted); font-size: 12px; margin-top: 6px; line-height: 1.4; text-align: left; }
   .settings-actions-row { display: flex; justify-content: flex-end; gap: 10px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
   .btn-ghost { background: transparent; border-color: var(--border); color: var(--muted); font-weight: 800; }
@@ -4052,7 +4055,7 @@ function renderActive(){
             
             <td class="mono"><div class="${rem.cls}">${rem.txt}</div></td>
             
-            <td>
+            <td class="tax-cell">
                 <select class="tax-select" onchange="updVal('active',${i},'taxPrc',this.value)">
                 <option value="0" ${+item.taxPrc===0?'selected':''}>0%</option>
                 <option value="4" ${+item.taxPrc===4?'selected':''}>4%</option>
@@ -4510,7 +4513,7 @@ function renderArchive(){
         <td style="text-align:right;">
             <div class="footer-note">Чистыми</div>
             <div>${formatCurrency(tPr)}</div>
-            <div class="footer-note">Налоги: ${formatCurrency(tTax)}</div>
+            <div class="footer-note-sub">Налоги: ${formatCurrency(tTax)}</div>
         </td>
         <td></td>
     </tr>`;
