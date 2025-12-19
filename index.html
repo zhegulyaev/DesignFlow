@@ -162,8 +162,8 @@
   tr { position: relative; }
 
   /* Checkbox column */
-  th.select-col { width: 42px; cursor: default; }
-  td.select-col { width: 42px; padding: 0; text-align: center; }
+  th.select-col { width: 46px; cursor: default; }
+  td.select-col { width: 46px; padding: 0; text-align: center; }
   
   /* Контейнер для чекбокса и иконки дублирования - для выравнивания */
   .select-action-wrap {
@@ -177,7 +177,7 @@
   .bulk-checkbox { width: 16px; height: 16px; margin: 0; cursor: pointer; background: transparent; border: 1px solid var(--muted); border-radius: 4px; appearance: none; transition: background .1s, border-color .1s; flex-shrink: 0;}
   .bulk-checkbox:checked { background: var(--accent); border-color: var(--accent); }
 
-  th:last-child, td:last-child { width: 44px; }
+  th:last-child, td:last-child { width: 64px; }
 
   /* Table Footer (Totals) */
   tfoot td { padding: 15px 10px; border-top: 1px solid var(--border); background: transparent; font-weight: 600; color: var(--muted); text-align: right; font-size: 14px; white-space: nowrap; }
@@ -286,8 +286,7 @@
   tr:hover .dup-icon { opacity: 1; }
 
   .select-col { position: relative; min-width: 44px; }
-  .row-index { color: var(--muted); font-weight: 700; font-size: 12px; text-align: center; }
-  .row-selected .row-index { color: var(--text); }
+  .row-index { display: none; }
 
   .row-controls { position:absolute; left:-28px; top:50%; transform:translate(-140%,-50%); display:flex; gap:10px; align-items:center; opacity:0; transition:opacity .2s; }
   tr:hover .row-controls, .row-selected .row-controls { opacity:1; }
@@ -296,7 +295,7 @@
   .client-name.has-link { color: var(--link-blue); font-weight: 700; }
 
 
-  .action-btns{display:flex;gap:6px;align-items:center;}
+  .action-btns{display:flex;gap:6px;align-items:center;justify-content:flex-end;}
   .action-btn-base { padding: 6px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; user-select: none; min-width: 32px; text-align: center; transition: .2s; }
   .action-btn-base:hover { border-color: var(--accent); color: var(--accent); background: var(--tab-hover); }
   .done-btn:hover { background: var(--green); color: #fff; border-color: var(--green);} 
@@ -314,7 +313,7 @@
   .link-btn-go:hover { border-color: var(--accent); color: var(--accent); background: #f0f4ff; box-shadow: 0 6px 16px rgba(59,130,246,0.18); }
   .client-wrap .link-btn { opacity: 1; pointer-events: auto; }
   
-  .del-btn{color:var(--text);cursor:pointer;opacity:0.7; margin-left: 8px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 6px; border: 1px solid transparent; border-radius: 8px; transition: .2s; background: transparent;}
+  .del-btn{color:var(--text);cursor:pointer;opacity:0.7; margin-left: 4px; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 4px 6px; border: 1px solid transparent; border-radius: 8px; transition: .2s; background: transparent;}
   .del-btn svg { width: 16px; height: 16px; }
   .del-btn:hover{opacity:1; border-color: var(--del-hover-border); background: var(--del-hover-bg); color: var(--red);}
 
@@ -620,6 +619,10 @@ body.light .pace-block.critical {
   .add-modal-compact.price-tax-row { grid-template-columns: 1.05fr 0.9fr 0.8fr; align-items: end; column-gap: 10px; }
   .price-tax-row .inp-group { display: flex; flex-direction: column; gap: 5px; margin: 0; }
   .price-tax-row .inp-group label { margin-bottom: 0; }
+  .price-tax-row { grid-template-columns: 1.05fr 0.75fr 0.8fr; }
+
+  .paid-cell { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+  .paid-amount { text-align: right; width: 100%; }
   .price-tax-row .tax-group select { min-height: 44px; }
   .price-group { max-width: 240px; }
   .price-tax-row .inp-group input,
@@ -1365,7 +1368,7 @@ body:not([data-theme="dark"]) .header-new-badge {
         <table id="t-active">
           <thead>
             <tr>
-              <th class="select-col">№</th>
+              <th class="select-col" aria-label="Столбец выбора"></th>
               <th width="17%" data-type="active" data-key="c" onclick="sortData('active', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
               <th width="23%" data-type="active" data-key="n" onclick="sortData('active', 'n', 'string')">Проект <span class="sort-icon"></span></th>
               <th width="8%" data-type="active" data-key="start" onclick="sortData('active', 'start', 'date')">Старт <span class="sort-icon"></span></th>
@@ -1392,7 +1395,7 @@ body:not([data-theme="dark"]) .header-new-badge {
         <table id="t-delegation">
           <thead>
             <tr>
-              <th class="select-col">№</th>
+              <th class="select-col" aria-label="Столбец выбора"></th>
               <th width="16%">Клиент</th>
               <th width="22%">Проект</th>
               <th width="9%">Старт</th>
@@ -1495,7 +1498,7 @@ body:not([data-theme="dark"]) .header-new-badge {
         <table id="t-paused">
           <thead>
             <tr>
-              <th class="select-col">№</th>
+              <th class="select-col" aria-label="Столбец выбора"></th>
               <th width="20%" data-type="paused" data-key="c" onclick="sortData('paused', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
               <th width="30%" data-type="paused" data-key="n" onclick="sortData('paused', 'n', 'string')">Проект <span class="sort-icon"></span></th>
               <th width="15%" data-type="paused" data-key="dl" onclick="sortData('paused', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
@@ -1514,7 +1517,7 @@ body:not([data-theme="dark"]) .header-new-badge {
         <table id="t-archive">
           <thead>
             <tr>
-              <th class="select-col">№</th>
+              <th class="select-col" aria-label="Столбец выбора"></th>
               <th width="15%" data-type="archive" data-key="c" onclick="sortData('archive', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
               <th width="25%" data-type="archive" data-key="n" onclick="sortData('archive', 'n', 'string')">Проект <span class="sort-icon"></span></th>
               <th width="15%" data-type="archive" data-key="date" onclick="sortData('archive', 'date', 'date')">Дата сдачи <span class="sort-icon"></span></th>
@@ -4753,7 +4756,7 @@ function renderArchive(){
     });
     const footer = document.querySelector('#total-row-archive');
     footer.innerHTML = `<tr>
-        <td colspan="4" class="footer-total-toggle" onclick="toggleFooterSelection('archive')">Всего ${visibleItems.length} проектов</td>
+        <td colspan="3" class="footer-total-toggle" onclick="toggleFooterSelection('archive')">Всего ${visibleItems.length} проектов</td>
         <td style="text-align:right;">
             <div class="footer-note">Сумма</div>
             <div>${formatCurrency(tP)}</div>
@@ -4763,9 +4766,12 @@ function renderArchive(){
             <div>${formatCurrency(tContr)}</div>
         </td>
         <td style="text-align:right;">
+            <div class="footer-note">Налоги</div>
+            <div>${formatCurrency(tTax)}</div>
+        </td>
+        <td style="text-align:right;">
             <div class="footer-note">Чистыми</div>
             <div>${formatCurrency(tPr)}</div>
-            <div class="footer-note-sub">Налоги: ${formatCurrency(tTax)}</div>
         </td>
         <td></td>
     </tr>`;
