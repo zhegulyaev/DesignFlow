@@ -265,9 +265,9 @@
   .paid-select, .tax-select { background: var(--pill-bg); color: var(--text); border: 1px solid var(--border); padding: 8px 10px; border-radius: 10px; font-size: 13px; cursor: pointer; outline: none; transition: .2s; text-align: center; font-weight: 800; letter-spacing: -0.1px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
   .paid-select:hover, .tax-select:hover { background: var(--btn-hover); border-color: var(--date-hover-border); }
   .paid-select option, .tax-select option { background: var(--card); }
-  .tax-cell { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 4px 0; text-align: center; }
-  .tax-cell .tax-select { width: 110px; justify-self: center; }
-  .tax-helper { color: var(--green); font-size: 13px; margin-top: 2px; text-align: center; width: 100%; font-weight: 800; letter-spacing: -0.2px; }
+  .tax-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 4px 0; text-align: left; min-width: 110px; }
+  .tax-cell .tax-select { width: 120px; justify-self: flex-start; }
+  .tax-helper { color: var(--green); font-size: 13px; margin-top: 2px; text-align: left; width: 100%; font-weight: 800; letter-spacing: -0.2px; }
 
   /* Actions */
   .client-wrap{display:flex;align-items:center;gap:8px; width: 100%;}
@@ -297,10 +297,11 @@
 
 
   .action-btns{display:flex;gap:6px;align-items:center;}
-  .action-btn-base { padding: 6px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; user-select: none; min-width: 32px; text-align: center; }
-  .done-btn:hover { background: var(--green); color: #fff; border-color: var(--green);}
-  .wait-btn:hover { background: var(--purple); color: #fff; border-color: var(--purple);}
-  .pause-btn:hover { background: var(--link-blue); color: #fff; border-color: var(--link-blue);}
+  .action-btn-base { padding: 6px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; user-select: none; min-width: 32px; text-align: center; transition: .2s; }
+  .action-btn-base:hover { border-color: var(--accent); color: var(--accent); background: var(--tab-hover); }
+  .done-btn:hover { background: var(--green); color: #fff; border-color: var(--green);} 
+  .wait-btn:hover { background: var(--purple); color: #fff; border-color: var(--purple);} 
+  .pause-btn:hover { background: var(--link-blue); color: #fff; border-color: var(--link-blue);} 
   /* New hover styles for wait and pause in active table */
   .wait-active-btn:hover { background: var(--purple); color: #fff; border-color: var(--purple);}
   .pause-active-btn:hover { background: var(--link-blue); color: #fff; border-color: var(--link-blue);}
@@ -335,7 +336,9 @@
   #t-paused th:nth-child(3), #t-paused td:nth-child(3),
   #t-potential th:nth-child(3), #t-potential td:nth-child(3),
   #t-archive th:nth-child(3), #t-archive td:nth-child(3),
-  #t-all th:nth-child(3), #t-all td:nth-child(3) { min-width: 220px; }
+  #t-all th:nth-child(3), #t-all td:nth-child(3) { min-width: 260px; }
+  #t-active th:nth-child(7), #t-active td:nth-child(7) { min-width: 130px; }
+  #t-active th:nth-child(8), #t-active td:nth-child(8) { min-width: 190px; }
 
   .row-pulse { box-shadow: inset 0 0 0 2px var(--accent); }
   
@@ -1107,22 +1110,27 @@ td.date-cell + td.date-cell {
   .task-empty { text-align: center; color: var(--muted); font-size: 14px; padding: 12px; border: 1px dashed var(--border); border-radius: 12px; background: var(--pill-bg); }
   .journal-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
   .journal-actions .inline-note { color: var(--muted); font-size: 13px; }
-  .journal-add { display: grid; grid-template-columns: 1fr auto; gap: 8px; width: 100%; margin-top: 10px; }
+  .journal-add { display: grid; grid-template-columns: 1fr auto; gap: 8px; width: 100%; margin-top: 10px; align-items: flex-start; }
   .journal-add textarea { width: 100%; border-radius: 10px; border: 1px solid var(--border); padding: 10px 12px; background: var(--card); color: var(--text); font-weight: 700; min-height: 44px; resize: vertical; overflow: hidden; line-height: 1.35; }
   .journal-add textarea:focus { outline: none; border-color: var(--accent); }
-  .journal-add button { min-width: 120px; justify-content: center; height: 44px; display: inline-flex; align-items: center; }
+  .journal-add button { min-width: 120px; justify-content: center; height: 44px; display: inline-flex; align-items: center; align-self: flex-start; }
   .task-row { position: relative; transition: transform .15s ease, box-shadow .15s ease; }
-  .task-row.is-completed { background: linear-gradient(90deg, rgba(46,160,67,0.12), rgba(46,160,67,0.04)); box-shadow: 0 6px 14px rgba(46,160,67,0.15); transform: translateY(-2px); }
+  .task-row.is-completed { background: var(--pill-bg); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); transform: none; }
+  .task-row.is-completed .task-text { text-decoration: line-through; color: var(--muted); }
+  .task-row.is-completed .task-amount, .task-row.is-completed .task-amount-suffix { color: var(--muted); }
   .task-body { display: flex; flex-direction: column; gap: 6px; width: 100%; }
   .task-meta-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
   .task-amount-wrap { display: flex; align-items: center; gap: 6px; background: var(--card); padding: 6px 8px; border-radius: 8px; border: 1px solid var(--border); }
   .task-amount-wrap span { color: var(--muted); font-weight: 700; font-size: 12px; }
+  .task-amount-input { display: grid; grid-template-columns: 1fr auto; align-items: center; background: var(--pill-bg); border: 1px solid var(--border); border-radius: 8px; padding: 2px 8px 2px 10px; gap: 8px; }
   .task-amount { width: 110px; border: none; background: transparent; color: var(--text); font-weight: 800; text-align: right; }
   .task-amount:focus { outline: none; }
+  .task-amount-suffix { font-weight: 800; color: var(--muted); }
   .task-done-at { color: var(--muted); font-size: 12px; font-weight: 700; }
   .task-delete.trash { color: var(--muted); padding: 6px 10px; border: 1px solid transparent; background: transparent; }
   .task-delete.trash:hover { border-color: var(--del-hover-border); color: var(--red); background: var(--del-hover-bg); }
-  .journal-summary { margin-top: 14px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; background: linear-gradient(135deg, rgba(88,166,255,0.08), rgba(163,113,247,0.08)); display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; align-items: stretch; box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
+  .journal-summary { margin-top: 14px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; background: linear-gradient(135deg, rgba(88,166,255,0.08), rgba(163,113,247,0.08)); display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; align-items: flex-start; box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
+  .journal-summary > div { display: flex; flex-direction: column; gap: 4px; justify-content: flex-start; }
   .journal-summary .label { color: var(--muted); font-weight: 800; font-size: 12px; letter-spacing: 0.1px; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
   .journal-summary .label::before { content: '◆'; font-size: 9px; color: var(--accent); }
   .journal-summary .value { font-weight: 900; font-size: 18px; color: var(--text); }
@@ -1142,7 +1150,11 @@ td.date-cell + td.date-cell {
 
   .journal-trash { margin-top: 10px; border: 1px dashed var(--border); border-radius: 12px; padding: 10px 12px; background: var(--pill-bg); display: none; flex-direction: column; gap: 10px; }
   .journal-trash.visible { display: flex; }
-  .journal-trash-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .journal-trash.collapsed .journal-trash-list, .journal-trash.collapsed .journal-trash-actions, .journal-trash.collapsed .helper-label { display: none; }
+  .journal-trash-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer; user-select: none; }
+  .journal-trash-toggle { display: inline-flex; align-items: center; gap: 8px; }
+  .journal-trash-toggle .trash-caret { display: inline-flex; width: 14px; height: 14px; align-items: center; justify-content: center; transform: rotate(0deg); transition: transform .2s; color: var(--muted); font-weight: 900; }
+  .journal-trash.expanded .journal-trash-toggle .trash-caret { transform: rotate(180deg); }
   .journal-trash-title { font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
   .journal-trash-title .count { background: var(--button-bg); border: 1px solid var(--border); padding: 2px 8px; border-radius: 8px; font-size: 12px; font-weight: 800; color: var(--muted); }
   .journal-trash-list { display: flex; flex-direction: column; gap: 8px; }
@@ -1151,6 +1163,8 @@ td.date-cell + td.date-cell {
   .journal-trash-meta { color: var(--muted); font-size: 12px; font-weight: 700; margin-top: 4px; }
   .journal-trash-actions { display: flex; align-items: center; gap: 8px; }
   .journal-trash button { padding: 8px 12px; border-radius: 8px; font-weight: 800; }
+  .journal-trash .hard-delete { border-color: var(--del-hover-border); color: var(--muted); }
+  .journal-trash .hard-delete:hover { color: var(--red); border-color: var(--red); background: var(--del-hover-bg); }
 
 
 
@@ -1353,12 +1367,12 @@ body:not([data-theme="dark"]) .header-new-badge {
             <tr>
               <th class="select-col">№</th>
               <th width="17%" data-type="active" data-key="c" onclick="sortData('active', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
-              <th width="21%" data-type="active" data-key="n" onclick="sortData('active', 'n', 'string')">Проект <span class="sort-icon"></span></th>
+              <th width="23%" data-type="active" data-key="n" onclick="sortData('active', 'n', 'string')">Проект <span class="sort-icon"></span></th>
               <th width="8%" data-type="active" data-key="start" onclick="sortData('active', 'start', 'date')">Старт <span class="sort-icon"></span></th>
               <th width="8%" data-type="active" data-key="dl" onclick="sortData('active', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
               <th width="6%" data-type="active" data-key="rem" onclick="sortData('active', 'rem', 'number')">Осталось <span class="sort-icon"></span></th>
-              <th width="3%" data-type="active" data-key="taxPrc" onclick="sortData('active', 'taxPrc', 'number')">Налог % <span class="sort-icon"></span></th>
-              <th width="6%" data-type="active" data-key="contractor" onclick="sortData('active', 'contractor', 'number')" style="text-align:right;">Расходы <span class="sort-icon"></span></th>
+              <th width="4%" data-type="active" data-key="taxPrc" onclick="sortData('active', 'taxPrc', 'number')">Налог % <span class="sort-icon"></span></th>
+              <th width="5%" data-type="active" data-key="contractor" onclick="sortData('active', 'contractor', 'number')" style="text-align:right;">Расходы <span class="sort-icon"></span></th>
               <th width="8%" data-type="active" data-key="p" onclick="sortData('active', 'p', 'number')" style="text-align:right;">Сумма <span class="sort-icon"></span></th>
               <th width="8%" style="text-align:right;">Чистыми</th>
               <th width="6%" style="text-align:right;">Оплачено</th>
@@ -1380,11 +1394,11 @@ body:not([data-theme="dark"]) .header-new-badge {
             <tr>
               <th class="select-col">№</th>
               <th width="16%">Клиент</th>
-              <th width="20%">Проект</th>
+              <th width="22%">Проект</th>
               <th width="9%">Старт</th>
               <th width="9%">Дедлайн</th>
               <th width="8%">Осталось</th>
-              <th width="10%">Расходы</th>
+              <th width="8%">Расходы</th>
               <th width="10%">Сумма</th>
               <th width="10%">Чистыми</th>
               <th width="8%">Оплачено</th>
@@ -2049,11 +2063,15 @@ body:not([data-theme="dark"]) .header-new-badge {
         <div class="task-journal" id="journal-list"></div>
         <div class="journal-trash" id="journal-trash">
             <div class="journal-trash-header">
-                <div class="journal-trash-title">Корзина задач <span class="count" id="journal-trash-count">0</span></div>
+                <div class="journal-trash-toggle" onclick="toggleJournalTrash()">
+                    <div class="journal-trash-title">Корзина задач <span class="count" id="journal-trash-count">0</span></div>
+                    <span class="trash-caret">▾</span>
+                </div>
                 <div class="journal-trash-actions">
                     <button class="template-secondary-btn" type="button" onclick="restoreAllJournalTasks()">Восстановить все</button>
                 </div>
             </div>
+            <div class="helper-label">Удалённые задачи хранятся 7 дней, потом очищаются автоматически.</div>
             <div class="journal-trash-list" id="journal-trash-list"></div>
         </div>
         <div class="journal-summary" id="journal-summary" style="display:none">
@@ -3573,6 +3591,7 @@ let datePicker = null;
 let timePicker = null;
 let journalContext = null;
 let journalTrash = [];
+let journalTrashOpen = false;
 let projectEditorContext = null;
 let editorPreviousDeadline = '';
 
@@ -3969,6 +3988,7 @@ function init(){
         autoResizeTextarea(journalInput);
     }
     cleanupTrash();
+    cleanupAllJournalTrash();
     applyBlockVisibility();
     updateSettingsPreviewStates();
     applyStatVisibility();
@@ -4006,6 +4026,32 @@ function cleanupTrash(){
     const initLen = DATA.trash.length;
     DATA.trash = DATA.trash.filter(i => (nowMs - (i.deletedAt || 0)) < sevenDays);
     if(DATA.trash.length !== initLen) save();
+}
+
+function cleanupJournalTrash(list = journalTrash) {
+    const sevenDays = 7 * 24 * 60 * 60 * 1000;
+    const nowMs = Date.now();
+    return (list || []).filter(task => {
+        if (!task?.deletedAt) return true;
+        const deletedMs = new Date(task.deletedAt).getTime();
+        return !isNaN(deletedMs) && (nowMs - deletedMs) < sevenDays;
+    });
+}
+
+function cleanupAllJournalTrash() {
+    let updated = false;
+    ['active', 'archive', 'paused', 'waiting', 'potential', 'requests', 'trash'].forEach(type => {
+        DATA[type]?.forEach(item => {
+            if (Array.isArray(item.taskTrash)) {
+                const filtered = cleanupJournalTrash(item.taskTrash);
+                if (filtered.length !== item.taskTrash.length) {
+                    item.taskTrash = filtered;
+                    updated = true;
+                }
+            }
+        });
+    });
+    if (updated) save();
 }
 
 function formatCurrency(n) { return new Intl.NumberFormat('ru-RU').format(Math.round(n)) + ' ₽'; }
@@ -5040,7 +5086,8 @@ function openTaskJournal(type, idx) {
     if (title) title.textContent = item.n || 'Без названия';
     const input = document.getElementById('journal-new-task');
     if (input) { input.value = ''; autoResizeTextarea(input); }
-    journalTrash = Array.isArray(item.taskTrash) ? [...item.taskTrash] : [];
+    journalTrash = cleanupJournalTrash(Array.isArray(item.taskTrash) ? [...item.taskTrash] : []);
+    journalTrashOpen = false;
     renderJournalTasks(item.tasks || []);
     renderJournalTrash();
     const modal = document.getElementById('taskJournalModal');
@@ -5074,7 +5121,10 @@ function renderJournalTasks(tasks = []) {
                 <div class="task-meta-row">
                     <div class="task-amount-wrap">
                         <span>Сумма</span>
-                        <input type="text" class="task-amount" value="${formatPlainNumber(task.amount || '')}" placeholder="0" oninput="formatNumberInput(this); handleJournalAmountChange()" onblur="handleJournalAmountChange()">
+                        <div class="task-amount-input">
+                            <input type="text" class="task-amount" value="${formatPlainNumber(task.amount || '')}" placeholder="0 ₽" oninput="formatNumberInput(this); handleJournalAmountChange()" onblur="handleJournalAmountChange()">
+                            <span class="task-amount-suffix">₽</span>
+                        </div>
                     </div>
                     <div class="task-done-at">${doneText}</div>
                 </div>
@@ -5096,10 +5146,22 @@ function renderJournalTrash() {
     const list = document.getElementById('journal-trash-list');
     const countEl = document.getElementById('journal-trash-count');
     if (!wrap || !list || !countEl) return;
+    const initialLen = journalTrash.length;
+    journalTrash = cleanupJournalTrash(journalTrash);
     list.innerHTML = '';
     countEl.textContent = journalTrash.length;
-    wrap.classList.toggle('visible', !!journalTrash.length);
-    if (!journalTrash.length) return;
+    const hasTrash = !!journalTrash.length;
+    wrap.classList.toggle('visible', hasTrash);
+    wrap.classList.toggle('collapsed', hasTrash && !journalTrashOpen);
+    wrap.classList.toggle('expanded', hasTrash && journalTrashOpen);
+    if (!hasTrash) {
+        journalTrashOpen = false;
+        if (initialLen && journalContext) persistJournalTasks();
+        return;
+    }
+
+    if (initialLen !== journalTrash.length && journalContext) persistJournalTasks();
+    if (!journalTrashOpen) return;
 
     journalTrash.forEach((task, idx) => {
         const row = document.createElement('div');
@@ -5112,10 +5174,17 @@ function renderJournalTrash() {
             </div>
             <div class="journal-trash-actions">
                 <button class="template-secondary-btn" type="button" onclick="restoreJournalTask(${idx})">Восстановить</button>
+                <button class="template-secondary-btn hard-delete" type="button" onclick="deleteJournalTaskForever(${idx})">Удалить навсегда</button>
             </div>
         `;
         list.appendChild(row);
     });
+}
+
+function toggleJournalTrash() {
+    if (!journalTrash.length) return;
+    journalTrashOpen = !journalTrashOpen;
+    renderJournalTrash();
 }
 
 function collectJournalTasks() {
@@ -5197,6 +5266,7 @@ function persistJournalTasks() {
     const tasks = collectJournalTasks();
     updateJournalProgress(tasks);
     updateJournalSummary(tasks);
+    journalTrash = cleanupJournalTrash(journalTrash);
     if (!journalContext) return;
     const { type, idx } = journalContext;
     const item = DATA[type]?.[idx];
@@ -5210,8 +5280,9 @@ function addJournalTask() {
     const input = document.getElementById('journal-new-task');
     if (!input) return;
     const val = input.value.trim();
+    if (!val) { showToast('Введите наименование задачи'); input.focus(); return; }
     const tasks = collectJournalTasks();
-    tasks.push({ text: val || `Пункт ${tasks.length + 1}`, done: false, amount: 0, doneAt: '' });
+    tasks.push({ text: val, done: false, amount: 0, doneAt: '' });
     input.value = '';
     autoResizeTextarea(input);
     renderJournalTasks(tasks);
@@ -5245,6 +5316,12 @@ function restoreAllJournalTasks() {
     tasks.push(...journalTrash.map(t => ({ ...t, deletedAt: undefined })));
     journalTrash = [];
     renderJournalTasks(tasks);
+    renderJournalTrash();
+    persistJournalTasks();
+}
+
+function deleteJournalTaskForever(idx) {
+    journalTrash.splice(idx, 1);
     renderJournalTrash();
     persistJournalTasks();
 }
