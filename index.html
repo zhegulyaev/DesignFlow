@@ -2318,10 +2318,30 @@ const STATUS_META = {
     archive: { label: 'Выполнено', cls: 'archive' },
 };
 
+const CALCULATOR_DELAY_MS = 1000;
+const calcTimers = new WeakMap();
+
+function evaluateMathExpression(raw) {
+    const cleaned = String(raw ?? '').replace(/,/g, '.').trim();
+    if (!cleaned) return null;
+
+    const normalized = cleaned.replace(/\s+/g, '');
+    const allowed = /^[\d.+\-*/()]+$/;
+
+    if (allowed.test(normalized)) {
+        try {
+            const result = Function('"use strict"; return (' + normalized + ')')();
+            if (typeof result === 'number' && isFinite(result)) return result;
+        } catch (e) {}
+    }
+
+    const fallback = parseFloat(normalized || cleaned);
+    return isNaN(fallback) ? null : fallback;
+}
+
 const toNumeric = (val) => {
-    const cleaned = String(val || '').replace(/\s+/g, '').replace(',', '.');
-    const num = parseFloat(cleaned);
-    return isNaN(num) ? 0 : num;
+    const evaluated = evaluateMathExpression(val);
+    return evaluated === null ? 0 : evaluated;
 };
 
 function formatPlainNumber(val) {
@@ -2935,9 +2955,31 @@ function updateScrollToggle() {
     btn.style.display = nearTop && nearBottom ? 'none' : 'grid';
 }
 
+function applyCalculatorResult(inputEl) {
+    if (!inputEl) return;
+    const evaluated = evaluateMathExpression(inputEl.value);
+    if (evaluated === null) return;
+    const formatted = formatPlainNumber(evaluated);
+    if (formatted !== inputEl.value) {
+        inputEl.value = formatted;
+    }
+}
+
+function attachCalculatorListeners(inputEl) {
+    if (!inputEl || inputEl.dataset.calcAttached) return;
+    inputEl.dataset.calcAttached = '1';
+    inputEl.addEventListener('blur', () => applyCalculatorResult(inputEl), true);
+}
+
 function formatNumberInput(inputEl) {
     if (!inputEl) return;
-    inputEl.value = formatPlainNumber(inputEl.value);
+    attachCalculatorListeners(inputEl);
+
+    const existing = calcTimers.get(inputEl);
+    if (existing) clearTimeout(existing);
+
+    const timer = setTimeout(() => applyCalculatorResult(inputEl), CALCULATOR_DELAY_MS);
+    calcTimers.set(inputEl, timer);
 }
 
 const DEFAULT_NAME_TEMPLATES = [
