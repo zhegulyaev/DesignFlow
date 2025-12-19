@@ -104,7 +104,7 @@
 }
 
   /* Warning Block */
-  .top-panel{background:var(--card);padding:16px 18px;border-radius:14px;border:1px solid var(--border);margin-bottom:30px;display:flex;align-items:center;flex-wrap:wrap;gap:16px;box-shadow:0 10px 26px rgba(0,0,0,0.18);}
+  .top-panel{background:var(--card);padding:16px 18px;border-radius:14px;border:1px solid var(--border);margin-bottom:30px;display:flex;align-items:center;flex-wrap:wrap;gap:16px;box-shadow:none;}
   .backup-alert{display:flex;align-items:center;gap:12px;flex:1;min-width:280px;}
   .backup-icon{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:rgba(248,81,73,0.12);border:1px solid rgba(248,81,73,0.45);color:#f85149;box-shadow:0 8px 20px rgba(0,0,0,0.08);}
   .backup-icon svg{width:18px;height:18px;}
@@ -201,7 +201,7 @@
   .date-cell { padding: 0 !important; } 
   .date-input-wrap { width: 100%; padding: 6px 8px; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: flex-start; transition: .2s; border-radius: 10px; gap: 6px; border: 1px solid var(--border); background: transparent; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
   .date-input-wrap:hover { background: var(--date-hover-bg); border-color: var(--date-hover-border); }
-  .date-text-display { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; display: flex; align-items: center; gap: 8px; letter-spacing: -0.1px; }
+  .date-text-display { font-size: 14px; font-weight: 600; color: var(--text); white-space: normal; display: flex; align-items: flex-start; gap: 8px; letter-spacing: -0.1px; }
   .date-icon { display: inline-flex; width: 14px; height: 14px; color: var(--muted); opacity: 0.85; }
   .time-text { color: var(--muted); font-weight: 700; font-size: 12px; }
 
@@ -552,24 +552,32 @@ body.light .pace-block.critical {
   .clear-input-btn:hover { color: var(--text); border-color: transparent; background: var(--input-bg); }
   .clear-input-btn.hidden { opacity: 0; pointer-events: none; }
   .input-error { border-color: var(--red) !important; box-shadow: 0 0 0 2px rgba(218,54,51,0.12); }
-  .deadline-presets { display: flex; gap: 8px; align-items: center; flex-wrap: nowrap; }
-  .deadline-presets select { min-width: 140px; max-width: 170px; white-space: nowrap; flex: 0 1 150px; }
-  .deadline-presets input { min-width: 110px; max-width: 140px; flex: 1 1 110px; }
+  .deadline-presets { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .deadline-presets select,
+  .deadline-presets input { background: var(--input-bg); border: 1px solid var(--border); padding: 10px 12px; border-radius: 10px; color: var(--text); min-height: 44px; font-weight: 800; transition: .15s; }
+  .deadline-presets select:focus,
+  .deadline-presets input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 2px rgba(88,166,255,0.14); }
+  .deadline-presets select { min-width: 150px; max-width: 190px; white-space: nowrap; flex: 0 1 170px; }
+  .deadline-presets input { min-width: 120px; max-width: 150px; flex: 1 1 120px; }
   .deadline-time { min-width: 120px; max-width: 150px; flex: 0 0 130px; padding: 10px 12px; }
   .modal-deadline-presets { flex-wrap: wrap; justify-content: flex-start; margin: 12px 0 6px; }
   .modal-deadline-presets select { min-width: 170px; }
-  .modal-deadline-presets input { flex: 0 1 140px; }
+  .modal-deadline-presets input { flex: 0 1 160px; }
+  .date-modal-footer { display: flex; justify-content: space-between; align-items: center; margin: 10px 0 6px; gap: 10px; flex-wrap: wrap; }
   .date-duo { display: flex; gap: 12px; align-items: stretch; margin-bottom: 12px; flex-wrap: wrap; }
   .date-duo .inp-group { margin-bottom: 0; }
   .date-duo-card { flex: 1 1 220px; min-width: 0; padding: 0; border-radius: 14px; border: none; background: transparent; box-shadow: none; }
   .date-duo .inp-group label { display: flex; align-items: center; gap: 6px; color: var(--muted); font-weight: 700; }
   .date-chip { margin-top: 8px; }
+  .deadline-display { display: flex; flex-direction: column; gap: 2px; line-height: 1.15; align-items: flex-start; }
+  .deadline-display .date-text { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .deadline-delta { color: var(--muted); font-size: 12px; font-weight: 750; letter-spacing: -0.1px; }
+  .deadline-delta.overdue { color: var(--red); }
 
   .timeline-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; margin-bottom: 10px; align-items: start; }
   .timeline-pair { display: grid; grid-template-columns: repeat(2, minmax(200px, 1fr)); column-gap: 12px; row-gap: 0; align-items: stretch; }
   .timeline-row .inp-group { margin-bottom: 0; display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
   .timeline-row .deadline-presets { justify-content: flex-start; }
-  .timeline-row .deadline-presets select, .timeline-row .deadline-presets input { background: var(--input-bg); border: 1px solid var(--border); }
   .timeline-row .date-input-wrap { width: 100%; }
 
   .add-modal-grid {
@@ -589,12 +597,12 @@ body.light .pace-block.critical {
   .link-manage-btn:hover { border-color: var(--accent); color: var(--accent); }
   .link-manage-btn.link-active { border-color: var(--accent); color: var(--accent); background: rgba(88,166,255,0.08); }
   .add-modal-compact { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; align-items: start; }
-  .add-modal-compact.price-tax-row { grid-template-columns: 0.95fr 1fr 0.78fr 0.82fr; align-items: end; column-gap: 10px; }
+  .add-modal-compact.price-tax-row { grid-template-columns: 1fr 0.9fr 1fr 0.85fr; align-items: start; column-gap: 12px; }
   .price-tax-row .inp-group { display: flex; flex-direction: column; gap: 5px; margin: 0; }
   .price-tax-row .inp-group label { margin-bottom: 0; }
   .price-tax-row .tax-group select { min-height: 44px; }
   .price-group { max-width: 200px; }
-  .paid-group select { min-height: 44px; text-align: center; }
+  .paid-group select { min-height: 44px; min-width: 140px; text-align: center; }
   .price-tax-row .inp-group input,
   .price-tax-row .inp-group select { min-height: 44px; }
   .contractor-inline label { margin-bottom: 6px; }
@@ -1088,7 +1096,7 @@ td.date-cell + td.date-cell {
 <svg style="display: none;">
     <symbol id="icon-sun" viewBox="0 0 24 24"><path fill="currentColor" d="M12 4.5a1 1 0 0 1-1-1V2a1 1 0 1 1 2 0v1.5a1 1 0 0 1-1 1Zm0 17a1 1 0 0 1-1 1V24a1 1 0 1 1 2 0v-1.5a1 1 0 0 1-1-1Zm7.424-14.924a1 1 0 0 1 0-1.414l1.06-1.06a1 1 0 1 1 1.415 1.414l-1.06 1.06a1 1 0 0 1-1.415 0ZM2.1 20.4a1 1 0 0 1 0-1.415l1.06-1.06a1 1 0 1 1 1.414 1.414l-1.06 1.061A1 1 0 0 1 2.1 20.4Zm19.8-1.414a1 1 0 0 1-1.415 0l-1.06-1.06a1 1 0 1 1 1.414-1.415l1.06 1.06a1 1 0 0 1 0 1.415ZM2.1 3.6a1 1 0 0 1 1.414 0l1.06 1.06A1 1 0 0 1 3.16 6.074L2.1 5.014A1 1 0 0 1 2.1 3.6ZM4.5 12a1 1 0 0 1-1 1H2a1 1 0 1 1 0-2h1.5a1 1 0 0 1 1 1Zm18 0a1 1 0 0 1-1 1H20a1 1 0 1 1 0-2h1.5a1 1 0 0 1 1 1Zm-7 0a3.5 3.5 0 1 1-7 0a3.5 3.5 0 0 1 7 0Z"/></symbol>
     <symbol id="icon-moon" viewBox="0 0 24 24"><path fill="currentColor" d="M21.74 15.34a1 1 0 0 0-1.11-.27A7.5 7.5 0 0 1 9.06 4.5a1 1 0 0 0-.76-1.2a9 9 0 1 0 13.44 12.36Z"/></symbol>
-    <symbol id="icon-pen" viewBox="0 0 20 20"><path fill="currentColor" d="M2.5 13.793V17.5h3.707L16.1 7.607l-3.707-3.707Zm13.94-8.233l-.633.634l-3.707-3.707l.633-.633a1.5 1.5 0 0 1 2.122 0l1.585 1.585a1.5 1.5 0 0 1 0 2.121Z"/></symbol>
+    <symbol id="icon-pen" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="m5 15.5 9.9-9.9a1.8 1.8 0 0 1 2.55 0l1.95 1.95a1.8 1.8 0 0 1 0 2.55L9.5 20H4v-5.5Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M14 6l4 4"/></symbol>
     <symbol id="icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="m16.707 6.293-7.25 7.25a1 1 0 0 1-1.414 0l-4-4a1 1 0 1 1 1.414-1.414L8.5 11.672l6.543-6.543a1 1 0 0 1 1.414 1.164a.99.99 0 0 1-.25.293Z"/></symbol>
     <symbol id="icon-settings" viewBox="0 0 24 24"><path fill="currentColor" d="M6 7a2 2 0 1 1 3.874-.658L17 6.342A1.75 1.75 0 0 1 18.75 8.5A1.75 1.75 0 0 1 17 10.658l-7.126-.316A2 2 0 1 1 6 7Zm0 10a2 2 0 0 1 3.874-.658L17 16.342A1.75 1.75 0 0 1 18.75 18.5A1.75 1.75 0 0 1 17 20.658l-7.126-.316A2 2 0 1 1 6 17Z"/></symbol>
     <symbol id="icon-drag" viewBox="0 0 24 24"><path fill="currentColor" d="M10 4a2 2 0 1 1-4 0a2 2 0 0 1 4 0Zm4 0a2 2 0 1 1 4 0a2 2 0 0 1-4 0ZM8 12a2 2 0 1 0-4 0a2 2 0 0 0 4 0Zm8 0a2 2 0 1 0-4 0a2 2 0 0 0 4 0Zm-6 6a2 2 0 1 1-4 0a2 2 0 0 1 4 0Zm4 0a2 2 0 1 1 4 0a2 2 0 0 1-4 0Z"/></symbol>
@@ -1710,6 +1718,14 @@ body:not([data-theme="dark"]) .header-new-badge {
                         <label>Сумма (₽)</label>
                         <input type="text" id="add-proj-price" placeholder="50 000" oninput="formatNumberInput(this)">
                     </div>
+                    <div class="inp-group paid-group">
+                        <label>Оплачено</label>
+                        <select id="add-proj-paid" class="symbol-select">
+                            <option value="0">0%</option>
+                            <option value="50" selected>50%</option>
+                            <option value="100">100%</option>
+                        </select>
+                    </div>
                     <div class="inp-group contractor-group contractor-inline">
                         <label>Расходы</label>
                         <select id="add-proj-contractor-mode" class="contractor-mode-select" onchange="handleNewContractorModeChange(this.value)">
@@ -1725,14 +1741,6 @@ body:not([data-theme="dark"]) .header-new-badge {
                             <option value="4">4%</option>
                             <option value="6">6%</option>
                             <option value="13">13%</option>
-                        </select>
-                    </div>
-                    <div class="inp-group paid-group">
-                        <label>Оплачено</label>
-                        <select id="add-proj-paid" class="symbol-select">
-                            <option value="0">0%</option>
-                            <option value="50" selected>50%</option>
-                            <option value="100">100%</option>
                         </select>
                     </div>
                 </div>
@@ -1877,9 +1885,14 @@ body:not([data-theme="dark"]) .header-new-badge {
                 <option value="custom">Свои дни</option>
             </select>
             <input type="number" id="date-modal-custom" placeholder="Свои дни" oninput="applyDateModalPreset()">
-            <input type="time" id="date-modal-time" class="deadline-time" step="300" aria-label="Время срока" oninput="syncModalPresetTime()">
         </div>
-        <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveDate()">Сохранить</button>
+        <div class="date-modal-footer">
+            <button type="button" class="deadline-clear-btn" id="date-modal-clear" onclick="clearDateModalDeadline()">
+                <svg><use href="#icon-calendar-off"/></svg>
+                <span>Без дедлайна</span>
+            </button>
+            <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveDate()">Сохранить</button>
+        </div>
     </div>
 </div>
 
@@ -3712,7 +3725,33 @@ function formatDateDisplay(str) {
 
 function formatDeadlineDisplay(str) {
     if (!str) return '<span class="deadline-infinity">∞ Нет срока</span>';
-    return formatDateDisplay(str);
+    const dateObj = new Date(str.replace(' ', 'T'));
+    if (isNaN(dateObj.getTime())) return '—';
+    const delta = formatDeadlineDelta(dateObj);
+    const dateText = formatDateDisplay(str);
+    if (!delta) return dateText;
+    const overdue = dateObj.getTime() < Date.now();
+    return `<div class="deadline-display"><span class="date-text">${dateText}</span><span class="deadline-delta ${overdue ? 'overdue' : ''}">${delta}</span></div>`;
+}
+
+function formatDeadlineDelta(dateObj) {
+    if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) return '';
+    const now = new Date();
+    let diffMs = dateObj.getTime() - now.getTime();
+    const overdue = diffMs < 0;
+    diffMs = Math.abs(diffMs);
+
+    const days = Math.floor(diffMs / (24 * 60 * 60 * 1000));
+    const hours = Math.floor((diffMs % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+
+    if (!days && !hours) return overdue ? 'просрочено' : 'сегодня';
+
+    const parts = [];
+    if (days) parts.push(`${days} д`);
+    if (hours) parts.push(`${hours} ч`);
+
+    const prefix = overdue ? 'назад' : 'через';
+    return `${prefix} ${parts.join(' ')}`.trim();
 }
 
 function formatDateWithTime(dateObj, timeStr) {
@@ -4795,7 +4834,6 @@ function getPresetBaseDate() {
 function applyDateModalPreset() {
     const select = document.getElementById('date-modal-preset');
     const customInput = document.getElementById('date-modal-custom');
-    const timeInput = document.getElementById('date-modal-time');
     if (!select) return;
 
     if (document.activeElement === customInput && select.value !== 'custom') {
@@ -4818,26 +4856,6 @@ function applyDateModalPreset() {
 
     if (datePicker) datePicker.setDate(nextDate, true);
     else document.getElementById('date-input-val').value = nextDate;
-
-    const presetTime = (timeInput?.value || '').trim();
-    if (presetTime) {
-        document.getElementById('date-has-time').checked = true;
-        toggleTimeInput();
-        if (timePicker) timePicker.setDate(presetTime, true, 'H:i');
-        else document.getElementById('time-input-val').value = presetTime;
-    }
-}
-
-function syncModalPresetTime() {
-    const timeInput = document.getElementById('date-modal-time');
-    if (!timeInput) return;
-    const val = timeInput.value;
-    if (!val) return;
-
-    document.getElementById('date-has-time').checked = true;
-    toggleTimeInput();
-    if (timePicker) timePicker.setDate(val, true, 'H:i');
-    else document.getElementById('time-input-val').value = val;
 }
 
 function openDate(type, idx, field){
@@ -4882,10 +4900,8 @@ function openDateBase(val) {
 
     const modalPreset = document.getElementById('date-modal-preset');
     const modalCustom = document.getElementById('date-modal-custom');
-    const modalPresetTime = document.getElementById('date-modal-time');
     if (modalPreset) modalPreset.value = '';
     if (modalCustom) modalCustom.value = '';
-    if (modalPresetTime) modalPresetTime.value = hasTime ? timeVal : '';
 
     if (datePicker) datePicker.setDate(dateVal, true);
     else document.getElementById('date-input-val').value = dateVal;
@@ -4894,6 +4910,12 @@ function openDateBase(val) {
     else document.getElementById('time-input-val').value = timeVal;
 
     toggleTimeInput();
+
+    const clearBtn = document.getElementById('date-modal-clear');
+    const isDeadlineContext = (queue?.targetId && queue.targetId.includes('dl')) || queue?.field === 'dl';
+    if (clearBtn) {
+        clearBtn.style.display = isDeadlineContext ? 'inline-flex' : 'none';
+    }
     document.getElementById('dateModal').style.display = 'flex';
 }
 function toggleTimeInput(){
@@ -4909,12 +4931,39 @@ function toggleTimeInput(){
     if (timePicker) {
         timePicker.set('clickOpens', chk.checked);
     }
+}
+function clearDateModalDeadline() {
+    const dateInput = document.getElementById('date-input-val');
+    const timeInput = document.getElementById('time-input-val');
+    const isDeadlineContext = (queue?.targetId && queue.targetId.includes('dl')) || queue?.field === 'dl';
+    if (!isDeadlineContext) return;
 
-    const modalPresetTime = document.getElementById('date-modal-time');
-    if (modalPresetTime) {
-        modalPresetTime.disabled = !chk.checked;
-        modalPresetTime.style.opacity = chk.checked ? '1' : '0.4';
-        if (!chk.checked) modalPresetTime.value = '';
+    if (datePicker) datePicker.clear();
+    else if (dateInput) dateInput.value = '';
+    if (timePicker) timePicker.clear();
+    if (timeInput) timeInput.value = '';
+
+    const timeToggle = document.getElementById('date-has-time');
+    if (timeToggle) {
+        timeToggle.checked = false;
+        toggleTimeInput();
+    }
+
+    if (queue?.targetId) {
+        const displayId = queue.targetId.replace('-val', '-display');
+        const displayNode = document.getElementById(displayId)?.querySelector('.date-text-display');
+        document.getElementById(queue.targetId).value = '';
+        if (displayNode) displayNode.innerHTML = formatDeadlineDisplay('');
+        if (queue.targetId === 'add-proj-dl-val') deadlineUnset = true;
+        closeDateModal();
+        return;
+    }
+
+    if (queue?.type && typeof queue.idx === 'number') {
+        DATA[queue.type][queue.idx].dl = '';
+        closeDateModal();
+        save();
+        upd();
     }
 }
 function closeDateModal(){ document.getElementById('dateModal').style.display = 'none'; }
