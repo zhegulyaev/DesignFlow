@@ -73,7 +73,7 @@
   *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;}
   
   body{background:var(--bg);color:var(--text);padding-bottom:100px;min-height:100vh;display:flex;flex-direction:column;}
-  .c{max-width:1600px;margin:0 auto;padding:20px;width:100%;} 
+  .c{max-width:none;margin:0 auto;padding:20px 16px;width:100%;}
   
   /* Header */
   h1{font-size:42px;font-weight:800;margin:0;letter-spacing: -1px;}
@@ -309,8 +309,22 @@
   .delegation-pill { background: rgba(88,166,255,0.14); color: var(--accent); border: 1px solid rgba(88,166,255,0.35); padding: 4px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: 0.2px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.05); }
   .delegation-pill svg { width: 12px; height: 12px; }
 
-  .action-move-select { background: var(--pill-bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; font-size: 12px; font-weight: 700; cursor: pointer; min-width: 150px; }
-  .action-move-select:hover { border-color: var(--accent); }
+  /* Project table sizing */
+  #t-active th:nth-child(2), #t-active td:nth-child(2),
+  #t-delegation th:nth-child(2), #t-delegation td:nth-child(2),
+  #t-waiting th:nth-child(2), #t-waiting td:nth-child(2),
+  #t-paused th:nth-child(2), #t-paused td:nth-child(2),
+  #t-potential th:nth-child(2), #t-potential td:nth-child(2),
+  #t-archive th:nth-child(2), #t-archive td:nth-child(2),
+  #t-all th:nth-child(2), #t-all td:nth-child(2) { min-width: 170px; }
+
+  #t-active th:nth-child(3), #t-active td:nth-child(3),
+  #t-delegation th:nth-child(3), #t-delegation td:nth-child(3),
+  #t-waiting th:nth-child(3), #t-waiting td:nth-child(3),
+  #t-paused th:nth-child(3), #t-paused td:nth-child(3),
+  #t-potential th:nth-child(3), #t-potential td:nth-child(3),
+  #t-archive th:nth-child(3), #t-archive td:nth-child(3),
+  #t-all th:nth-child(3), #t-all td:nth-child(3) { min-width: 220px; }
 
   .row-pulse { box-shadow: inset 0 0 0 2px var(--accent); }
   
@@ -4003,15 +4017,6 @@ function renderActive(){
         if (isTableEnabled('waiting')) actionButtons.push(`<div class="wait-active-btn action-btn-base" onclick="mv(${i},'active','waiting')" title="В ожидании"><svg class="btn-icon"><use href="#icon-waiting"/></svg></div>`);
         actionButtons.push(`<div class="action-btn-base" onclick="openProjectEditor('active',${i})" title="Редактировать проект"><svg class="btn-icon"><use href="#icon-pen"/></svg></div>`);
         actionButtons.push(`<div class="action-btn-base" onclick="openTaskJournal('active',${i})" title="Журнал задач"><svg class="btn-icon"><use href="#icon-checklist"/></svg></div>`);
-        const moveSelect = `<select class="action-move-select" onchange="moveFromActive(${i}, this.value, this)">
-                <option value="">Перенести...</option>
-                <option value="delegation">В делегирование</option>
-                <option value="clear-delegation" ${item.delegated ? '' : 'disabled'}>Убрать делегирование</option>
-                ${isTableEnabled('waiting') ? '<option value="waiting">В ожидание</option>' : ''}
-                ${isTableEnabled('paused') ? '<option value="paused">На паузу</option>' : ''}
-                <option value="potential">В потенциал</option>
-            </select>`;
-
         tr.innerHTML = `
             <td class="select-col">
                 <div class="row-index">${i + 1}</div>
@@ -4070,7 +4075,6 @@ function renderActive(){
             
             <td><div class="action-btns">
                 ${actionButtons.join('')}
-                ${moveSelect}
                 <button class="del-btn" onclick="askDel('active',${i})" title="Удалить" aria-label="Удалить в корзину">
                     <svg><use href="#icon-trash"/></svg>
                 </button>
@@ -4137,29 +4141,6 @@ function renderActive(){
     }
 }
 
-function moveFromActive(idx, target, el){
-    if (!target) return;
-    const item = DATA.active[idx];
-    if (!item) { if (el) el.value = ''; return; }
-
-    if (target === 'delegation') {
-        item.delegated = true;
-        save(); upd(); switchTab('delegation');
-    } else if (target === 'clear-delegation') {
-        item.delegated = false;
-        save(); upd();
-    } else {
-        item.delegated = false;
-        mv(idx,'active',target);
-    }
-
-    if (el) el.value = '';
-}
-
-function moveFromDelegation(idx, target, el){
-    moveFromActive(idx, target, el);
-}
-
 function openDelegationTab(idx){
     switchTab('delegation');
     setTimeout(() => {
@@ -4185,14 +4166,6 @@ function renderDelegation(){
         tr.dataset.index = idx;
         total += toNumeric(item.p);
         const linkIcon = renderLinkControls(item, idx, 'active');
-        const moveSelect = `<select class="action-move-select" onchange="moveFromDelegation(${idx}, this.value, this)">
-                <option value="">Действие...</option>
-                <option value="clear-delegation">Убрать делегирование</option>
-                ${isTableEnabled('waiting') ? '<option value="waiting">В ожидание</option>' : ''}
-                ${isTableEnabled('paused') ? '<option value="paused">На паузу</option>' : ''}
-                <option value="potential">В потенциал</option>
-                <option value="archive">В архив</option>
-            </select>`;
         tr.innerHTML = `
             <td class="select-col"><div class="row-index">${order + 1}</div></td>
             <td><div class="client-wrap">
@@ -4210,7 +4183,6 @@ function renderDelegation(){
             <td style="text-align:right;">${formatCurrency(item.p || 0)}</td>
             <td><div class="action-btns" style="justify-content:flex-end; gap: 8px;">
                 <div class="done-btn action-btn-base" onclick="mv(${idx},'active','archive')" title="Выполнено"><svg class="btn-icon"><use href="#icon-check"/></svg></div>
-                ${moveSelect}
                 <div class="action-btn-base" onclick="openProjectEditor('active',${idx})" title="Редактировать проект"><svg class="btn-icon"><use href="#icon-pen"/></svg></div>
                 <div class="action-btn-base" onclick="openTaskJournal('active',${idx})" title="Журнал задач"><svg class="btn-icon"><use href="#icon-checklist"/></svg></div>
             </div></td>
