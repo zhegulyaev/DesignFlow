@@ -1100,17 +1100,17 @@ td.date-cell + td.date-cell {
   .task-journal-header h3 { margin: 0; font-size: 16px; }
   .task-row { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--pill-bg); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
   .task-row input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-color: var(--accent); }
-  .task-row .task-text { width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; background: var(--card); color: var(--text); font-weight: 600; }
+  .task-row .task-text { width: 100%; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; background: var(--card); color: var(--text); font-weight: 600; min-height: 44px; resize: vertical; overflow: hidden; line-height: 1.35; }
   .task-row .task-text:focus { outline: none; border-color: var(--accent); }
   .task-row .task-delete { border: 1px solid transparent; background: transparent; color: var(--muted); padding: 6px 10px; border-radius: 8px; cursor: pointer; font-weight: 700; }
   .task-row .task-delete:hover { border-color: var(--del-hover-border); color: var(--red); background: var(--del-hover-bg); }
   .task-empty { text-align: center; color: var(--muted); font-size: 14px; padding: 12px; border: 1px dashed var(--border); border-radius: 12px; background: var(--pill-bg); }
   .journal-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
   .journal-actions .inline-note { color: var(--muted); font-size: 13px; }
-  .journal-add { display: grid; grid-template-columns: 1fr auto; gap: 8px; width: 100%; margin-top: 6px; }
-  .journal-add input { width: 100%; border-radius: 10px; border: 1px solid var(--border); padding: 8px 11px; background: var(--card); color: var(--text); font-weight: 700; }
-  .journal-add input:focus { outline: none; border-color: var(--accent); }
-  .journal-add button { min-width: 120px; justify-content: center; }
+  .journal-add { display: grid; grid-template-columns: 1fr auto; gap: 8px; width: 100%; margin-top: 10px; }
+  .journal-add textarea { width: 100%; border-radius: 10px; border: 1px solid var(--border); padding: 10px 12px; background: var(--card); color: var(--text); font-weight: 700; min-height: 44px; resize: vertical; overflow: hidden; line-height: 1.35; }
+  .journal-add textarea:focus { outline: none; border-color: var(--accent); }
+  .journal-add button { min-width: 120px; justify-content: center; height: 44px; display: inline-flex; align-items: center; }
   .task-row { position: relative; transition: transform .15s ease, box-shadow .15s ease; }
   .task-row.is-completed { background: linear-gradient(90deg, rgba(46,160,67,0.12), rgba(46,160,67,0.04)); box-shadow: 0 6px 14px rgba(46,160,67,0.15); transform: translateY(-2px); }
   .task-body { display: flex; flex-direction: column; gap: 6px; width: 100%; }
@@ -1122,9 +1122,10 @@ td.date-cell + td.date-cell {
   .task-done-at { color: var(--muted); font-size: 12px; font-weight: 700; }
   .task-delete.trash { color: var(--muted); padding: 6px 10px; border: 1px solid transparent; background: transparent; }
   .task-delete.trash:hover { border-color: var(--del-hover-border); color: var(--red); background: var(--del-hover-bg); }
-  .journal-summary { margin-top: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--pill-bg); display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; align-items: center; }
-  .journal-summary .label { color: var(--muted); font-weight: 700; font-size: 12px; letter-spacing: -0.2px; }
-  .journal-summary .value { font-weight: 800; font-size: 16px; }
+  .journal-summary { margin-top: 14px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 12px; background: linear-gradient(135deg, rgba(88,166,255,0.08), rgba(163,113,247,0.08)); display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; align-items: stretch; box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
+  .journal-summary .label { color: var(--muted); font-weight: 800; font-size: 12px; letter-spacing: 0.1px; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
+  .journal-summary .label::before { content: '◆'; font-size: 9px; color: var(--accent); }
+  .journal-summary .value { font-weight: 900; font-size: 18px; color: var(--text); }
   .journal-actions { margin-top: 10px; }
   .task-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 8px; background: var(--pill-bg); color: var(--muted); font-weight: 700; font-size: 12px; border: 1px solid var(--border); }
   .task-badge .task-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
@@ -1137,7 +1138,19 @@ td.date-cell + td.date-cell {
   .deadline-disabled .deadline-presets input { opacity: 0.5; pointer-events: none; }
 
   .project-editor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
-  .project-editor-note { color: var(--muted); font-size: 13px; margin-top: -4px; margin-bottom: 10px; }
+  .project-editor-note { color: var(--muted); font-size: 13px; margin-top: -4px; margin-bottom: 14px; line-height: 1.45; }
+
+  .journal-trash { margin-top: 10px; border: 1px dashed var(--border); border-radius: 12px; padding: 10px 12px; background: var(--pill-bg); display: none; flex-direction: column; gap: 10px; }
+  .journal-trash.visible { display: flex; }
+  .journal-trash-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .journal-trash-title { font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
+  .journal-trash-title .count { background: var(--button-bg); border: 1px solid var(--border); padding: 2px 8px; border-radius: 8px; font-size: 12px; font-weight: 800; color: var(--muted); }
+  .journal-trash-list { display: flex; flex-direction: column; gap: 8px; }
+  .journal-trash-item { display: grid; grid-template-columns: 1fr auto; gap: 10px; padding: 10px 12px; border-radius: 10px; background: var(--card); border: 1px solid var(--border); align-items: center; }
+  .journal-trash-text { color: var(--text); font-weight: 700; line-height: 1.35; }
+  .journal-trash-meta { color: var(--muted); font-size: 12px; font-weight: 700; margin-top: 4px; }
+  .journal-trash-actions { display: flex; align-items: center; gap: 8px; }
+  .journal-trash button { padding: 8px 12px; border-radius: 8px; font-weight: 800; }
 
 
 
@@ -2030,10 +2043,19 @@ body:not([data-theme="dark"]) .header-new-badge {
         </div>
         <div class="project-editor-note">Отмечайте готовые пункты, редактируйте текст или удаляйте лишнее.</div>
         <div class="journal-add">
-            <input type="text" id="journal-new-task" placeholder="Добавить пункт списка..." onkeydown="if(event.key==='Enter'){event.preventDefault(); addJournalTask();}">
+            <textarea id="journal-new-task" rows="1" placeholder="Добавить пункт списка..." onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault(); addJournalTask();}"></textarea>
             <button class="save-stg" type="button" onclick="addJournalTask()">+ Добавить</button>
         </div>
         <div class="task-journal" id="journal-list"></div>
+        <div class="journal-trash" id="journal-trash">
+            <div class="journal-trash-header">
+                <div class="journal-trash-title">Корзина задач <span class="count" id="journal-trash-count">0</span></div>
+                <div class="journal-trash-actions">
+                    <button class="template-secondary-btn" type="button" onclick="restoreAllJournalTasks()">Восстановить все</button>
+                </div>
+            </div>
+            <div class="journal-trash-list" id="journal-trash-list"></div>
+        </div>
         <div class="journal-summary" id="journal-summary" style="display:none">
             <div>
                 <div class="label">Сумма задач</div>
@@ -3550,6 +3572,7 @@ let newProjectLink = '';
 let datePicker = null;
 let timePicker = null;
 let journalContext = null;
+let journalTrash = [];
 let projectEditorContext = null;
 let editorPreviousDeadline = '';
 
@@ -3940,6 +3963,11 @@ function init(){
         });
         toggleProjectNameClear();
     }
+    const journalInput = document.getElementById('journal-new-task');
+    if (journalInput) {
+        journalInput.addEventListener('input', () => autoResizeTextarea(journalInput));
+        autoResizeTextarea(journalInput);
+    }
     cleanupTrash();
     applyBlockVisibility();
     updateSettingsPreviewStates();
@@ -3986,9 +4014,9 @@ function formatDateTimeDisplay(str) {
     if (!str) return '';
     const dateObj = new Date(str);
     if (isNaN(dateObj.getTime())) return '';
-    const date = dateObj.toLocaleDateString('ru', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const date = dateObj.toLocaleDateString('ru', { day: 'numeric', month: 'short' }).replace('.', '');
     const time = dateObj.toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' });
-    return `${date} · ${time}`;
+    return `${date}, ${time}`;
 }
 
 function formatDateDisplay(str, noDeadline = false) {
@@ -4003,6 +4031,12 @@ function formatDateDisplay(str, noDeadline = false) {
         return `${d} <span class="time-text">${t}</span>`;
     }
     return d;
+}
+
+function autoResizeTextarea(el, maxHeight = 220) {
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, maxHeight) + 'px';
 }
 
 function formatDateWithTime(dateObj, timeStr) {
@@ -5005,8 +5039,10 @@ function openTaskJournal(type, idx) {
     const title = document.getElementById('journal-project-name');
     if (title) title.textContent = item.n || 'Без названия';
     const input = document.getElementById('journal-new-task');
-    if (input) input.value = '';
+    if (input) { input.value = ''; autoResizeTextarea(input); }
+    journalTrash = Array.isArray(item.taskTrash) ? [...item.taskTrash] : [];
     renderJournalTasks(item.tasks || []);
+    renderJournalTrash();
     const modal = document.getElementById('taskJournalModal');
     if (modal) modal.style.display = 'flex';
 }
@@ -5034,7 +5070,7 @@ function renderJournalTasks(tasks = []) {
         row.innerHTML = `
             <input type="checkbox" ${task.done ? 'checked' : ''} onchange="handleJournalToggle(${idx}, this)">
             <div class="task-body">
-                <input type="text" class="task-text" value="${escapeHtml(task.text || '')}" oninput="persistJournalTasks()" onblur="persistJournalTasks()">
+                <textarea class="task-text" rows="1" oninput="handleTaskTextInput(this)" onblur="persistJournalTasks()">${escapeHtml(task.text || '')}</textarea>
                 <div class="task-meta-row">
                     <div class="task-amount-wrap">
                         <span>Сумма</span>
@@ -5046,11 +5082,40 @@ function renderJournalTasks(tasks = []) {
             <button type="button" class="task-delete trash" onclick="deleteJournalRow(${idx})" title="Удалить в корзину"><svg class="btn-icon"><use href="#icon-trash"/></svg></button>
         `;
         list.appendChild(row);
+        const textarea = row.querySelector('.task-text');
+        if (textarea) autoResizeTextarea(textarea);
     });
 
     if (note) note.textContent = `${tasks.filter(t => t.done).length}/${tasks.length} выполнено`;
     updateJournalProgress(tasks);
     updateJournalSummary(tasks);
+}
+
+function renderJournalTrash() {
+    const wrap = document.getElementById('journal-trash');
+    const list = document.getElementById('journal-trash-list');
+    const countEl = document.getElementById('journal-trash-count');
+    if (!wrap || !list || !countEl) return;
+    list.innerHTML = '';
+    countEl.textContent = journalTrash.length;
+    wrap.classList.toggle('visible', !!journalTrash.length);
+    if (!journalTrash.length) return;
+
+    journalTrash.forEach((task, idx) => {
+        const row = document.createElement('div');
+        row.className = 'journal-trash-item';
+        const timeText = task.deletedAt ? formatDateTimeDisplay(task.deletedAt) : '';
+        row.innerHTML = `
+            <div>
+                <div class="journal-trash-text">${escapeHtml(task.text || 'Без названия')}</div>
+                <div class="journal-trash-meta">${task.amount ? `Сумма: ${formatCurrency(task.amount)}` : 'Сумма не указана'}${timeText ? ` · Удалено: ${timeText}` : ''}</div>
+            </div>
+            <div class="journal-trash-actions">
+                <button class="template-secondary-btn" type="button" onclick="restoreJournalTask(${idx})">Восстановить</button>
+            </div>
+        `;
+        list.appendChild(row);
+    });
 }
 
 function collectJournalTasks() {
@@ -5119,6 +5184,11 @@ function handleJournalToggle(idx, checkbox) {
     persistJournalTasks();
 }
 
+function handleTaskTextInput(el) {
+    autoResizeTextarea(el);
+    persistJournalTasks();
+}
+
 function handleJournalAmountChange() {
     persistJournalTasks();
 }
@@ -5132,6 +5202,7 @@ function persistJournalTasks() {
     const item = DATA[type]?.[idx];
     if (!item) return;
     item.tasks = tasks;
+    item.taskTrash = journalTrash;
     save(); upd();
 }
 
@@ -5142,14 +5213,39 @@ function addJournalTask() {
     const tasks = collectJournalTasks();
     tasks.push({ text: val || `Пункт ${tasks.length + 1}`, done: false, amount: 0, doneAt: '' });
     input.value = '';
+    autoResizeTextarea(input);
     renderJournalTasks(tasks);
     persistJournalTasks();
 }
 
 function deleteJournalRow(idx) {
     const tasks = collectJournalTasks();
-    tasks.splice(idx, 1);
+    const removed = tasks.splice(idx, 1)[0];
+    if (removed) {
+        journalTrash.unshift({ ...removed, deletedAt: new Date().toISOString() });
+        renderJournalTrash();
+    }
     renderJournalTasks(tasks);
+    persistJournalTasks();
+}
+
+function restoreJournalTask(idx) {
+    const recovered = journalTrash.splice(idx, 1)[0];
+    if (!recovered) return;
+    const tasks = collectJournalTasks();
+    tasks.push({ ...recovered, deletedAt: undefined });
+    renderJournalTasks(tasks);
+    renderJournalTrash();
+    persistJournalTasks();
+}
+
+function restoreAllJournalTasks() {
+    if (!journalTrash.length) return;
+    const tasks = collectJournalTasks();
+    tasks.push(...journalTrash.map(t => ({ ...t, deletedAt: undefined })));
+    journalTrash = [];
+    renderJournalTasks(tasks);
+    renderJournalTrash();
     persistJournalTasks();
 }
 
