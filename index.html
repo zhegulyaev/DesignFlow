@@ -1052,7 +1052,7 @@ body.light .pace-block.critical {
   .contractor-layout { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
   .contractor-group { align-self: stretch; min-width: 0; }
   .tax-group { flex: 0 0 130px; }
-  .contractor-mode-select { width: 100%; padding: 12px 14px; border-radius: 12px; font-weight: 800; min-height: 46px; min-width: 0; color: var(--text); border: 1px solid var(--border); background: var(--input-bg); box-shadow: inset 0 1px 0 rgba(255,255,255,0.03), 0 8px 20px rgba(0,0,0,0.12); }
+  .contractor-mode-select { width: 100%; padding: 12px 14px; border-radius: 12px; font-weight: 800; min-height: 46px; min-width: 0; color: var(--text); border: 1px solid var(--border); background: var(--input-bg); box-shadow: none; }
   .contractor-amount { display: flex; flex-direction: column; gap: 8px; background: var(--pill-bg); border: 1px solid transparent; padding: 14px; border-radius: 12px; width: 100%; box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
   .contractor-amount-row { margin-top: 2px; }
   .input-with-suffix { display: grid; grid-template-columns: 1fr auto; align-items: stretch; gap: 0; width: 100%; }
@@ -1196,7 +1196,7 @@ body:not([data-theme="dark"]) .header-new-badge {
           
           
         <button onclick="openSettings()" id="openSettingsBtn">
-            <svg class="btn-icon"><use href="#icon-settings"/></svg>
+            <svg class="btn-icon lg"><use href="#icon-settings"/></svg>
             <span class="btn-label">Настройки</span>
         </button>
         <select id="monthSelect" class="month-select" onchange="changeMonth(this.value)"></select>
