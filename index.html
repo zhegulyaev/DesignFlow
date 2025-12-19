@@ -104,9 +104,14 @@
 }
 
   /* Warning Block */
-  .top-panel{background:var(--card);padding:20px;border-radius:12px;border:1px solid var(--border);margin-bottom:30px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
-  .backup-info{color:var(--muted);font-size:13px;max-width:650px;line-height:1.5;}
+  .top-panel{background:var(--card);padding:16px 18px;border-radius:14px;border:1px solid var(--border);margin-bottom:30px;display:flex;align-items:center;flex-wrap:wrap;gap:16px;box-shadow:0 10px 26px rgba(0,0,0,0.18);}
+  .backup-alert{display:flex;align-items:center;gap:12px;flex:1;min-width:280px;}
+  .backup-icon{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:rgba(248,81,73,0.12);border:1px solid rgba(248,81,73,0.45);color:#f85149;box-shadow:0 8px 20px rgba(0,0,0,0.08);}
+  .backup-icon svg{width:18px;height:18px;}
+  .backup-info{color:var(--muted);font-size:13px;line-height:1.5;display:flex;flex-direction:column;gap:4px;}
   .backup-info b{color:#f85149;}
+  .backup-info .backup-title{font-weight:800;letter-spacing:-0.15px;color:var(--text);}
+  .backup-info .backup-sub{max-width:640px;}
   
   .btns{display:flex;gap:15px;flex-wrap:wrap; align-items: center;} 
   
@@ -1044,7 +1049,8 @@ body.light .pace-block.critical {
   .is-hidden { display: none !important; }
   .expense-cell input:disabled { background: var(--input-bg); color: var(--muted); cursor: not-allowed; }
   .deadline-links-row { margin-top: 12px; display: flex; align-items: center; justify-content: flex-start; }
-  .link-inline-btn { padding: 6px 0 0; }
+  .link-inline-btn { padding: 10px 14px; font-weight: 800; gap: 10px; box-shadow: 0 6px 16px rgba(59,130,246,0.08); }
+  .link-inline-btn span { color: var(--text); font-size: 13px; }
 
 
 .date-cell:not(:last-child) .date-input-wrap {
@@ -1178,10 +1184,20 @@ body:not([data-theme="dark"]) .header-new-badge {
 
 
 <div class="top-panel">
-  <div class="backup-info">
-    ⚠ <b>Важно:</b> Данные хранятся только в вашем браузере. Обязательно скачивайте резервную копию перед очисткой кэша или переустановкой системы.
+  <div class="backup-alert">
+      <div class="backup-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+      </div>
+      <div class="backup-info">
+          <div class="backup-title"><b>Важно:</b> Данные хранятся только в вашем браузере.</div>
+          <div class="backup-sub">Обязательно скачивайте резервную копию перед очисткой кэша или переустановкой системы.</div>
+      </div>
   </div>
-  
+
   <div class="btns">
     <button class="btn-outline" onclick="exp()" title="Сохранить JSON">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1200,7 +1216,7 @@ body:not([data-theme="dark"]) .header-new-badge {
       </svg>
       <span>Загрузить базу</span>
     </button>
-    
+
     <input type="file" id="importFile" style="display:none" onchange="imp(this.files[0])">
   </div>
 </div>
@@ -1735,7 +1751,7 @@ body:not([data-theme="dark"]) .header-new-badge {
                                <input type="hidden" id="add-proj-dl-val" value="">
                                 <button type="button" class="deadline-clear-btn" onclick="clearNewProjectDeadline()">
                                     <svg><use href="#icon-calendar-off"/></svg>
-                                    <span>Дедлайн не установлен</span>
+                                    <span>Сбросить дедлайн</span>
                                 </button>
                             </div>
                         </div>
@@ -1759,9 +1775,9 @@ body:not([data-theme="dark"]) .header-new-badge {
                         </div>
                     </div>
                     <div class="deadline-links-row">
-                        <button type="button" class="template-create-inline link-inline-btn" id="new-project-link-btn" onclick="openLink('new')">
-                            <svg class="btn-icon"><use href="#icon-link"/></svg>
-                            <span>Добавить ссылку</span>
+                        <button type="button" class="link-btn link-inline-btn" id="new-project-link-btn" onclick="openLink('new')">
+                            <svg><use href="#icon-link"/></svg>
+                            <span>Ссылка на чат/материалы</span>
                         </button>
                     </div>
                     <div class="link-preview" id="new-project-link-preview" style="display:none">
@@ -3225,6 +3241,7 @@ let SORT = { active: 'dl', archive: 'date', potential: 'p', waiting: 'p', paused
 let queue = { type: null, idx: null, field: null, targetId: null };
 let previousDeadlineValue = '';
 let deadlineUnset = false;
+let editContext = null;
 let toastTimeout = null;
 let templateHelperTimeout = null;
 let lastPermanentDeletion = null;
@@ -3838,8 +3855,9 @@ function renderActive(){
         const actionButtons = [
             `<div class="done-btn action-btn-base" onclick="mv(${i},'active','archive')" title="Выполнено"><svg class="btn-icon"><use href="#icon-check"/></svg></div>`
         ];
+        actionButtons.push(`<div class="edit-active-btn action-btn-base" onclick="startProjectEdit('active',${i})" title="Редактировать"><svg class="btn-icon"><use href="#icon-pen"/></svg></div>`);
         if (isTableEnabled('waiting')) actionButtons.push(`<div class="wait-active-btn action-btn-base" onclick="mv(${i},'active','waiting')" title="В ожидании"><svg class="btn-icon"><use href="#icon-waiting"/></svg></div>`);
-        if (isTableEnabled('paused')) actionButtons.push(`<div class="pause-active-btn action-btn-base" onclick="mv(${i},'active','paused')" title="Редактировать/пауза"><svg class="btn-icon"><use href="#icon-pen"/></svg></div>`);
+        if (isTableEnabled('paused')) actionButtons.push(`<div class="pause-active-btn action-btn-base" onclick="mv(${i},'active','paused')" title="Пауза"><svg class="btn-icon"><use href="#icon-paused"/></svg></div>`);
 
         tr.innerHTML = `
             <td class="select-col">
@@ -3998,6 +4016,7 @@ function renderSimple(type){
             ${hasDeadline ? `<td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('${type}',${i},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.dl)} (${rem.txt})</span></div></td>` : ''}
             <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('${type}',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td><div class="action-btns" style="justify-content:flex-end">
+                <div class="action-btn-base" onclick="startProjectEdit('${type}',${i})" title="Редактировать"><svg class="btn-icon"><use href="#icon-pen"/></svg></div>
                 <div class="action-btn-base" onclick="mv(${i},'${type}','active')" title="В работу"><svg class="btn-icon"><use href="#icon-arrow-right"/></svg></div>
                 <button class="del-btn" onclick="askDel('${type}',${i})" aria-label="Удалить в корзину">
                     <svg><use href="#icon-trash"/></svg>
@@ -4050,6 +4069,7 @@ function renderPotential(){
             </td>
             <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('potential',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td><div class="action-btns" style="justify-content:flex-end">
+                <div class="action-btn-base" onclick="startProjectEdit('potential',${i})" title="Редактировать"><svg class="btn-icon"><use href="#icon-pen"/></svg></div>
                 <div class="done-btn action-btn-base" onclick="mv(${i},'potential','active')" title="В работу"><svg class="btn-icon"><use href="#icon-arrow-right"/></svg><span class="btn-label">В работу</span></div>
                 <button class="del-btn" onclick="askDel('potential',${i})" aria-label="Удалить в корзину">
                     <svg><use href="#icon-trash"/></svg>
@@ -4427,11 +4447,12 @@ function mv(idx, from, to){
     DATA[from].splice(idx, 1);
     if(to === 'active') { item.start = item.start || today; item.dl = item.dl || today; item.paid = item.paid || 50; delete item.date; }
     if(to === 'archive') { item.date = today; item.paid = 100; delete item.start; delete item.dl; }
-    if(to === 'potential' || to === 'waiting' || to === 'paused') { delete item.date; delete item.start; delete item.dl; item.paid = 0; }
-    
+    if(to === 'potential') { delete item.date; delete item.start; delete item.dl; item.paid = 0; }
+    if(to === 'waiting' || to === 'paused') { delete item.date; item.paid = 0; }
+
     DATA[to].unshift(item);
     sortData('active', 'dl', 'date', true);
-    save(); 
+    save();
     setTimeout(() => { switchTab(to); }, 10);
 }
 
@@ -4497,7 +4518,8 @@ function updateNewProjectLinkButton() {
     if (!btn) return;
     const hasLink = !!newProjectLink;
     btn.classList.toggle('link-active', hasLink);
-    btn.textContent = hasLink ? '🔗 Ссылка добавлена' : '🔗 Ссылка на чат/материалы';
+    const label = btn.querySelector('span');
+    if (label) label.textContent = hasLink ? 'Ссылка добавлена' : 'Ссылка на чат/материалы';
     if (preview && text) {
         preview.style.display = hasLink ? 'flex' : 'none';
         text.textContent = hasLink ? newProjectLink : '';
@@ -4524,25 +4546,59 @@ function restoreFromTrash(idx){
     save(); switchTab('active');
 }
 
-function openAddModal(){
-    ['name','client','price','contractor'].forEach(id => document.getElementById(`add-proj-${id}`).value = '');
-    toggleProjectNameClear();
-    document.getElementById('add-proj-tax').value = '0';
-    document.getElementById('add-proj-contractor-mode').value = 'none';
-    handleNewContractorModeChange('none');
-    document.getElementById('add-proj-type').value = 'active';
-    document.getElementById('add-proj-start-val').value = today;
-    document.getElementById('add-proj-dl-val').value = today;
-    previousDeadlineValue = today;
-    deadlineUnset = false;
-    document.getElementById('add-proj-dl-days').value = '';
-    document.getElementById('add-proj-dl-custom').value = '';
+function openAddModal(type = null, idx = null){
+    const isEdit = typeof type === 'string' && typeof idx === 'number';
+    editContext = isEdit ? { type, idx } : null;
+    const titleEl = document.querySelector('#addProjectModal h2');
+    const saveBtn = document.querySelector('.add-modal-actions .save-stg');
+
+    if (titleEl) titleEl.textContent = isEdit ? 'Редактировать проект' : 'Новый проект';
+    if (saveBtn) saveBtn.textContent = isEdit ? 'Сохранить изменения' : 'Создать новый проект';
+
     const presetTimeInput = document.getElementById('add-proj-dl-time');
-    if (presetTimeInput) presetTimeInput.value = '';
-    document.getElementById('add-proj-start-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
-    document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
-    handleStatusChange('active');
-    newProjectLink = '';
+
+    if (isEdit) {
+        const item = DATA[type][idx];
+        document.getElementById('add-proj-name').value = item.n || '';
+        document.getElementById('add-proj-client').value = item.c || '';
+        document.getElementById('add-proj-price').value = formatPlainNumber(item.p || 0);
+        const mode = item.contractorMode || 'none';
+        document.getElementById('add-proj-contractor-mode').value = mode;
+        handleNewContractorModeChange(mode);
+        document.getElementById('add-proj-contractor').value = formatPlainNumber(item.contractor || 0);
+        document.getElementById('add-proj-tax').value = String(item.taxPrc ?? 0);
+        document.getElementById('add-proj-type').value = type;
+        document.getElementById('add-proj-start-val').value = item.start || '';
+        document.getElementById('add-proj-dl-val').value = item.dl || '';
+        previousDeadlineValue = item.dl || '';
+        deadlineUnset = !item.dl;
+        document.getElementById('add-proj-start-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(item.start || today);
+        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = item.dl ? formatDateDisplay(item.dl) : 'Без дедлайна';
+        document.getElementById('add-proj-dl-days').value = '';
+        document.getElementById('add-proj-dl-custom').value = '';
+        if (presetTimeInput) presetTimeInput.value = item.dl && item.dl.includes('T') ? item.dl.slice(11, 16) : '';
+        newProjectLink = item.link || '';
+        toggleProjectNameClear();
+        handleStatusChange(type);
+    } else {
+        ['name','client','price','contractor'].forEach(id => document.getElementById(`add-proj-${id}`).value = '');
+        toggleProjectNameClear();
+        document.getElementById('add-proj-tax').value = '0';
+        document.getElementById('add-proj-contractor-mode').value = 'none';
+        handleNewContractorModeChange('none');
+        document.getElementById('add-proj-type').value = 'active';
+        document.getElementById('add-proj-start-val').value = today;
+        document.getElementById('add-proj-dl-val').value = today;
+        previousDeadlineValue = today;
+        deadlineUnset = false;
+        document.getElementById('add-proj-dl-days').value = '';
+        document.getElementById('add-proj-dl-custom').value = '';
+        if (presetTimeInput) presetTimeInput.value = '';
+        document.getElementById('add-proj-start-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
+        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
+        handleStatusChange('active');
+        newProjectLink = '';
+    }
     updateNewProjectLinkButton();
     document.getElementById('addProjectModal').style.display = 'flex';
 }
@@ -4558,12 +4614,16 @@ function saveNewProject(){
     const rawDeadline = document.getElementById('add-proj-dl-val').value;
     const dl = deadlineUnset ? '' : (rawDeadline || today);
 
+    const isEdit = !!editContext;
+    const base = isEdit ? { ...DATA[editContext.type][editContext.idx] } : {};
+
     const item = {
+        ...base,
         n: name, c: client, p: price, contractor: contr, contractorMode: contrMode, taxPrc: tax, link: newProjectLink,
-        start: type==='active'? start : undefined,
-        dl: type==='active' || type==='waiting' || type==='paused' ? dl || undefined : undefined,
+        start: type==='active'? start : base.start,
+        dl: type==='active' || type==='waiting' || type==='paused' ? dl || base.dl : undefined,
         paid: (type==='active'||type==='archive'? (type==='archive'?100:50) : 0),
-        date: type==='archive' ? today : undefined
+        date: type==='archive' ? today : base.date
     };
 
     if (type === 'potential') {
@@ -4571,9 +4631,20 @@ function saveNewProject(){
         delete item.dl;
     }
 
-    DATA[type].unshift(item);
+    if (isEdit) {
+        const fromType = editContext.type;
+        DATA[fromType].splice(editContext.idx, 1);
+        if (fromType === type) {
+            DATA[type].splice(editContext.idx, 0, item);
+        } else {
+            DATA[type].unshift(item);
+        }
+        editContext = null;
+    } else {
+        DATA[type].unshift(item);
+    }
     document.getElementById('addProjectModal').style.display = 'none';
-    showToast('Проект создан');
+    showToast(isEdit ? 'Проект обновлён' : 'Проект создан');
     sortData('active', 'dl', 'date', true);
     save(); switchTab(type);
 }
@@ -4788,6 +4859,10 @@ function saveLink(){
 
     DATA[queue.type][queue.idx].link = normalized;
     closeLinkModal(); save(); upd();
+}
+
+function startProjectEdit(type, idx) {
+    openAddModal(type, idx);
 }
 
 function openSettings(){
