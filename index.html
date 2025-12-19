@@ -257,6 +257,7 @@
   .paid-select, .tax-select { background: transparent; color: var(--text); border: 1px solid transparent; padding: 5px; border-radius: 6px; font-size: 13px; cursor: pointer; outline: none; transition: .2s; text-align: center;}
   .paid-select:hover, .tax-select:hover { background: var(--btn-hover); border-color: var(--border); }
   .paid-select option, .tax-select option { background: var(--card); }
+  .tax-helper { color: var(--muted); font-size: 12px; margin-top: 4px; text-align: center; }
 
   /* Actions */
   .client-wrap{display:flex;align-items:center;gap:8px; width: 100%;}
@@ -4001,8 +4002,9 @@ function renderActive(){
         const gross = toNumeric(item.p);
         totalP += gross; totalPr += item.pr || 0;
         const contractorAmount = calcContractorAmount(item);
+        const taxAmount = calcTax(item);
         totalContr += contractorAmount;
-        totalTax += calcTax(item);
+        totalTax += taxAmount;
 
         const rem = getTimeRemaining(item.dl, item.noDeadline);
         const tr = document.createElement('tr');
@@ -4050,12 +4052,15 @@ function renderActive(){
             
             <td class="mono"><div class="${rem.cls}">${rem.txt}</div></td>
             
-            <td><select class="tax-select" onchange="updVal('active',${i},'taxPrc',this.value)">
+            <td>
+                <select class="tax-select" onchange="updVal('active',${i},'taxPrc',this.value)">
                 <option value="0" ${+item.taxPrc===0?'selected':''}>0%</option>
                 <option value="4" ${+item.taxPrc===4?'selected':''}>4%</option>
                 <option value="6" ${+item.taxPrc===6?'selected':''}>6%</option>
                 <option value="13" ${+item.taxPrc===13?'selected':''}>13%</option>
-            </select></td>
+            </select>
+                <div class="tax-helper">${formatCurrency(taxAmount)}</div>
+            </td>
             
             <td style="text-align:right;">
                 <div class="price-cell-wrap expense-cell">
