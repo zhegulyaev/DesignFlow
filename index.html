@@ -597,11 +597,12 @@ body.light .pace-block.critical {
   .link-manage-btn:hover { border-color: var(--accent); color: var(--accent); }
   .link-manage-btn.link-active { border-color: var(--accent); color: var(--accent); background: rgba(88,166,255,0.08); }
   .add-modal-compact { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; align-items: start; }
-  .add-modal-compact.price-tax-row { grid-template-columns: 1fr 0.7fr 1.3fr 0.85fr; align-items: start; column-gap: 12px; }
+  .add-modal-compact.price-tax-row { grid-template-columns: 1.35fr 0.6fr 1.2fr 0.85fr; align-items: start; column-gap: 12px; }
   .price-tax-row .inp-group { display: flex; flex-direction: column; gap: 5px; margin: 0; }
   .price-tax-row .inp-group label { margin-bottom: 0; }
   .price-tax-row .tax-group select { min-height: 44px; }
-  .price-group { max-width: 200px; }
+  .price-group { max-width: 260px; }
+  .paid-group { max-width: 140px; }
   .paid-group select { min-height: 44px; min-width: 94px; max-width: 110px; text-align: center; }
   .price-tax-row .inp-group input,
   .price-tax-row .inp-group select { min-height: 44px; }
@@ -2957,13 +2958,11 @@ function formatNumberInput(inputEl) {
 
         const applyCalculation = () => {
             const raw = String(inputEl.value || '').replace(/\s+/g, '').replace(/,/g, '.');
-            if (!raw || /[^0-9+\-*/().]/.test(raw)) return;
-            try {
-                const result = new Function('return ' + raw)();
-                if (result !== undefined && isFinite(result)) {
-                    inputEl.value = formatPlainNumber(result);
-                }
-            } catch (e) {}
+            if (!raw || /[^0-9+\-*/().kк]/i.test(raw)) return;
+            const result = toNumeric(raw);
+            if (result !== undefined && isFinite(result)) {
+                inputEl.value = formatPlainNumber(result);
+            }
         };
 
         inputEl.addEventListener('blur', applyCalculation);
@@ -2980,7 +2979,7 @@ function formatNumberInput(inputEl) {
 
     // Если пользователь вводит выражение, оставляем операторы и считаем позже
     if (/[+\-*/]/.test(val)) {
-        const cleaned = val.replace(/[^0-9+\-*/().,]/g, '');
+        const cleaned = val.replace(/[^0-9+\-*/().,kк]/gi, '');
         inputEl.value = cleaned;
         clearTimeout(state.timeout);
         state.timeout = setTimeout(() => {
@@ -2991,7 +2990,8 @@ function formatNumberInput(inputEl) {
         return;
     }
 
-    inputEl.value = formatPlainNumber(val);
+    const numeric = toNumeric(val.replace(/\s+/g, '').replace(/,/g, '.'));
+    inputEl.value = val ? formatPlainNumber(numeric) : '';
 }
 
 const DEFAULT_NAME_TEMPLATES = [
