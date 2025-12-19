@@ -556,6 +556,9 @@ body.light .pace-block.critical {
   .deadline-presets select { min-width: 140px; max-width: 170px; white-space: nowrap; flex: 0 1 150px; }
   .deadline-presets input { min-width: 110px; max-width: 140px; flex: 1 1 110px; }
   .deadline-time { min-width: 120px; max-width: 150px; flex: 0 0 130px; padding: 10px 12px; }
+  .modal-deadline-presets { flex-wrap: wrap; justify-content: flex-start; margin: 12px 0 6px; }
+  .modal-deadline-presets select { min-width: 170px; }
+  .modal-deadline-presets input { flex: 0 1 140px; }
   .date-duo { display: flex; gap: 12px; align-items: stretch; margin-bottom: 12px; flex-wrap: wrap; }
   .date-duo .inp-group { margin-bottom: 0; }
   .date-duo-card { flex: 1 1 220px; min-width: 0; padding: 0; border-radius: 14px; border: none; background: transparent; box-shadow: none; }
@@ -586,11 +589,12 @@ body.light .pace-block.critical {
   .link-manage-btn:hover { border-color: var(--accent); color: var(--accent); }
   .link-manage-btn.link-active { border-color: var(--accent); color: var(--accent); background: rgba(88,166,255,0.08); }
   .add-modal-compact { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; align-items: start; }
-  .add-modal-compact.price-tax-row { grid-template-columns: 1.1fr 1fr 0.85fr; align-items: end; column-gap: 10px; }
+  .add-modal-compact.price-tax-row { grid-template-columns: 0.95fr 1fr 0.78fr 0.82fr; align-items: end; column-gap: 10px; }
   .price-tax-row .inp-group { display: flex; flex-direction: column; gap: 5px; margin: 0; }
   .price-tax-row .inp-group label { margin-bottom: 0; }
   .price-tax-row .tax-group select { min-height: 44px; }
-  .price-group { max-width: 240px; }
+  .price-group { max-width: 200px; }
+  .paid-group select { min-height: 44px; text-align: center; }
   .price-tax-row .inp-group input,
   .price-tax-row .inp-group select { min-height: 44px; }
   .contractor-inline label { margin-bottom: 6px; }
@@ -1723,6 +1727,14 @@ body:not([data-theme="dark"]) .header-new-badge {
                             <option value="13">13%</option>
                         </select>
                     </div>
+                    <div class="inp-group paid-group">
+                        <label>Оплачено</label>
+                        <select id="add-proj-paid" class="symbol-select">
+                            <option value="0">0%</option>
+                            <option value="50" selected>50%</option>
+                            <option value="100">100%</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="contractor-amount contractor-amount-row is-hidden" id="contractor-amount-wrap">
                     <div class="input-with-suffix">
@@ -1853,6 +1865,19 @@ body:not([data-theme="dark"]) .header-new-badge {
                 <svg class="input-icon"><use href="#icon-clock"/></svg>
                 <input type="text" id="time-input-val" placeholder="ЧЧ:ММ" disabled>
             </div>
+        </div>
+        <div class="deadline-presets modal-deadline-presets">
+            <select id="date-modal-preset" onchange="applyDateModalPreset()">
+                <option value="">Шаблон срока</option>
+                <option value="1">1 день</option>
+                <option value="2">2 дня</option>
+                <option value="3">3 дня</option>
+                <option value="5">5 дней</option>
+                <option value="7">7 дней</option>
+                <option value="custom">Свои дни</option>
+            </select>
+            <input type="number" id="date-modal-custom" placeholder="Свои дни" oninput="applyDateModalPreset()">
+            <input type="time" id="date-modal-time" class="deadline-time" step="300" aria-label="Время срока" oninput="syncModalPresetTime()">
         </div>
         <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveDate()">Сохранить</button>
     </div>
@@ -3686,7 +3711,7 @@ function formatDateDisplay(str) {
 }
 
 function formatDeadlineDisplay(str) {
-    if (!str) return '<span class="deadline-infinity">∞ Без дедлайна</span>';
+    if (!str) return '<span class="deadline-infinity">∞ Нет срока</span>';
     return formatDateDisplay(str);
 }
 
@@ -4579,6 +4604,7 @@ function openAddModal(type = null, idx = null){
         handleNewContractorModeChange(mode);
         document.getElementById('add-proj-contractor').value = formatPlainNumber(item.contractor || 0);
         document.getElementById('add-proj-tax').value = String(item.taxPrc ?? 0);
+        document.getElementById('add-proj-paid').value = String(item.paid ?? (type === 'archive' ? 100 : type === 'active' ? 50 : 0));
         document.getElementById('add-proj-type').value = type;
         document.getElementById('add-proj-start-val').value = item.start || '';
         document.getElementById('add-proj-dl-val').value = item.dl || '';
@@ -4591,13 +4617,14 @@ function openAddModal(type = null, idx = null){
         if (presetTimeInput) presetTimeInput.value = item.dl && item.dl.includes('T') ? item.dl.slice(11, 16) : '';
         newProjectLink = item.link || '';
         toggleProjectNameClear();
-        handleStatusChange(type);
+        handleStatusChange(type, { preservePaid: true });
     } else {
         ['name','client','price','contractor'].forEach(id => document.getElementById(`add-proj-${id}`).value = '');
         toggleProjectNameClear();
         document.getElementById('add-proj-tax').value = '0';
         document.getElementById('add-proj-contractor-mode').value = 'none';
         handleNewContractorModeChange('none');
+        document.getElementById('add-proj-paid').value = '50';
         document.getElementById('add-proj-type').value = 'active';
         document.getElementById('add-proj-start-val').value = today;
         document.getElementById('add-proj-dl-val').value = today;
@@ -4621,6 +4648,7 @@ function saveNewProject(){
     const contrMode = document.getElementById('add-proj-contractor-mode').value || 'none';
     const contr = contrMode === 'none' ? 0 : toNumeric(document.getElementById('add-proj-contractor').value);
     const tax = +document.getElementById('add-proj-tax').value || 0;
+    const paid = +document.getElementById('add-proj-paid').value || 0;
     const type = document.getElementById('add-proj-type').value;
     const start = document.getElementById('add-proj-start-val').value || today;
     const rawDeadline = (document.getElementById('add-proj-dl-val').value || '').trim();
@@ -4637,7 +4665,7 @@ function saveNewProject(){
         dl: type==='active' || type==='waiting' || type==='paused'
             ? (isDeadlineCleared ? '' : (finalDeadline || base.dl || ''))
             : undefined,
-        paid: (type==='active'||type==='archive'? (type==='archive'?100:50) : 0),
+        paid: type==='archive' ? 100 : paid,
         date: type==='archive' ? today : base.date
     };
 
@@ -4733,13 +4761,83 @@ function clearNewProjectDeadline() {
     if (presetTimeInput) presetTimeInput.value = '';
 }
 
-function handleStatusChange(status) {
+function handleStatusChange(status, options = {}) {
+    const { preservePaid = false } = options;
     const dateBlocks = document.querySelectorAll('.status-dates');
     dateBlocks.forEach(block => block.style.display = status === 'potential' ? 'none' : '');
     if (status === 'potential') {
         document.getElementById('add-proj-dl-days').value = '';
         document.getElementById('add-proj-dl-custom').value = '';
     }
+
+    const paidSelect = document.getElementById('add-proj-paid');
+    if (paidSelect && !preservePaid) {
+        const defaultPaid = status === 'archive' ? 100 : status === 'active' ? 50 : 0;
+        paidSelect.value = String(defaultPaid);
+    }
+}
+
+function getPresetBaseDate() {
+    if (queue.targetId) {
+        if (queue.targetId === 'add-proj-dl-val') {
+            return document.getElementById('add-proj-start-val').value || today;
+        }
+        return document.getElementById(queue.targetId)?.value || today;
+    }
+    if (queue.type && typeof queue.idx === 'number') {
+        const item = DATA[queue.type][queue.idx] || {};
+        if (queue.field === 'dl') return item.start || item.dl || item.date || today;
+        return item[queue.field] || item.start || today;
+    }
+    return today;
+}
+
+function applyDateModalPreset() {
+    const select = document.getElementById('date-modal-preset');
+    const customInput = document.getElementById('date-modal-custom');
+    const timeInput = document.getElementById('date-modal-time');
+    if (!select) return;
+
+    if (document.activeElement === customInput && select.value !== 'custom') {
+        select.value = 'custom';
+    }
+
+    if (select.value === '') return;
+
+    let days = parseInt(select.value, 10);
+    if (select.value === 'custom') {
+        days = parseInt(customInput.value, 10);
+    }
+    if (!days || days <= 0) return;
+
+    const baseRaw = (getPresetBaseDate() || today).slice(0, 10);
+    const baseDate = new Date(baseRaw + 'T00:00:00');
+    if (isNaN(baseDate)) return;
+    baseDate.setDate(baseDate.getDate() + days);
+    const nextDate = baseDate.toISOString().slice(0, 10);
+
+    if (datePicker) datePicker.setDate(nextDate, true);
+    else document.getElementById('date-input-val').value = nextDate;
+
+    const presetTime = (timeInput?.value || '').trim();
+    if (presetTime) {
+        document.getElementById('date-has-time').checked = true;
+        toggleTimeInput();
+        if (timePicker) timePicker.setDate(presetTime, true, 'H:i');
+        else document.getElementById('time-input-val').value = presetTime;
+    }
+}
+
+function syncModalPresetTime() {
+    const timeInput = document.getElementById('date-modal-time');
+    if (!timeInput) return;
+    const val = timeInput.value;
+    if (!val) return;
+
+    document.getElementById('date-has-time').checked = true;
+    toggleTimeInput();
+    if (timePicker) timePicker.setDate(val, true, 'H:i');
+    else document.getElementById('time-input-val').value = val;
 }
 
 function openDate(type, idx, field){
@@ -4782,6 +4880,13 @@ function openDateBase(val) {
     const dateVal = val ? val.slice(0, 10) : today;
     const timeVal = hasTime ? val.slice(11, 16) : '12:00';
 
+    const modalPreset = document.getElementById('date-modal-preset');
+    const modalCustom = document.getElementById('date-modal-custom');
+    const modalPresetTime = document.getElementById('date-modal-time');
+    if (modalPreset) modalPreset.value = '';
+    if (modalCustom) modalCustom.value = '';
+    if (modalPresetTime) modalPresetTime.value = hasTime ? timeVal : '';
+
     if (datePicker) datePicker.setDate(dateVal, true);
     else document.getElementById('date-input-val').value = dateVal;
 
@@ -4803,6 +4908,13 @@ function toggleTimeInput(){
 
     if (timePicker) {
         timePicker.set('clickOpens', chk.checked);
+    }
+
+    const modalPresetTime = document.getElementById('date-modal-time');
+    if (modalPresetTime) {
+        modalPresetTime.disabled = !chk.checked;
+        modalPresetTime.style.opacity = chk.checked ? '1' : '0.4';
+        if (!chk.checked) modalPresetTime.value = '';
     }
 }
 function closeDateModal(){ document.getElementById('dateModal').style.display = 'none'; }
@@ -5036,7 +5148,7 @@ function getTimeRemaining(dl){
     if (isNaN(targetExact.getTime())) return {txt:'∞', cls:'days-infinite', days: Infinity, isInfinite: true};
     const msLeft = targetExact.getTime() - Date.now();
 
-    if(msLeft < 0) return {txt:'Просрочено', cls:'days-critical', days: -1};
+    if(msLeft < 0) return {txt:'Срок вышел', cls:'days-critical', days: -1};
     if(dayDiff === 0) {
         const hours = Math.max(1, Math.ceil(msLeft / (1000 * 60 * 60)));
         return {txt:`${hours} ч.`, cls:'days-critical', days: 0};
