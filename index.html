@@ -141,7 +141,7 @@
 
   /* Main Layout & Tables */
   .table-wrap{overflow-x:auto;overflow-y:visible;background:var(--card);border-radius:12px;border:1px solid var(--border);padding:6px 10px; margin-top: 12px; position: relative;}
-  table{width:100%;border-collapse:collapse; min-width: 1200px;}
+  table{width:100%;border-collapse:collapse; min-width: 1100px;}
   th{text-align:left;color:var(--muted);font-size:12px;text-transform:uppercase;padding:11px 8px;border-bottom:1px solid var(--border);user-select:none; white-space: nowrap; cursor: pointer;}
   
   /* Выравнивание заголовков для Active */
@@ -243,16 +243,18 @@
       margin-top: 2px;
   }
 
-  .expense-cell { gap: 8px; justify-content: flex-end; }
+  .expense-cell { gap: 10px; justify-content: flex-start; align-items: flex-start; }
   .expense-cell .price-cell-wrap {
       background: var(--pill-bg);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 6px 10px;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+      justify-content: flex-start;
+      min-width: 200px;
   }
-  .expense-cell .price-cell-wrap input { text-align: left; min-width: 80px; }
-  .expense-mode { background: var(--pill-bg); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 6px 10px; font-size: 12px; cursor: pointer; min-width: 64px; font-weight: 700; }
+  .expense-cell .price-cell-wrap input { text-align: left; min-width: 100px; }
+  .expense-mode { background: var(--pill-bg); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 6px 10px; font-size: 12px; cursor: pointer; min-width: 70px; font-weight: 700; }
   .expense-helper { color: var(--muted); font-size: 12px; margin-top: 4px; text-align: right; line-height: 1.2; font-weight: 600; }
   .helper-label { color: var(--muted); font-size: 12px; margin-top: 6px; line-height: 1.4; font-weight: 600; }
 
@@ -266,8 +268,8 @@
   .paid-select, .tax-select { background: var(--pill-bg); color: var(--text); border: 1px solid var(--border); padding: 8px 10px; border-radius: 10px; font-size: 13px; cursor: pointer; outline: none; transition: .2s; text-align: center; font-weight: 800; letter-spacing: -0.1px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
   .paid-select:hover, .tax-select:hover { background: var(--btn-hover); border-color: var(--date-hover-border); }
   .paid-select option, .tax-select option { background: var(--card); }
-  .tax-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; padding: 4px 0; text-align: left; min-width: 90px; }
-  .tax-cell .tax-select { width: 100px; justify-self: flex-start; }
+  .tax-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 4px 0; text-align: left; min-width: 110px; }
+  .tax-cell .tax-select { width: 110px; justify-self: flex-start; }
   .tax-helper { color: var(--muted); font-size: 12px; margin-top: 0; text-align: left; width: 100%; font-weight: 700; letter-spacing: -0.2px; }
 
   /* Actions */
@@ -338,7 +340,7 @@
   #t-paused th:nth-child(2), #t-paused td:nth-child(2),
   #t-potential th:nth-child(2), #t-potential td:nth-child(2),
   #t-archive th:nth-child(2), #t-archive td:nth-child(2),
-  #t-all th:nth-child(2), #t-all td:nth-child(2) { min-width: 170px; }
+  #t-all th:nth-child(2), #t-all td:nth-child(2) { min-width: 220px; }
 
   #t-active th:nth-child(3), #t-active td:nth-child(3),
   #t-delegation th:nth-child(3), #t-delegation td:nth-child(3),
@@ -346,9 +348,9 @@
   #t-paused th:nth-child(3), #t-paused td:nth-child(3),
   #t-potential th:nth-child(3), #t-potential td:nth-child(3),
   #t-archive th:nth-child(3), #t-archive td:nth-child(3),
-  #t-all th:nth-child(3), #t-all td:nth-child(3) { min-width: 320px; }
-  #t-active th:nth-child(7), #t-active td:nth-child(7) { min-width: 90px; }
-  #t-active th:nth-child(8), #t-active td:nth-child(8) { min-width: 150px; }
+  #t-all th:nth-child(3), #t-all td:nth-child(3) { min-width: 340px; }
+  #t-active th:nth-child(7), #t-active td:nth-child(7) { min-width: 120px; }
+  #t-active th:nth-child(8), #t-active td:nth-child(8) { min-width: 190px; }
 
   .row-pulse { box-shadow: inset 0 0 0 2px var(--accent); }
   
@@ -1380,17 +1382,17 @@ body:not([data-theme="dark"]) .header-new-badge {
           <thead>
             <tr>
               <th class="select-col" aria-label="Столбец выбора"></th>
-              <th width="16%" data-type="active" data-key="c" onclick="sortData('active', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
-              <th width="30%" data-type="active" data-key="n" onclick="sortData('active', 'n', 'string')">Проект <span class="sort-icon"></span></th>
-              <th width="8%" data-type="active" data-key="start" onclick="sortData('active', 'start', 'date')">Старт <span class="sort-icon"></span></th>
-              <th width="8%" data-type="active" data-key="dl" onclick="sortData('active', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
-              <th width="6%" data-type="active" data-key="rem" onclick="sortData('active', 'rem', 'number')">Осталось <span class="sort-icon"></span></th>
-              <th width="4%" data-type="active" data-key="taxPrc" onclick="sortData('active', 'taxPrc', 'number')">Налог % <span class="sort-icon"></span></th>
-              <th width="4%" data-type="active" data-key="contractor" onclick="sortData('active', 'contractor', 'number')" style="text-align:right;">Расходы <span class="sort-icon"></span></th>
-              <th width="7%" data-type="active" data-key="p" onclick="sortData('active', 'p', 'number')" style="text-align:right;">Сумма <span class="sort-icon"></span></th>
-              <th width="7%" style="text-align:right;">Чистыми</th>
-              <th width="6%" style="text-align:right;">Оплачено</th>
-              <th width="8%"></th>
+              <th data-type="active" data-key="c" onclick="sortData('active', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
+              <th data-type="active" data-key="n" onclick="sortData('active', 'n', 'string')">Проект <span class="sort-icon"></span></th>
+              <th data-type="active" data-key="start" onclick="sortData('active', 'start', 'date')">Старт <span class="sort-icon"></span></th>
+              <th data-type="active" data-key="dl" onclick="sortData('active', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
+              <th data-type="active" data-key="rem" onclick="sortData('active', 'rem', 'number')">Осталось <span class="sort-icon"></span></th>
+              <th data-type="active" data-key="taxPrc" onclick="sortData('active', 'taxPrc', 'number')">Налог % <span class="sort-icon"></span></th>
+              <th data-type="active" data-key="contractor" onclick="sortData('active', 'contractor', 'number')" style="text-align:right;">Расходы <span class="sort-icon"></span></th>
+              <th data-type="active" data-key="p" onclick="sortData('active', 'p', 'number')" style="text-align:right;">Сумма <span class="sort-icon"></span></th>
+              <th style="text-align:right;">Чистыми</th>
+              <th style="text-align:right;">Оплачено</th>
+              <th></th>
             </tr>
           </thead>
           <tbody></tbody>
