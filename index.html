@@ -4623,8 +4623,9 @@ function saveNewProject(){
     const tax = +document.getElementById('add-proj-tax').value || 0;
     const type = document.getElementById('add-proj-type').value;
     const start = document.getElementById('add-proj-start-val').value || today;
-    const rawDeadline = document.getElementById('add-proj-dl-val').value;
-    const dl = deadlineUnset ? '' : (rawDeadline || today);
+    const rawDeadline = (document.getElementById('add-proj-dl-val').value || '').trim();
+    const isDeadlineCleared = deadlineUnset || rawDeadline === '';
+    const finalDeadline = isDeadlineCleared ? '' : rawDeadline;
 
     const isEdit = !!editContext;
     const base = isEdit ? { ...DATA[editContext.type][editContext.idx] } : {};
@@ -4633,7 +4634,9 @@ function saveNewProject(){
         ...base,
         n: name, c: client, p: price, contractor: contr, contractorMode: contrMode, taxPrc: tax, link: newProjectLink,
         start: type==='active'? start : base.start,
-        dl: type==='active' || type==='waiting' || type==='paused' ? dl || base.dl : undefined,
+        dl: type==='active' || type==='waiting' || type==='paused'
+            ? (isDeadlineCleared ? '' : (finalDeadline || base.dl || ''))
+            : undefined,
         paid: (type==='active'||type==='archive'? (type==='archive'?100:50) : 0),
         date: type==='archive' ? today : base.date
     };
