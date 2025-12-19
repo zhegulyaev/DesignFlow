@@ -17,6 +17,21 @@ let SETTINGS = {
   taxBase: 'p' // p or net
 };
 
+function parseAmount(value) {
+  const normalized = (value || '').toString().trim().replace(/\s+/g, '').toLowerCase();
+  if (!normalized) return 0;
+
+  const match = normalized.match(/^([\d.,]+)([kк])?$/i);
+  if (match) {
+    const base = parseFloat(match[1].replace(',', '.'));
+    const multiplier = match[2] ? 1000 : 1;
+    return Number.isFinite(base) ? Math.round(base * multiplier) : 0;
+  }
+
+  const fallback = parseInt(normalized, 10);
+  return Number.isFinite(fallback) ? fallback : 0;
+}
+
 let today = new Date().toISOString().slice(0, 10);
 
 function loadData() {
@@ -129,9 +144,9 @@ function addItem() {
   const id = document.getElementById('item-id').value;
   const c = document.getElementById('client').value;
   const n = document.getElementById('name').value;
-  const p = parseInt(document.getElementById('price').value) || 0;
+  const p = parseAmount(document.getElementById('price').value);
   const taxPrc = parseInt(document.getElementById('taxPrc').value) || 0;
-  const contractorAmount = parseInt(document.getElementById('contractorAmount').value) || 0;
+  const contractorAmount = parseAmount(document.getElementById('contractorAmount').value);
   const paid = parseInt(document.getElementById('paid').value) || 0;
   const start = document.getElementById('start').value;
   const dl = document.getElementById('dl').value;
