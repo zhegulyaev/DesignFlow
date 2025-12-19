@@ -201,7 +201,7 @@
   .date-cell { padding: 0 !important; } 
   .date-input-wrap { width: 100%; padding: 6px 8px; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: flex-start; transition: .2s; border-radius: 10px; gap: 6px; border: 1px solid var(--border); background: transparent; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
   .date-input-wrap:hover { background: var(--date-hover-bg); border-color: var(--date-hover-border); }
-  .date-text-display { font-size: 14px; font-weight: 600; color: var(--text); white-space: normal; display: flex; align-items: flex-start; gap: 8px; letter-spacing: -0.1px; }
+  .date-text-display { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; letter-spacing: -0.1px; }
   .date-icon { display: inline-flex; width: 14px; height: 14px; color: var(--muted); opacity: 0.85; }
   .time-text { color: var(--muted); font-weight: 700; font-size: 12px; }
 
@@ -602,7 +602,7 @@ body.light .pace-block.critical {
   .price-tax-row .inp-group label { margin-bottom: 0; }
   .price-tax-row .tax-group select { min-height: 44px; }
   .price-group { max-width: 200px; }
-  .paid-group select { min-height: 44px; min-width: 140px; text-align: center; }
+  .paid-group select { min-height: 44px; min-width: 110px; max-width: 130px; text-align: center; }
   .price-tax-row .inp-group input,
   .price-tax-row .inp-group select { min-height: 44px; }
   .contractor-inline label { margin-bottom: 6px; }
@@ -1100,7 +1100,7 @@ td.date-cell + td.date-cell {
     <symbol id="icon-pen" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="m5 15.5 9.9-9.9a1.8 1.8 0 0 1 2.55 0l1.95 1.95a1.8 1.8 0 0 1 0 2.55L9.5 20H4v-5.5Z"/><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M14 6l4 4"/></symbol>
     <symbol id="icon-check" viewBox="0 0 20 20"><path fill="currentColor" d="m16.707 6.293-7.25 7.25a1 1 0 0 1-1.414 0l-4-4a1 1 0 1 1 1.414-1.414L8.5 11.672l6.543-6.543a1 1 0 0 1 1.414 1.164a.99.99 0 0 1-.25.293Z"/></symbol>
     <symbol id="icon-settings" viewBox="0 0 24 24">
-      <path fill="currentColor" d="M12 2.5a1.25 1.25 0 0 1 1.19.88l.44 1.5a7.1 7.1 0 0 1 1.48.62l1.47-.61a1.25 1.25 0 0 1 1.6.58l1 1.9a1.25 1.25 0 0 1-.24 1.48l-1.18 1.14c.07.33.13.66.16 1l1.5.7a1.25 1.25 0 0 1 .63 1.65l-.9 2.04a1.25 1.25 0 0 1-1.5.68l-1.54-.47a7.17 7.17 0 0 1-1.33.9l-.2 1.58a1.25 1.25 0 0 1-1.23 1.09h-2.1a1.25 1.25 0 0 1-1.23-1.09l-.2-1.58a7.17 7.17 0 0 1-1.33-.9l-1.54.47a1.25 1.25 0 0 1-1.5-.68l-.9-2.04a1.25 1.25 0 0 1 .63-1.65l1.5-.7c.03-.34.09-.67.16-1l-1.18-1.14a1.25 1.25 0 0 1-.24-1.48l1-1.9a1.25 1.25 0 0 1 1.6-.58l1.47.61c.5-.25.99-.45 1.48-.62l.44-1.5A1.25 1.25 0 0 1 12 2.5Zm0 6.5a3 3 0 1 0 0 6a3 3 0 0 0 0-6Z"/>
+      <path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" d="M12 15.5a3.5 3.5 0 1 1 0-7a3.5 3.5 0 0 1 0 7Zm7.5-3.5a7.5 7.5 0 0 1-.07 1l1.64 1.28-1.5 2.6-1.97-.65a7.52 7.52 0 0 1-1.73 1L14.5 21h-3l-.47-2.77a7.52 7.52 0 0 1-1.73-1l-1.97.65-1.5-2.6L4.47 13.5a7.5 7.5 0 0 1 0-2l-1.64-1.28 1.5-2.6 1.97.65a7.52 7.52 0 0 1 1.73-1L11.5 3h3l.47 2.77a7.52 7.52 0 0 1 1.73 1l1.97-.65 1.5 2.6-1.64 1.28c.05.32.07.66.07 1Z"/>
     </symbol>
     <symbol id="icon-drag" viewBox="0 0 24 24"><path fill="currentColor" d="M10 4a2 2 0 1 1-4 0a2 2 0 0 1 4 0Zm4 0a2 2 0 1 1 4 0a2 2 0 0 1-4 0ZM8 12a2 2 0 1 0-4 0a2 2 0 0 0 4 0Zm8 0a2 2 0 1 0-4 0a2 2 0 0 0 4 0Zm-6 6a2 2 0 1 1-4 0a2 2 0 0 1 4 0Zm4 0a2 2 0 1 1 4 0a2 2 0 0 1-4 0Z"/></symbol>
     <symbol id="icon-grip" viewBox="0 0 24 24"><path fill="currentColor" d="M10 5a1 1 0 0 1-1 1H7a1 1 0 1 1 0-2h2a1 1 0 0 1 1 1Zm7-1h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2Zm0 6h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2Zm0 6h-2a1 1 0 1 0 0 2h2a1 1 0 0 0 0-2Zm-8-4H7a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2Zm0 6H7a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2Zm0-12H7a1 1 0 1 0 0 2h2a1 1 0 1 0 0-2Z"/></symbol>
@@ -5204,13 +5204,18 @@ function getTimeRemaining(dl){
     if (isNaN(targetExact.getTime())) return {txt:'∞', cls:'days-infinite', days: Infinity, isInfinite: true};
     const msLeft = targetExact.getTime() - Date.now();
 
+    const dayMs = 1000 * 60 * 60 * 24;
+    const hourMs = 1000 * 60 * 60;
+    const hoursRemainder = Math.max(0, Math.floor((msLeft % dayMs) / hourMs));
+    const shortHours = Math.max(1, hoursRemainder);
+
     if(msLeft < 0) return {txt:'Срок вышел', cls:'days-critical', days: -1};
-    if(dayDiff === 0) {
-        const hours = Math.max(1, Math.ceil(msLeft / (1000 * 60 * 60)));
-        return {txt:`${hours} ч.`, cls:'days-critical', days: 0};
-    }
-    if(dayDiff <= 3) return {txt: dayDiff + ' дн.', cls:'days-warning', days: dayDiff};
-    return {txt: dayDiff + ' дн.', cls:'days-normal', days: dayDiff};
+    const hoursText = dayDiff === 0 ? shortHours : hoursRemainder;
+    const text = `${Math.max(0, dayDiff)}д ${hoursText}ч`;
+
+    if(dayDiff === 0) return {txt: text, cls:'days-critical', days: dayDiff};
+    if(dayDiff <= 3) return {txt: text, cls:'days-warning', days: dayDiff};
+    return {txt: text, cls:'days-normal', days: dayDiff};
 }
 
 function getArchiveByMonth(month = currentMonth) {
