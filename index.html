@@ -2322,11 +2322,14 @@ const toNumeric = (val) => {
     const cleaned = String(val || '').replace(/\s+/g, '').replace(/,/g, '.');
     if (!cleaned) return 0;
 
+    // Поддержка короткой записи "10k/10к" для тысяч
+    const normalized = cleaned.replace(/(\d*\.?\d+)[kк]/gi, '($1*1000)');
+
     // Разрешаем простые математические выражения (+ - * / и скобки)
-    if (/[^0-9+\-*/().]/.test(cleaned)) return 0;
+    if (/[^0-9+\-*/().]/.test(normalized)) return 0;
 
     try {
-        const result = new Function('return ' + cleaned)();
+        const result = new Function('return ' + normalized)();
         const num = typeof result === 'number' ? result : parseFloat(result);
         return isFinite(num) ? num : 0;
     } catch {
