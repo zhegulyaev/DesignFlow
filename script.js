@@ -17,6 +17,11 @@ let SETTINGS = {
   taxBase: 'p' // p or net
 };
 
+function formatCurrency(value) {
+  const amount = Number.isFinite(Number(value)) ? Number(value) : 0;
+  return `${amount.toLocaleString('ru-RU')} ${SETTINGS.currency}`;
+}
+
 function parseAmount(value) {
   const normalized = (value || '').toString().trim().replace(/\s+/g, '').toLowerCase();
   if (!normalized) return 0;
@@ -235,17 +240,17 @@ function renderItem(item) {
     <div class="card" onclick="openModal(${JSON.stringify(item).replace(/"/g, '&quot;')})">
       <div class="c-row">
         <div class="c-client">${item.c || '—'}</div>
-        <div class="c-price">${item.p || 0} ${SETTINGS.currency}</div>
+        <div class="c-price">${formatCurrency(item.p)}</div>
       </div>
       <div class="c-row">
         <div class="c-name">${item.n || '—'}</div>
-        <div class="c-tax">${tax ? `Налог: ${tax} ${SETTINGS.currency} (${item.taxPrc || 0}%)` : 'Без налога'}</div>
+        <div class="c-tax">${tax ? `Налог: ${formatCurrency(tax)} (${item.taxPrc || 0}%)` : 'Без налога'}</div>
       </div>
       <div class="c-row">
-        <div class="c-net">Чистыми: ${net} ${SETTINGS.currency}</div>
+        <div class="c-net">Чистыми: ${formatCurrency(net)}</div>
         <div class="c-paid ${paidClass}">Оплачено: ${item.paid || 0}%</div>
       </div>
-      ${contractor ? `<div class="c-row"><div class="c-contractor">Расходы: ${contractor} ${SETTINGS.currency}</div></div>` : ''}
+      ${contractor ? `<div class="c-row"><div class="c-contractor">Расходы: ${formatCurrency(contractor)}</div></div>` : ''}
       <div class="c-dates">
         <span>Старт: ${item.start || '—'}</span>
         <span>Дедлайн: ${item.dl || item.date || '—'}</span>
@@ -330,11 +335,11 @@ function updateStats() {
     });
   });
 
-  document.getElementById('all-sum').textContent = `${allSum} ${SETTINGS.currency}`;
-  document.getElementById('all-net').textContent = `${allNet} ${SETTINGS.currency}`;
-  document.getElementById('all-paid').textContent = `${allPaid} ${SETTINGS.currency}`;
-  document.getElementById('all-tax').textContent = `${allTax} ${SETTINGS.currency}`;
-  document.getElementById('all-contractor').textContent = `${allContractor} ${SETTINGS.currency}`;
+  document.getElementById('all-sum').textContent = formatCurrency(allSum);
+  document.getElementById('all-net').textContent = formatCurrency(allNet);
+  document.getElementById('all-paid').textContent = formatCurrency(allPaid);
+  document.getElementById('all-tax').textContent = formatCurrency(allTax);
+  document.getElementById('all-contractor').textContent = formatCurrency(allContractor);
 
   updateChart(allSum, allPaid, allNet, allTax, allContractor);
 }
