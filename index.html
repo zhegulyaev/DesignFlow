@@ -265,9 +265,9 @@
   .paid-select, .tax-select { background: var(--pill-bg); color: var(--text); border: 1px solid var(--border); padding: 8px 10px; border-radius: 10px; font-size: 13px; cursor: pointer; outline: none; transition: .2s; text-align: center; font-weight: 800; letter-spacing: -0.1px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
   .paid-select:hover, .tax-select:hover { background: var(--btn-hover); border-color: var(--date-hover-border); }
   .paid-select option, .tax-select option { background: var(--card); }
-  .tax-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 4px 0; }
-  .tax-cell .tax-select { width: 120px; }
-  .tax-helper { color: var(--green); font-size: 13px; margin-top: 2px; text-align: left; width: 100%; font-weight: 800; letter-spacing: -0.2px; }
+  .tax-cell { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 4px 0; text-align: center; }
+  .tax-cell .tax-select { width: 110px; justify-self: center; }
+  .tax-helper { color: var(--green); font-size: 13px; margin-top: 2px; text-align: center; width: 100%; font-weight: 800; letter-spacing: -0.2px; }
 
   /* Actions */
   .client-wrap{display:flex;align-items:center;gap:8px; width: 100%;}
@@ -614,7 +614,7 @@ body.light .pace-block.critical {
   .link-manage-btn:hover { border-color: var(--accent); color: var(--accent); }
   .link-manage-btn.link-active { border-color: var(--accent); color: var(--accent); background: rgba(88,166,255,0.08); }
   .add-modal-compact { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; align-items: start; }
-  .add-modal-compact.price-tax-row { grid-template-columns: 1.1fr 1fr 0.85fr; align-items: end; column-gap: 10px; }
+  .add-modal-compact.price-tax-row { grid-template-columns: 1.05fr 0.9fr 0.8fr; align-items: end; column-gap: 10px; }
   .price-tax-row .inp-group { display: flex; flex-direction: column; gap: 5px; margin: 0; }
   .price-tax-row .inp-group label { margin-bottom: 0; }
   .price-tax-row .tax-group select { min-height: 44px; }
@@ -1107,10 +1107,25 @@ td.date-cell + td.date-cell {
   .task-empty { text-align: center; color: var(--muted); font-size: 14px; padding: 12px; border: 1px dashed var(--border); border-radius: 12px; background: var(--pill-bg); }
   .journal-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
   .journal-actions .inline-note { color: var(--muted); font-size: 13px; }
-  .journal-add { display: grid; grid-template-columns: 1fr auto; gap: 8px; width: 100%; }
-  .journal-add input { width: 100%; border-radius: 10px; border: 1px solid var(--border); padding: 10px 12px; background: var(--card); color: var(--text); font-weight: 700; }
+  .journal-add { display: grid; grid-template-columns: 1fr auto; gap: 8px; width: 100%; margin-top: 6px; }
+  .journal-add input { width: 100%; border-radius: 10px; border: 1px solid var(--border); padding: 8px 11px; background: var(--card); color: var(--text); font-weight: 700; }
   .journal-add input:focus { outline: none; border-color: var(--accent); }
   .journal-add button { min-width: 120px; justify-content: center; }
+  .task-row { position: relative; transition: transform .15s ease, box-shadow .15s ease; }
+  .task-row.is-completed { background: linear-gradient(90deg, rgba(46,160,67,0.12), rgba(46,160,67,0.04)); box-shadow: 0 6px 14px rgba(46,160,67,0.15); transform: translateY(-2px); }
+  .task-body { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+  .task-meta-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+  .task-amount-wrap { display: flex; align-items: center; gap: 6px; background: var(--card); padding: 6px 8px; border-radius: 8px; border: 1px solid var(--border); }
+  .task-amount-wrap span { color: var(--muted); font-weight: 700; font-size: 12px; }
+  .task-amount { width: 110px; border: none; background: transparent; color: var(--text); font-weight: 800; text-align: right; }
+  .task-amount:focus { outline: none; }
+  .task-done-at { color: var(--muted); font-size: 12px; font-weight: 700; }
+  .task-delete.trash { color: var(--muted); padding: 6px 10px; border: 1px solid transparent; background: transparent; }
+  .task-delete.trash:hover { border-color: var(--del-hover-border); color: var(--red); background: var(--del-hover-bg); }
+  .journal-summary { margin-top: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; background: var(--pill-bg); display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; align-items: center; }
+  .journal-summary .label { color: var(--muted); font-weight: 700; font-size: 12px; letter-spacing: -0.2px; }
+  .journal-summary .value { font-weight: 800; font-size: 16px; }
+  .journal-actions { margin-top: 10px; }
   .task-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 8px; background: var(--pill-bg); color: var(--muted); font-weight: 700; font-size: 12px; border: 1px solid var(--border); }
   .task-badge .task-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
 
@@ -1153,8 +1168,8 @@ td.date-cell + td.date-cell {
     <symbol id="icon-active" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM3 8a5 5 0 0 1 10 0 5 5 0 0 1-10 0Z"/></symbol>
     <symbol id="icon-all" viewBox="0 0 16 16"><path fill="currentColor" d="M2.5 2.5A.5.5 0 0 1 3 2h4.5a.5.5 0 0 1 .5.5V7a.5.5 0 0 1-.5.5H3A.5.5 0 0 1 2.5 7Zm6 0A.5.5 0 0 1 9 2h4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-.5.5H9a.5.5 0 0 1-.5-.5Zm-6 6A.5.5 0 0 1 3 8h4.5a.5.5 0 0 1 .5.5V13a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5Zm8 0A.5.5 0 0 1 11 8h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5Z"/></symbol>
     <symbol id="icon-waiting" viewBox="0 0 16 16">
-        <path fill="currentColor" d="M2.5 1a.5.5 0 0 0-.5.5v3c0 .176.091.33.228.424L6 8l-3.772 3.076A.5.5 0 0 0 2 11.5v3a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.228-.424L10 8l3.772-3.076A.5.5 0 0 0 14 4.5v-3a.5.5 0 0 0-.5-.5h-11Z"/>
-        <path fill="currentColor" d="M4 1h8v1H4V1Zm0 13h8v1H4v-1Z" opacity="0.6"/>
+        <circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.55"/>
+        <path fill="currentColor" d="M8 1.5a.75.75 0 0 0-.75.75v5.4c0 .2.08.39.22.53l3.4 3.4a.75.75 0 0 0 1.06-1.06L8.75 7.95V2.25A.75.75 0 0 0 8 1.5Z"/>
     </symbol>
     <symbol id="icon-potential" viewBox="0 0 16 16"><path fill="currentColor" d="M3 1.5A.5.5 0 0 1 3.5 1h7a.5.5 0 0 1 .4.8L9.6 4l1.3 2.2a.5.5 0 0 1-.43.8H5.5V14a.5.5 0 0 1-1 0z"/></symbol>
     <symbol id="icon-paused" viewBox="0 0 16 16"><path fill="currentColor" d="M5 2.5a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0V3a.5.5 0 0 1 .5-.5Zm6 0a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0V3a.5.5 0 0 1 .5-.5Z"/></symbol>
@@ -1324,12 +1339,12 @@ body:not([data-theme="dark"]) .header-new-badge {
           <thead>
             <tr>
               <th class="select-col">№</th>
-              <th width="18%" data-type="active" data-key="c" onclick="sortData('active', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
-              <th width="19%" data-type="active" data-key="n" onclick="sortData('active', 'n', 'string')">Проект <span class="sort-icon"></span></th>
+              <th width="17%" data-type="active" data-key="c" onclick="sortData('active', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
+              <th width="21%" data-type="active" data-key="n" onclick="sortData('active', 'n', 'string')">Проект <span class="sort-icon"></span></th>
               <th width="8%" data-type="active" data-key="start" onclick="sortData('active', 'start', 'date')">Старт <span class="sort-icon"></span></th>
               <th width="8%" data-type="active" data-key="dl" onclick="sortData('active', 'dl', 'date')">Дедлайн <span class="sort-icon"></span></th>
               <th width="6%" data-type="active" data-key="rem" onclick="sortData('active', 'rem', 'number')">Осталось <span class="sort-icon"></span></th>
-              <th width="4%" data-type="active" data-key="taxPrc" onclick="sortData('active', 'taxPrc', 'number')">Налог % <span class="sort-icon"></span></th>
+              <th width="3%" data-type="active" data-key="taxPrc" onclick="sortData('active', 'taxPrc', 'number')">Налог % <span class="sort-icon"></span></th>
               <th width="6%" data-type="active" data-key="contractor" onclick="sortData('active', 'contractor', 'number')" style="text-align:right;">Расходы <span class="sort-icon"></span></th>
               <th width="8%" data-type="active" data-key="p" onclick="sortData('active', 'p', 'number')" style="text-align:right;">Сумма <span class="sort-icon"></span></th>
               <th width="8%" style="text-align:right;">Чистыми</th>
@@ -1905,6 +1920,10 @@ body:not([data-theme="dark"]) .header-new-badge {
                         </div>
                         <datalist id="project-name-templates"></datalist>
                     </div>
+                    <div class="template-actions-row">
+                        <button class="template-create-inline" type="button" onclick="saveNameTemplate()">+ Создать шаблон</button>
+                        <button class="template-secondary-btn" type="button" onclick="openTemplateManagerModal()">📂 Мои шаблоны</button>
+                    </div>
                     <div class="template-helper" id="edit-template-helper">Введите название проекта, затем сохраните как шаблон.</div>
                 </div>
             </div>
@@ -2015,6 +2034,24 @@ body:not([data-theme="dark"]) .header-new-badge {
             <button class="save-stg" type="button" onclick="addJournalTask()">+ Добавить</button>
         </div>
         <div class="task-journal" id="journal-list"></div>
+        <div class="journal-summary" id="journal-summary" style="display:none">
+            <div>
+                <div class="label">Сумма задач</div>
+                <div class="value" id="journal-total"></div>
+            </div>
+            <div>
+                <div class="label">Бюджет проекта</div>
+                <div class="value" id="journal-budget"></div>
+            </div>
+            <div>
+                <div class="label">Остаток/перерасход</div>
+                <div class="value" id="journal-diff"></div>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
+                <button class="template-secondary-btn" type="button" onclick="distributeTaskBudget()">÷ Распределить бюджет</button>
+                <button class="template-secondary-btn" type="button" onclick="clearTaskBudget()">✕ Очистить суммы</button>
+            </div>
+        </div>
         <div class="journal-actions">
             <div class="inline-note" id="journal-empty-note"></div>
             <div style="display:flex; gap:10px; align-items:center;">
@@ -3121,6 +3158,14 @@ function formatNumberInput(inputEl) {
     inputEl.value = formatPlainNumber(inputEl.value);
 }
 
+function getActiveNameInput() {
+    const editor = document.getElementById('projectEditorModal');
+    const addModal = document.getElementById('addProjectModal');
+    if (editor && editor.style.display === 'flex') return document.getElementById('edit-proj-name');
+    if (addModal && addModal.style.display === 'flex') return document.getElementById('add-proj-name');
+    return document.getElementById('add-proj-name') || document.getElementById('edit-proj-name');
+}
+
 const DEFAULT_NAME_TEMPLATES = [
     'Оформление группы ВКонтакте',
     'Дизайн баннеров',
@@ -3160,16 +3205,22 @@ function persistNameTemplates() {
 }
 
 function setTemplateHelper(message, state = '', autoReset = false) {
-    const helper = document.getElementById('template-helper');
-    if (!helper) return;
+    const helpers = ['template-helper', 'edit-template-helper']
+        .map(id => document.getElementById(id))
+        .filter(Boolean);
+    if (!helpers.length) return;
     if (templateHelperTimeout) { clearTimeout(templateHelperTimeout); templateHelperTimeout = null; }
-    helper.textContent = message;
-    helper.classList.remove('error', 'success');
-    if (state) helper.classList.add(state);
+    helpers.forEach(helper => {
+        helper.textContent = message;
+        helper.classList.remove('error', 'success');
+        if (state) helper.classList.add(state);
+    });
     if (autoReset) {
         templateHelperTimeout = setTimeout(() => {
-            helper.textContent = TEMPLATE_HELPER_DEFAULT;
-            helper.classList.remove('error', 'success');
+            helpers.forEach(helper => {
+                helper.textContent = TEMPLATE_HELPER_DEFAULT;
+                helper.classList.remove('error', 'success');
+            });
         }, 3200);
     }
 }
@@ -3255,18 +3306,18 @@ function clearProjectName() {
 
 function applyNameTemplate(val) {
     if (!val) return;
-    const input = document.getElementById('add-proj-name');
+    const input = getActiveNameInput();
     if (input) {
         input.value = val;
         input.focus();
-        toggleProjectNameClear();
+        if (input.id === 'add-proj-name') toggleProjectNameClear();
         activeTemplateSelection = val;
         setTemplateHelper('Шаблон подставлен в поле.', 'success', true);
     }
 }
 
 function saveNameTemplate() {
-    const input = document.getElementById('add-proj-name');
+    const input = getActiveNameInput();
     if (!input) return;
     const val = input.value.trim();
     if (!val) {
@@ -3930,6 +3981,15 @@ function cleanupTrash(){
 }
 
 function formatCurrency(n) { return new Intl.NumberFormat('ru-RU').format(Math.round(n)) + ' ₽'; }
+
+function formatDateTimeDisplay(str) {
+    if (!str) return '';
+    const dateObj = new Date(str);
+    if (isNaN(dateObj.getTime())) return '';
+    const date = dateObj.toLocaleDateString('ru', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const time = dateObj.toLocaleTimeString('ru', { hour: '2-digit', minute: '2-digit' });
+    return `${date} · ${time}`;
+}
 
 function formatDateDisplay(str, noDeadline = false) {
     if (noDeadline) return 'Нет срока';
@@ -4960,6 +5020,7 @@ function renderJournalTasks(tasks = []) {
         list.innerHTML = '<div class="task-empty">Добавьте пункты, чтобы фиксировать прогресс.</div>';
         if (note) note.textContent = 'Нет элементов в журнале';
         updateJournalProgress(tasks);
+        updateJournalSummary(tasks);
         return;
     }
 
@@ -4967,16 +5028,29 @@ function renderJournalTasks(tasks = []) {
         const row = document.createElement('div');
         row.className = 'task-row';
         row.dataset.index = idx;
+        if (task.done) row.classList.add('is-completed');
+        row.dataset.doneAt = task.doneAt || '';
+        const doneText = task.doneAt ? `Готово: ${formatDateTimeDisplay(task.doneAt)}` : 'Не выполнено';
         row.innerHTML = `
-            <input type="checkbox" ${task.done ? 'checked' : ''} onchange="persistJournalTasks()">
-            <input type="text" class="task-text" value="${escapeHtml(task.text || '')}" oninput="persistJournalTasks()" onblur="persistJournalTasks()">
-            <button type="button" class="task-delete" onclick="deleteJournalRow(${idx})">×</button>
+            <input type="checkbox" ${task.done ? 'checked' : ''} onchange="handleJournalToggle(${idx}, this)">
+            <div class="task-body">
+                <input type="text" class="task-text" value="${escapeHtml(task.text || '')}" oninput="persistJournalTasks()" onblur="persistJournalTasks()">
+                <div class="task-meta-row">
+                    <div class="task-amount-wrap">
+                        <span>Сумма</span>
+                        <input type="text" class="task-amount" value="${formatPlainNumber(task.amount || '')}" placeholder="0" oninput="formatNumberInput(this); handleJournalAmountChange()" onblur="handleJournalAmountChange()">
+                    </div>
+                    <div class="task-done-at">${doneText}</div>
+                </div>
+            </div>
+            <button type="button" class="task-delete trash" onclick="deleteJournalRow(${idx})" title="Удалить в корзину"><svg class="btn-icon"><use href="#icon-trash"/></svg></button>
         `;
         list.appendChild(row);
     });
 
     if (note) note.textContent = `${tasks.filter(t => t.done).length}/${tasks.length} выполнено`;
     updateJournalProgress(tasks);
+    updateJournalSummary(tasks);
 }
 
 function collectJournalTasks() {
@@ -4985,7 +5059,12 @@ function collectJournalTasks() {
     rows.forEach(row => {
         const text = row.querySelector('.task-text')?.value.trim() || '';
         const done = row.querySelector('input[type="checkbox"]')?.checked || false;
-        if (text) tasks.push({ text, done });
+        const amount = toNumeric(row.querySelector('.task-amount')?.value || 0);
+        let doneAt = row.dataset.doneAt || '';
+        if (done && !doneAt) doneAt = new Date().toISOString();
+        if (!done) doneAt = '';
+        row.dataset.doneAt = doneAt;
+        if (text) tasks.push({ text, done, amount, doneAt });
     });
     return tasks;
 }
@@ -5005,9 +5084,49 @@ function updateJournalProgress(tasks = []) {
     }
 }
 
+function updateJournalSummary(tasks = []) {
+    const summary = document.getElementById('journal-summary');
+    const totalEl = document.getElementById('journal-total');
+    const budgetEl = document.getElementById('journal-budget');
+    const diffEl = document.getElementById('journal-diff');
+    if (!summary) return;
+    if (!tasks.length) { summary.style.display = 'none'; return; }
+    summary.style.display = 'grid';
+    const { type, idx } = journalContext || {};
+    const budget = type !== undefined ? toNumeric(DATA[type]?.[idx]?.p || 0) : 0;
+    const total = tasks.reduce((sum, t) => sum + toNumeric(t.amount || 0), 0);
+    const diff = budget - total;
+    if (totalEl) totalEl.textContent = formatCurrency(total);
+    if (budgetEl) budgetEl.textContent = formatCurrency(budget);
+    if (diffEl) {
+        diffEl.textContent = `${diff >= 0 ? '+' : '–'}${formatCurrency(Math.abs(diff))}`;
+        diffEl.style.color = diff >= 0 ? 'var(--green)' : 'var(--red)';
+    }
+}
+
+function handleJournalToggle(idx, checkbox) {
+    const row = document.querySelector(`#journal-list .task-row[data-index="${idx}"]`);
+    if (!row) return;
+    if (checkbox?.checked) {
+        if (!row.dataset.doneAt) row.dataset.doneAt = new Date().toISOString();
+        row.classList.add('is-completed');
+    } else {
+        row.dataset.doneAt = '';
+        row.classList.remove('is-completed');
+    }
+    const meta = row.querySelector('.task-done-at');
+    if (meta) meta.textContent = row.dataset.doneAt ? `Готово: ${formatDateTimeDisplay(row.dataset.doneAt)}` : 'Не выполнено';
+    persistJournalTasks();
+}
+
+function handleJournalAmountChange() {
+    persistJournalTasks();
+}
+
 function persistJournalTasks() {
     const tasks = collectJournalTasks();
     updateJournalProgress(tasks);
+    updateJournalSummary(tasks);
     if (!journalContext) return;
     const { type, idx } = journalContext;
     const item = DATA[type]?.[idx];
@@ -5021,7 +5140,7 @@ function addJournalTask() {
     if (!input) return;
     const val = input.value.trim();
     const tasks = collectJournalTasks();
-    tasks.push({ text: val || `Пункт ${tasks.length + 1}`, done: false });
+    tasks.push({ text: val || `Пункт ${tasks.length + 1}`, done: false, amount: 0, doneAt: '' });
     input.value = '';
     renderJournalTasks(tasks);
     persistJournalTasks();
@@ -5030,6 +5149,31 @@ function addJournalTask() {
 function deleteJournalRow(idx) {
     const tasks = collectJournalTasks();
     tasks.splice(idx, 1);
+    renderJournalTasks(tasks);
+    persistJournalTasks();
+}
+
+function distributeTaskBudget() {
+    if (!journalContext) return;
+    const { type, idx } = journalContext;
+    const item = DATA[type]?.[idx];
+    const tasks = collectJournalTasks();
+    if (!tasks.length) { showToast('Добавьте задачи, чтобы распределять бюджет'); return; }
+    const budget = toNumeric(item?.p || 0);
+    if (!budget) { showToast('Укажите сумму проекта, чтобы разделить бюджет'); return; }
+    const base = Math.floor(budget / tasks.length);
+    let remainder = budget - base * tasks.length;
+    const distributed = tasks.map(t => {
+        const portion = base + (remainder > 0 ? 1 : 0);
+        if (remainder > 0) remainder -= 1;
+        return { ...t, amount: portion };
+    });
+    renderJournalTasks(distributed);
+    persistJournalTasks();
+}
+
+function clearTaskBudget() {
+    const tasks = collectJournalTasks().map(t => ({ ...t, amount: 0 }));
     renderJournalTasks(tasks);
     persistJournalTasks();
 }
