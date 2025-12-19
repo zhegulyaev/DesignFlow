@@ -209,6 +209,8 @@
   .days-critical { color: var(--red); font-weight: 700; }
   .days-warning { color: var(--gold); font-weight: 700; }
   .days-normal { color: var(--muted); }
+  .days-infinite { color: var(--muted); font-weight: 800; display: inline-flex; align-items: center; gap: 6px; }
+  .deadline-infinity { color: var(--muted); font-weight: 800; display: inline-flex; align-items: center; gap: 6px; }
   
   /* Price/Contractor/Net Styling */
   .price-cell-wrap { display: flex; align-items: center; justify-content: flex-end; gap: 4px; height: 100%; padding: 2px 0;}
@@ -289,6 +291,7 @@
   .action-btns{display:flex;gap:6px;align-items:center;}
   .action-btn-base { padding: 6px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; font-weight: 700; cursor: pointer; user-select: none; min-width: 32px; text-align: center; }
   .done-btn:hover { background: var(--green); color: #fff; border-color: var(--green);}
+  .edit-active-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
   .wait-btn:hover { background: var(--purple); color: #fff; border-color: var(--purple);}
   .pause-btn:hover { background: var(--link-blue); color: #fff; border-color: var(--link-blue);}
   /* New hover styles for wait and pause in active table */
@@ -484,7 +487,7 @@ body.light .pace-block.critical {
   .rep-cta:hover { border-color: var(--accent); color: var(--accent); }
   .rep-cta svg { width: 16px; height: 16px; }
   .link-preview { margin-top: 10px; padding: 10px 12px; border: 1px dashed var(--border); border-radius: 12px; background: var(--card-alt); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-  .link-preview-url { font-weight: 800; color: var(--text); word-break: break-all; }
+  .link-preview-url { font-weight: 800; color: var(--accent); word-break: break-all; text-decoration: underline; }
   .link-preview-actions { display: flex; gap: 8px; }
   .link-preview button { padding: 8px 12px; min-height: 36px; }
   /* Bulk Toolbar */
@@ -496,12 +499,12 @@ body.light .pace-block.critical {
   }
   .bulk-action-btn {
       background: var(--button-bg); border: 1px solid var(--border); color: var(--text);
-      padding: 8px 15px; font-size: 14px; border-radius: 6px; cursor: pointer; 
+      padding: 8px 15px; font-size: 14px; border-radius: 6px; cursor: pointer;
       transition: .2s; white-space: nowrap;
   }
   .bulk-action-btn.delete { color: var(--red); border-color: var(--red); }
-  .bulk-action-btn:hover { background: #30363d; }
-  .bulk-action-btn.delete:hover { background: rgba(218, 54, 51, 0.1); }
+  .bulk-action-btn:hover { background: var(--btn-hover); border-color: var(--accent); color: var(--accent); }
+  .bulk-action-btn.delete:hover { background: var(--del-hover-bg); color: var(--red); border-color: var(--del-hover-border); }
   
   /* Bulk Move Select */
   .bulk-move-select {
@@ -1751,7 +1754,7 @@ body:not([data-theme="dark"]) .header-new-badge {
                                <input type="hidden" id="add-proj-dl-val" value="">
                                 <button type="button" class="deadline-clear-btn" onclick="clearNewProjectDeadline()">
                                     <svg><use href="#icon-calendar-off"/></svg>
-                                    <span>Сбросить дедлайн</span>
+                                    <span>Без дедлайна</span>
                                 </button>
                             </div>
                         </div>
@@ -1781,7 +1784,7 @@ body:not([data-theme="dark"]) .header-new-badge {
                         </button>
                     </div>
                     <div class="link-preview" id="new-project-link-preview" style="display:none">
-                        <div class="link-preview-url" id="new-project-link-text"></div>
+                        <a class="link-preview-url" id="new-project-link-text" href="#" target="_blank" rel="noopener noreferrer"></a>
                         <div class="link-preview-actions">
                             <button class="btn-ghost" type="button" onclick="openLink('new')">Редактировать</button>
                             <button class="del-btn" type="button" onclick="clearNewProjectLink()" title="Очистить ссылку">×</button>
@@ -3682,6 +3685,11 @@ function formatDateDisplay(str) {
     return d;
 }
 
+function formatDeadlineDisplay(str) {
+    if (!str) return '<span class="deadline-infinity">∞ Без дедлайна</span>';
+    return formatDateDisplay(str);
+}
+
 function formatDateWithTime(dateObj, timeStr) {
     const y = dateObj.getFullYear();
     const m = String(dateObj.getMonth() + 1).padStart(2, '0');
@@ -3857,7 +3865,6 @@ function renderActive(){
         ];
         actionButtons.push(`<div class="edit-active-btn action-btn-base" onclick="startProjectEdit('active',${i})" title="Редактировать"><svg class="btn-icon"><use href="#icon-pen"/></svg></div>`);
         if (isTableEnabled('waiting')) actionButtons.push(`<div class="wait-active-btn action-btn-base" onclick="mv(${i},'active','waiting')" title="В ожидании"><svg class="btn-icon"><use href="#icon-waiting"/></svg></div>`);
-        if (isTableEnabled('paused')) actionButtons.push(`<div class="pause-active-btn action-btn-base" onclick="mv(${i},'active','paused')" title="Пауза"><svg class="btn-icon"><use href="#icon-paused"/></svg></div>`);
 
         tr.innerHTML = `
             <td class="select-col">
@@ -3877,7 +3884,7 @@ function renderActive(){
             </td>
             
             <td class="date-cell"><div class="date-input-wrap" onclick="openDate('active',${i},'start')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.start)}</span></div></td>
-            <td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('active',${i},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.dl)}</span></div></td>
+            <td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('active',${i},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDeadlineDisplay(item.dl)}</span></div></td>
             
             <td class="mono"><div class="${rem.cls}">${rem.txt}</div></td>
             
@@ -3996,6 +4003,8 @@ function renderSimple(type){
 
         const linkIcon = renderLinkControls(item, i, type);
         const rem = hasDeadline ? getTimeRemaining(item.dl) : null;
+        const deadlineText = hasDeadline ? formatDeadlineDisplay(item.dl) : '';
+        const remSuffix = hasDeadline && rem && !rem.isInfinite ? ` (${rem.txt})` : '';
 
         tr.innerHTML = `
             <td class="select-col">
@@ -4013,7 +4022,7 @@ function renderSimple(type){
             <td class="project-name-wrap">
                 <span class="project-name" contenteditable onblur="updVal('${type}',${i},'n',this.innerText)">${item.n}</span>
             </td>
-            ${hasDeadline ? `<td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('${type}',${i},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.dl)} (${rem.txt})</span></div></td>` : ''}
+            ${hasDeadline ? `<td class="date-cell"><div class="date-input-wrap ${rem.cls}" onclick="openDate('${type}',${i},'dl')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${deadlineText}${remSuffix}</span></div></td>` : ''}
             <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('${type}',${i},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td><div class="action-btns" style="justify-content:flex-end">
                 <div class="action-btn-base" onclick="startProjectEdit('${type}',${i})" title="Редактировать"><svg class="btn-icon"><use href="#icon-pen"/></svg></div>
@@ -4276,8 +4285,10 @@ function renderAll(){
         const deadlineValue = wrap.__type === 'archive' ? item.date : (item.dl || item.date || item.start);
         const dateField = wrap.__type === 'archive' ? 'date' : 'dl';
         const rem = wrap.__type === 'archive' ? { cls: '', txt: '' } : getTimeRemaining(deadlineValue);
-        const remText = wrap.__type === 'archive' || rem.txt === '—' ? '' : ` (${rem.txt})`;
-        const dateDisplay = deadlineValue ? formatDateDisplay(deadlineValue) : '—';
+        const remText = wrap.__type === 'archive' || (rem && rem.isInfinite) ? '' : ` (${rem.txt})`;
+        const dateDisplay = wrap.__type === 'archive'
+            ? (deadlineValue ? formatDateDisplay(deadlineValue) : '—')
+            : formatDeadlineDisplay(deadlineValue);
         const dateCls = wrap.__type === 'archive' ? '' : rem.cls;
         const linkIcon = renderLinkControls(item, wrap.idx, wrap.__type);
 
@@ -4523,6 +4534,7 @@ function updateNewProjectLinkButton() {
     if (preview && text) {
         preview.style.display = hasLink ? 'flex' : 'none';
         text.textContent = hasLink ? newProjectLink : '';
+        text.href = hasLink ? newProjectLink : '#';
     }
 }
 
@@ -4573,7 +4585,7 @@ function openAddModal(type = null, idx = null){
         previousDeadlineValue = item.dl || '';
         deadlineUnset = !item.dl;
         document.getElementById('add-proj-start-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(item.start || today);
-        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = item.dl ? formatDateDisplay(item.dl) : 'Без дедлайна';
+        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDeadlineDisplay(item.dl);
         document.getElementById('add-proj-dl-days').value = '';
         document.getElementById('add-proj-dl-custom').value = '';
         if (presetTimeInput) presetTimeInput.value = item.dl && item.dl.includes('T') ? item.dl.slice(11, 16) : '';
@@ -4595,7 +4607,7 @@ function openAddModal(type = null, idx = null){
         document.getElementById('add-proj-dl-custom').value = '';
         if (presetTimeInput) presetTimeInput.value = '';
         document.getElementById('add-proj-start-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
-        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(today);
+        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDeadlineDisplay(today);
         handleStatusChange('active');
         newProjectLink = '';
     }
@@ -4675,7 +4687,7 @@ function applyDeadlinePreset() {
     if (select.value === '') {
         const restoreVal = previousDeadlineValue || currentDl;
         document.getElementById('add-proj-dl-val').value = restoreVal;
-        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(restoreVal);
+        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDeadlineDisplay(restoreVal);
         customInput.value = '';
         previousDeadlineValue = '';
         return;
@@ -4685,7 +4697,7 @@ function applyDeadlinePreset() {
         select.value = '';
         document.getElementById('add-proj-dl-val').value = previousDeadlineValue || currentDl;
         const restoredDl = document.getElementById('add-proj-dl-val').value || currentDl;
-        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(restoredDl);
+        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDeadlineDisplay(restoredDl);
         previousDeadlineValue = '';
         return;
     }
@@ -4703,14 +4715,14 @@ function applyDeadlinePreset() {
     dlDate.setDate(dlDate.getDate() + days);
     const deadlineValue = formatDateWithTime(dlDate, finalTime);
     document.getElementById('add-proj-dl-val').value = deadlineValue;
-    document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(deadlineValue);
+    document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDeadlineDisplay(deadlineValue);
     previousDeadlineValue = deadlineValue;
 }
 
 function clearNewProjectDeadline() {
     deadlineUnset = true;
     document.getElementById('add-proj-dl-val').value = '';
-    document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = 'Без дедлайна';
+    document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDeadlineDisplay('');
     document.getElementById('add-proj-dl-days').value = '';
     document.getElementById('add-proj-dl-custom').value = '';
     previousDeadlineValue = '';
@@ -4801,7 +4813,8 @@ function saveDate(){
     if (queue.targetId) {
         document.getElementById(queue.targetId).value = result;
         const displayId = queue.targetId.replace('-val', '-display');
-        document.getElementById(displayId).querySelector('.date-text-display').innerHTML = formatDateDisplay(result);
+        const formatter = queue.targetId.includes('dl') ? formatDeadlineDisplay : formatDateDisplay;
+        document.getElementById(displayId).querySelector('.date-text-display').innerHTML = formatter(result);
         if (queue.targetId === 'add-proj-dl-val') deadlineUnset = false;
         if (queue.targetId === 'add-proj-start-val') {
             const presetTimeInput = document.getElementById('add-proj-dl-time');
@@ -5009,15 +5022,15 @@ function pluralize(num, forms){
 }
 
 function getTimeRemaining(dl){
-    if(!dl) return {txt:'—', cls:'days-normal', days: Infinity};
+    if(!dl) return {txt:'∞', cls:'days-infinite', days: Infinity, isInfinite: true};
     const targetDay = new Date(dl.slice(0, 10) + 'T00:00:00');
     const todayNormalized = new Date(today + 'T00:00:00');
 
-    if (isNaN(targetDay.getTime())) return {txt:'—', cls:'days-normal', days: Infinity};
+    if (isNaN(targetDay.getTime())) return {txt:'∞', cls:'days-infinite', days: Infinity, isInfinite: true};
 
     const dayDiff = Math.ceil((targetDay.getTime() - todayNormalized.getTime()) / (1000 * 60 * 60 * 24));
     const targetExact = dl.includes('T') ? new Date(dl.replace(' ', 'T')) : new Date(dl + 'T23:59:59');
-    if (isNaN(targetExact.getTime())) return {txt:'—', cls:'days-normal', days: Infinity};
+    if (isNaN(targetExact.getTime())) return {txt:'∞', cls:'days-infinite', days: Infinity, isInfinite: true};
     const msLeft = targetExact.getTime() - Date.now();
 
     if(msLeft < 0) return {txt:'Просрочено', cls:'days-critical', days: -1};
