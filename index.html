@@ -209,7 +209,7 @@
   .days-muted { color: var(--muted); font-weight: 600; opacity: 0.8; }
   
   /* Price/Contractor/Net Styling */
-  .price-cell-wrap { display: flex; align-items: center; justify-content: flex-end; gap: 4px; height: 100%; padding: 2px 0;}
+  .price-cell-wrap { display: flex; align-items: center; justify-content: flex-end; gap: 6px; height: 100%; padding: 4px 2px; }
   .price-cell-wrap input {
     background: transparent;
     border: none;
@@ -219,16 +219,16 @@
     min-width: 64px;
     flex: 1 1 70px;
     font-family: monospace;
-    font-weight: 600;
+    font-weight: 700;
     outline: none;
     text-align: right;
     padding: 4px 0; /* Добавлен отступ для кликабельности */
     margin: 0;
     -moz-appearance: textfield;
   }
-  .price-cell-wrap:focus-within { border-color: var(--border); background: var(--input-bg); border-radius: 6px; }
+  .price-cell-wrap:focus-within { border-color: var(--border); background: var(--input-bg); border-radius: 10px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
   .price-cell-wrap input::-webkit-outer-spin-button, .price-cell-wrap input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-  .currency-symbol { color: var(--muted); font-size: 14px; font-weight: 600; font-family: monospace; min-width: 15px; }
+  .currency-symbol { color: var(--muted); font-size: 14px; font-weight: 700; font-family: monospace; min-width: 16px; }
   .currency-symbol.symbol-empty { font-size: 12px; font-weight: 800; color: var(--muted); text-transform: lowercase; }
 
   /* Net Column Fix */
@@ -242,9 +242,17 @@
       margin-top: 2px;
   }
 
-  .expense-cell { gap: 4px; }
-  .expense-mode { background: var(--pill-bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 4px 6px; font-size: 12px; cursor: pointer; min-width: 54px; }
-  .expense-helper { color: var(--muted); font-size: 11px; margin-top: 2px; text-align: right; line-height: 1.2; }
+  .expense-cell { gap: 8px; justify-content: flex-end; }
+  .expense-cell .price-cell-wrap {
+      background: var(--pill-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 6px 10px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+  }
+  .expense-cell .price-cell-wrap input { text-align: left; min-width: 80px; }
+  .expense-mode { background: var(--pill-bg); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 6px 10px; font-size: 12px; cursor: pointer; min-width: 64px; font-weight: 700; }
+  .expense-helper { color: var(--muted); font-size: 12px; margin-top: 6px; text-align: right; line-height: 1.25; font-weight: 600; }
   .helper-label { color: var(--muted); font-size: 12px; margin-top: 6px; line-height: 1.4; font-weight: 600; }
 
   .paid-amount { font-size: 12px; color: var(--muted); margin-top: 4px; text-align: right; }
@@ -254,12 +262,12 @@
   .paid-cell .paid-amount { text-align: right; width: 100%; }
 
 
-  .paid-select, .tax-select { background: transparent; color: var(--text); border: 1px solid transparent; padding: 5px; border-radius: 6px; font-size: 13px; cursor: pointer; outline: none; transition: .2s; text-align: center;}
-  .paid-select:hover, .tax-select:hover { background: var(--btn-hover); border-color: var(--border); }
+  .paid-select, .tax-select { background: var(--pill-bg); color: var(--text); border: 1px solid var(--border); padding: 8px 10px; border-radius: 10px; font-size: 13px; cursor: pointer; outline: none; transition: .2s; text-align: center; font-weight: 800; letter-spacing: -0.1px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .paid-select:hover, .tax-select:hover { background: var(--btn-hover); border-color: var(--date-hover-border); }
   .paid-select option, .tax-select option { background: var(--card); }
-  .tax-cell { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-  .tax-cell .tax-select { width: 100%; min-width: 88px; }
-  .tax-helper { color: var(--muted); font-size: 12px; margin-top: 2px; text-align: right; width: 100%; }
+  .tax-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 4px 0; }
+  .tax-cell .tax-select { width: 120px; }
+  .tax-helper { color: var(--green); font-size: 13px; margin-top: 2px; text-align: left; width: 100%; font-weight: 800; letter-spacing: -0.2px; }
 
   /* Actions */
   .client-wrap{display:flex;align-items:center;gap:8px; width: 100%;}
@@ -1144,7 +1152,10 @@ td.date-cell + td.date-cell {
     <symbol id="icon-hide" viewBox="0 0 24 24"><path fill="currentColor" d="M4.52 3.1a1 1 0 0 0-1.42 1.41l16 16a1 1 0 0 0 1.42-1.41l-2.03-2.03A11.3 11.3 0 0 0 21.89 12a11.29 11.29 0 0 0-3.67-4.91A9.3 9.3 0 0 0 12 5A9.4 9.4 0 0 0 8.6 5.6Zm5.58 5.58l2.11 2.1a2 2 0 0 0-2.1-2.1Zm-5.42-1.5A9.27 9.27 0 0 0 2.11 12a11.29 11.29 0 0 0 3.67 4.91A9.3 9.3 0 0 0 12 19a9.4 9.4 0 0 0 1.61-.14l-2.44-2.45A4 4 0 0 1 7.6 9.18Z"/></symbol>
     <symbol id="icon-active" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM3 8a5 5 0 0 1 10 0 5 5 0 0 1-10 0Z"/></symbol>
     <symbol id="icon-all" viewBox="0 0 16 16"><path fill="currentColor" d="M2.5 2.5A.5.5 0 0 1 3 2h4.5a.5.5 0 0 1 .5.5V7a.5.5 0 0 1-.5.5H3A.5.5 0 0 1 2.5 7Zm6 0A.5.5 0 0 1 9 2h4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-.5.5H9a.5.5 0 0 1-.5-.5Zm-6 6A.5.5 0 0 1 3 8h4.5a.5.5 0 0 1 .5.5V13a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5Zm8 0A.5.5 0 0 1 11 8h2a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5Z"/></symbol>
-    <symbol id="icon-waiting" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0ZM8 4a1 1 0 0 1 1 1v3.5a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1 0-1H8V5a1 1 0 0 1 1-1Z"/></symbol>
+    <symbol id="icon-waiting" viewBox="0 0 16 16">
+        <path fill="currentColor" d="M2.5 1a.5.5 0 0 0-.5.5v3c0 .176.091.33.228.424L6 8l-3.772 3.076A.5.5 0 0 0 2 11.5v3a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.228-.424L10 8l3.772-3.076A.5.5 0 0 0 14 4.5v-3a.5.5 0 0 0-.5-.5h-11Z"/>
+        <path fill="currentColor" d="M4 1h8v1H4V1Zm0 13h8v1H4v-1Z" opacity="0.6"/>
+    </symbol>
     <symbol id="icon-potential" viewBox="0 0 16 16"><path fill="currentColor" d="M3 1.5A.5.5 0 0 1 3.5 1h7a.5.5 0 0 1 .4.8L9.6 4l1.3 2.2a.5.5 0 0 1-.43.8H5.5V14a.5.5 0 0 1-1 0z"/></symbol>
     <symbol id="icon-paused" viewBox="0 0 16 16"><path fill="currentColor" d="M5 2.5a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0V3a.5.5 0 0 1 .5-.5Zm6 0a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-1 0V3a.5.5 0 0 1 .5-.5Z"/></symbol>
     <symbol id="icon-archive" viewBox="0 0 16 16"><path fill="currentColor" d="M13 1.75a.75.75 0 0 0-.75-.75H3.75a.75.75 0 0 0-.75.75v12.5c0 .414.336.75.75.75h8.5a.75.75 0 0 0 .75-.75Zm-1.5 8.75a.5.5 0 0 1-1 0V6.707L6.464 10.464a.5.5 0 0 1-.708-.708L10.793 6H7.5a.5.5 0 0 1 0-1h4.5a.5.5 0 0 1 .5.5v4.5Z"/></symbol>
@@ -1799,7 +1810,7 @@ body:not([data-theme="dark"]) .header-new-badge {
                     <div class="contractor-helper" id="add-contractor-helper">Выберите тип расходов, чтобы указать сумму.</div>
                 </div>
 
-                <div class="timeline-row">
+                <div class="timeline-row status-dates">
                     <div class="timeline-pair">
                         <div class="date-duo-card">
                             <div class="inp-group">
@@ -1864,49 +1875,126 @@ body:not([data-theme="dark"]) .header-new-badge {
 <div class="modal" id="projectEditorModal">
     <div class="modal-content modal-wide">
         <span class="close-modal-x" onclick="closeProjectEditor()">×</span>
-        <h3 style="margin-bottom: 6px;">Редактор проекта</h3>
+        <h2 style="margin-bottom:10px">Редактирование проекта</h2>
         <div class="project-editor-note" id="project-editor-name">Настройте сроки и примените шаблон.</div>
-        <div class="project-editor-grid">
-            <div class="date-duo-card">
+        <div class="add-modal-grid">
+            <div class="add-modal-card add-modal-stack">
                 <div class="inp-group">
-                    <label>⚡ Старт</label>
-                    <div class="date-input-wrap date-chip" id="editor-start-display" onclick="openDateInModal('editor-start-val')">
-                        <svg class="date-icon"><use href="#icon-calendar"/></svg>
-                        <span class="date-text-display">Сегодня</span>
-                    </div>
-                    <input type="hidden" id="editor-start-val" value="">
-                </div>
-            </div>
-            <div class="date-duo-card" id="editor-deadline-card">
-                <div class="inp-group">
-                    <label>🏁 Дедлайн</label>
-                    <div class="date-input-wrap date-chip" id="editor-dl-display" onclick="openDateInModal('editor-dl-val')">
-                        <svg class="date-icon"><use href="#icon-calendar"/></svg>
-                        <span class="date-text-display">Сегодня</span>
-                    </div>
-                    <input type="hidden" id="editor-dl-val" value="">
-                    <label class="no-deadline-toggle"><input type="checkbox" id="editor-no-deadline" onchange="toggleEditorDeadline()"> Дедлайн не установлен</label>
-                </div>
-            </div>
-            <div class="inp-group">
-                <label>Шаблон срока</label>
-                <div class="deadline-presets">
-                    <select id="editor-dl-days" onchange="applyEditorDeadlinePreset()">
-                        <option value="">Не выбрано</option>
-                        <option value="1">1 день</option>
-                        <option value="2">2 дня</option>
-                        <option value="3">3 дня</option>
-                        <option value="5">5 дней</option>
-                        <option value="7">7 дней</option>
-                        <option value="custom">Свои дни</option>
+                    <label>Статус</label>
+                    <select id="edit-proj-type" onchange="handleEditorStatusChange(this.value)">
+                        <option value="active">В работу</option>
+                        <option value="potential">Потенциал</option>
+                        <option value="waiting">Ожидает</option>
+                        <option value="paused">На паузе</option>
+                        <option value="archive">Выполнено (Архив)</option>
                     </select>
-                    <input type="number" id="editor-dl-custom" placeholder="Свои дни" oninput="applyEditorDeadlinePreset()">
-                    <input type="time" id="editor-dl-time" class="deadline-time" step="300" aria-label="Время дедлайна" oninput="applyEditorDeadlinePreset()">
+                </div>
+                <div class="inp-group">
+                    <label class="no-deadline-toggle"><input type="checkbox" id="edit-proj-delegated"> Делегировано</label>
+                    <div class="helper-label">Оставляет проект во «В работе», но добавляет в раздел делегирования.</div>
+                </div>
+                <div class="inp-group">
+                    <label>Имя клиента</label>
+                    <input type="text" id="edit-proj-client" placeholder="Иван Иванов">
+                </div>
+                <div class="inp-group">
+                    <label>Название проекта</label>
+                    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                        <div class="input-with-clear">
+                            <input type="text" id="edit-proj-name" list="project-name-templates" placeholder="Сайт для кофейни">
+                        </div>
+                        <datalist id="project-name-templates"></datalist>
+                    </div>
+                    <div class="template-helper" id="edit-template-helper">Введите название проекта, затем сохраните как шаблон.</div>
+                </div>
+            </div>
+            <div class="add-modal-card add-modal-stack">
+                <div class="add-modal-compact price-tax-row">
+                    <div class="inp-group price-group">
+                        <label>Сумма (₽)</label>
+                        <input type="text" id="edit-proj-price" placeholder="50 000" oninput="formatNumberInput(this)">
+                    </div>
+                    <div class="inp-group contractor-group contractor-inline">
+                        <label>Расходы</label>
+                        <select id="edit-proj-contractor-mode" class="contractor-mode-select" onchange="handleEditContractorModeChange(this.value)">
+                            <option value="none">Нет расходов</option>
+                            <option value="percent">Процент (%)</option>
+                            <option value="amount">Фикс. сумма (₽)</option>
+                        </select>
+                    </div>
+                    <div class="inp-group tax-group" style="flex: 0 0 150px;">
+                        <label>Налог</label>
+                        <select id="edit-proj-tax" class="symbol-select">
+                            <option value="0">0%</option>
+                            <option value="4">4%</option>
+                            <option value="6">6%</option>
+                            <option value="13">13%</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="contractor-amount contractor-amount-row is-hidden" id="edit-contractor-amount-wrap">
+                    <div class="input-with-suffix">
+                        <input type="text" class="contractor-input" id="edit-proj-contractor" placeholder="Например, 30 000" oninput="formatNumberInput(this)" disabled>
+                        <span class="input-suffix" id="edit-contractor-suffix"></span>
+                    </div>
+                    <div class="contractor-helper" id="edit-contractor-helper">Выберите тип расходов, чтобы указать сумму.</div>
+                </div>
+
+                <div class="timeline-row status-dates">
+                    <div class="timeline-pair">
+                        <div class="date-duo-card">
+                            <div class="inp-group">
+                                <label>⚡ Старт</label>
+                                <div class="date-input-wrap date-chip" id="editor-start-display" onclick="openDateInModal('editor-start-val')">
+                                    <svg class="date-icon"><use href="#icon-calendar"/></svg>
+                                    <span class="date-text-display">Сегодня</span>
+                                </div>
+                                <input type="hidden" id="editor-start-val" value="">
+                            </div>
+                        </div>
+                        <div class="date-duo-card" id="editor-deadline-card">
+                            <div class="inp-group">
+                                <label>🏁 Дедлайн</label>
+                                <div class="date-input-wrap date-chip" id="editor-dl-display" onclick="openDateInModal('editor-dl-val')">
+                                    <svg class="date-icon"><use href="#icon-calendar"/></svg>
+                                    <span class="date-text-display">Сегодня</span>
+                                </div>
+                                <input type="hidden" id="editor-dl-val" value="">
+                                <label class="no-deadline-toggle"><input type="checkbox" id="editor-no-deadline" onchange="toggleEditorDeadline()"> Дедлайн не установлен</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="date-duo-card">
+                        <div class="inp-group">
+                            <label>Шаблон срока</label>
+                            <div class="deadline-presets">
+                                <select id="editor-dl-days" onchange="applyEditorDeadlinePreset()">
+                                    <option value="">Не выбрано</option>
+                                    <option value="1">1 день</option>
+                                    <option value="2">2 дня</option>
+                                    <option value="3">3 дня</option>
+                                    <option value="5">5 дней</option>
+                                    <option value="7">7 дней</option>
+                                    <option value="custom">Свои дни</option>
+                                </select>
+                                <input type="number" id="editor-dl-custom" placeholder="Свои дни" oninput="applyEditorDeadlinePreset()">
+                                <input type="time" id="editor-dl-time" class="deadline-time" step="300" aria-label="Время дедлайна" oninput="applyEditorDeadlinePreset()">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="deadline-links-row">
+                        <button type="button" class="template-create-inline link-inline-btn" id="edit-project-link-btn" onclick="openLinkFromEditor()">🔗 Добавить ссылку</button>
+                    </div>
+                    <div class="link-preview" id="edit-project-link-preview" style="display:none">
+                        <div class="link-preview-url" id="edit-project-link-text"></div>
+                        <div class="link-preview-actions">
+                            <button class="btn-ghost" type="button" onclick="openLinkFromEditor()">Редактировать</button>
+                            <button class="del-btn" type="button" onclick="clearEditProjectLink()" title="Очистить ссылку">×</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <label class="no-deadline-toggle" style="margin-bottom: 8px;"><input type="checkbox" id="editor-delegated"> Проект делегирован</label>
 
         <div class="add-modal-actions">
             <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveProjectEditor()">Сохранить изменения</button>
@@ -3352,6 +3440,30 @@ function handleNewContractorModeChange(mode) {
     const helper = document.getElementById('add-contractor-helper');
     const wrapper = document.getElementById('contractor-amount-wrap');
     const suffix = document.getElementById('contractor-suffix');
+    if (!input || !helper || !wrapper || !suffix) return;
+    const showInput = mode !== 'none';
+    wrapper.classList.toggle('is-hidden', !showInput);
+    input.disabled = !showInput;
+    if (!showInput) {
+        input.value = '';
+        suffix.textContent = '';
+        helper.textContent = 'Выберите тип расходов, чтобы добавить сумму.';
+        return;
+    }
+    const isPercent = mode === 'percent';
+    helper.textContent = isPercent
+        ? 'Укажите процент расходов от общей суммы.'
+        : 'Укажите фиксированную сумму расходов.';
+    input.placeholder = isPercent ? 'Например, 20' : 'Например, 30 000';
+    suffix.textContent = isPercent ? '%' : '₽';
+    input.focus();
+}
+
+function handleEditContractorModeChange(mode) {
+    const input = document.getElementById('edit-proj-contractor');
+    const helper = document.getElementById('edit-contractor-helper');
+    const wrapper = document.getElementById('edit-contractor-amount-wrap');
+    const suffix = document.getElementById('edit-contractor-suffix');
     if (!input || !helper || !wrapper || !suffix) return;
     const showInput = mode !== 'none';
     wrapper.classList.toggle('is-hidden', !showInput);
@@ -5012,9 +5124,30 @@ function openProjectEditor(type, idx) {
     projectEditorContext = { type, idx };
     const nameLabel = document.getElementById('project-editor-name');
     if (nameLabel) nameLabel.textContent = `${item.n || 'Проект'} · ${item.c || 'Клиент'}`;
+
     const startVal = item.start || today;
     const dlVal = item.dl || '';
     editorPreviousDeadline = dlVal || startVal;
+
+    const typeSelect = document.getElementById('edit-proj-type');
+    if (typeSelect) typeSelect.value = type;
+    document.getElementById('edit-proj-client').value = item.c || '';
+    document.getElementById('edit-proj-name').value = item.n || '';
+    document.getElementById('edit-proj-price').value = formatPlainNumber(item.p || 0);
+    document.getElementById('edit-proj-tax').value = item.taxPrc === undefined ? '0' : String(item.taxPrc);
+
+    const contractorMode = item.contractorMode || 'none';
+    const contractorInput = document.getElementById('edit-proj-contractor');
+    document.getElementById('edit-proj-contractor-mode').value = contractorMode;
+    if (contractorInput) contractorInput.value = contractorMode === 'none' ? '' : formatPlainNumber(item.contractor || 0);
+    handleEditContractorModeChange(contractorMode);
+
+    const delegatedToggle = document.getElementById('edit-proj-delegated');
+    if (delegatedToggle) {
+        delegatedToggle.checked = !!item.delegated;
+        delegatedToggle.disabled = type !== 'active';
+    }
+
     document.getElementById('editor-start-val').value = startVal;
     document.getElementById('editor-dl-val').value = dlVal;
     document.getElementById('editor-start-display').querySelector('.date-text-display').innerHTML = formatDateDisplay(startVal);
@@ -5023,17 +5156,43 @@ function openProjectEditor(type, idx) {
     if (timeInput) timeInput.value = dlVal && dlVal.includes('T') ? dlVal.slice(11, 16) : '';
     const noDeadlineToggle = document.getElementById('editor-no-deadline');
     if (noDeadlineToggle) noDeadlineToggle.checked = !!item.noDeadline;
-    const delegatedToggle = document.getElementById('editor-delegated');
-    if (delegatedToggle) {
-        delegatedToggle.checked = !!item.delegated;
-        delegatedToggle.disabled = type !== 'active';
-        delegatedToggle.title = type !== 'active' ? 'Доступно только в статусе «В работе»' : '';
-    }
+
     document.getElementById('editor-dl-days').value = '';
     document.getElementById('editor-dl-custom').value = '';
+    handleEditorStatusChange(type);
     toggleEditorDeadline();
+    renderEditProjectLinkPreview(item.link);
     const modal = document.getElementById('projectEditorModal');
     if (modal) modal.style.display = 'flex';
+}
+
+function renderEditProjectLinkPreview(linkValue) {
+    const preview = document.getElementById('edit-project-link-preview');
+    const text = document.getElementById('edit-project-link-text');
+    const btn = document.getElementById('edit-project-link-btn');
+    if (!preview || !text || !btn) return;
+    const link = linkValue === undefined
+        ? (projectEditorContext ? DATA[projectEditorContext.type]?.[projectEditorContext.idx]?.link : '')
+        : linkValue;
+    const hasLink = !!link;
+    preview.style.display = hasLink ? 'flex' : 'none';
+    text.textContent = hasLink ? link : '';
+    btn.textContent = hasLink ? '🔗 Изменить ссылку' : '🔗 Добавить ссылку';
+}
+
+function openLinkFromEditor() {
+    if (!projectEditorContext) return;
+    openLink(projectEditorContext.type, projectEditorContext.idx);
+}
+
+function clearEditProjectLink() {
+    if (!projectEditorContext) return;
+    const { type, idx } = projectEditorContext;
+    const item = DATA[type]?.[idx];
+    if (!item) return;
+    item.link = '';
+    renderEditProjectLinkPreview('');
+    save(); upd();
 }
 
 function closeProjectEditor() {
@@ -5047,25 +5206,65 @@ function saveProjectEditor() {
     const { type, idx } = projectEditorContext;
     const item = DATA[type]?.[idx];
     if (!item) return;
-    const startVal = document.getElementById('editor-start-val').value;
+
+    const targetType = document.getElementById('edit-proj-type').value;
+    const name = document.getElementById('edit-proj-name').value.trim();
+    const client = document.getElementById('edit-proj-client').value.trim();
+    const price = toNumeric(document.getElementById('edit-proj-price').value);
+    const contractorMode = document.getElementById('edit-proj-contractor-mode').value || 'none';
+    const contractorVal = contractorMode === 'none' ? 0 : toNumeric(document.getElementById('edit-proj-contractor').value);
+    const tax = +document.getElementById('edit-proj-tax').value || 0;
+    const startVal = document.getElementById('editor-start-val').value || today;
     const dlVal = document.getElementById('editor-dl-val').value;
     const noDeadline = document.getElementById('editor-no-deadline')?.checked;
-    const delegated = document.getElementById('editor-delegated')?.checked;
+    const delegated = document.getElementById('edit-proj-delegated')?.checked;
 
-    item.start = startVal || '';
-    item.dl = noDeadline ? '' : dlVal;
-    item.noDeadline = !!noDeadline;
-    item.delegated = type === 'active' ? !!delegated : false;
+    const updated = {
+        ...item,
+        n: name,
+        c: client,
+        p: price,
+        contractor: contractorVal,
+        contractorMode,
+        taxPrc: tax,
+    };
 
-    if (type === 'potential') {
-        delete item.start;
-        delete item.dl;
-        delete item.noDeadline;
+    const wasArchive = type === 'archive';
+    const shouldArchive = targetType === 'archive';
+
+    if (targetType === 'active') {
+        updated.start = startVal;
+        updated.dl = noDeadline ? '' : dlVal;
+        updated.noDeadline = !!noDeadline;
+        updated.delegated = !!delegated;
+        if (updated.paid === undefined && !wasArchive) updated.paid = 50;
+    } else if (targetType === 'waiting' || targetType === 'paused') {
+        updated.start = startVal;
+        updated.dl = noDeadline ? '' : dlVal;
+        updated.noDeadline = !!noDeadline;
+        updated.delegated = false;
+        updated.paid = 0;
+    } else if (targetType === 'potential') {
+        delete updated.start;
+        delete updated.dl;
+        updated.noDeadline = false;
+        updated.delegated = false;
+        updated.paid = 0;
     }
 
-    if (type === 'archive') {
-        item.noDeadline = false;
+    if (shouldArchive) {
+        updated.noDeadline = false;
+        delete updated.dl;
+        delete updated.start;
+        updated.delegated = false;
+        updated.paid = 100;
+        updated.date = item.date || today;
+    } else if (!shouldArchive && wasArchive) {
+        delete updated.date;
     }
+
+    DATA[type].splice(idx, 1);
+    DATA[targetType].push(updated);
 
     sortData('active', 'dl', 'date', true);
     save(); upd();
@@ -5229,6 +5428,24 @@ function handleStatusChange(status) {
     }
 }
 
+function handleEditorStatusChange(status) {
+    const dateBlocks = document.querySelectorAll('#projectEditorModal .status-dates');
+    dateBlocks.forEach(block => block.style.display = status === 'potential' ? 'none' : '');
+    const delegationInput = document.getElementById('edit-proj-delegated');
+    if (delegationInput) {
+        delegationInput.disabled = status !== 'active';
+        if (status !== 'active') delegationInput.checked = false;
+    }
+    const noDeadlineToggle = document.getElementById('editor-no-deadline');
+    if (noDeadlineToggle) {
+        noDeadlineToggle.disabled = status === 'potential';
+        if (status === 'potential') {
+            noDeadlineToggle.checked = false;
+            toggleEditorDeadline();
+        }
+    }
+}
+
 function openDate(type, idx, field){
     queue = {type, idx, field, targetId: null};
     const val = DATA[type][idx][field];
@@ -5358,6 +5575,9 @@ function saveLink(){
     }
 
     DATA[queue.type][queue.idx].link = normalized;
+    if (projectEditorContext && projectEditorContext.type === queue.type && projectEditorContext.idx === queue.idx) {
+        renderEditProjectLinkPreview(normalized);
+    }
     closeLinkModal(); save(); upd();
 }
 
