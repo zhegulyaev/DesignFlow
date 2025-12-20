@@ -1525,6 +1525,254 @@ td.date-cell + td.date-cell {
 
 
 
+
+  /* Обновленные стили для модального окна настроек */
+  .settings-modal {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    font-family: 'Inter', sans-serif;
+    color: #333;
+    max-width: 1280px;
+    width: 96vw;
+  }
+
+  .settings-modal h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .settings-modal p {
+    color: #666;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .settings-layout { display: grid; grid-template-columns: 260px 1fr; gap: 18px; align-items: start; }
+
+  .settings-sidebar {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    padding: 10px;
+  }
+
+  .settings-sidebar button {
+    width: 100%;
+    padding: 12px 16px;
+    margin-bottom: 5px;
+    border: none;
+    background: none;
+    text-align: left;
+    font-size: 16px;
+    color: #555;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .settings-sidebar button:hover { background-color: #e9ecef; color: #333; }
+  .settings-sidebar button.active { background-color: #e7f1ff; color: #007bff; font-weight: 500; }
+
+  .settings-content { display: flex; flex-direction: column; gap: 16px; }
+  .settings-content h3 { font-size: 18px; font-weight: 600; margin-bottom: 20px; }
+  .settings-pane { display: none; flex-direction: column; gap: 14px; }
+  .settings-pane.active { display: flex; }
+
+  .settings-section { border: 1px solid #e9ecef; border-radius: 14px; padding: 18px; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+  .settings-section-title { font-weight: 800; font-size: 16px; display:flex; align-items:flex-start; justify-content: space-between; gap: 10px; text-align: left; color: #222; }
+  .settings-section-sub { color: #777; font-size: 14px; margin-top: 6px; font-weight: 500; }
+
+  .theme-option {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #fff;
+  }
+  .theme-option:hover { border-color: #b3d7ff; background-color: #f8f9fa; }
+  .theme-option.selected { border-color: #007bff; background-color: #f0f7ff; }
+  .theme-option input[type="radio"] { margin-right: 15px; accent-color: #007bff; transform: scale(1.2); }
+  .theme-option-text strong { display: block; font-size: 16px; font-weight: 600; margin-bottom: 4px; color: #222; }
+  .theme-option-text p { text-align: left; margin: 0; font-size: 14px; color: #777; }
+  .save-button { width: 100%; padding: 14px; background-color: #007bff; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background-color 0.2s; margin-top: 20px; }
+  .save-button:hover { background-color: #0056b3; }
+
+
+  /* CSS для нового блока "Личный Рекорд" */
+  .record-block {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+
+  .record-icon {
+    font-size: 48px;
+    margin-right: 20px;
+    background-color: #fff;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .record-content h3 {
+    margin: 0 0 5px 0;
+    font-size: 18px;
+    color: #666;
+    font-weight: 500;
+  }
+
+  .record-value {
+    margin: 0;
+    font-size: 36px;
+    font-weight: 800;
+    color: #28a745;
+  }
+
+  .record-subtitle {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    color: #999;
+  }
+
+  /* CSS для нового блока "Финансы" */
+  .finance-block {
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  }
+
+  .finance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 12px;
+  }
+
+  .finance-header h2 {
+    margin: 0;
+    font-size: 28px;
+  }
+
+  .finance-date { color: #666; font-size: 16px; }
+
+  .edit-goal-btn {
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    background: none;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #555;
+  }
+
+  .finance-cards {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .finance-card {
+    flex: 1;
+    min-width: 220px;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: #f8f9fa;
+    border: 1px solid #eee;
+  }
+
+  .card-icon { font-size: 32px; margin-right: 15px; }
+  .card-info { flex: 1; }
+  .card-label { display: block; font-size: 14px; color: #666; margin-bottom: 5px; }
+  .card-value { display: block; font-size: 24px; font-weight: 700; color: #333; }
+
+  .fact-card .progress-bar {
+    height: 6px;
+    background-color: #e9ecef;
+    border-radius: 3px;
+    margin-top: 10px;
+    overflow: hidden;
+  }
+  .fact-card .progress-fill {
+    height: 100%;
+    background-color: #28a745;
+    border-radius: 3px;
+    transition: width 0.5s ease-in-out;
+  }
+
+  .finance-recent-transactions h3 { font-size: 20px; margin-bottom: 20px; }
+  .finance-recent-transactions ul { list-style: none; padding: 0; margin: 0 0 20px 0; }
+  .finance-recent-transactions li { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #eee; }
+  .finance-recent-transactions li:last-child { border-bottom: none; }
+  .trans-amount.positive { color: #28a745; }
+  .trans-amount.negative { color: #dc3545; }
+  .view-all-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #f0f7ff;
+    color: #007bff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  /* Исправление кнопки прокрутки */
+  .scroll-toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 0;
+  }
+  .scroll-toggle svg, .scroll-toggle i { margin: 0; display: block; }
+
+  /* Ровные линии в таблице проектов */
+  .projects-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  .projects-table thead th {
+    text-align: left;
+    padding: 16px 20px;
+    font-weight: 600;
+    color: #666;
+    border-bottom: 2px solid #eee;
+    white-space: nowrap;
+  }
+  .projects-table tbody tr {
+    height: 70px;
+    transition: background-color 0.2s;
+  }
+  .projects-table tbody tr:hover { background-color: #f9f9f9; }
+  .projects-table tbody td {
+    padding: 12px 20px;
+    vertical-align: middle;
+    border-bottom: 1px solid #eee;
+    color: #333;
+  }
+
 </style>
 </head>
 <body>
@@ -1737,7 +1985,7 @@ body:not([data-theme="dark"]) .header-new-badge {
     
     <div id="view-active">
       <div class="table-wrap">
-        <table id="t-active">
+        <table id="t-active" class="projects-table">
           <thead>
             <tr>
               <th class="select-col">№</th>
@@ -1764,7 +2012,7 @@ body:not([data-theme="dark"]) .header-new-badge {
 
     <div id="view-waiting" style="display:none">
         <div class="table-wrap">
-          <table id="t-waiting">
+          <table id="t-waiting" class="projects-table">
             <thead>
               <tr>
                 <th class="select-col">№</th>
@@ -1782,7 +2030,7 @@ body:not([data-theme="dark"]) .header-new-badge {
     
     <div id="view-potential" style="display:none">
         <div class="table-wrap">
-          <table id="t-potential">
+          <table id="t-potential" class="projects-table">
             <thead>
               <tr>
                 <th class="select-col">№</th>
@@ -1823,7 +2071,7 @@ body:not([data-theme="dark"]) .header-new-badge {
             </div>
             <button class="save-stg request-add-btn" onclick="addRequest()">Добавить</button>
         </div>
-        <table id="t-requests">
+        <table id="t-requests" class="projects-table">
             <thead>
                 <tr>
                     <th class="select-col">№</th>
@@ -1843,7 +2091,7 @@ body:not([data-theme="dark"]) .header-new-badge {
 
     <div id="view-paused" style="display:none">
       <div class="table-wrap">
-        <table id="t-paused">
+        <table id="t-paused" class="projects-table">
           <thead>
             <tr>
               <th class="select-col">№</th>
@@ -1862,7 +2110,7 @@ body:not([data-theme="dark"]) .header-new-badge {
 
     <div id="view-archive" style="display:none">
       <div class="table-wrap">
-        <table id="t-archive">
+        <table id="t-archive" class="projects-table">
           <thead>
             <tr>
               <th class="select-col">№</th>
@@ -1883,7 +2131,7 @@ body:not([data-theme="dark"]) .header-new-badge {
 
     <div id="view-all" style="display:none">
       <div class="table-wrap">
-        <table id="t-all">
+        <table id="t-all" class="projects-table">
           <thead>
             <tr>
               <th class="select-col">№</th>
@@ -1905,7 +2153,7 @@ body:not([data-theme="dark"]) .header-new-badge {
     
     <div id="view-trash" style="display:none">
       <div class="table-wrap">
-        <table id="t-trash">
+        <table id="t-trash" class="projects-table">
           <thead>
             <tr>
               <th class="select-col">№</th>
@@ -1934,93 +2182,61 @@ body:not([data-theme="dark"]) .header-new-badge {
     <div class="stats-full">
       <div class="stats-two-columns">
           <div class="stats-main" data-block-container="main">
-              <div class="card">
-              <div class="card-head">
+              <div class="finance-block">
+                <div class="finance-header">
                   <div>
-                      <div class="finance-title">Финансы: <span class="text-green" id="dash-month-name">...</span></div>
-                      <div class="finance-sub">Дашборд по чистой прибыли и платежам</div>
-                      <div class="stat-scope-note" id="stat-scope-note" title="Данные собираются по всем разделам">Срез: все проекты</div>
+                    <h2>Финансы</h2>
+                    <div class="finance-date" id="finance-date">Декабрь 2025</div>
                   </div>
-                  <div class="card-head-actions">
-                      <div class="stat-pill" id="goal-pill">Цель: 0 ₽</div>
-                      <button class="inline-link-btn" onclick="openGoalSettings()">Редактировать</button>
+                  <button class="edit-goal-btn" onclick="openGoalSettings()">Редактировать цель</button>
+                </div>
+
+                <div class="finance-cards">
+                  <div class="finance-card goal-card">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-info">
+                      <span class="card-label">Цель</span>
+                      <span class="card-value" id="finance-goal">0 ₽</span>
+                    </div>
                   </div>
+                  <div class="finance-card fact-card">
+                    <div class="card-icon">💰</div>
+                    <div class="card-info">
+                      <span class="card-label">Факт (Чистая прибыль)</span>
+                      <span class="card-value" id="finance-fact">0 ₽</span>
+                      <div class="progress-bar">
+                        <div class="progress-fill" id="finance-progress" style="width: 0%;"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="finance-card forecast-card">
+                    <div class="card-icon">📈</div>
+                    <div class="card-info">
+                      <span class="card-label">Прогноз</span>
+                      <span class="card-value" id="finance-forecast">0 ₽</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="finance-recent-transactions">
+                  <h3>Последние операции</h3>
+                  <ul id="finance-transactions">
+                    <li>
+                      <span class="trans-name">Проект "Оформление"</span>
+                      <span class="trans-amount positive">+ 0 ₽</span>
+                    </li>
+                    <li>
+                      <span class="trans-name">Аренда сервера</span>
+                      <span class="trans-amount negative">- 0 ₽</span>
+                    </li>
+                  </ul>
+                  <button class="view-all-btn" type="button">Смотреть все операции</button>
+                </div>
+
+                <div class="eff-chart-canvas-wrap" style="height:220px; margin-top: 10px;">
+                  <canvas id="lineChart"></canvas>
+                </div>
               </div>
-              <div class="goal-wrap" id="goal-progress">
-                  <div class="goal-info">
-                      <span class="stat-label-with-help">Прогресс цели <span class="help-icon" data-tooltip="Соотношение текущей чистой прибыли к месячной цели. Значение обновляется при изменении статусов проектов и оплат.">?</span></span>
-                      <span id="goal-text">0 / 0 ₽</span>
-                  </div>
-                  <div class="progress-bg"><div class="progress-fill" id="p-bar"></div></div>
-              </div>
-              <div class="stats-grid">
-                  <div class="stat-box" data-stat="fact" data-editable="stat">
-                      <div class="stat-label-row">
-                          <div class="stat-label-with-help"><span class="stat-label">ФАКТ</span><span class="help-icon" data-tooltip="Чистая прибыль за выбранный месяц с учётом всех статусов.">?</span></div>
-                          <div class="stat-pill">Чистыми</div>
-                      </div>
-                      <div class="stat-val text-green mono" id="val-fact">0 ₽</div>
-                      <div class="stat-helper" id="val-fact-prc">0%</div>
-                  </div>
-                  <div class="stat-box" data-stat="active-fact" data-editable="stat">
-                      <div class="stat-label-row">
-                          <div class="stat-label-with-help"><span class="stat-label">ПОЛУЧЕНО</span><span class="help-icon" data-tooltip="Чистая сумма, уже поступившая по проектам в работе (статус ‘В работе’).">?</span></div>
-                          <div class="stat-pill">Чистыми (в работе)</div>
-                      </div>
-                      <div class="stat-val text-green mono" id="val-active-fact">0 ₽</div>
-                      <div class="stat-helper">Оплачено в текущих проектах</div>
-                  </div>
-                  <div class="stat-box" data-stat="paid-gross" data-editable="stat">
-                      <div class="stat-label-row">
-                          <div class="stat-label-with-help"><span class="stat-label">ОПЛАЧЕНО</span><span class="help-icon" data-tooltip="Все полученные платежи без вычета налогов и расходов (грязными).">?</span></div>
-                          <div class="stat-pill">Все поступления</div>
-                      </div>
-                      <div class="stat-val mono" id="val-paid-gross" style="color:var(--accent)">0 ₽</div>
-                      <div class="stat-helper">Полученные платежи (грязными)</div>
-                  </div>
-                  <div class="stat-box" data-stat="total-gross" data-editable="stat">
-                      <div class="stat-label-row">
-                          <div class="stat-label-with-help"><span class="stat-label">ОБЩАЯ СУММА</span><span class="help-icon" data-tooltip="Все бюджеты проектов (грязными) во всех разделах, включая архив и паузу.">?</span></div>
-                          <div class="stat-pill">Грязными</div>
-                      </div>
-                      <div class="stat-val mono" id="val-total-gross" style="color:var(--accent)">0 ₽</div>
-                      <div class="stat-helper">Бюджеты по всем статусам</div>
-                  </div>
-                  <div class="stat-box" data-stat="plan" data-editable="stat">
-                      <div class="stat-label-row">
-                          <div class="stat-label-with-help"><span class="stat-label">ПЛАН</span><span class="help-icon" data-tooltip="Сколько ещё нужно получить до достижения цели месяца.">?</span></div>
-                          <div class="stat-pill">Остаток до цели</div>
-                      </div>
-                      <div class="stat-val text-gold mono" id="val-plan">0 ₽</div>
-                      <div class="stat-helper">Осталось получить</div>
-                  </div>
-                  <div class="stat-box" data-stat="forecast" data-editable="stat">
-                      <div class="stat-label-row">
-                          <div class="stat-label-with-help"><span class="stat-label">ПРОГНОЗ ИТОГА</span><span class="help-icon" data-tooltip="Оценка конца месяца: текущий факт + ожидаемые платежи по проектам.">?</span></div>
-                          <div class="stat-pill">Факт + ожидаемое</div>
-                      </div>
-                      <div class="stat-val mono" id="val-total" style="color:var(--accent)">0 ₽</div>
-                      <div class="stat-helper">Маржа: <span id="val-margin">0 ₽</span> (<span id="val-margin-prc">0%</span>)</div>
-                  </div>
-                  <div class="stat-box" data-stat="expenses" data-editable="stat">
-                      <div class="stat-label-row">
-                          <div class="stat-label-with-help"><span class="stat-label">РАСХОДЫ</span><span class="help-icon" data-tooltip="Совокупные траты по всем проектам, включая архив и паузу.">?</span></div>
-                          <div class="stat-pill">По всем проектам</div>
-                      </div>
-                      <div class="stat-val mono text-red" id="val-expenses">0 ₽</div>
-                      <div class="stat-helper">Сумма затрат</div>
-                  </div>
-                  <div class="stat-box" data-stat="taxes" data-editable="stat">
-                      <div class="stat-label-row">
-                          <div class="stat-label-with-help"><span class="stat-label">НАЛОГИ</span><span class="help-icon" data-tooltip="Предварительные начисления по указанным ставкам для каждого проекта.">?</span></div>
-                          <div class="stat-pill">К уплате</div>
-                      </div>
-                      <div class="stat-val mono" id="val-taxes">0 ₽</div>
-                      <div class="stat-helper">По указанным ставкам</div>
-                  </div>
-              </div>
-              <div style="position:relative;height:250px;width:100%"><canvas id="lineChart"></canvas></div>
-          </div>
               <div class="card top-clients-card" id="top-clients-card" data-editable data-block-key="topClients">
                 <div class="top-clients-header">
                   <div>
@@ -2066,32 +2282,14 @@ body:not([data-theme="dark"]) .header-new-badge {
                   </div>
               </div>
 
-              <div class="record-clean" id="record-banner" data-editable data-block-key="record">
-                  <div class="rec-clean-header">
-                      <div class="rec-clean-title">
-                          <svg class="rec-clean-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
-                          Личный Рекорд
-                      </div>
-                      <span class="rec-edit-link" onclick="openRecordSettings()">Изменить</span>
+              <div class="record-block" id="record-banner" data-editable data-block-key="record">
+                  <div class="record-icon">🏆</div>
+                  <div class="record-content">
+                    <h3>Личный Рекорд</h3>
+                    <p class="record-value" id="record-amount">0 ₽</p>
+                    <p class="record-subtitle" id="rec-current-fact">Текущий результат: 0 ₽</p>
+                    <p class="record-subtitle" id="record-remaining">Чистая прибыль за месяц</p>
                   </div>
-                  
-                  <div class="rec-clean-values">
-                      <div class="rec-val-group">
-                          <span class="rec-label">Заработано сейчас</span>
-                          <span class="rec-current-val" id="rec-current-fact">0 ₽</span>
-                      </div>
-                      <div class="rec-val-group">
-                          <span class="rec-label">Цель (Рекорд)</span>
-                          <span class="rec-target-val" id="record-amount">0 ₽</span>
-                      </div>
-                  </div>
-                  
-                  <div class="rec-progress-track">
-                      <div class="rec-progress-bar" id="record-progress"></div>
-                  </div>
-                  
-                  <div class="rec-status-text" id="record-remaining">До рекорда: 0 ₽</div>
-                  <div id="record-motiv" style="display:none"></div>
               </div>
               
               <div class="reputation-card" id="reputation-card" data-editable data-block-key="reputation">
@@ -2435,7 +2633,7 @@ body:not([data-theme="dark"]) .header-new-badge {
         </div>
 
         <div class="settings-layout">
-            <div class="settings-tabs">
+            <div class="settings-tabs settings-sidebar">
                 <button class="settings-nav-btn active" data-target="appearance" onclick="activateSettingsPane('appearance')">Внешний вид</button>
                 <button class="settings-nav-btn" data-target="blocks" onclick="activateSettingsPane('blocks')">Блоки</button>
                 <button class="settings-nav-btn" data-target="tables" onclick="activateSettingsPane('tables')">Таблица</button>
@@ -2447,26 +2645,26 @@ body:not([data-theme="dark"]) .header-new-badge {
                     <div class="settings-section">
                         <div class="settings-section-title">Тема оформления</div>
                         <div class="settings-section-sub">Выберите светлую, тёмную или автоматическую тему по времени суток.</div>
-                        <div class="radio-grid">
-                            <label class="radio-card">
+                        <div class="settings-options">
+                            <label class="theme-option" data-theme-option="auto">
                                 <input type="radio" name="theme-mode" value="auto" id="theme-mode-auto">
-                                <div>
-                                    <div class="radio-card-title">Авто</div>
-                                    <div class="radio-card-sub">Определяет тему по времени суток и подстраивается каждые несколько минут.</div>
+                                <div class="theme-option-text">
+                                    <strong>Авто</strong>
+                                    <p>Определяет тему по времени суток и подстраивается каждые несколько минут.</p>
                                 </div>
                             </label>
-                            <label class="radio-card">
+                            <label class="theme-option" data-theme-option="light">
                                 <input type="radio" name="theme-mode" value="light" id="theme-mode-light">
-                                <div>
-                                    <div class="radio-card-title">Светлая</div>
-                                    <div class="radio-card-sub">Лёгкая палитра для дневного времени. Подходит для печати.</div>
+                                <div class="theme-option-text">
+                                    <strong>Светлая</strong>
+                                    <p>Лёгкая палитра для дневного времени. Подходит для печати.</p>
                                 </div>
                             </label>
-                            <label class="radio-card">
+                            <label class="theme-option" data-theme-option="dark">
                                 <input type="radio" name="theme-mode" value="dark" id="theme-mode-dark">
-                                <div>
-                                    <div class="radio-card-title">Тёмная</div>
-                                    <div class="radio-card-sub">Контрастная палитра, бережёт глаза и батарею.</div>
+                                <div class="theme-option-text">
+                                    <strong>Тёмная</strong>
+                                    <p>Контрастная палитра, бережёт глаза и батарею.</p>
                                 </div>
                             </label>
                         </div>
@@ -2784,7 +2982,7 @@ const DEFAULT_BLOCK_ORDER = {
     side: ['efficiency','record','reputation']
 };
 const DEFAULT_UI_PREFS = {
-    themeMode: 'dark',
+    themeMode: 'light',
     blockVisibility: {
         backup: true,
         pace: true,
@@ -2948,7 +3146,7 @@ function loadUiPrefs() {
     UI_PREFS.statOrder = normalizeOrder(UI_PREFS.statOrder, STAT_KEYS);
     UI_PREFS.sideOrder = normalizeOrder(UI_PREFS.sideOrder, SIDE_BLOCK_KEYS);
     UI_PREFS.blockOrder = normalizeBlockOrder(UI_PREFS.blockOrder, DEFAULT_BLOCK_ORDER);
-    if (!UI_PREFS.themeMode) UI_PREFS.themeMode = 'dark';
+    if (!UI_PREFS.themeMode) UI_PREFS.themeMode = 'light';
     persistUiPrefs();
 }
 
@@ -2980,6 +3178,7 @@ function stopAutoThemeWatcher() {
 
 function applyTheme(theme) {
     const isLight = theme === 'light';
+    document.documentElement.setAttribute('data-theme', theme);
     document.body.classList.toggle('light', isLight);
     const icon = document.getElementById('themeToggleIcon');
     const label = document.getElementById('themeToggleLabel');
@@ -2988,7 +3187,7 @@ function applyTheme(theme) {
         if (use) use.setAttribute('href', isLight ? '#icon-moon' : '#icon-sun');
     }
     if (label) {
-        const mode = UI_PREFS.themeMode || 'dark';
+        const mode = UI_PREFS.themeMode || 'light';
         label.textContent = mode === 'auto'
             ? (isLight ? 'Авто · Светлая' : 'Авто · Тёмная')
             : (isLight ? 'Тёмная тема' : 'Светлая тема');
@@ -2996,7 +3195,7 @@ function applyTheme(theme) {
 }
 
 function applyThemeMode(mode, { silent = false, skipSave = false, respectOverride = true, overrideTheme } = {}) {
-    UI_PREFS.themeMode = mode || 'dark';
+    UI_PREFS.themeMode = mode || 'light';
     if (UI_PREFS.themeMode !== 'auto') {
         localStorage.removeItem(THEME_OVERRIDE_KEY);
     } else {
@@ -3010,6 +3209,10 @@ function applyThemeMode(mode, { silent = false, skipSave = false, respectOverrid
     if (!skipSave) persistUiPrefs();
     applyTheme(actual);
     document.querySelectorAll('input[name="theme-mode"]').forEach(r => r.checked = r.value === UI_PREFS.themeMode);
+    document.querySelectorAll('.theme-option').forEach(opt => {
+        const input = opt.querySelector('input[name="theme-mode"]');
+        opt.classList.toggle('selected', input && input.value === UI_PREFS.themeMode);
+    });
     if (UI_PREFS.themeMode === 'auto') {
         startAutoThemeWatcher();
     } else {
@@ -3036,7 +3239,7 @@ function initTheme() {
     if (!localStorage.getItem(UI_PREFS_KEY) && (storedTheme === 'light' || storedTheme === 'dark')) {
         UI_PREFS.themeMode = storedTheme;
     }
-    applyThemeMode(UI_PREFS.themeMode || storedTheme || 'dark', { silent: true });
+    applyThemeMode(UI_PREFS.themeMode || storedTheme || 'light', { silent: true });
     if (UI_PREFS.themeMode === 'auto') startAutoThemeWatcher();
 }
 
@@ -5737,7 +5940,7 @@ function openSettings(){
     activateSettingsPane('appearance');
     document.getElementById('stg-goal').value = formatPlainNumber(DATA.monthlyGoals[currentMonth] || 250000);
     document.getElementById('stg-rec').value = formatPlainNumber(DATA.settings.record || 0);
-    const mode = UI_PREFS.themeMode || 'dark';
+        const mode = UI_PREFS.themeMode || 'light';
     ['auto', 'light', 'dark'].forEach(m => {
         const radio = document.getElementById(`theme-mode-${m}`);
         if (radio) radio.checked = mode === m;
@@ -5853,7 +6056,7 @@ function resetInterface() {
     if (!ok) return;
     UI_PREFS = JSON.parse(JSON.stringify(DEFAULT_UI_PREFS));
     persistUiPrefs();
-    applyThemeMode(UI_PREFS.themeMode || 'dark', { silent: true });
+    applyThemeMode(UI_PREFS.themeMode || 'light', { silent: true });
     applyBlockVisibility();
     applyBlockOrder();
     applyTableVisibility();
@@ -6207,6 +6410,28 @@ function getScopedDataForStats() {
     };
 }
 
+function updateFinanceTransactions(scope) {
+    const list = document.getElementById('finance-transactions');
+    if (!list) return;
+
+    const recent = [...(scope.archive || [])]
+        .filter(i => i.date)
+        .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
+        .slice(0, 2);
+
+    if (!recent.length) {
+        list.innerHTML = '<li><span class="trans-name">Нет операций</span><span class="trans-amount">0 ₽</span></li>';
+        return;
+    }
+
+    list.innerHTML = recent.map(item => {
+        const amount = calcNet(item);
+        const cls = amount >= 0 ? 'positive' : 'negative';
+        const name = escapeHTML(item.n || 'Без названия');
+        return `<li><span class="trans-name">${name}</span><span class="trans-amount ${cls}">${amount >= 0 ? '+' : '-'} ${formatCurrency(Math.abs(amount)).replace(/^-/, '')}</span></li>`;
+    }).join('');
+}
+
 function calcStats(){
     const scope = getScopedDataForStats();
     const goal = toNumeric(DATA.monthlyGoals[currentMonth]) || 250000;
@@ -6247,24 +6472,21 @@ function calcStats(){
 
     const totalFact = fact + activeFact;
     const forecast = totalFact + plan;
-    
+
     const totalMargin = totalNet;
     const totalGrossCombined = totalGross;
     const goalProgress = goal ? Math.round((totalFact/goal)*100) : 0;
 
-    document.getElementById('val-fact').innerText = formatCurrency(totalFact);
-    document.getElementById('val-fact-prc').innerText = `${goalProgress}% от цели`;
-    document.getElementById('val-active-fact').innerText = formatCurrency(activeFact);
-    document.getElementById('val-margin').innerText = formatCurrency(totalMargin);
-    document.getElementById('val-margin-prc').innerText = `${totalGrossCombined > 0 ? Math.round((totalMargin/totalGrossCombined)*100) : 0}%`;
-    document.getElementById('val-plan').innerText = formatCurrency(plan);
-    document.getElementById('val-total').innerText = formatCurrency(forecast);
-    document.getElementById('val-total-gross').innerText = formatCurrency(totalGrossCombined);
-    document.getElementById('val-expenses').innerText = formatCurrency(totalExpenses);
-    document.getElementById('val-taxes').innerText = formatCurrency(totalTaxes);
-    document.getElementById('val-paid-gross').innerText = formatCurrency(totalPaidGross);
-    document.getElementById('goal-text').innerText = `${formatCurrency(totalFact)} / ${formatCurrency(goal)}`;
-    document.getElementById('goal-pill').innerText = `Цель: ${formatCurrency(goal)}`;
+    const financeFact = document.getElementById('finance-fact');
+    if (financeFact) financeFact.innerText = formatCurrency(totalFact);
+    const financeGoal = document.getElementById('finance-goal');
+    if (financeGoal) financeGoal.innerText = formatCurrency(goal);
+    const financeForecast = document.getElementById('finance-forecast');
+    if (financeForecast) financeForecast.innerText = formatCurrency(forecast);
+    const financeProgress = document.getElementById('finance-progress');
+    if (financeProgress) financeProgress.style.width = goal > 0 ? Math.min(100, goalProgress) + '%': '0%';
+    const financeDate = document.getElementById('finance-date');
+    if (financeDate) financeDate.innerText = document.getElementById('monthSelect').options[document.getElementById('monthSelect').selectedIndex]?.text || '';
 
     const record = DATA.settings.record || 0;
     const recordProgress = record > 0 ? Math.min(100, (totalFact/record)*100) : 0;
@@ -6275,22 +6497,14 @@ function calcStats(){
     else if (recordProgress >= 70) motivText = 'Чуть-чуть до рекорда!';
     else motivText = 'Движемся к рекорду каждый день.';
 
-    document.getElementById('record-motiv').innerText = motivText;
-    document.getElementById('record-remaining').innerText = record ? (recordRemaining > 0 ? `До рекорда ${formatCurrency(recordRemaining)}` : 'Рекорд побит!') : 'Задайте рекорд в настройках';
-    document.getElementById('record-amount').innerText = formatCurrency(record);
+    const recordRemainingEl = document.getElementById('record-remaining');
+    if (recordRemainingEl) recordRemainingEl.innerText = record ? (recordRemaining > 0 ? `До рекорда: ${formatCurrency(recordRemaining)}` : 'Рекорд побит!') : 'Задайте рекорд в настройках';
+    const recordAmountEl = document.getElementById('record-amount');
+    if (recordAmountEl) recordAmountEl.innerText = formatCurrency(record);
     const recCurrentFact = document.getElementById('rec-current-fact');
-    if (recCurrentFact) recCurrentFact.innerText = formatCurrency(totalFact);
-    document.getElementById('record-progress').style.width = record ? Math.min(100, (totalFact/record)*100) + '%' : '0%';
+    if (recCurrentFact) recCurrentFact.innerText = `Текущий результат: ${formatCurrency(totalFact)}`;
 
-    document.getElementById('p-bar').style.width = goal > 0 ? Math.min(100, (totalFact/goal)*100) + '%' : '0%';
-    document.getElementById('dash-month-name').innerText = document.getElementById('monthSelect').options[document.getElementById('monthSelect').selectedIndex]?.text || '';
-    const scopeNote = 'Срез: все проекты';
-    const scopeHint = 'Статистика собирается по всем разделам вне зависимости от выбранной вкладки';
-    const scopeEl = document.getElementById('stat-scope-note');
-    if (scopeEl) {
-        scopeEl.innerText = scopeNote;
-        scopeEl.title = scopeHint;
-    }
+    updateFinanceTransactions(scope);
     updateReputationUI();
     updateCharts(totalFact, plan, scope);
     updateTopClientsChart(scope);
@@ -6299,64 +6513,127 @@ function calcStats(){
 let chL = null, chP = null, chB = null, chRep = null, chTopClients = null;
 let topClientsMode = 'net';
 let lastTopClientsScope = null;
-function updateCharts(fact, plan, scope){
-    const ctxL = document.getElementById('lineChart').getContext('2d');
-    const ctxP = document.getElementById('pieChart').getContext('2d');
-    const ctxB = document.getElementById('barChart').getContext('2d');
-    const daysInM = new Date(currentMonth.split('-')[0], currentMonth.split('-')[1], 0).getDate();
-    const labelsL = Array.from({length:daysInM},(_,i)=>i+1);
 
-    const dataL = new Array(daysInM).fill(0);
+function prepareDynamicsData(allTransactions) {
+    const monthlyData = {};
+    const monthNames = ['янв', 'фев', 'март', 'апр', 'май', 'июнь', 'июль', 'авг', 'сент', 'окт', 'нояб', 'дек'];
+    const todayDate = new Date();
 
-    scope.archive.forEach(i => {
-        const d = parseInt(i.date.split('-')[2]) - 1;
-        if(d>=0 && d<daysInM) dataL[d] += calcNet(i);
-    });
-    
-    let acc = 0; 
-    const dataAcc = dataL.map(v => acc+=v);
-    
-    if(chL) chL.destroy();
-    chL = new Chart(ctxL, {
-        type: 'line',
-        data: { labels: labelsL, datasets: [{label:'Факт', data:dataAcc, borderColor:'#2ea043', backgroundColor:'rgba(46,160,67,0.1)', fill:true, tension:0.3, pointRadius:0}] },
-        options: {responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{display:false}, y:{grid:{color:'#30363d'}}}}
-    });
-    
-    if(chP) chP.destroy();
-    chP = new Chart(ctxP, {
-        type: 'doughnut',
-        data: { labels: ['Факт (Оплачено)', 'План (Остаток/Лиды)'], datasets: [{data:[fact, plan], backgroundColor:['#2ea043','#d29922'], borderWidth:0}] },
-        options: {responsive:true, maintainAspectRatio:false, cutout:'75%', plugins:{legend:{position:'bottom', labels:{color:'#8b949e'}}}}
-    });
-    
-    const h = {};
-    scope.archive.forEach(i => { const m = (i.date||'').slice(0,7); if(m) h[m] = (h[m]||0) + calcNet(i); });
+    for (let i = 5; i >= 0; i--) {
+        const d = new Date(todayDate.getFullYear(), todayDate.getMonth() - i, 1);
+        const monthKey = `${d.getFullYear()}-${d.getMonth()}`;
+        monthlyData[monthKey] = { label: monthNames[d.getMonth()], value: 0, date: d };
+    }
 
-    const baseDate = currentMonth ? new Date(currentMonth + '-01') : new Date();
-    const keys = Array.from({ length: 6 }, (_, idx) => {
-        const d = new Date(baseDate.getFullYear(), baseDate.getMonth() - (5 - idx), 1);
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        return `${d.getFullYear()}-${month}`;
-    });
-
-    if(chB) chB.destroy();
-    chB = new Chart(ctxB, {
-        type: 'bar',
-        data: { labels: keys.map(m => new Date(m + '-01').toLocaleString('ru', {month:'short'})), datasets: [{data: keys.map(k=>h[k]||0), backgroundColor: keys.map(k=>k===currentMonth?'#58a6ff':getCssVar('--chart-bar-bg')||'#21262d'), borderRadius:4}] },
-        options: {
-            responsive: true, 
-            maintainAspectRatio: false, 
-            plugins:{legend:{display:false}}, 
-            scales:{
-                x:{
-                    grid:{display:false},
-                    ticks: { color: '#8b949e', font: {size: 10} } // Включаем тики (месяцы)
-                }, 
-                y:{display:false, ticks:{beginAtZero:true}}
-            }
+    allTransactions.forEach(transaction => {
+        const date = new Date(transaction.date);
+        if (isNaN(date.getTime())) return;
+        const monthKey = `${date.getFullYear()}-${date.getMonth()}`;
+        if (monthlyData[monthKey]) {
+            monthlyData[monthKey].value += transaction.amount;
         }
     });
+
+    const sortedData = Object.values(monthlyData).sort((a, b) => a.date - b.date);
+    return {
+        labels: sortedData.map(item => item.label),
+        data: sortedData.map(item => item.value),
+    };
+}
+
+function updateCharts(fact, plan, scope){
+    const lineCanvas = document.getElementById('lineChart');
+    const pieCanvas = document.getElementById('pieChart');
+    const barCanvas = document.getElementById('barChart');
+
+    if (lineCanvas) {
+        const ctxL = lineCanvas.getContext('2d');
+        const daysInM = new Date(currentMonth.split('-')[0], currentMonth.split('-')[1], 0).getDate();
+        const labelsL = Array.from({length:daysInM},(_,i)=>i+1);
+        const dataL = new Array(daysInM).fill(0);
+
+        scope.archive.forEach(i => {
+            const d = parseInt(i.date.split('-')[2]) - 1;
+            if(d>=0 && d<daysInM) dataL[d] += calcNet(i);
+        });
+
+        let acc = 0;
+        const dataAcc = dataL.map(v => acc+=v);
+
+        if(chL) chL.destroy();
+        chL = new Chart(ctxL, {
+            type: 'line',
+            data: { labels: labelsL, datasets: [{label:'Факт', data:dataAcc, borderColor:'#2ea043', backgroundColor:'rgba(46,160,67,0.1)', fill:true, tension:0.3, pointRadius:0}] },
+            options: {responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{display:false}, y:{grid:{color:'#30363d'}}}}
+        });
+    }
+
+    if (pieCanvas) {
+        const ctxP = pieCanvas.getContext('2d');
+        if (chP) chP.destroy();
+        chP = new Chart(ctxP, {
+            type: 'doughnut',
+            data: (canvas) => {
+                const c = canvas.getContext('2d');
+                const factGradient = c.createLinearGradient(0, 0, 0, canvas.height || 400);
+                factGradient.addColorStop(0, '#28a745');
+                factGradient.addColorStop(1, '#85d393');
+
+                const planGradient = c.createLinearGradient(0, 0, 0, canvas.height || 400);
+                planGradient.addColorStop(0, '#d4a348');
+                planGradient.addColorStop(1, '#f0d08c');
+
+                return {
+                    labels: ['Факт (Оплачено)', 'План (Остаток/Лиды)'],
+                    datasets: [{
+                        data: [fact, plan],
+                        backgroundColor: [factGradient, planGradient],
+                        borderWidth: 0,
+                        cutout: '70%'
+                    }]
+                };
+            },
+            options: {
+                responsive:true,
+                maintainAspectRatio:false,
+                plugins:{
+                    legend:{
+                        position:'bottom',
+                        labels:{ usePointStyle:true, pointStyle:'circle', padding:20, font:{ size:14 } }
+                    },
+                    tooltip:{
+                        backgroundColor:'rgba(0, 0, 0, 0.8)',
+                        titleFont:{ size:16 },
+                        bodyFont:{ size:14 },
+                        padding:12,
+                        cornerRadius:8,
+                        displayColors:false
+                    }
+                }
+            }
+        });
+    }
+
+    if (barCanvas) {
+        const ctxB = barCanvas.getContext('2d');
+        const transactions = (scope.archive || []).map(item => ({ date: item.date, amount: calcNet(item) }));
+        const dynData = prepareDynamicsData(transactions);
+
+        if(chB) chB.destroy();
+        chB = new Chart(ctxB, {
+            type: 'bar',
+            data: { labels: dynData.labels, datasets: [{data: dynData.data, backgroundColor: dynData.labels.map((_, idx) => idx === dynData.labels.length -1 ? '#58a6ff' : (getCssVar('--chart-bar-bg')||'#21262d')), borderRadius:4}] },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins:{legend:{display:false}},
+                scales:{
+                    x:{ grid:{display:false}, ticks: { color: '#8b949e', font: {size: 10} } },
+                    y:{display:false, ticks:{beginAtZero:true}}
+                }
+            }
+        });
+    }
 }
 
 function updateTopClientsChart(scope) {
