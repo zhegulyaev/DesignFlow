@@ -1612,10 +1612,10 @@ td.date-cell + td.date-cell {
       box-shadow: 0 4px 20px rgba(0,0,0,0.03);
   }
   .rec-clean-header {
-      margin-bottom: 16px;
-      display: flex;
+      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: 1fr auto;
       align-items: center;
-      justify-content: space-between;
       gap: 12px;
   }
   .rec-clean-title {
@@ -1627,13 +1627,37 @@ td.date-cell + td.date-cell {
       align-items: center;
       gap: 8px;
   }
+  .rec-edit-link {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 13px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: color .2s ease, background .2s ease, border-color .2s ease, box-shadow .2s ease;
+      justify-self: end;
+  }
+  .rec-edit-link:hover {
+      color: #8ab4ff;
+      background: var(--tab-hover);
+      border-color: var(--border);
+      text-decoration: underline;
+  }
+  .rec-edit-link:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(88,166,255,0.35);
+      border-color: var(--accent);
+  }
   .rec-clean-icon { display: none; } /* Убираем иконку, делаем минималистично */
 
   .rec-clean-values {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-      margin-bottom: 20px;
+      grid-template-columns: minmax(0,1fr) minmax(220px, 280px);
+      gap: 18px;
+      align-items: start;
+      margin-bottom: 18px;
   }
   .rec-current-val {
       font-size: 40px;
@@ -1642,17 +1666,24 @@ td.date-cell + td.date-cell {
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       font-weight: 900;
+      line-height: 1.1;
   }
   .rec-target-val {
-      font-size: 14px;
+      font-size: 32px;
       color: var(--gold);
-      font-weight: 600;
+      font-weight: 800;
+      line-height: 1.1;
   }
 
   .rec-val-group {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
+  }
+
+  .rec-goal-group {
+      max-width: 280px;
+      justify-self: end;
   }
 
   .rec-label {
@@ -1666,10 +1697,11 @@ td.date-cell + td.date-cell {
   .rec-progress-track {
       background: var(--button-bg);
       border: none;
-      height: 6px;
+      height: 12px;
       border-radius: 999px;
       overflow: hidden;
-      margin-top: 4px;
+      margin-top: 18px;
+      margin-bottom: 14px;
   }
   .rec-progress-bar {
       background: linear-gradient(90deg, #facc15, #f59e0b);
@@ -1679,9 +1711,10 @@ td.date-cell + td.date-cell {
   }
 
   .rec-status-text {
-      margin-top: 12px;
-      font-weight: 800;
-      color: var(--text);
+      margin-top: 6px;
+      font-weight: 700;
+      color: var(--muted);
+      text-align: left;
   }
 
   /* --- Reputation Metrics Update --- */
@@ -2245,15 +2278,15 @@ body:not([data-theme="dark"]) .header-new-badge {
                           <svg class="rec-clean-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
                           Личный Рекорд
                       </div>
-                      <span class="rec-edit-link" onclick="openRecordSettings()">Изменить</span>
+                      <button type="button" class="rec-edit-link" onclick="openRecordSettings()">Изменить</button>
                   </div>
-                  
+
                   <div class="rec-clean-values">
                       <div class="rec-val-group">
                           <span class="rec-label">Заработано сейчас</span>
                           <span class="rec-current-val" id="rec-current-fact">0 ₽</span>
                       </div>
-                      <div class="rec-val-group">
+                      <div class="rec-val-group rec-goal-group">
                           <span class="rec-label">Цель (Рекорд)</span>
                           <span class="rec-target-val" id="record-amount">0 ₽</span>
                       </div>
@@ -2470,7 +2503,7 @@ body:not([data-theme="dark"]) .header-new-badge {
                    <svg class="date-icon"><use href="#icon-calendar"/></svg>
                    <span class="date-text-display">Нет срока</span>
                 </div>
-                <button type="button" class="deadline-clear-btn" onclick="clearNewProjectDeadline()" title="Убрать дедлайн" style="height:44px; margin:0 0 0 6px;">
+                <button type="button" class="deadline-clear-btn" onclick="clearNewProjectDeadline()" title="Убрать дедлайн" style="height:44px; margin:0 0 0 4px;">
                     <svg><use href="#icon-calendar-off"/></svg>
                 </button>
              </div>
