@@ -905,9 +905,11 @@
   .deadline-presets input { min-width: 100px; max-width: 140px; flex: 0 1 120px; }
   .deadline-time { min-width: 110px; max-width: 140px; flex: 0 0 120px; padding: 10px 12px; }
   .modal-deadline-presets { flex-wrap: wrap; justify-content: flex-start; margin: 12px 0 6px; }
-  .modal-deadline-presets select { min-width: 170px; }
-  .modal-deadline-presets input { flex: 0 1 160px; }
-  .date-modal-footer { display: flex; justify-content: space-between; align-items: center; margin: 10px 0 6px; gap: 10px; flex-wrap: wrap; }
+  .modal-deadline-presets { gap: 8px; }
+  .modal-deadline-presets select { min-width: 160px; }
+  .modal-deadline-presets input { flex: 0 0 110px; max-width: 120px; }
+  .modal-deadline-presets .deadline-clear-btn { height: 44px; padding: 0 14px; white-space: nowrap; }
+  .date-modal-footer { display: flex; justify-content: flex-end; align-items: center; margin: 10px 0 6px; gap: 10px; flex-wrap: wrap; }
   .date-duo { display: flex; gap: 12px; align-items: stretch; margin-bottom: 12px; flex-wrap: wrap; }
   .date-duo .inp-group { margin-bottom: 0; }
   .date-duo-card { flex: 1 1 220px; min-width: 0; padding: 0; border-radius: 14px; border: none; background: transparent; box-shadow: none; }
@@ -969,7 +971,13 @@
       border-bottom: 1px solid var(--border);
       background: var(--card);
       margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      justify-content: space-between;
   }
+  .settings-title { font-size: 26px; font-weight: 900; letter-spacing: -0.25px; }
+  .settings-sub { font-weight: 700; color: var(--muted); }
   .settings-layout {
       display: flex;
       flex: 1;
@@ -1034,6 +1042,7 @@
   .settings-row { display:flex; justify-content: space-between; align-items: flex-start; gap: 14px; padding: 12px 14px; border:1px solid var(--border); border-radius: 12px; background: var(--card-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); transition: border-color .2s, background .2s; text-align: left; }
   .settings-row-title { font-weight: 800; }
   .settings-row-sub { color: var(--muted); font-size: 13px; font-weight: 600; margin-top: 4px; max-width: 520px; }
+  .settings-pill { margin-left: auto; padding: 10px 16px; border-radius: 999px; background: var(--pill-bg); border: 1px solid var(--border); font-weight: 800; color: var(--muted); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
   .toggle-switch { position: relative; display: inline-block; width: 46px; height: 26px; }
   .toggle-switch input { opacity: 0; width: 0; height: 0; }
   .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border); transition: .2s; border-radius: 999px; }
@@ -1411,7 +1420,7 @@
   .template-pill .template-fill-btn:hover { color: var(--accent); }
   .template-pill .template-delete-btn { border: none; background: transparent; color: var(--muted); padding: 0 4px; cursor: pointer; font-weight: 800; }
   .template-pill .template-delete-btn:hover { color: var(--red); }
-  .template-add-btn { align-self: flex-start; margin-top: 0; height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 0 16px; }
+  .template-add-btn { align-self: flex-start; margin-top: 0; height: 52px; min-height: 52px; display: inline-flex; align-items: center; justify-content: center; padding: 0 16px; }
   .template-modal-add { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: end; margin: 12px 0 4px; }
   .template-modal-input { margin-bottom: 0; }
   .template-modal-input label { margin-bottom: 6px; }
@@ -1435,7 +1444,7 @@
   .deadline-row .date-input-wrap { flex: 1; }
   .deadline-row .deadline-clear-btn { margin: 0; height: 44px; padding: 0 12px; }
   .link-inline-btn { width: auto; min-height: 44px; padding: 10px 14px; }
-  .template-add-btn { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 0 18px; }
+  .template-add-btn { min-height: 52px; height: 52px; display: inline-flex; align-items: center; justify-content: center; padding: 0 18px; }
   .link-inline-btn { padding: 10px 14px; font-weight: 800; gap: 10px; box-shadow: 0 6px 16px rgba(59,130,246,0.08); }
   .link-inline-btn span { color: var(--text); font-size: 13px; }
 
@@ -2632,12 +2641,12 @@ body:not([data-theme="dark"]) .header-new-badge {
                 <option value="custom">Свой срок</option>
             </select>
             <input type="number" id="date-modal-custom" placeholder="Дней" oninput="applyDateModalPreset()" style="display:none;">
-        </div>
-        <div class="date-modal-footer">
             <button type="button" class="deadline-clear-btn" id="date-modal-clear" onclick="clearDateModalDeadline()">
                 <svg><use href="#icon-calendar-off"/></svg>
                 <span>Без дедлайна</span>
             </button>
+        </div>
+        <div class="date-modal-footer">
             <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveDate()">Сохранить</button>
         </div>
     </div>
@@ -2645,7 +2654,7 @@ body:not([data-theme="dark"]) .header-new-badge {
 
 <div class="modal" id="settingsModal">
     <div class="modal-content settings-modal">
-        <span class="close-modal-x" onclick="document.getElementById('settingsModal').style.display='none'">×</span>
+        <span class="close-modal-x" onclick="attemptCloseSettings()">×</span>
         <div class="settings-header">
             <div class="settings-header-text">
                 <div class="settings-title">Настройки</div>
@@ -2977,6 +2986,16 @@ body:not([data-theme="dark"]) .header-new-badge {
         </div>
     </div>
 </div>
+<div class="modal" id="settingsUnsavedModal" style="display:none;">
+    <div class="modal-content" style="max-width: 420px;">
+        <h3 style="margin-bottom: 6px;">Закрыть без сохранения?</h3>
+        <p style="color:var(--muted); font-weight: 700; line-height: 1.4;">Вы изменили настройки, но не нажали «Сохранить». Выйти без сохранения или сохранить и выйти?</p>
+        <div style="display:flex; gap:10px; margin-top: 18px; flex-wrap: wrap;">
+            <button class="btn-ghost" style="flex:1; min-width:180px;" onclick="discardSettingsChanges()">Да, выйти не сохраняя</button>
+            <button class="save-stg" style="flex:1; min-width:180px; background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveSettings()">Нет, сохранить и выйти</button>
+        </div>
+    </div>
+</div>
 <div class="modal" id="deleteConfirmModal">
     <div class="modal-content">
         <span class="close-modal-x" onclick="document.getElementById('deleteConfirmModal').style.display='none'">×</span>
@@ -3040,6 +3059,8 @@ const now = new Date();
 const today = now.toISOString().slice(0, 10);
 let currentMonth = today.slice(0,7);
 let currentTab = 'active';
+let settingsSnapshot = null;
+let settingsInitialState = null;
 const TAB_DESCRIPTIONS = {
     active: "Проекты в работе. Следите за дедлайнами и фиксируйте предоплату.",
     waiting: "Ожидают реакции клиента или материалов.",
@@ -5974,6 +5995,91 @@ function startProjectEdit(type, idx) {
     openAddModal(type, idx);
 }
 
+function collectSettingsFormState() {
+    const selectedMode = document.querySelector('input[name="theme-mode"]:checked');
+    const readToggle = (id) => document.getElementById(id)?.checked !== false;
+    return {
+        mode: selectedMode ? selectedMode.value : (UI_PREFS.themeMode || 'dark'),
+        blockVisibility: {
+            backup: readToggle('block-toggle-backup'),
+            pace: readToggle('block-toggle-pace'),
+            dashboard: readToggle('block-toggle-dashboard'),
+            efficiency: readToggle('block-toggle-efficiency'),
+            topClients: readToggle('block-toggle-top-clients'),
+            record: readToggle('block-toggle-record'),
+            reputation: readToggle('block-toggle-reputation'),
+        },
+        tableVisibility: {
+            requests: readToggle('table-toggle-requests'),
+            waiting: readToggle('table-toggle-waiting'),
+            paused: readToggle('table-toggle-paused'),
+        },
+        statVisibility: {
+            goal: readToggle('stat-toggle-goal'),
+            fact: readToggle('stat-toggle-fact'),
+            activeFact: readToggle('stat-toggle-active-fact'),
+            paidGross: readToggle('stat-toggle-paid-gross'),
+            totalGross: readToggle('stat-toggle-total-gross'),
+            plan: readToggle('stat-toggle-plan'),
+            forecast: readToggle('stat-toggle-forecast'),
+            expenses: readToggle('stat-toggle-expenses'),
+            taxes: readToggle('stat-toggle-taxes'),
+        },
+        goal: toNumeric(document.getElementById('stg-goal')?.value),
+        record: toNumeric(document.getElementById('stg-rec')?.value)
+    };
+}
+
+function captureSettingsSnapshot() {
+    settingsSnapshot = collectSettingsFormState();
+    settingsInitialState = {
+        prefs: JSON.parse(JSON.stringify(UI_PREFS)),
+        mode: UI_PREFS.themeMode,
+        storedTheme: localStorage.getItem(THEME_KEY),
+        overrideTheme: localStorage.getItem(THEME_OVERRIDE_KEY),
+    };
+}
+
+function hasSettingsChanges() {
+    if (!settingsSnapshot) return false;
+    return JSON.stringify(collectSettingsFormState()) !== JSON.stringify(settingsSnapshot);
+}
+
+function closeSettingsModal() {
+    document.getElementById('settingsModal').style.display = 'none';
+    document.getElementById('settingsUnsavedModal').style.display = 'none';
+    settingsSnapshot = null;
+    settingsInitialState = null;
+}
+
+function attemptCloseSettings() {
+    if (!hasSettingsChanges()) {
+        closeSettingsModal();
+        return;
+    }
+    document.getElementById('settingsUnsavedModal').style.display = 'flex';
+}
+
+function discardSettingsChanges() {
+    if (settingsInitialState) {
+        UI_PREFS = JSON.parse(JSON.stringify(settingsInitialState.prefs));
+        persistUiPrefs();
+        if (settingsInitialState.storedTheme) localStorage.setItem(THEME_KEY, settingsInitialState.storedTheme); else localStorage.removeItem(THEME_KEY);
+        if (settingsInitialState.overrideTheme) localStorage.setItem(THEME_OVERRIDE_KEY, settingsInitialState.overrideTheme); else localStorage.removeItem(THEME_OVERRIDE_KEY);
+        applyThemeMode(settingsInitialState.mode || 'dark', { silent: true, skipSave: true, respectOverride: false });
+        applyBlockVisibility();
+        applyTableVisibility();
+        applyStatVisibility();
+        applyStatOrder();
+        applyBlockOrder();
+    }
+    closeSettingsModal();
+}
+
+function previewThemeMode(mode) {
+    applyThemeMode(mode || UI_PREFS.themeMode || 'dark', { skipSave: true });
+}
+
 function openSettings(){
     activateSettingsPane('appearance');
     document.getElementById('stg-goal').value = formatPlainNumber(DATA.monthlyGoals[currentMonth] || 250000);
@@ -5982,6 +6088,10 @@ function openSettings(){
     ['auto', 'light', 'dark'].forEach(m => {
         const radio = document.getElementById(`theme-mode-${m}`);
         if (radio) radio.checked = mode === m;
+        if (radio && !radio.dataset.previewBound) {
+            radio.addEventListener('change', (e) => previewThemeMode(e.target.value));
+            radio.dataset.previewBound = '1';
+        }
     });
     const visibility = UI_PREFS.blockVisibility || {};
     const toggleMap = [
@@ -6028,6 +6138,7 @@ function openSettings(){
         if (el) el.checked = statVisibility[key] !== false;
     });
     updateSettingsPreviewStates();
+    captureSettingsSnapshot();
     document.getElementById('settingsModal').style.display = 'flex';
 }
 function openGoalSettings(){
@@ -6085,7 +6196,7 @@ function saveSettings(){
     applyStatVisibility();
     DATA.monthlyGoals[currentMonth] = toNumeric(document.getElementById('stg-goal').value);
     DATA.settings.record = toNumeric(document.getElementById('stg-rec').value);
-    document.getElementById('settingsModal').style.display = 'none';
+    closeSettingsModal();
     save(); upd();
 }
 
