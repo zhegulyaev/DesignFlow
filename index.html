@@ -1408,6 +1408,10 @@ td.date-cell + td.date-cell {
     gap: 16px;
     margin-bottom: 16px;
   }
+
+  .form-grid-row.finance {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
   
   /* Класс для элементов во всю ширину (Название проекта) */
   .form-grid-full {
@@ -1426,6 +1430,7 @@ td.date-cell + td.date-cell {
     font-size: 14px;
     color: var(--text);
     height: 44px;
+    width: 100%;
   }
   .inp-modern input:focus, .inp-modern select:focus {
     border-color: var(--accent);
@@ -1456,6 +1461,8 @@ td.date-cell + td.date-cell {
     background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px;
     display: flex; flex-direction: column; gap: 16px;
   }
+  .eff-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .eff-title { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; }
   .eff-chart-box {
     background: var(--card-alt); border: 1px solid var(--border); border-radius: 12px; padding: 12px;
     min-height: 200px; /* Увеличили высоту чтобы текст не наезжал */
@@ -5450,7 +5457,9 @@ function handleStatusChange(status, options = {}) {
     }
 
     const paidSelect = document.getElementById('add-proj-paid');
-    if (paidSelect && !preservePaid) {
+    if (paidSelect && status === 'archive') {
+        paidSelect.value = '100';
+    } else if (paidSelect && !preservePaid) {
         const defaultPaid = status === 'archive' ? 100 : status === 'active' ? 50 : 0;
         paidSelect.value = String(defaultPaid);
     }
