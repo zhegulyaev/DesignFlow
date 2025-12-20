@@ -1,14 +1,16 @@
 const K = 'DesignFlowData';
 const TODAY_K = 'DesignFlowToday';
 const SETTINGS_K = 'DesignFlowSettings';
+const STATUS_KEYS = ['active', 'waiting', 'potential', 'paused', 'archive'];
 
-let DATA = {
-  active: [],
-  waiting: [],
-  potential: [],
-  paused: [],
-  archive: []
-};
+function createEmptyData() {
+  return STATUS_KEYS.reduce((acc, status) => {
+    acc[status] = [];
+    return acc;
+  }, {});
+}
+
+let DATA = createEmptyData();
 
 let SETTINGS = {
   currency: '₽',
@@ -39,14 +41,45 @@ function parseAmount(value) {
 
 let today = new Date().toISOString().slice(0, 10);
 
+function normalizeData(data) {
+  const normalized = createEmptyData();
+
+  if (!data || typeof data !== 'object') {
+    return { normalized, migrated: !!data };
+  }
+
+  let migrated = false;
+
+  STATUS_KEYS.forEach(status => {
+    if (Array.isArray(data[status])) {
+      normalized[status] = data[status];
+    } else {
+      migrated = true;
+    }
+  });
+
+  return { normalized, migrated };
+}
+
 function loadData() {
   try {
-    const data = JSON.parse(localStorage.getItem(K));
-    if (data) {
-      DATA = data;
+    const stored = localStorage.getItem(K);
+
+    if (!stored) return;
+
+    const data = JSON.parse(stored);
+    const { normalized, migrated } = normalizeData(data);
+
+    DATA = normalized;
+
+    if (migrated) {
+      console.warn('DesignFlow: stored data has invalid structure. Missing lists reset to defaults.');
+      localStorage.setItem(K, JSON.stringify(DATA));
     }
   } catch (e) {
-    console.error('Error loading data:', e);
+    console.warn('Error loading data. Resetting to defaults.', e);
+    DATA = createEmptyData();
+    localStorage.setItem(K, JSON.stringify(DATA));
   }
 }
 
