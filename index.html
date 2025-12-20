@@ -2174,11 +2174,11 @@ body:not([data-theme="dark"]) .header-new-badge {
                   <div class="rec-bar-box">
                       <div class="rec-bar-fill" id="record-progress"></div>
                   </div>
-                  
+
                   <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:11px; color:var(--muted); font-weight:700;">
-                      <span>0%</span>
+                      <span id="record-progress-label">0%</span>
                       <span id="record-remaining">Осталось: 0 ₽</span>
-                      <span>100%</span>
+                      <span id="record-target-label">100%</span>
                   </div>
               </div>
               
@@ -6376,6 +6376,10 @@ function calcStats(){
     document.getElementById('record-amount').innerText = formatCurrency(record);
     const recordEarnedEl = document.getElementById('record-earned');
     if (recordEarnedEl) recordEarnedEl.innerText = formatCurrency(totalFact);
+    const recordProgressLabel = document.getElementById('record-progress-label');
+    const recordTargetLabel = document.getElementById('record-target-label');
+    if (recordProgressLabel) recordProgressLabel.innerText = `${Math.round(recordProgress)}%`;
+    if (recordTargetLabel) recordTargetLabel.innerText = record ? '100%' : '—';
     document.getElementById('record-progress').style.width = record ? Math.min(100, (totalFact/record)*100) + '%' : '0%';
 
     document.getElementById('p-bar').style.width = goal > 0 ? Math.min(100, (totalFact/goal)*100) + '%' : '0%';
