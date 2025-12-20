@@ -818,10 +818,10 @@
   .rep-cta:hover { border-color: var(--accent); color: var(--accent); }
   .rep-cta svg { width: 16px; height: 16px; }
   .link-preview { margin-top: 10px; padding: 10px 12px; border: 1px dashed var(--border); border-radius: 12px; background: var(--card-alt); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-  .link-preview-info { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-  .link-preview-url { font-weight: 800; color: var(--accent); word-break: break-all; text-decoration: underline; transition: color .2s; }
+  .link-preview-info { display: flex; flex-direction: row; align-items: center; gap: 8px; min-width: 0; flex-wrap: nowrap; }
+  .link-preview-url { font-weight: 800; color: var(--accent); text-decoration: underline; transition: color .2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; word-break: normal; flex: 1; min-width: 0; }
   .link-preview-url:hover { color: #8ab4ff; }
-  .link-preview-title { color: var(--muted); font-size: 13px; line-height: 1.4; word-break: break-word; }
+  .link-preview-title { color: var(--muted); font-size: 13px; line-height: 1.4; word-break: break-word; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50%; }
   .link-preview-actions { display: flex; gap: 8px; }
   .link-preview button { padding: 8px 12px; min-height: 36px; }
   /* Bulk Toolbar */
