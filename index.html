@@ -818,10 +818,13 @@
   .rep-cta:hover { border-color: var(--accent); color: var(--accent); }
   .rep-cta svg { width: 16px; height: 16px; }
   .link-preview { margin-top: 10px; padding: 10px 12px; border: 1px dashed var(--border); border-radius: 12px; background: var(--card-alt); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-  .link-preview-info { display: flex; flex-direction: row; align-items: center; gap: 8px; min-width: 0; flex-wrap: nowrap; }
+  .link-preview-body { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+  .link-preview-head { display: flex; align-items: center; gap: 10px; min-width: 0; flex-wrap: wrap; }
+  .link-preview-label { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; background: var(--pill-bg); border: 1px solid var(--border); color: var(--muted); font-size: 12px; font-weight: 800; letter-spacing: -0.2px; white-space: nowrap; }
+  .link-preview-info { display: inline-flex; align-items: center; gap: 8px; min-width: 0; flex: 1; }
   .link-preview-url { font-weight: 800; color: var(--accent); text-decoration: underline; transition: color .2s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; word-break: normal; flex: 1; min-width: 0; }
   .link-preview-url:hover { color: #8ab4ff; }
-  .link-preview-title { color: var(--muted); font-size: 13px; line-height: 1.4; word-break: break-word; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50%; }
+  .link-preview-title { color: var(--muted); font-size: 13px; line-height: 1.4; word-break: break-word; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .link-preview-actions { display: flex; gap: 8px; }
   .link-preview button { padding: 8px 12px; min-height: 36px; }
   /* Bulk Toolbar */
@@ -1358,6 +1361,11 @@
   .is-hidden { display: none !important; }
   .expense-cell input:disabled { background: var(--input-bg); color: var(--muted); cursor: not-allowed; }
   .deadline-links-row { margin-top: 12px; display: flex; align-items: center; justify-content: flex-start; }
+  .deadline-row { display: flex; align-items: center; gap: 10px; }
+  .deadline-row .date-input-wrap { flex: 1; }
+  .deadline-row .deadline-clear-btn { margin: 0; height: 44px; padding: 0 12px; }
+  .link-inline-btn { width: auto; min-height: 44px; padding: 10px 14px; }
+  .template-add-btn { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 0 18px; }
   .link-inline-btn { padding: 10px 14px; font-weight: 800; gap: 10px; box-shadow: 0 6px 16px rgba(59,130,246,0.08); }
   .link-inline-btn span { color: var(--text); font-size: 13px; }
 
@@ -2282,10 +2290,15 @@ body:not([data-theme="dark"]) .header-new-badge {
                     
                     <div class="inp-modern">
                          <label>🏁 Дедлайн</label>
-                         <div class="date-input-wrap" id="add-proj-dl-display" onclick="openDateInModal('add-proj-dl-val')" style="background:var(--input-bg); width:100%; height:44px;">
-                           <svg class="date-icon"><use href="#icon-calendar"/></svg>
-                           <span class="date-text-display">Нет срока</span>
-                        </div>
+                         <div class="deadline-row">
+                             <div class="date-input-wrap" id="add-proj-dl-display" onclick="openDateInModal('add-proj-dl-val')" style="background:var(--input-bg); width:100%; height:44px;">
+                               <svg class="date-icon"><use href="#icon-calendar"/></svg>
+                               <span class="date-text-display">Нет срока</span>
+                            </div>
+                            <button type="button" class="deadline-clear-btn" onclick="clearNewProjectDeadline()" title="Убрать дедлайн">
+                                <svg><use href="#icon-calendar-off"/></svg>
+                            </button>
+                         </div>
                         <input type="hidden" id="add-proj-dl-val" value="">
                     </div>
 
@@ -2300,20 +2313,23 @@ body:not([data-theme="dark"]) .header-new-badge {
                         
                         <input type="number" id="add-proj-dl-custom" placeholder="Дней" oninput="applyDeadlinePreset()" style="width: 80px; display:none; background:var(--input-bg); border:1px solid var(--border); border-radius:10px; padding:10px; height: 44px;">
                         
-                        <input type="time" id="add-proj-dl-time" class="deadline-time" step="300" oninput="applyDeadlinePreset()" style="background:var(--input-bg); border:1px solid var(--border); border-radius:10px; padding:10px; height: 44px; display:none;"> <button type="button" class="deadline-clear-btn" onclick="clearNewProjectDeadline()" title="Убрать дедлайн">
-                            <svg><use href="#icon-calendar-off"/></svg>
-                        </button>
+                        <input type="time" id="add-proj-dl-time" class="deadline-time" step="300" oninput="applyDeadlinePreset()" style="background:var(--input-bg); border:1px solid var(--border); border-radius:10px; padding:10px; height: 44px; display:none;">
                     </div>
                 </div>
 
                 <div style="margin-top: 16px;">
-                    <button type="button" class="link-btn link-inline-btn" id="new-project-link-btn" onclick="openLink('new')" style="width:100%; justify-content: flex-start; height: 44px;">
+                    <button type="button" class="link-btn link-inline-btn" id="new-project-link-btn" onclick="openLink('new')" style="justify-content: flex-start;">
                         <svg><use href="#icon-link"/></svg>
-                        <span>Прикрепить ссылку на чат или ТЗ</span>
+                        <span>Ссылка на чат/материалы</span>
                     </button>
                     <div class="link-preview" id="new-project-link-preview" style="display:none; margin-top:10px;">
-                        <div class="link-preview-info">
-                            <a class="link-preview-url" id="new-project-link-text" href="#" target="_blank"></a>
+                        <div class="link-preview-body">
+                            <div class="link-preview-head">
+                                <div class="link-preview-label" id="new-project-link-label">Ссылка добавлена</div>
+                                <div class="link-preview-info">
+                                    <a class="link-preview-url" id="new-project-link-text" href="#" target="_blank"></a>
+                                </div>
+                            </div>
                             <div class="link-preview-title" id="new-project-link-title" style="display:none"></div>
                         </div>
                         <div class="link-preview-actions">
@@ -5219,11 +5235,13 @@ function updateNewProjectLinkButton() {
     const btn = document.getElementById('new-project-link-btn');
     const preview = document.getElementById('new-project-link-preview');
     const text = document.getElementById('new-project-link-text');
+    const previewLabel = document.getElementById('new-project-link-label');
     if (!btn) return;
     const hasLink = !!newProjectLink;
     btn.classList.toggle('link-active', hasLink);
     const label = btn.querySelector('span');
-    if (label) label.textContent = hasLink ? 'Ссылка добавлена' : 'Ссылка на чат/материалы';
+    if (label) label.textContent = 'Ссылка на чат/материалы';
+    if (previewLabel) previewLabel.textContent = hasLink ? 'Ссылка добавлена' : 'Ссылка на чат/материалы';
     if (preview && text) {
         const displayText = hasLink ? formatLinkDisplay(newProjectLink) : '';
         preview.style.display = hasLink ? 'flex' : 'none';
