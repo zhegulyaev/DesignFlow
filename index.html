@@ -598,6 +598,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    align-items: center;
   }
 
   .rep-legend-row {
@@ -625,7 +626,7 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     background: var(--card);
   }
 
@@ -647,6 +648,14 @@
     font-size: 14px;
     font-weight: 800;
     color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .rep-chart-area canvas {
+    width: 100% !important;
+    max-width: 280px;
+    aspect-ratio: 1 / 1;
+    height: auto !important;
   }
 
   .rep-tip-card {
@@ -706,6 +715,9 @@
   .top-clients-title { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; color: var(--text); }
   .top-clients-sub { color: var(--muted); font-weight: 600; font-size: 14px; }
   .top-clients-legend { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; font-weight: 700; background: var(--pill-bg); border: 1px solid var(--border); padding: 8px 10px; border-radius: 10px; }
+  .top-clients-controls { display: flex; align-items: center; gap: 8px; }
+  .top-clients-mode-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--button-bg); border: 1px solid var(--border); color: var(--text); border-radius: 10px; font-weight: 800; font-size: 13px; letter-spacing: -0.2px; cursor: pointer; transition: .2s; }
+  .top-clients-mode-btn:hover { border-color: var(--accent); color: var(--accent); }
   .top-clients-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--purple); box-shadow: 0 0 0 4px rgba(163,113,247,0.12); }
   .top-clients-chart { height: 260px; margin-top: 12px; }
   .inline-link-btn { padding: 8px 12px; background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; transition: .2s; }
@@ -1897,10 +1909,15 @@ body:not([data-theme="dark"]) .header-new-badge {
               <div class="card top-clients-card" id="top-clients-card" data-editable data-block-key="topClients">
                 <div class="top-clients-header">
                   <div>
-                    <div class="top-clients-title">Топ 5 клиентов · Чистая прибыль</div>
-                    <div class="top-clients-sub">Маржа по активным, архивным, на паузе и в ожидании</div>
+                    <div class="top-clients-title">Топ 5 клиентов</div>
+                    <div class="top-clients-sub" id="top-clients-sub">Маржа по активным, архивным, на паузе и в ожидании</div>
                   </div>
-                  <div class="top-clients-legend"><span class="top-clients-dot"></span> Чистая прибыль</div>
+                  <div class="top-clients-controls">
+                    <button class="top-clients-mode-btn" id="top-clients-mode-btn" onclick="toggleTopClientsMode()" title="Переключить тип прибыли для графика">
+                      <span class="top-clients-dot"></span>
+                      <span id="top-clients-mode-label">Чистая прибыль</span>
+                    </button>
+                  </div>
                 </div>
                 <div class="top-clients-chart"><canvas id="topClientsChart"></canvas></div>
               </div>
@@ -4173,6 +4190,10 @@ function calcNet(item){
     const taxAmt = gross * (tax / 100);
     return Math.round(gross - taxAmt - contr);
 }
+
+function calcGross(item) {
+    return toNumeric(item.p);
+}
 function calcMarginPrc(item) {
     const gross = toNumeric(item.p);
     if (gross === 0) return 0;
@@ -5826,9 +5847,9 @@ function analyzeReputation(){
 }
 
 function openReputationTasks() {
-    if (isTableEnabled('waiting')) {
-        switchTab('waiting');
-        const tabBtn = document.getElementById('tab-waiting');
+    if (isTableEnabled('active')) {
+        switchTab('active');
+        const tabBtn = document.getElementById('tab-active');
         if (tabBtn) tabBtn.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
         openSettings();
@@ -5942,7 +5963,8 @@ function updateReputationUI(){
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
+                aspectRatio: 1.1,
                 cutout: '72%',
                 plugins: {
                     legend: { display: false },
@@ -6088,6 +6110,8 @@ function calcStats(){
 }
 
 let chL = null, chP = null, chB = null, chRep = null, chTopClients = null;
+let topClientsMode = 'net';
+let lastTopClientsScope = null;
 function updateCharts(fact, plan, scope){
     const ctxL = document.getElementById('lineChart').getContext('2d');
     const ctxP = document.getElementById('pieChart').getContext('2d');
@@ -6137,12 +6161,25 @@ function updateTopClientsChart(scope) {
     const canvas = document.getElementById('topClientsChart');
     if (!canvas) return;
 
+    lastTopClientsScope = scope;
+
+    const modeLabel = document.getElementById('top-clients-mode-label');
+    const sub = document.getElementById('top-clients-sub');
+    const isGross = topClientsMode === 'gross';
+    if (modeLabel) modeLabel.innerText = isGross ? 'Грязная прибыль' : 'Чистая прибыль';
+    if (sub) sub.innerText = isGross
+        ? 'Без учёта расходов и налогов — все статусы'
+        : 'Маржа по активным, архивным, на паузе и в ожидании';
+
+    const valueGetter = isGross ? calcGross : calcNet;
+    const datasetLabel = isGross ? 'Грязная прибыль' : 'Чистая прибыль';
+
     const totals = {};
     ['active','archive','paused','waiting'].forEach(type => {
         (scope[type] || []).forEach(item => {
             const client = (item.c || 'Без имени').trim() || 'Без имени';
-            const net = calcNet(item);
-            totals[client] = (totals[client] || 0) + net;
+            const value = valueGetter(item);
+            totals[client] = (totals[client] || 0) + value;
         });
     });
 
@@ -6176,7 +6213,7 @@ function updateTopClientsChart(scope) {
                 legend: { display: false },
                 tooltip: {
                     callbacks: {
-                        label: ctx => formatCurrency(ctx.parsed.x)
+                        label: ctx => `${datasetLabel}: ${formatCurrency(ctx.parsed.x)}`
                     }
                 }
             },
@@ -6195,6 +6232,13 @@ function updateTopClientsChart(scope) {
             }
         }
     });
+}
+
+function toggleTopClientsMode() {
+    topClientsMode = topClientsMode === 'net' ? 'gross' : 'net';
+    if (lastTopClientsScope) {
+        updateTopClientsChart(lastTopClientsScope);
+    }
 }
 
 function exp(){
