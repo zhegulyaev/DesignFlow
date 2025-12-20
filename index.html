@@ -311,59 +311,381 @@
   .del-btn svg { width: 16px; height: 16px; }
   .del-btn:hover{opacity:1; border-color: var(--del-hover-border); background: var(--del-hover-bg); color: var(--red);}
   
-  /* Pacing Block Updated (Fire) */
+  /* --- Modern Pace Block (Темп недели) --- */
   .pace-block {
-    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-    padding: 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 6px; /* Тонкая рамка вокруг контента */
+    margin-bottom: 24px;
+    margin-top: 20px;
     display: flex;
+    gap: 0;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    transition: all 0.3s ease;
+  }
+  
+  /* Статус "Критично" меняет обводку и фон */
+  .pace-block.critical {
+    border-color: rgba(248,81,73,0.4);
+    background: linear-gradient(to right, rgba(248,81,73,0.05), var(--card) 40%);
+  }
+
+  .pace-layout {
+    display: flex;
+    width: 100%;
     align-items: stretch;
+    background: var(--card-alt);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  /* Левая часть - Основной статус */
+  .pace-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 16px 24px;
+    gap: 18px;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+  
+  .pace-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  
+  .pace-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .pace-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 800;
+    color: var(--muted);
+  }
+  
+  .pace-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .pace-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+  }
+  
+  .pace-status {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .pace-chill { background: rgba(46,160,67,0.15); color: var(--green); }
+  .pace-hurry { background: rgba(248,81,73,0.15); color: var(--red); }
+  
+  .pace-desc {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* Правая часть - Мини репутация */
+  .pace-side {
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 20px;
+    background: rgba(255,255,255,0.01);
+  }
+
+  .pace-mini-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+  }
+  
+  .pace-rep-val {
+    font-size: 20px;
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .rep-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .rep-dot.good { background: #2ea043; box-shadow: 0 0 0 2px rgba(46,160,67,0.2); }
+  .rep-dot.warn { background: #d29922; box-shadow: 0 0 0 2px rgba(210,153,34,0.2); }
+  .rep-dot.bad { background: #f85149; box-shadow: 0 0 0 2px rgba(248,81,73,0.2); }
+
+  .pace-rep-sub {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  
+  .pace-btn-wrap button {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: .2s;
+  }
+  .pace-btn-wrap button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--button-bg);
+  }
+
+  @media(max-width: 768px) {
+    .pace-layout { flex-direction: column; }
+    .pace-main { border-right: none; border-bottom: 1px solid var(--border); }
+    .pace-side { padding: 16px 24px; justify-content: space-between; }
+    .pace-mini-stat { align-items: flex-start; text-align: left; }
+  }
+
+  /* --- Modern Reputation Block (Репутация) --- */
+  .reputation-card {
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 0;
+    background: var(--card);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Шапка репутации */
+  .rep-header-modern {
+    padding: 24px;
+    background: linear-gradient(180deg, var(--card-alt) 0%, var(--card) 100%);
+    border-bottom: 1px solid var(--border);
+    display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
-    margin-top: 15px; /* Дополнительный отступ сверху */
-    transition: background .3s;
+    align-items: flex-start;
+  }
+  
+  .rep-main-score {
+    display: flex;
+    align-items: center;
     gap: 16px;
   }
-  .pace-block.critical { background: rgba(218, 54, 51, 0.15); border-color: var(--red); }
-  .pace-icon { font-size: 24px; }
-  .pace-status { font-weight: 700; font-size: 14px; padding: 5px 12px; border-radius: 6px; }
-  .pace-chill { background: rgba(57, 211, 83, 0.1); color: var(--green); }
-  .pace-hurry { background: var(--red); color: white; }
+  
+  .rep-badge-large {
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: grid;
+    place-items: center;
+    font-size: 28px;
+    color: var(--gold);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  }
+  
+  .rep-header-texts h3 {
+    font-size: 32px;
+    font-weight: 900;
+    margin: 0;
+    line-height: 1;
+    letter-spacing: -1px;
+    color: var(--text);
+  }
+  
+  .rep-header-texts .rep-subtitle {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 6px;
+    font-weight: 600;
+  }
 
-body.light .pace-block.critical {
-    background: #ffffff;
-    border-color: #d8e1f0;
-    box-shadow: none;
-}
-  body.light .pace-hurry { background: #f26b6b; color: #fff; box-shadow: 0 6px 14px rgba(242,107,107,0.25); }
+  .rep-status-badge {
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid transparent;
+  }
+  .rep-status-badge.good { background: rgba(46,160,67,0.1); color: var(--green); border-color: rgba(46,160,67,0.2); }
+  .rep-status-badge.warn { background: rgba(210,153,34,0.1); color: var(--gold); border-color: rgba(210,153,34,0.2); }
+  .rep-status-badge.bad { background: rgba(248,81,73,0.1); color: var(--red); border-color: rgba(248,81,73,0.2); }
 
-  .pace-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; width: 100%; align-items: stretch; }
-  .pace-card { border: 1px solid var(--border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 8px; background: var(--card-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
-  .pace-card-label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; color: var(--muted); display: inline-flex; align-items: center; gap: 8px; }
-  .pace-card-label-icon .pace-icon { font-size: 18px; }
-  .pace-card-value { font-size: 18px; font-weight: 900; color: var(--text); }
-  .pace-card-sub { color: var(--muted); font-size: 13px; font-weight: 600; line-height: 1.45; }
-  .pace-card--rep .pace-rep-chip { width: 100%; }
-  .pace-rep-chip { display: inline-flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; background: var(--chip-bg); border: 1px solid var(--border); color: #e9edf4; font-weight: 700; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); min-height: 48px; width: auto; }
-  .pace-rep-chip .rep-dot { width: 10px; height: 10px; box-shadow: 0 0 0 4px rgba(88,166,255,0.12); }
-  .pace-rep-chip .rep-chip-text { display: flex; flex-direction: column; gap: 2px; line-height: 1.2; }
-  .pace-rep-chip .rep-chip-label { font-size: 11px; letter-spacing: 0.4px; text-transform: uppercase; color: var(--muted); }
-  .pace-rep-chip .rep-chip-score { font-size: 15px; font-weight: 800; }
-  .pace-rep-chip .rep-chip-sub { font-size: 12px; color: var(--muted); font-weight: 600; }
-  .pace-rep-chip.good { border-color: rgba(46, 160, 67, 0.35); background: linear-gradient(135deg, rgba(46,160,67,0.14), rgba(15,23,31,0.8)); box-shadow: 0 0 0 1px rgba(46,160,67,0.18); }
-  .pace-rep-chip.warn { border-color: rgba(210, 153, 34, 0.35); background: linear-gradient(135deg, rgba(210,153,34,0.14), rgba(15,23,31,0.8)); box-shadow: 0 0 0 1px rgba(210,153,34,0.16); }
-  .pace-rep-chip.bad { border-color: rgba(218, 54, 51, 0.35); background: linear-gradient(135deg, rgba(248,81,73,0.14), rgba(15,23,31,0.8)); box-shadow: 0 0 0 1px rgba(218,54,51,0.16); }
-  body.light .pace-rep-chip { background: linear-gradient(135deg,#f7fbff,#eef2ff); border-color: #d6e2f5; color: #1f2d4a; box-shadow: 0 6px 20px rgba(17,24,39,0.06); }
-  body.light .pace-rep-chip .rep-chip-label { color: #4b5563; }
-  body.light .pace-rep-chip.good { border-color: rgba(46,160,67,0.3); background: linear-gradient(135deg, rgba(46,160,67,0.1), #f5fbf7); box-shadow: 0 0 0 1px rgba(46,160,67,0.12); color: #1f422c; }
-  body.light .pace-rep-chip.warn { border-color: rgba(210,153,34,0.28); background: linear-gradient(135deg, rgba(210,153,34,0.12), #fdf7ec); box-shadow: 0 0 0 1px rgba(210,153,34,0.12); color: #5a4314; }
-  body.light .pace-rep-chip.bad { border-color: rgba(218,54,51,0.32); background: linear-gradient(135deg, rgba(248,81,73,0.12), #fff1f0); box-shadow: 0 0 0 1px rgba(218,54,51,0.12); color: #6b1c1c; }
-  .inline-link-btn.full { width: 100%; justify-content: center; }
+  /* Сетка метрик */
+  .rep-metrics-modern {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    padding: 18px 20px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+  }
 
+  .rep-metric-item {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    background: var(--card-alt);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .rm-label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 800;
+  }
+
+  .rm-value {
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--text);
+  }
+
+  .rm-sub {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  /* Основное тело: график + советы */
+  .rep-body-split {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 0;
+  }
+
+  .rep-chart-area {
+    padding: 20px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .rep-legend-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  .rep-legend-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--card-alt);
+  }
+
+  .rep-legend-pill .rep-dot { box-shadow: 0 0 0 3px rgba(255,255,255,0.06); }
+
+  .rep-advice-area {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: var(--card);
+  }
+
+  .rep-fallout-banner {
+    border: 1px dashed rgba(248,81,73,0.5);
+    background: rgba(248,81,73,0.08);
+    color: var(--red);
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    display: none;
+  }
+
+  .rep-advice-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text);
+  }
+
+  .rep-tip-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: var(--card-alt);
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.45;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+  }
+
+  .rep-tip-card svg {
+    width: 18px;
+    height: 18px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  @media(max-width: 900px) {
+    .rep-body-split { grid-template-columns: 1fr; }
+    .rep-chart-area { border-right: none; border-bottom: 1px solid var(--border); }
+  }
+
+  body.light .rep-legend-pill .rep-dot { box-shadow: 0 0 0 3px rgba(0,0,0,0.03); }
+  body.light .rep-fallout-banner { background: #fff1f0; color: #b42318; border-color: rgba(248,81,73,0.4); }
+  body.light .rep-tip-card { background: #f6f8fd; border-color: #d8e1f0; color: #1f2937; }
+  body.light .rep-legend-pill { background: #f6f8fd; border-color: #d8e1f0; }
+  body.light .pace-block { box-shadow: 0 10px 24px rgba(17,24,39,0.06); }
+  body.light .pace-icon-box { background: #f7faff; }
 
       .date-input-wrap:not(:last-child) {
     margin-right: 10px;
 }
-  
+
   /* Stats Dashboard fixes */
   .stats-full { margin-top: 50px; display: flex; flex-direction: column; gap: 20px; }
   .stats-two-columns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; align-items: start; }
@@ -1262,28 +1584,36 @@ body:not([data-theme="dark"]) .header-new-badge {
   
   <div class="tab-desc-block" id="tab-description">Проекты в работе. Следите за дедлайнами и фиксируйте предоплату.</div>
 
-  <div class="pace-block" id="pace-indicator" style="display:none;" data-editable data-block-key="pace">
-      <div class="pace-actions">
-          <div class="pace-card pace-card--deadlines">
-              <div class="pace-card-label pace-card-label-icon">
-                  <span class="pace-icon" id="pace-icon">🔥</span>
-                  <span>Темп недели</span>
+<div class="pace-block" id="pace-indicator" style="display:none;" data-editable data-block-key="pace">
+      <div class="pace-layout">
+          <div class="pace-main">
+              <div class="pace-icon-box">
+                  <div id="pace-icon">🔥</div>
               </div>
-              <div class="pace-card-value" id="pace-title">Нужно ускориться!</div>
-              <div class="pace-card-sub" id="pace-desc">Загрузка...</div>
-              <div class="pace-status" id="pace-status">Критично</div>
-          </div>
-          <div class="pace-card pace-card--rep">
-              <div class="pace-card-label">Репутация</div>
-              <div class="pace-rep-chip good" id="pace-rep-chip">
-                  <span class="rep-dot good" id="pace-rep-dot"></span>
-                  <div class="rep-chip-text">
-                      <div class="rep-chip-label">Счёт</div>
-                      <div class="rep-chip-score" id="pace-rep-text">100 / 100</div>
-                      <div class="rep-chip-sub" id="pace-rep-caption">Доверие стабильно</div>
+              <div class="pace-info">
+                  <div class="pace-label">Темп недели</div>
+                  <div class="pace-title-row">
+                      <div class="pace-title" id="pace-title">Нужно ускориться!</div>
+                      <div class="pace-status pace-hurry" id="pace-status">Критично</div>
                   </div>
+                  <div class="pace-desc" id="pace-desc">Горит дедлайнов: 2. Поднажми!</div>
               </div>
-              <button class="inline-link-btn full" id="pace-details-btn" onclick="scrollToReputation()">Открыть блок репутации</button>
+          </div>
+          
+          <div class="pace-side">
+              <div class="pace-mini-stat">
+                  <div class="pace-rep-val">
+                      <span class="rep-dot good" id="pace-rep-dot"></span>
+                      <span id="pace-rep-text">100 / 100</span>
+                  </div>
+                  <div class="pace-rep-sub" id="pace-rep-caption">Доверие стабильно</div>
+                  <div id="pace-rep-chip" style="display:none"></div> 
+              </div>
+              <div class="pace-btn-wrap">
+                  <button id="pace-details-btn" onclick="scrollToReputation()" title="Открыть детали репутации">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+                  </button>
+              </div>
           </div>
       </div>
   </div>
@@ -1609,52 +1939,62 @@ body:not([data-theme="dark"]) .header-new-badge {
                       <button class="inline-link-btn" onclick="openRecordSettings()">Редактировать рекорд</button>
                   </div>
               </div>
-              <div class="reputation-card" id="reputation-card" data-editable data-block-key="reputation">
-                  <div class="reputation-title">Репутация дизайнера <span class="help-icon" data-tooltip="Пульс по дедлайнам: учитываем все активные проекты и просрочки, чтобы предупредить потери клиентов.">?</span></div>
-                  <div class="reputation-top-row">
-                      <div class="rep-score-chip">
-                          <div class="rep-score-icon">★</div>
-                          <div class="rep-score-meta">
-                              <div class="rep-score-label">Счёт</div>
-                              <div class="rep-score-main" id="reputation-score">100 / 100</div>
-                          </div>
-                      </div>
-                      <div class="rep-actions">
-                       
-                          <div class="rep-severity good" id="reputation-severity">Всё ок</div>
-                      </div>
-                  </div>
-                  <div class="reputation-grade" id="reputation-grade">Просроченных дедлайнов нет</div>
-                  <div class="reputation-detail" id="reputation-detail">Отсутствие просрочек усиливает доверие клиентов. Держи темп и фиксируй успехи в архиве.</div>
-                  <div class="reputation-fallout" id="reputation-fallout" style="display:none"></div>
-                  <div class="reputation-grid">
-                      <div class="rep-metric">
-                          <div class="rep-label">Активных проектов</div>
-                          <div class="rep-value" id="rep-active-count">0</div>
-                          <div class="rep-helper" id="rep-on-time">Без просрочек</div>
-                      </div>
-                      <div class="rep-metric">
-                          <div class="rep-label">Просрочки</div>
-                          <div class="rep-value" id="rep-overdue">0</div>
-                          <div class="rep-helper" id="rep-delay">Макс 0 дн.</div>
-                      </div>
-                  </div>
-                  <div class="reputation-mini">
-                      <div class="rep-chart-box">
-                          <div class="rep-chart-legend"><span class="legend-title">Общая репутация <span class="help-icon" data-tooltip="Диаграмма показывает, сколько задач вовремя, сколько горят и где уже просрочка.">?</span></span><span class="legend-score" id="rep-score-label">100</span></div>
-                          <div style="flex:1; position:relative; min-height: 120px;"><canvas id="reputationChart"></canvas></div>
-                          <div class="rep-chart-caption">
-                              <div class="rep-chart-pill"><span class="rep-dot good"></span> В срок: <span id="rep-on-time-pill">0</span></div>
-                              <div class="rep-chart-pill"><span class="rep-dot warn"></span> На грани: <span id="rep-near-pill">0</span></div>
-                              <div class="rep-chart-pill"><span class="rep-dot bad"></span> Просрочено: <span id="rep-overdue-pill">0</span></div>
-                          </div>
-                      </div>
-                      <div class="rep-tips">
-                          <div class="rep-tips-title">Что улучшить</div>
-                          <div id="reputation-tips"></div>
-                      </div>
-                  </div>
+<div class="reputation-card" id="reputation-card" data-editable data-block-key="reputation">
+      
+      <div class="rep-header-modern">
+          <div class="rep-main-score">
+              <div class="rep-badge-large">★</div>
+              <div class="rep-header-texts">
+                  <h3 id="reputation-score">100 / 100</h3>
+                  <div class="rep-subtitle" id="reputation-headline">Репутация безупречна</div>
               </div>
+          </div>
+          <div class="rep-status-badge good" id="reputation-severity">Стабильно</div>
+      </div>
+
+      <div class="rep-metrics-modern">
+          <div class="rep-metric-item">
+              <div class="rm-label">В работе</div>
+              <div class="rm-value" id="rep-active-count">0</div>
+              <div class="rm-sub" id="rep-on-time">Без просрочек</div>
+          </div>
+          <div class="rep-metric-item">
+              <div class="rm-label">Просрочки</div>
+              <div class="rm-value" id="rep-overdue">0</div>
+              <div class="rm-sub" id="reputation-grade">Задач нет</div>
+          </div>
+          <div class="rep-metric-item">
+              <div class="rm-label">Задержка</div>
+              <div class="rm-value" id="rep-delay">0 дн.</div>
+              <div class="rm-sub">Максимальная</div>
+          </div>
+      </div>
+
+      <div class="rep-body-split">
+          <div class="rep-chart-area">
+              <canvas id="reputationChart"></canvas>
+              <div class="rep-legend-row">
+                  <div class="rep-legend-pill"><span class="rep-dot good"></span> <span id="rep-on-time-pill">0</span></div>
+                  <div class="rep-legend-pill"><span class="rep-dot warn"></span> <span id="rep-near-pill">0</span></div>
+                  <div class="rep-legend-pill"><span class="rep-dot bad"></span> <span id="rep-overdue-pill">0</span></div>
+              </div>
+              <div id="reputation-hint" style="display:none"></div>
+              <div id="reputation-detail" style="display:none"></div>
+              <div id="rep-score-label" style="display:none"></div>
+          </div>
+          
+          <div class="rep-advice-area">
+              <div class="rep-fallout-banner" id="reputation-fallout"></div>
+              
+              <div class="rep-advice-title">
+                  <span>Что улучшить</span>
+                  <span style="cursor:pointer; color:var(--accent)" onclick="openReputationTasks()">К задачам →</span>
+              </div>
+              
+              <div id="reputation-tips"></div>
+          </div>
+      </div>
+  </div>
           </div>
 
       </div>
@@ -5567,10 +5907,13 @@ function updateReputationUI(){
 
     const tipsEl = document.getElementById('reputation-tips');
     if (tipsEl) {
+        // Мы меняем class="rep-tip" на class="rep-tip-card" чтобы подхватились новые стили
         tipsEl.innerHTML = state.tips.map(tip => `
-            <div class="rep-tip">
+            <div class="rep-tip-card">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 3v4"/><path d="M6.5 7.5l2.5 2.5"/><path d="M17.5 7.5L15 10"/><path d="M12 17v4"/><path d="M6 13l-2 2"/><path d="M18 13l2 2"/><circle cx="12" cy="12" r="4"/>
+                    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
                 </svg>
                 <span>${tip}</span>
             </div>
