@@ -164,7 +164,7 @@
 
   th:first-child, td:first-child { width: 24px; cursor: default; text-align: center; }
   td.select-col { position: relative; }
-  td{ padding: 5px 8px; border-bottom:1px solid var(--table-border); vertical-align:middle; font-size:15px; position: relative; }
+  td{ padding: 10px 8px; border-bottom:1px solid var(--table-border); vertical-align:middle; font-size:15px; position: relative; }
   tr:last-child td{border-bottom:none;}
   tr:hover td{background:var(--row-hover);}
 
@@ -2504,7 +2504,7 @@ body:not([data-theme="dark"]) .header-new-badge {
                             <option value="amount">Сумма (₽)</option>
                             <option value="percent">Процент (%)</option>
                         </select>
-                        <div class="helper-note" id="add-contractor-helper" style="margin-top:6px;">Выберите тип расходов, чтобы добавить сумму.</div>
+                        <div class="helper-note is-hidden" id="add-contractor-helper" style="margin-top:6px;"></div>
                         <div id="contractor-amount-wrap" class="is-hidden" style="margin-top:6px;">
                              <div class="input-with-suffix">
                                 <input type="text" class="contractor-input" id="add-proj-contractor" placeholder="Сумма" oninput="formatNumberInput(this)">
@@ -4128,18 +4128,15 @@ function handleNewContractorModeChange(mode) {
     if (!input || !helper || !wrapper || !suffix) return;
     const showInput = mode !== 'none';
     wrapper.classList.toggle('is-hidden', !showInput);
-    helper.classList.toggle('is-hidden', mode === 'amount');
+    helper.textContent = '';
+    helper.classList.add('is-hidden');
     input.disabled = !showInput;
     if (!showInput) {
         input.value = '';
         suffix.textContent = '';
-        helper.textContent = 'Выберите тип расходов, чтобы добавить сумму.';
-        helper.classList.remove('is-hidden');
         return;
     }
     const isPercent = mode === 'percent';
-    helper.textContent = isPercent ? 'Укажите процент расходов от общей суммы.' : '';
-    helper.classList.toggle('is-hidden', !helper.textContent);
     input.placeholder = isPercent ? 'Например, 20' : 'Например, 30 000';
     suffix.textContent = isPercent ? '%' : '₽';
     input.focus();
@@ -4159,6 +4156,7 @@ let editContext = null;
 let toastTimeout = null;
 let templateHelperTimeout = null;
 let lastPermanentDeletion = null;
+let lastTrashMove = null;
 let projectFormSnapshot = null;
 let newProjectLink = '';
 let newProjectLinkTitle = '';
@@ -4219,6 +4217,28 @@ function undoPermanentDelete() {
         });
 
     lastPermanentDeletion = null;
+    save();
+    upd();
+    showToast('Удаление отменено');
+}
+
+function undoMoveToTrash() {
+    if (!lastTrashMove || !Array.isArray(lastTrashMove.items)) return;
+
+    const { type, items } = lastTrashMove;
+    if (!Array.isArray(DATA[type])) return;
+
+    items
+        .slice()
+        .sort((a, b) => a.index - b.index)
+        .forEach(({ item, index }) => {
+            const trashIndex = DATA.trash.indexOf(item);
+            if (trashIndex > -1) DATA.trash.splice(trashIndex, 1);
+            delete item.deletedAt;
+            DATA[type].splice(Math.max(0, Math.min(index, DATA[type].length)), 0, item);
+        });
+
+    lastTrashMove = null;
     save();
     upd();
     showToast('Удаление отменено');
@@ -4415,16 +4435,17 @@ function bulkDelete(type = currentTab, deleteForever = false) {
         const itemIndex = DATA[type].findIndex((_, i) => i === idx);
         if (itemIndex > -1) {
             const item = DATA[type].splice(itemIndex, 1)[0];
+            deletedItems.push({ item, index: itemIndex });
             if (deleteForever) {
-                deletedItems.push({ item, index: itemIndex });
-            } else {
-                item.deletedAt = Date.now();
-                DATA.trash.unshift(item);
+                return;
             }
+            item.deletedAt = Date.now();
+            DATA.trash.unshift(item);
         }
     });
 
     lastPermanentDeletion = deleteForever ? { type, items: deletedItems } : null;
+    lastTrashMove = deleteForever ? null : { type, items: deletedItems };
 
     selectedRows[type].clear();
     document.getElementById('deleteConfirmModal').style.display = 'none';
@@ -4432,7 +4453,7 @@ function bulkDelete(type = currentTab, deleteForever = false) {
     if (deleteForever) {
         showToast('Удалено навсегда', 'Отмена', undoPermanentDelete);
     } else {
-        showToast(`Перемещено в корзину: ${indicesToDelete.length}`, 'Перейти', () => switchTab('trash'));
+        showToast(`Перемещено в корзину: ${indicesToDelete.length}`, 'Отменить', undoMoveToTrash);
     }
 }
 
@@ -4701,6 +4722,10 @@ function setupModalsBackgroundCheck() {
         if (!event.target.classList.contains('modal')) return;
         if (event.target.id === 'addProjectModal') {
             attemptCloseProjectModal();
+            return;
+        }
+        if (event.target.id === 'settingsModal') {
+            attemptCloseSettings();
             return;
         }
         event.target.style.display = 'none';
@@ -5470,8 +5495,9 @@ function askDel(type, idx){
         item.deletedAt = Date.now();
         DATA.trash.unshift(item);
         lastPermanentDeletion = null;
+        lastTrashMove = { type, items: [{ item, index: itemIndex }] };
         save(); upd();
-        showToast('Перемещено в корзину', 'Перейти', () => switchTab('trash'));
+        showToast('Перемещено в корзину', 'Отменить', undoMoveToTrash);
     }
 }
 
@@ -6176,12 +6202,13 @@ function closeSettingsModal() {
     settingsInitialState = null;
 }
 
-function attemptCloseSettings() {
-    if (!hasSettingsChanges()) {
+function attemptCloseSettings(force = false) {
+    if (force || !hasSettingsChanges()) {
         closeSettingsModal();
         return;
     }
-    document.getElementById('settingsUnsavedModal').style.display = 'flex';
+    const ok = confirm('Вы уверены, что хотите закрыть окно? Внесённые изменения не будут сохранены.');
+    if (ok) closeSettingsModal();
 }
 
 function discardSettingsChanges() {
