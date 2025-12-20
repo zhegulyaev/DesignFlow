@@ -1376,8 +1376,7 @@ td.date-cell + td.date-cell {
     padding-left: 10px !important;
 }
 
-/* --- New Project Modal (Redesign) --- */
-  /* Сетка модального окна */
+/* --- New Project Modal (Updated) --- */
   .modal-layout-modern {
     display: flex;
     flex-direction: column;
@@ -1402,196 +1401,111 @@ td.date-cell + td.date-cell {
     background: var(--border);
     opacity: 0.5;
   }
-
-  /* Основная сетка для полей */
+  
   .form-grid-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-bottom: 16px;
   }
-  .form-grid-row.full { grid-template-columns: 1fr; }
-  .form-grid-row.finance { grid-template-columns: 1.5fr 0.8fr 1.2fr 0.8fr; }
   
-  /* Улучшенные инпуты */
-  .inp-modern {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  /* Класс для элементов во всю ширину (Название проекта) */
+  .form-grid-full {
+    grid-column: 1 / -1;
+    width: 100%;
   }
-  .inp-modern label {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text);
-  }
-  .inp-modern input, 
-  .inp-modern select {
+
+  /* Исправленный блок с инпутами */
+  .inp-modern { display: flex; flex-direction: column; gap: 6px; }
+  .inp-modern label { font-size: 13px; font-weight: 700; color: var(--text); }
+  .inp-modern input, .inp-modern select {
     background: var(--input-bg);
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 10px 12px;
     font-size: 14px;
     color: var(--text);
-    transition: .2s;
-    height: 44px; /* Фиксированная высота для выравнивания */
+    height: 44px;
   }
   .inp-modern input:focus, .inp-modern select:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px rgba(88,166,255,0.1);
   }
-  
-  /* Блок шаблонов внутри инпута */
-  .template-control-group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 6px;
-  }
+
+  .template-control-group { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
   .tpl-btn-chip {
-    font-size: 12px;
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    border: 1px solid transparent;
-    transition: .2s;
+    font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 8px; cursor: pointer;
+    border: 1px solid transparent; display: flex; align-items: center; gap: 6px;
   }
   .tpl-btn-chip.create { background: rgba(88,166,255,0.1); color: var(--accent); }
   .tpl-btn-chip.list { background: var(--card-alt); border-color: var(--border); color: var(--muted); }
-  .tpl-btn-chip:hover { transform: translateY(-1px); filter: brightness(1.1); }
+  .tpl-btn-chip svg { width: 14px; height: 14px; }
 
-  /* Секция дат (визуальное выделение) */
+  /* Date Panel */
   .date-panel {
-    background: var(--card-alt);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    align-items: end;
+    background: var(--card-alt); border: 1px solid var(--border); border-radius: 12px; padding: 14px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: end;
   }
   .date-presets-row {
-    grid-column: 1 / -1;
-    display: flex;
-    gap: 8px;
-    border-top: 1px solid var(--border);
-    padding-top: 12px;
-    margin-top: 4px;
-    align-items: center;
+    grid-column: 1 / -1; display: flex; gap: 8px; border-top: 1px solid var(--border);
+    padding-top: 12px; margin-top: 4px; align-items: center; flex-wrap: wrap;
   }
 
-  /* --- Efficiency Block (Redesign) --- */
+  /* --- Efficiency & Charts Fixes --- */
   .eff-card-modern {
+    background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px;
+    display: flex; flex-direction: column; gap: 16px;
+  }
+  .eff-chart-box {
+    background: var(--card-alt); border: 1px solid var(--border); border-radius: 12px; padding: 12px;
+    min-height: 200px; /* Увеличили высоту чтобы текст не наезжал */
+    position: relative; display: flex; flex-direction: column;
+  }
+  .eff-chart-canvas-wrap {
+      flex: 1; min-height: 0; width: 100%; position: relative;
+  }
+
+  /* --- Record Block (Clean Design) --- */
+  .record-clean {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: 16px;
     padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-  }
-  .eff-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .eff-title { font-size: 16px; font-weight: 800; color: var(--text); display:flex; gap:8px; align-items:center;}
-  .eff-tabs {
-    background: var(--card-alt);
-    padding: 3px;
-    border-radius: 8px;
-    display: flex;
-    gap: 2px;
-  }
-  .eff-tab {
-    padding: 4px 10px;
-    font-size: 11px;
-    font-weight: 700;
-    border-radius: 6px;
-    cursor: pointer;
-    color: var(--muted);
-    transition: .2s;
-  }
-  .eff-tab.active { background: var(--card); color: var(--text); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-
-  .eff-content-grid {
-    display: grid;
-    grid-template-columns: 1fr; /* Stacked */
     gap: 12px;
   }
-  .eff-chart-box {
-    background: var(--card-alt);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px;
-    min-height: 180px;
-    position: relative;
-  }
-  .eff-label {
-    font-size: 11px;
-    text-transform: uppercase;
-    color: var(--muted);
-    font-weight: 700;
-    position: absolute;
-    top: 10px; left: 12px;
-    z-index: 2;
-  }
+  
+  .rec-clean-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .rec-clean-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; color: var(--text); }
+  .rec-clean-icon { color: var(--gold); }
+  .rec-edit-link { font-size: 12px; color: var(--muted); cursor: pointer; text-decoration: underline; }
 
-  /* --- Record Block (Redesign) --- */
-  .record-modern {
-    position: relative;
-    background: linear-gradient(135deg, var(--card) 0%, var(--card-alt) 100%);
-    border: 1px solid var(--gold); /* Золотая обводка */
-    border-radius: 16px;
-    padding: 18px;
-    overflow: hidden;
-    box-shadow: 0 4px 24px rgba(210, 153, 34, 0.08);
-  }
-  .record-modern::before {
-    content: "🏆";
-    position: absolute;
-    right: -10px;
-    top: -10px;
-    font-size: 80px;
-    opacity: 0.05;
-    transform: rotate(15deg);
-    pointer-events: none;
-  }
-  
-  .rec-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 12px;
-  }
-  .rec-title { font-size: 13px; font-weight: 800; color: var(--gold); letter-spacing: 0.5px; text-transform: uppercase; }
-  .rec-edit-btn { font-size: 11px; color: var(--muted); cursor: pointer; text-decoration: underline; }
-  
-  .rec-main-val { font-size: 26px; font-weight: 900; color: var(--text); line-height: 1; margin-bottom: 4px; }
-  .rec-sub-text { font-size: 13px; color: var(--muted); font-weight: 600; }
-  
-  .rec-bar-box {
-    margin-top: 14px;
-    background: rgba(210, 153, 34, 0.1);
-    height: 8px;
-    border-radius: 4px;
-    overflow: hidden;
-    position: relative;
-  }
-  .rec-bar-fill {
-    height: 100%;
-    background: var(--gold);
-    width: 0%;
-    border-radius: 4px;
-    box-shadow: 0 0 10px rgba(210, 153, 34, 0.4);
-    transition: width 1s ease;
-  }
+  .rec-clean-values { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 6px; }
+  .rec-val-group { display: flex; flex-direction: column; }
+  .rec-label { font-size: 11px; text-transform: uppercase; color: var(--muted); font-weight: 700; margin-bottom: 2px; }
+  .rec-current-val { font-size: 24px; font-weight: 900; color: var(--text); line-height: 1; }
+  .rec-target-val { font-size: 14px; font-weight: 700; color: var(--muted); text-align: right; }
 
-  @media(max-width: 700px) {
-    .form-grid-row, .form-grid-row.finance, .date-panel { grid-template-columns: 1fr; gap: 12px;}
-    .date-presets-row { flex-wrap: wrap; }
+  .rec-progress-track {
+    height: 8px; background: var(--card-alt); border-radius: 4px; overflow: hidden; border: 1px solid var(--border);
   }
+  .rec-progress-bar {
+    height: 100%; background: var(--gold); border-radius: 4px; width: 0%; transition: width 0.5s ease;
+  }
+  .rec-status-text { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* --- Reputation Metrics Update --- */
+  .rep-metric-compact {
+      display: flex; flex-direction: column; gap: 4px;
+  }
+  .rep-metric-row { display: flex; justify-content: space-between; align-items: baseline; }
+  .rep-metric-big { font-size: 20px; font-weight: 800; color: var(--text); }
+  .rep-metric-label { font-size: 11px; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .rep-split-val { display: flex; gap: 12px; margin-top: 4px; }
+  .rep-sub-item { display: flex; flex-direction: column; }
+  .rep-sub-val { font-size: 14px; font-weight: 700; color: var(--text); }
+  .rep-sub-lbl { font-size: 10px; color: var(--muted); }
 
 
 
@@ -2122,38 +2036,46 @@ body:not([data-theme="dark"]) .header-new-badge {
                   <div class="eff-content-grid">
                       <div class="eff-chart-box">
                           <div class="eff-label">Потенциал vs Факт</div>
-                          <div style="height:160px;width:100%; display:flex; justify-content:center;">
+                          <div class="eff-chart-canvas-wrap" style="height:180px;">
                               <canvas id="pieChart"></canvas>
                           </div>
                       </div>
                       
                       <div class="eff-chart-box">
                           <div class="eff-label">Динамика (6 мес)</div>
-                          <div style="height:140px;width:100%">
+                          <div class="eff-chart-canvas-wrap" style="height:160px;">
                               <canvas id="barChart"></canvas>
                           </div>
                       </div>
                   </div>
               </div>
 
-              <div class="record-modern" id="record-banner" data-editable data-block-key="record">
-                  <div class="rec-header">
-                      <div class="rec-title">Личный Рекорд</div>
-                      <span class="rec-edit-btn" onclick="openRecordSettings()">Изменить</span>
+              <div class="record-clean" id="record-banner" data-editable data-block-key="record">
+                  <div class="rec-clean-header">
+                      <div class="rec-clean-title">
+                          <svg class="rec-clean-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                          Личный Рекорд
+                      </div>
+                      <span class="rec-edit-link" onclick="openRecordSettings()">Изменить</span>
                   </div>
                   
-                  <div class="rec-main-val mono" id="record-amount">0 ₽</div>
-                  <div class="rec-sub-text" id="record-motiv">Задай цель!</div>
-                  
-                  <div class="rec-bar-box">
-                      <div class="rec-bar-fill" id="record-progress"></div>
+                  <div class="rec-clean-values">
+                      <div class="rec-val-group">
+                          <span class="rec-label">Заработано сейчас</span>
+                          <span class="rec-current-val" id="rec-current-fact">0 ₽</span>
+                      </div>
+                      <div class="rec-val-group">
+                          <span class="rec-label">Цель (Рекорд)</span>
+                          <span class="rec-target-val" id="record-amount">0 ₽</span>
+                      </div>
                   </div>
                   
-                  <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:11px; color:var(--muted); font-weight:700;">
-                      <span>0%</span>
-                      <span id="record-remaining">Осталось: 0 ₽</span>
-                      <span>100%</span>
+                  <div class="rec-progress-track">
+                      <div class="rec-progress-bar" id="record-progress"></div>
                   </div>
+                  
+                  <div class="rec-status-text" id="record-remaining">До рекорда: 0 ₽</div>
+                  <div id="record-motiv" style="display:none"></div>
               </div>
               
               <div class="reputation-card" id="reputation-card" data-editable data-block-key="reputation">
@@ -2167,6 +2089,7 @@ body:not([data-theme="dark"]) .header-new-badge {
                       </div>
                       <div class="rep-status-badge good" id="reputation-severity">Стабильно</div>
                   </div>
+
                   <div class="rep-metrics-modern">
                       <div class="rep-metric-item">
                           <div class="rm-label">В работе</div>
@@ -2179,11 +2102,22 @@ body:not([data-theme="dark"]) .header-new-badge {
                           <div class="rm-sub" id="reputation-grade">Задач нет</div>
                       </div>
                       <div class="rep-metric-item">
-                          <div class="rm-label">Задержка</div>
-                          <div class="rm-value" id="rep-delay">0 дн.</div>
-                          <div class="rm-sub">Максимальная</div>
+                          <div class="rm-label">Задержка (дни)</div>
+                          <div class="rep-split-val">
+                              <div class="rep-sub-item">
+                                  <span class="rep-sub-val" id="rep-delay-max">0</span>
+                                  <span class="rep-sub-lbl">Макс</span>
+                              </div>
+                              <div style="width:1px; background:var(--border);"></div>
+                              <div class="rep-sub-item">
+                                  <span class="rep-sub-val" id="rep-delay-avg">0</span>
+                                  <span class="rep-sub-lbl">Средняя</span>
+                              </div>
+                          </div>
+                          <div id="rep-delay" style="display:none"></div>
                       </div>
                   </div>
+
                   <div class="rep-body-split">
                       <div class="rep-chart-area">
                           <canvas id="reputationChart"></canvas>
@@ -2244,9 +2178,10 @@ body:not([data-theme="dark"]) .header-new-badge {
         <h2 style="margin-bottom:20px; font-size: 24px;">Новый проект</h2>
         
         <div class="modal-layout-modern">
-            
+
             <div>
                 <div class="modal-section-title">Основное</div>
+                
                 <div class="form-grid-row">
                     <div class="inp-modern">
                         <label>Статус</label>
@@ -2264,17 +2199,22 @@ body:not([data-theme="dark"]) .header-new-badge {
                     </div>
                 </div>
                 
-                <div class="inp-modern">
-                    <label>Название проекта</label>
-                    <div style="position:relative;">
-                        <input type="text" id="add-proj-name" list="project-name-templates" placeholder="Например: Дизайн сайта">
-                        <button type="button" class="clear-input-btn hidden" id="project-name-clear" onclick="clearProjectName()" style="top:10px; right:10px;">×</button>
-                    </div>
-                    <div class="template-control-group">
-                        <div class="tpl-btn-chip create" onclick="saveNameTemplate()">+ В шаблоны</div>
-                        <div class="tpl-btn-chip list" onclick="openTemplateManagerModal()">📂 Мои шаблоны</div>
-                        <div class="template-helper" id="template-helper" style="margin:0; font-size:11px;"></div>
-                        <datalist id="project-name-templates"></datalist>
+                <div class="form-grid-row">
+                    <div class="inp-modern form-grid-full" style="grid-column: 1 / -1;">
+                        <label>Название проекта</label>
+                        <div style="position:relative;">
+                            <input type="text" id="add-proj-name" list="project-name-templates" placeholder="Например: Дизайн сайта">
+                            <button type="button" class="clear-input-btn hidden" id="project-name-clear" onclick="clearProjectName()" style="top:10px; right:10px;">×</button>
+                        </div>
+                        <div class="template-control-group">
+                            <div class="tpl-btn-chip create" onclick="saveNameTemplate()">+ В шаблоны</div>
+                            <div class="tpl-btn-chip list" onclick="openTemplateManagerModal()">
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                                Мои шаблоны
+                            </div>
+                            <div class="template-helper" id="template-helper" style="margin:0; font-size:11px;"></div>
+                            <datalist id="project-name-templates"></datalist>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2325,7 +2265,7 @@ body:not([data-theme="dark"]) .header-new-badge {
                 <div class="date-panel">
                     <div class="inp-modern">
                         <label>⚡ Дата старта</label>
-                        <div class="date-input-wrap" id="add-proj-start-display" onclick="openDateInModal('add-proj-start-val')" style="background:var(--input-bg); width:100%; height:44px;">
+                         <div class="date-input-wrap" id="add-proj-start-display" onclick="openDateInModal('add-proj-start-val')" style="background:var(--input-bg); width:100%; height:44px;">
                             <svg class="date-icon"><use href="#icon-calendar"/></svg>
                             <span class="date-text-display">Сегодня</span>
                          </div>
@@ -2349,10 +2289,10 @@ body:not([data-theme="dark"]) .header-new-badge {
                             <option value="7">Неделя</option>
                             <option value="custom">Свой...</option>
                         </select>
-                        <input type="number" id="add-proj-dl-custom" placeholder="Дней" oninput="applyDeadlinePreset()" style="width: 80px; display:none; background:var(--input-bg); border:1px solid var(--border); border-radius:6px; padding:6px;">
-                         <input type="time" id="add-proj-dl-time" class="deadline-time" step="300" oninput="applyDeadlinePreset()" style="background:var(--input-bg); border:1px solid var(--border); border-radius:6px; padding:6px;">
                         
-                        <button type="button" class="deadline-clear-btn" onclick="clearNewProjectDeadline()" title="Убрать дедлайн">
+                        <input type="number" id="add-proj-dl-custom" placeholder="Дней" oninput="applyDeadlinePreset()" style="width: 80px; display:none; background:var(--input-bg); border:1px solid var(--border); border-radius:10px; padding:10px; height: 44px;">
+                        
+                        <input type="time" id="add-proj-dl-time" class="deadline-time" step="300" oninput="applyDeadlinePreset()" style="background:var(--input-bg); border:1px solid var(--border); border-radius:10px; padding:10px; height: 44px; display:none;"> <button type="button" class="deadline-clear-btn" onclick="clearNewProjectDeadline()" title="Убрать дедлайн">
                             <svg><use href="#icon-calendar-off"/></svg>
                         </button>
                     </div>
@@ -2363,7 +2303,6 @@ body:not([data-theme="dark"]) .header-new-badge {
                         <svg><use href="#icon-link"/></svg>
                         <span>Прикрепить ссылку на чат или ТЗ</span>
                     </button>
-                    
                     <div class="link-preview" id="new-project-link-preview" style="display:none; margin-top:10px;">
                         <div class="link-preview-info">
                             <a class="link-preview-url" id="new-project-link-text" href="#" target="_blank"></a>
@@ -5427,6 +5366,15 @@ function applyDeadlinePreset() {
     const select = document.getElementById('add-proj-dl-days');
     const customInput = document.getElementById('add-proj-dl-custom');
     const timeInput = document.getElementById('add-proj-dl-time');
+
+    // Логика отображения поля "Свой срок"
+    if (select.value === 'custom') {
+        customInput.style.display = 'block';
+        customInput.focus();
+    } else {
+        customInput.style.display = 'none';
+    }
+
     deadlineUnset = false;
     const currentStart = document.getElementById('add-proj-start-val').value || today;
     const currentDl = document.getElementById('add-proj-dl-val').value || currentStart || today;
@@ -6117,8 +6065,11 @@ function updateReputationUI(){
     const repOverdue = document.getElementById('rep-overdue');
     if (repOverdue) repOverdue.innerText = state.total;
 
-    const repDelay = document.getElementById('rep-delay');
-    if (repDelay) repDelay.innerText = state.total ? `Макс ${state.worst} дн. · Ср ${state.avg} дн.` : 'Просрочек нет';
+    const repDelayMax = document.getElementById('rep-delay-max');
+    const repDelayAvg = document.getElementById('rep-delay-avg');
+
+    if (repDelayMax) repDelayMax.innerText = state.worst > 0 ? state.worst : '-';
+    if (repDelayAvg) repDelayAvg.innerText = state.avg > 0 ? state.avg : '-';
 
     const tipsEl = document.getElementById('reputation-tips');
     if (tipsEl) {
@@ -6299,6 +6250,8 @@ function calcStats(){
     document.getElementById('record-motiv').innerText = motivText;
     document.getElementById('record-remaining').innerText = record ? (recordRemaining > 0 ? `До рекорда ${formatCurrency(recordRemaining)}` : 'Рекорд побит!') : 'Задайте рекорд в настройках';
     document.getElementById('record-amount').innerText = formatCurrency(record);
+    const recCurrentFact = document.getElementById('rec-current-fact');
+    if (recCurrentFact) recCurrentFact.innerText = formatCurrency(totalFact);
     document.getElementById('record-progress').style.width = record ? Math.min(100, (totalFact/record)*100) + '%' : '0%';
 
     document.getElementById('p-bar').style.width = goal > 0 ? Math.min(100, (totalFact/goal)*100) + '%' : '0%';
@@ -6359,7 +6312,18 @@ function updateCharts(fact, plan, scope){
     chB = new Chart(ctxB, {
         type: 'bar',
         data: { labels: keys.map(m => new Date(m + '-01').toLocaleString('ru', {month:'short'})), datasets: [{data: keys.map(k=>h[k]), backgroundColor: keys.map(k=>k===currentMonth?'#58a6ff':getCssVar('--chart-bar-bg')||'#21262d'), borderRadius:4}] },
-        options: {responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}, y:{display:false, ticks:{beginAtZero:true}}}}
+        options: {
+            responsive: true, 
+            maintainAspectRatio: false, 
+            plugins:{legend:{display:false}}, 
+            scales:{
+                x:{
+                    grid:{display:false},
+                    ticks: { color: '#8b949e', font: {size: 10} } // Включаем тики (месяцы)
+                }, 
+                y:{display:false, ticks:{beginAtZero:true}}
+            }
+        }
     });
 }
 
