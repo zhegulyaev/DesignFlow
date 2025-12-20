@@ -943,719 +943,172 @@
   }
   #settingsModal .modal-content h2 { margin-bottom: 15px; }
 
-  /* --- Обновленные Настройки (Settings Modal) --- */
-  .settings-modal { 
-      padding: 0 !important; 
-      overflow: hidden; 
-      display: flex; 
-      flex-direction: column; 
-      background: var(--card);
-  }
-  .settings-header {
-      padding: 24px 32px;
-      border-bottom: 1px solid var(--border);
-      background: var(--card);
-      margin: 0;
-  }
-  .settings-layout {
-      display: flex;
-      flex: 1;
+  /* --- Clean Settings Modal (Redesign) --- */
+  #settingsModal .modal-content {
+      padding: 0 !important;
       overflow: hidden;
-      margin: 0;
-      background: var(--bg); /* Контрастный фон для контента */
-  }
-  .settings-tabs {
-      width: 240px;
-      flex-shrink: 0;
-      padding: 20px;
-      background: var(--card);
-      border: none;
-      border-right: 1px solid var(--border);
-      border-radius: 0;
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      box-shadow: none;
-      position: static;
+      background: var(--bg); /* Фон подложки */
+      max-height: 85vh;
+      height: 700px;
+      width: 900px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
   }
-  .settings-nav-btn {
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
+  .settings-top-bar {
+      padding: 18px 24px;
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
   }
-  .settings-nav-btn.active {
-      background: var(--button-bg);
-      color: var(--accent);
-      border-color: transparent;
-      box-shadow: none;
-  }
-  .settings-content {
+  .settings-top-title { font-size: 18px; font-weight: 800; color: var(--text); }
+  .settings-layout-clean {
+      display: flex;
       flex: 1;
-      padding: 32px;
-      overflow-y: auto;
-  }
-  .settings-section {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-      margin-bottom: 24px;
-      padding: 24px;
-  }
-  .settings-actions-row {
-      padding: 20px 32px;
-      background: var(--card);
-      border-top: 1px solid var(--border);
-      margin: 0;
-  }
-  .settings-grid { display: grid; gap: 14px; }
-  .settings-pane { display: none; flex-direction: column; gap: 14px; }
-  .settings-pane.active { display: flex; }
-  .settings-columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; }
-  .settings-section-title { font-weight: 800; font-size: 16px; display:flex; align-items:flex-start; justify-content: space-between; gap: 10px; text-align: left; }
-  .settings-section-sub { color: var(--muted); font-size: 13px; margin-top: 4px; font-weight: 600; }
-  .settings-options { display: grid; gap: 12px; margin-top: 12px; }
-  .settings-row { display:flex; justify-content: space-between; align-items: flex-start; gap: 14px; padding: 12px 14px; border:1px solid var(--border); border-radius: 12px; background: var(--card-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); transition: border-color .2s, background .2s; text-align: left; }
-  .settings-row-title { font-weight: 800; }
-  .settings-row-sub { color: var(--muted); font-size: 13px; font-weight: 600; margin-top: 4px; max-width: 520px; }
-  .toggle-switch { position: relative; display: inline-block; width: 46px; height: 26px; }
-  .toggle-switch input { opacity: 0; width: 0; height: 0; }
-  .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border); transition: .2s; border-radius: 999px; }
-  .toggle-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color:var(--muted); transition: .2s; border-radius: 50%; }
-  .toggle-switch input:checked + .toggle-slider { background-color: var(--btn-blue); }
-  .toggle-switch input:checked + .toggle-slider:before { transform: translateX(18px); background: #fff; }
-  .radio-card { display:flex; gap: 14px; border:1px solid var(--border); padding: 14px 16px; border-radius: 14px; align-items: center; background: var(--card-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); transition: border-color .2s, box-shadow .2s, transform .15s; }
-  .radio-card input { margin-top: 0; transform: translateY(1px); }
-  .radio-card:hover { border-color: var(--accent); box-shadow: 0 12px 26px rgba(0,0,0,0.18); transform: translateY(-1px); }
-  .radio-card-title { font-weight: 900; letter-spacing: -0.2px; }
-  .radio-card-sub { color: var(--muted); font-size: 13px; font-weight: 600; line-height: 1.45; }
-  .radio-grid { display:grid; gap:10px; margin-top: 10px; }
-  .block-setting { display: grid; gap: 12px; border: 1px solid var(--border); border-radius: 14px; padding: 12px; background: var(--card); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); position: relative; }
-  .block-setting.is-off .settings-row { border-color: rgba(255,255,255,0.08); }
-  .block-setting.is-off .block-preview { filter: grayscale(1); opacity: 0.5; }
-  .block-setting.is-off .preview-state { opacity: 1; transform: translateY(0); }
-  .block-preview { border: 1px solid var(--border); border-radius: 12px; padding: 14px; background: linear-gradient(135deg, rgba(88,166,255,0.08), rgba(163,113,247,0.08)); display: grid; gap: 10px; position: relative; overflow: hidden; }
-  .block-preview--neutral { background: linear-gradient(135deg, rgba(17,23,34,0.9), rgba(16,20,28,0.96)); }
-  body.light .block-preview { background: linear-gradient(135deg, rgba(59,130,246,0.06), rgba(124,82,228,0.06)); }
-  body.light .block-preview--neutral { background: linear-gradient(135deg, #f9fbff, #f4f6fb); border-color: #d8e1f0; box-shadow: 0 10px 28px rgba(17,24,39,0.06); }
-  .preview-banner { background: linear-gradient(90deg, rgba(248,81,73,0.2), rgba(88,166,255,0.15)); border: 1px solid rgba(248,81,73,0.35); padding: 10px; border-radius: 10px; font-weight: 700; color: var(--text); display: flex; gap: 10px; align-items: center; justify-content: space-between; }
-  .preview-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 10px; background: var(--card); border:1px solid var(--border); font-size: 12px; font-weight: 800; color: var(--text); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
-  .preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
-  .preview-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px; min-height: 70px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); position: relative; }
-  .preview-card.small { min-height: 52px; }
-  .preview-bar { height: 10px; border-radius: 999px; background: var(--border); overflow: hidden; box-shadow: inset 0 1px 0 rgba(255,255,255,0.04); }
-  .preview-bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--btn-blue), var(--purple)); width: 70%; box-shadow: 0 6px 18px rgba(163,113,247,0.25); }
-  .preview-state { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.55); color: #fff; border-radius: 10px; padding: 6px 10px; font-size: 11px; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase; opacity: 0; transform: translateY(-4px); transition: opacity .2s, transform .2s; }
-  body.light .preview-state { background: rgba(255,255,255,0.9); color: #1f2937; border: 1px solid #e2e8f5; box-shadow: 0 6px 18px rgba(17,24,39,0.08); }
-  .settings-actions { display:flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
-  .settings-actions button { flex: 1; justify-content: center; min-width: 180px; }
-  .settings-footer-note { color: var(--muted); font-size: 12px; font-weight: 600; margin-top: 8px; line-height: 1.5; }
-  .settings-chip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 12px; }
-  .settings-chip { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--card-alt); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); font-weight: 700; text-align: left; }
-  .settings-chip .settings-row-sub { margin-top: 0; }
-  .settings-chip small { color: var(--muted); font-size: 12px; font-weight: 600; }
-  .settings-chip strong { font-size: 13px; letter-spacing: -0.2px; }
-  .settings-row .toggle-switch, .settings-chip .toggle-switch { margin-top: 2px; }
-
-
-  .scroll-toggle { position: fixed; right: 18px; bottom: 18px; width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--border); background: var(--button-bg); color: var(--text); display: grid; place-items: center; font-size: 20px; font-weight: 900; cursor: pointer; box-shadow: 0 10px 28px rgba(0,0,0,0.25); z-index: 1200; opacity: 0.92; }
-  .scroll-toggle:hover { background: var(--btn-hover); border-color: var(--accent); color: var(--accent); }
-  .scroll-toggle svg { width: 18px; height: 18px; display: block; }
-
-  /* Layout edit mode */
-  .edit-controls, .edit-hint { display: none; }
-  .layout-edit [data-editable] { position: relative; outline: 1px dashed var(--border); border-radius: 12px; overflow: hidden; }
-  .layout-edit [data-editable].is-hidden { display: none !important; }
-  .layout-edit .edit-controls { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; z-index: 5; }
-  .layout-edit .edit-hint { display: inline-flex; }
-  .layout-edit .edit-handle { width: 36px; height: 36px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; background: var(--card-alt); border: 1px solid var(--border); color: var(--text); cursor: grab; box-shadow: 0 6px 18px rgba(0,0,0,0.22); }
-  .layout-edit [draggable="true"] .edit-handle { cursor: grab; }
-  .layout-edit .edit-remove { width: 36px; height: 36px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; background: rgba(218,54,51,0.1); border: 1px solid rgba(218,54,51,0.35); color: var(--red); font-weight: 900; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
-  .layout-edit .edit-remove:hover { background: rgba(218,54,51,0.15); border-color: rgba(218,54,51,0.55); }
-  .layout-edit .edit-remove svg { width: 17px; height: 17px; }
-  .layout-edit .drag-over { outline-color: var(--accent); box-shadow: 0 0 0 2px rgba(88,166,255,0.35); }
-  .layout-edit .edit-hint { position: absolute; bottom: 10px; right: 10px; background: var(--pill-bg); color: var(--muted); padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; border: 1px solid var(--border); }
-  .layout-edit .dragging { opacity: 0.55; transform: scale(0.99); box-shadow: 0 10px 28px rgba(0,0,0,0.28); }
-  .layout-edit .block-drop-target { outline: 2px dashed var(--accent); border-radius: 12px; }
-  .drag-ghost { position: absolute; top: -9999px; left: -9999px; padding: 6px; border-radius: 14px; background: var(--card); box-shadow: 0 16px 38px rgba(0,0,0,0.35); opacity: 0.95; border: 1px solid var(--border); overflow: hidden; pointer-events: none; }
-  body.light .drag-ghost { background: #fff; box-shadow: 0 16px 38px rgba(17,24,39,0.1); border-color: #d8e1f0; }
-
-  .footer-note { color: var(--muted); font-size: 12px; font-weight: 600; }
-  .helper-note { color: var(--muted); font-size: 12px; margin-top: 6px; line-height: 1.4; text-align: left; }
-  .settings-actions-row { display: flex; justify-content: flex-end; gap: 10px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
-  .btn-ghost { background: transparent; border-color: var(--border); color: var(--muted); font-weight: 800; }
-  .btn-ghost:hover { color: var(--accent); border-color: var(--accent); }
-
-  /* Date/Time Input Styling (Override attempts for dark theme) */
-  .inp-group input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
-  .inp-group input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.8; cursor: pointer; }
-  .inp-group input:focus, .inp-group select:focus { border-color: var(--accent); }
-
-  .date-time-inputs input {
-      background: var(--card-alt);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 12px;
-      border-radius: 10px;
-      font-weight: 700;
-      letter-spacing: 0.2px;
-      width: 100%;
-      transition: border-color .2s, background .2s, box-shadow .2s;
-  }
-
-  .date-time-inputs { display: flex; gap: 15px; width: 100%; }
-  .input-with-icon { position: relative; flex: 1; }
-  .input-with-icon .input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--muted); opacity: 0.9; }
-  .input-with-icon input { padding-left: 38px; }
-  .input-with-icon .flatpickr-input { width: 100%; }
-
-  .flatpickr-alt-input {
-      background: var(--card-alt);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 12px;
-      border-radius: 10px;
-      font-weight: 700;
-      letter-spacing: 0.2px;
-      width: 100%;
-      padding-left: 38px;
-  }
-
-  .flatpickr-alt-input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(88,166,255,0.15);
-      background: var(--date-focus-bg);
-  }
-
-  .date-time-inputs input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(88,166,255,0.15);
-      background: var(--date-focus-bg);
-  }
-
-  .date-time-inputs input:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-  }
-
-  /* Flatpickr Dark Theme Tweaks */
-  .flatpickr-calendar {
-      background: var(--card-alt);
-      border: 1px solid var(--border);
-      box-shadow: 0 16px 40px rgba(0,0,0,0.45);
-      color: var(--text);
-      border-radius: 14px;
       overflow: hidden;
   }
-
-  .flatpickr-months,
-  .flatpickr-weekdays,
-  .flatpickr-time {
+  .settings-sidebar {
+      width: 240px;
       background: var(--card-alt);
-      border-color: var(--border);
-  }
-
-  .flatpickr-months .flatpickr-month {
-      color: var(--text);
-  }
-
-  .flatpickr-monthDropdown-months,
-  .flatpickr-current-month input.cur-year {
-      color: var(--text);
-      background: var(--card-alt);
-      border-radius: 8px;
-      border: 1px solid var(--border);
-  }
-
-  .flatpickr-monthDropdown-months option {
-      background: var(--card-alt);
-      color: var(--text);
-  }
-
-  .flatpickr-day, .flatpickr-weekday {
-      color: var(--text);
-      border-radius: 10px;
-  }
-
-  .flatpickr-day:hover, .flatpickr-day:focus {
-      background: rgba(88,166,255,0.12);
-      border-color: rgba(88,166,255,0.35);
-  }
-
-  .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange {
-      background: var(--accent);
-      color: #fff;
-      box-shadow: 0 4px 16px rgba(88,166,255,0.35);
-  }
-
-  .flatpickr-day.today:not(.selected) {
-      border-color: var(--accent);
-      color: var(--accent);
-  }
-
-  .flatpickr-weekday {
-      color: #d0d7e0;
-      font-weight: 700;
-      letter-spacing: 0.4px;
-      text-transform: uppercase;
-  }
-
-  .flatpickr-months .flatpickr-prev-month svg,
-  .flatpickr-months .flatpickr-next-month svg {
-      fill: var(--text);
-  }
-
-  .flatpickr-time {
-      border-top: 1px solid var(--border);
-      padding: 10px 12px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-  }
-
-  .flatpickr-time input, .flatpickr-time .numInputWrapper span {
-      color: #e9edf4;
-  }
-
-  .flatpickr-time .flatpickr-time-separator { color: var(--muted); font-weight: 800; }
-
-  .flatpickr-time .numInputWrapper {
-      border: 1px solid #3a3f4b;
-      border-radius: 12px;
-      background: linear-gradient(180deg, #161b22, #0d1118);
-      overflow: hidden;
-      min-width: 76px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 8px 20px rgba(0,0,0,0.3);
-      transition: border-color .2s, box-shadow .2s, background .2s;
-  }
-
-  .flatpickr-time .numInputWrapper:focus-within {
-      border-color: rgba(88,166,255,0.7);
-      box-shadow: 0 0 0 1px rgba(88,166,255,0.25), 0 10px 30px rgba(0,0,0,0.35);
-      background: linear-gradient(180deg, #111722, #0b1016);
-  }
-
-  .flatpickr-time input {
-      background: transparent;
-      font-weight: 800;
-      font-size: 16px;
-      text-align: center;
-      padding: 10px 12px;
-      letter-spacing: 0.3px;
-  }
-
-  .flatpickr-time input:hover, .flatpickr-time .numInputWrapper span:hover {
-      background: rgba(88,166,255,0.08);
-  }
-
-  .flatpickr-time .numInputWrapper span {
-      background: transparent;
-      transition: background .15s;
-  }
-
-  .flatpickr-time .numInputWrapper span.arrowUp:after,
-  .flatpickr-time .numInputWrapper span.arrowDown:after {
-      border-bottom-color: var(--accent);
-      border-top-color: var(--accent);
-  }
-  body.light .flatpickr-calendar { box-shadow: 0 18px 40px rgba(17,24,39,0.16); }
-  body.light .flatpickr-months,
-  body.light .flatpickr-weekdays,
-  body.light .flatpickr-time { background: #fff; }
-  body.light .flatpickr-time input, body.light .flatpickr-time .numInputWrapper span { color: #111827; }
-  body.light .flatpickr-time .numInputWrapper { background: #f8fbff; border-color: #d8e1f0; box-shadow: inset 0 1px 0 rgba(255,255,255,0.9); }
-  body.light .flatpickr-time .numInputWrapper:focus-within { background: #eef3ff; border-color: #3b82f6; box-shadow: 0 0 0 1px rgba(59,130,246,0.15), 0 10px 30px rgba(17,24,39,0.12); }
-  body.light .flatpickr-time input:hover, body.light .flatpickr-time .numInputWrapper span:hover { background: rgba(59,130,246,0.08); }
-
-  /* Finance Block Percentage */
-  .stat-val-small { font-size: 16px; font-weight: 600; color: var(--muted); margin-left: 10px;}
-  .stat-label-row { display: flex; align-items: center; justify-content: space-between; }
-  .stat-val-margin { font-size: 24px; font-weight: 800; color: var(--text); }
-  .stat-label-with-help { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
-  .help-icon { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--help-border); background: var(--help-bg); color: var(--help-text); font-size: 11px; cursor: help; position: relative; transition: border-color .2s, color .2s, background .2s, box-shadow .2s; box-shadow: inset 0 1px 0 rgba(255,255,255,0.15); }
-  .help-icon:hover { color: var(--accent); border-color: var(--accent); background: var(--help-hover-bg); box-shadow: 0 4px 14px rgba(0,0,0,0.08); }
-  .help-icon::after { content: attr(data-tooltip); position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); background: var(--card-alt); color: var(--text); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 8px 30px rgba(0,0,0,0.2); width: 260px; max-width: 70vw; font-size: 12px; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity .15s, visibility .15s; z-index: 10; text-transform: none; }
-  .help-icon:hover::after { opacity: 1; visibility: visible; }
-  .text-red { color: var(--red); }
-  .symbol-select { width: 68px !important; padding: 8px; text-align: center; }
-  
-  /* Link Modal Specific */
-  #linkModal .modal-content { width: 350px; }
-  
-  /* Checkbox styling */
-  .checkbox-wrap { 
-    display: flex; align-items: center; gap: 8px; font-size: 14px; 
-    color: var(--muted); margin-bottom: 15px; cursor: pointer;
-    user-select: none;
-  }
-  .checkbox-wrap input[type="checkbox"] { width: 16px; height: 16px; margin: 0; cursor: pointer; }
-  
-  /* Trash Table Button Fix */
-  .trash-action-btns { display: flex; gap: 10px; align-items: center; }
-  #t-trash tbody td { vertical-align: middle; }
-  #t-trash tbody td:nth-child(5) { text-align: right; }
-  #t-trash tbody td:nth-child(6) { text-align: right; }
-  .trash-action-btns { justify-content: flex-end; }
-  .restore-trash-btn, .delete-forever-text {
-      padding: 6px 12px;
-      font-size: 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.2s, border-color 0.2s;
-      white-space: nowrap;
-      text-decoration: none; /* For delete-forever-text */
-      display: inline-block;
-      text-align: center;
-      min-width: 100px;
-  }
-  .restore-trash-btn { 
-      color: var(--green); 
-      border: 1px solid var(--green); 
-      background: transparent; 
-  }
-  .restore-trash-btn:hover { 
-      background: rgba(46, 160, 67, 0.1);
-  }
-  .delete-forever-text {
-      color: var(--red);
-      border: 1px solid var(--red);
-      background: transparent;
-      opacity: 1; /* Полная видимость */
-  }
-  .delete-forever-text:hover {
-       background: rgba(218, 54, 51, 0.1);
-  }
-
-  .trash-expire { color: var(--muted); font-size: 12px; font-weight: 700; }
-  .trash-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0 6px; }
-  .trash-clean-btn { padding: 12px 16px; border-radius: 10px; background: var(--button-bg); border: 1px solid var(--border); color: var(--text); font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
-  .trash-clean-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .trash-date-cell { display: flex; flex-direction: column; gap: 4px; }
-  .trash-deleted-label { font-weight: 800; color: var(--text); font-size: 13px; }
-  #view-trash .table-wrap { padding: 5px 14px 5px 18px; }
-  #t-trash { border-collapse: collapse; border-spacing: 0; min-width: 1200px; width: 100%; }
-  #t-trash thead th { background: transparent; border-bottom: 1px solid var(--border); padding: 12px 10px; border-radius: 0; }
-  #t-trash tbody tr { background: transparent; border: none; box-shadow: none; position: relative; }
-  #t-trash tbody td { border-bottom: 1px solid var(--table-border); padding: 12px 10px; }
-  #t-trash tbody tr:hover td { background: var(--row-hover); }
-  .trash-label { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 4px; }
-  .trash-client { font-weight: 800; color: var(--text); }
-  .trash-project { font-weight: 800; color: var(--accent); }
-  .trash-amount { font-size: 17px; font-weight: 900; color: var(--text); }
-  .trash-row-meta { display: flex; flex-direction: column; gap: 6px; }
-  .trash-row { transition: background .2s, box-shadow .2s; }
-  .trash-row:hover td { background: var(--row-hover); }
-  .trash-row .row-controls { position: absolute; z-index: 2; }
-  .trash-row-meta, .trash-action-btns, .trash-date-cell { position: relative; z-index: 1; }
-  .trash-expire.neutral { color: var(--muted); }
-  .trash-expire.warn { color: var(--gold); }
-  .trash-expire.danger { color: var(--red); }
-
-  .template-card { display: flex; flex-direction: column; height: 100%; align-self: start; }
-  .template-manager { display: flex; flex-direction: column; gap: 10px; width: 100%; margin-top: 0; margin-bottom: 4px; padding-bottom: 2px; position: relative; flex: 1; }
-  .template-manager-title { color: var(--muted); font-size: 13px; font-weight: 700; letter-spacing: -0.1px; padding-top: 0; margin-bottom: 4px; }
-  .template-wide { grid-column: 1 / -1; }
-  .template-wide .template-manager { margin-top: 0; padding-top: 10px; }
-  .template-create-inline { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: none; color: var(--accent); font-weight: 800; padding: 6px 0 0; cursor: pointer; font-size: 14px; }
-  .template-create-inline:hover { color: #8ab4ff; }
-  .template-actions-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
-  .template-secondary-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--button-bg); border: 1px solid var(--border); color: var(--text); border-radius: 10px; font-weight: 800; font-size: 14px; cursor: pointer; }
-  .template-secondary-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .template-manager-modal { max-height: 80vh; overflow: hidden; }
-  .modal.modal-centered { align-items: center; }
-  .template-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; max-height: 60vh; overflow: auto; padding-right: 6px; }
-  .template-empty { color: var(--muted); font-weight: 700; font-size: 14px; padding: 12px; border: 1px dashed var(--border); border-radius: 12px; background: var(--pill-bg); }
-  .deadline-clear-btn { padding: 9px 12px; border-radius: 10px; border: 1px dashed var(--border); background: transparent; color: var(--muted); font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
-  .deadline-clear-btn svg { width: 14px; height: 14px; }
-  .deadline-clear-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .template-row { display: grid; grid-template-columns: auto auto 1fr auto; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--pill-bg); cursor: grab; transition: border-color .15s, box-shadow .15s, background .15s; }
-  .template-row:active { cursor: grabbing; }
-  .template-row.drag-over { box-shadow: 0 0 0 2px var(--accent); }
-  .template-row.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); background: linear-gradient(120deg, rgba(88,166,255,0.08), rgba(163,113,247,0.04)); }
-  .template-drag-handle { width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; color: var(--muted); }
-  .template-row input { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); font-weight: 800; }
-  .template-row input:focus { border-color: var(--accent); outline: none; }
-  .template-row .template-delete-btn { border: none; background: transparent; color: var(--muted); padding: 4px 6px; cursor: pointer; font-weight: 800; font-size: 18px; }
-  .template-row .template-delete-btn:hover { color: var(--red); }
-  .template-select-btn { width: 32px; height: 32px; border-radius: 9px; border: 1px solid var(--border); background: var(--button-bg); color: var(--muted); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: .15s; font-weight: 900; }
-  .template-select-btn:hover { color: var(--text); border-color: var(--accent); }
-  .template-select-btn.is-active { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: 0 10px 24px rgba(88,166,255,0.28); }
-  .template-inline-block { border-top: 1px solid var(--border); padding-top: 12px; margin-top: 6px; }
-  .template-pills { display: flex; gap: 8px; overflow-y: auto; overflow-x: hidden; padding: 6px 4px 10px 2px; scrollbar-width: none; margin-top: 0; max-width: 100%; position: relative; flex: 1; flex-wrap: wrap; align-content: flex-start; }
-  .template-pills::-webkit-scrollbar { display: none; }
-  .template-pills::after, .template-pills::before { display: none; }
-  .template-helper { font-size: 12px; font-weight: 700; color: var(--muted); margin-top: 8px; }
-  .template-helper.error { color: var(--red); }
-  .template-helper.success { color: var(--green); }
-  .template-pill { display: inline-flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 10px; background: var(--pill-bg); border: 1px solid var(--border); font-weight: 700; color: var(--text); white-space: nowrap; cursor: grab; user-select: none; }
-  .template-pill:active { cursor: grabbing; }
-  .template-pill.drag-over { box-shadow: 0 0 0 2px var(--accent); }
-  .template-pill .template-fill-btn { border: none; background: transparent; color: var(--text); padding: 0; cursor: pointer; font-weight: 800; }
-  .template-pill .template-fill-btn:hover { color: var(--accent); }
-  .template-pill .template-delete-btn { border: none; background: transparent; color: var(--muted); padding: 0 4px; cursor: pointer; font-weight: 800; }
-  .template-pill .template-delete-btn:hover { color: var(--red); }
-  .template-add-btn { align-self: flex-start; margin-top: 0; }
-  .template-modal-add { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: end; margin: 12px 0 4px; }
-  .template-modal-input { margin-bottom: 0; }
-  .template-modal-input label { margin-bottom: 6px; }
-  .contractor-layout { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
-  .contractor-group { align-self: stretch; min-width: 0; }
-  .tax-group { flex: 0 0 130px; }
-  .contractor-mode-select { width: 100%; padding: 12px 14px; border-radius: 12px; font-weight: 600; min-height: 46px; min-width: 0; color: var(--text); border: 1px solid var(--border); background: var(--input-bg); box-shadow: none; }
-  .contractor-amount { display: flex; flex-direction: column; gap: 8px; background: var(--pill-bg); border: 1px solid transparent; padding: 14px; border-radius: 12px; width: 100%; box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
-  .contractor-amount-row { margin-top: 2px; }
-  .input-with-suffix { display: grid; grid-template-columns: 1fr auto; align-items: stretch; gap: 0; width: 100%; }
-  .input-with-suffix input { border-radius: 10px 0 0 10px; min-width: 0; padding: 11px 14px; border: 1px solid var(--border); background: var(--card); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
-  .input-with-suffix input:focus { z-index: 1; border-color: var(--accent); }
-  .input-suffix { display: inline-flex; align-items: center; justify-content: center; padding: 0 14px; background: var(--card-alt); border: 1px solid var(--border); border-left: none; border-radius: 0 10px 10px 0; font-weight: 800; color: var(--muted); min-width: 52px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
-  .contractor-helper { color: var(--muted); font-size: 12px; font-weight: 700; line-height: 1.4; }
-  .contractor-input { width: 100%; }
-  .tax-group { align-self: flex-end; }
-  .is-hidden { display: none !important; }
-  .expense-cell input:disabled { background: var(--input-bg); color: var(--muted); cursor: not-allowed; }
-  .deadline-links-row { margin-top: 12px; display: flex; align-items: center; justify-content: flex-start; }
-  .deadline-row { display: flex; align-items: center; gap: 10px; }
-  .deadline-row .date-input-wrap { flex: 1; }
-  .deadline-row .deadline-clear-btn { margin: 0; height: 44px; padding: 0 12px; }
-  .link-inline-btn { width: auto; min-height: 44px; padding: 10px 14px; }
-  .template-add-btn { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; padding: 0 18px; }
-  .link-inline-btn { padding: 10px 14px; font-weight: 800; gap: 10px; box-shadow: 0 6px 16px rgba(59,130,246,0.08); }
-  .link-inline-btn span { color: var(--text); font-size: 13px; }
-
-
-.date-cell:not(:last-child) .date-input-wrap {
-    margin-right: 8px;
-}
-
-
-      .date-cell:first-of-type .date-input-wrap {
-    margin-right: 8px;
-}
-
-
-td.date-cell + td.date-cell {
-    padding-left: 10px !important;
-}
-
-/* --- New Project Modal (Updated) --- */
-  .modal-layout-modern {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-  
-  .modal-section-title {
-    font-size: 12px;
-    text-transform: uppercase;
-    color: var(--muted);
-    font-weight: 800;
-    letter-spacing: 0.8px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .modal-section-title::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-    opacity: 0.5;
-  }
-  
-  .form-grid-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-
-  .form-grid-row.finance {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-  
-  /* Класс для элементов во всю ширину (Название проекта) */
-  .form-grid-full {
-    grid-column: 1 / -1;
-    width: 100%;
-  }
-
-  /* Исправленный блок с инпутами */
-  .inp-modern { display: flex; flex-direction: column; gap: 6px; }
-  .inp-modern label { font-size: 13px; font-weight: 700; color: var(--text); }
-  .inp-modern input, .inp-modern select {
-    background: var(--input-bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 10px 12px;
-    font-size: 14px;
-    color: var(--text);
-    height: 44px;
-    width: 100%;
-  }
-  .inp-modern input:focus, .inp-modern select:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(88,166,255,0.1);
-  }
-
-  .template-control-group { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
-  .tpl-btn-chip {
-    font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 8px; cursor: pointer;
-    border: 1px solid transparent; display: flex; align-items: center; gap: 6px;
-  }
-  .tpl-btn-chip.create { background: rgba(88,166,255,0.1); color: var(--accent); }
-  .tpl-btn-chip.list { background: var(--card-alt); border-color: var(--border); color: var(--muted); }
-  .tpl-btn-chip svg { width: 14px; height: 14px; }
-
-  /* Date Panel */
-  .date-panel {
-    background: var(--card-alt); border: 1px solid var(--border); border-radius: 12px; padding: 14px;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: end;
-  }
-  .date-presets-row {
-    grid-column: 1 / -1; display: flex; gap: 8px; border-top: 1px solid var(--border);
-    padding-top: 12px; margin-top: 4px; align-items: center; flex-wrap: wrap;
-  }
-
-  /* --- Стили для строки дат в модалке (в одну линию) --- */
-  .date-panel-row {
-      display: flex;
-      align-items: flex-end; /* Выравнивание по нижнему краю инпутов */
-      gap: 12px;
-      width: 100%;
-  }
-  .date-panel-item {
-      flex: 1;
+      border-right: 1px solid var(--border);
+      padding: 20px 12px;
       display: flex;
       flex-direction: column;
       gap: 6px;
+      flex-shrink: 0;
   }
-  .date-panel-item.shrink {
-      flex: 0 0 auto;
-      width: 160px; /* Ширина для дропдауна */
+  .settings-nav-item {
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: .2s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
   }
-  .date-panel-item.mini {
-      flex: 0 0 80px; /* Ширина для поля дней */
+  .settings-nav-item:hover { background: var(--button-bg); color: var(--text); }
+  .settings-nav-item.active { background: var(--button-bg); color: var(--accent); font-weight: 700; }
+  
+  .settings-body {
+      flex: 1;
+      background: var(--bg);
+      padding: 30px;
+      overflow-y: auto;
   }
-  /* Скрываем стандартные лейблы внутри этого ряда, если нужно сэкономить место, или оставляем */
-  .date-panel-row label {
-      font-size: 12px;
-      white-space: nowrap;
-  }
-
-  /* --- Обновленный Блок Эффективность --- */
-  .eff-card-modern {
+  
+  /* Карточки внутри настроек */
+  .stg-card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
   }
-  .eff-header {
+  .stg-card-title { font-size: 16px; font-weight: 800; margin-bottom: 6px; color: var(--text); }
+  .stg-card-desc { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.4; }
+  
+  .stg-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--table-border);
   }
-  .eff-title {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 800;
-      letter-spacing: -0.2px;
-  }
-  .eff-content-grid {
+  .stg-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .stg-row:first-child { padding-top: 0; }
+  
+  .stg-info h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .stg-info p { font-size: 12px; color: var(--muted); max-width: 400px; }
+
+  /* Input group в настройках */
+  .stg-input-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 20px;
+      margin-top: 15px;
   }
-  .eff-chart-box {
-      background: transparent;
-      border: none;
-      padding: 0;
-      min-height: auto;
+
+  /* --- Fixed Record Block (Premium Clean) --- */
+  .record-clean {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 24px;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      gap: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
   }
-  .eff-label {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 12px;
-      text-align: center;
+  /* Градиентный фон для красоты */
+  .record-clean::before {
+      content: "";
+      position: absolute;
+      top: 0; right: 0; width: 150px; height: 150px;
+      background: radial-gradient(circle at top right, rgba(250, 204, 21, 0.12), transparent 60%);
+      pointer-events: none;
+  }
+  
+  .rec-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      z-index: 2;
+  }
+  .rec-meta { display: flex; flex-direction: column; gap: 4px; }
+  .rec-label-sm { font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--muted); letter-spacing: 0.5px; }
+  .rec-big-val { font-size: 32px; font-weight: 900; color: var(--text); line-height: 1.1; }
+  
+  .rec-target-badge {
+      font-size: 12px; font-weight: 700; color: var(--gold); 
+      background: rgba(250, 204, 21, 0.1); padding: 6px 10px; border-radius: 8px;
+      border: 1px solid rgba(250, 204, 21, 0.2);
+      display: flex; align-items: center; gap: 6px;
+  }
+  .rec-edit-icon { cursor: pointer; opacity: 0.6; transition: .2s; }
+  .rec-edit-icon:hover { opacity: 1; color: var(--text); }
+
+  .rec-bar-area { display: flex; flex-direction: column; gap: 6px; z-index: 2; margin-top: 4px; }
+  .rec-track { height: 8px; background: var(--card-alt); border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+  .rec-fill { height: 100%; background: linear-gradient(90deg, #facc15, #f59e0b); border-radius: 6px; transition: width 0.6s ease; }
+  .rec-sub-text { font-size: 12px; color: var(--muted); font-weight: 600; display: flex; justify-content: space-between; }
+
+  /* --- Eff Card Fix --- */
+  .eff-card-modern {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px;
+      display: flex; flex-direction: column; gap: 16px;
+  }
+  .eff-chart-canvas-wrap {
+      position: relative;
       width: 100%;
   }
 
-  /* --- Обновленный Блок Рекорд (Premium Look) --- */
-  .record-clean {
-      position: relative;
-      background: radial-gradient(circle at top right, rgba(250, 204, 21, 0.05), transparent 40%), var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  /* --- Toggle Switch Clean --- */
+  .switch-clean { position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0; }
+  .switch-clean input { opacity: 0; width: 0; height: 0; }
+  .slider-clean {
+    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: var(--border); transition: .3s; border-radius: 22px;
   }
-  .rec-clean-header {
-      margin-bottom: 16px;
+  .slider-clean:before {
+    position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px;
+    background-color: white; transition: .3s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
-  .rec-clean-title {
-      font-size: 15px; 
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-  }
-  .rec-clean-icon { display: none; } /* Убираем иконку, делаем минималистично */
-  
-  .rec-clean-values {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
-      margin-bottom: 20px;
-  }
-  .rec-current-val {
-      font-size: 36px;
-      letter-spacing: -1px;
-      background: linear-gradient(90deg, var(--text), var(--muted));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-  }
-  .rec-target-val {
-      font-size: 14px;
-      color: var(--gold);
-      font-weight: 600;
-  }
-  
-  .rec-progress-track {
-      background: var(--button-bg);
-      border: none;
-      height: 6px;
-  }
-  .rec-progress-bar {
-      background: linear-gradient(90deg, #facc15, #f59e0b);
-      box-shadow: 0 0 10px rgba(250, 204, 21, 0.4);
-  }
+  .switch-clean input:checked + .slider-clean { background-color: var(--accent); }
+  .switch-clean input:checked + .slider-clean:before { transform: translateX(18px); }
 
-  /* --- Reputation Metrics Update --- */
-  .rep-metric-compact {
-      display: flex; flex-direction: column; gap: 4px;
-  }
-  .rep-metric-row { display: flex; justify-content: space-between; align-items: baseline; }
-  .rep-metric-big { font-size: 20px; font-weight: 800; color: var(--text); }
-  .rep-metric-label { font-size: 11px; text-transform: uppercase; color: var(--muted); font-weight: 700; }
-  .rep-split-val { display: flex; gap: 12px; margin-top: 4px; }
-  .rep-sub-item { display: flex; flex-direction: column; }
-  .rep-sub-val { font-size: 14px; font-weight: 700; color: var(--text); }
-  .rep-sub-lbl { font-size: 10px; color: var(--muted); }
-
-
+  /* Скроллбар для настроек */
+  .settings-body::-webkit-scrollbar { width: 6px; }
+  .settings-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
 </style>
 </head>
@@ -2199,31 +1652,26 @@ body:not([data-theme="dark"]) .header-new-badge {
               </div>
 
               <div class="record-clean" id="record-banner" data-editable data-block-key="record">
-                  <div class="rec-clean-header">
-                      <div class="rec-clean-title">
-                          <svg class="rec-clean-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
-                          Личный Рекорд
+                  <div class="rec-top-row">
+                      <div class="rec-meta">
+                          <span class="rec-label-sm">Заработано (Факт)</span>
+                          <div class="rec-big-val" id="rec-current-fact">0 ₽</div>
                       </div>
-                      <span class="rec-edit-link" onclick="openRecordSettings()">Изменить</span>
-                  </div>
-                  
-                  <div class="rec-clean-values">
-                      <div class="rec-val-group">
-                          <span class="rec-label">Заработано сейчас</span>
-                          <span class="rec-current-val" id="rec-current-fact">0 ₽</span>
-                      </div>
-                      <div class="rec-val-group">
-                          <span class="rec-label">Цель (Рекорд)</span>
-                          <span class="rec-target-val" id="record-amount">0 ₽</span>
+                      <div class="rec-target-badge" title="Цель (Рекорд)">
+                          <span>🏆 <span id="record-amount">0 ₽</span></span>
+                          <svg class="rec-edit-icon" onclick="openRecordSettings()" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                       </div>
                   </div>
                   
-                  <div class="rec-progress-track">
-                      <div class="rec-progress-bar" id="record-progress"></div>
+                  <div class="rec-bar-area">
+                      <div class="rec-track">
+                          <div class="rec-fill" id="record-progress" style="width: 0%"></div>
+                      </div>
+                      <div class="rec-sub-text">
+                          <span id="record-remaining">До рекорда: 0 ₽</span>
+                          <span id="record-motiv" style="color:var(--gold);">Движемся вверх!</span>
+                      </div>
                   </div>
-                  
-                  <div class="rec-status-text" id="record-remaining">До рекорда: 0 ₽</div>
-                  <div id="record-motiv" style="display:none"></div>
               </div>
               
               <div class="reputation-card" id="reputation-card" data-editable data-block-key="reputation">
@@ -2563,336 +2011,131 @@ body:not([data-theme="dark"]) .header-new-badge {
 </div>
 
 <div class="modal" id="settingsModal">
-    <div class="modal-content settings-modal">
-        <span class="close-modal-x" onclick="document.getElementById('settingsModal').style.display='none'">×</span>
-        <div class="settings-header">
-            <div class="settings-header-text">
-                <div class="settings-title">Настройки</div>
-                <div class="settings-sub">Управляйте блоками, темой, таблицами и резервными копиями.</div>
-            </div>
-            <div class="settings-pill">DesignFlow v0.8</div>
+    <div class="modal-content">
+        <div class="settings-top-bar">
+            <div class="settings-top-title">Настройки DesignFlow</div>
+            <span class="close-modal-x" onclick="document.getElementById('settingsModal').style.display='none'" style="position:static;">×</span>
         </div>
 
-        <div class="settings-layout">
-            <div class="settings-tabs">
-                <button class="settings-nav-btn active" data-target="appearance" onclick="activateSettingsPane('appearance')">Внешний вид</button>
-                <button class="settings-nav-btn" data-target="blocks" onclick="activateSettingsPane('blocks')">Блоки</button>
-                <button class="settings-nav-btn" data-target="tables" onclick="activateSettingsPane('tables')">Таблица</button>
-                <button class="settings-nav-btn" data-target="data" onclick="activateSettingsPane('data')">Данные</button>
+        <div class="settings-layout-clean">
+            <div class="settings-sidebar">
+                <div class="settings-nav-item active" data-target="appearance" onclick="activateSettingsPane('appearance')">🎨 Внешний вид</div>
+                <div class="settings-nav-item" data-target="blocks" onclick="activateSettingsPane('blocks')">🧩 Блоки</div>
+                <div class="settings-nav-item" data-target="tables" onclick="activateSettingsPane('tables')">📋 Таблицы</div>
+                <div class="settings-nav-item" data-target="data" onclick="activateSettingsPane('data')">💾 Данные</div>
             </div>
 
-            <div class="settings-content">
+            <div class="settings-body">
+                
                 <div class="settings-pane active" data-pane="appearance">
-                    <div class="settings-section">
-                        <div class="settings-section-title">Тема оформления</div>
-                        <div class="settings-section-sub">Выберите светлую, тёмную или автоматическую тему по времени суток.</div>
+                    <div class="stg-card">
+                        <div class="stg-card-title">Тема оформления</div>
+                        <div class="stg-card-desc">Выберите тему интерфейса. Автоматический режим меняет тему в зависимости от времени суток.</div>
                         <div class="radio-grid">
                             <label class="radio-card">
                                 <input type="radio" name="theme-mode" value="auto" id="theme-mode-auto">
-                                <div>
-                                    <div class="radio-card-title">Авто</div>
-                                    <div class="radio-card-sub">Определяет тему по времени суток и подстраивается каждые несколько минут.</div>
-                                </div>
+                                <div><div class="radio-card-title">Авто</div><div class="radio-card-sub">День/Ночь</div></div>
                             </label>
                             <label class="radio-card">
                                 <input type="radio" name="theme-mode" value="light" id="theme-mode-light">
-                                <div>
-                                    <div class="radio-card-title">Светлая</div>
-                                    <div class="radio-card-sub">Лёгкая палитра для дневного времени. Подходит для печати.</div>
-                                </div>
+                                <div><div class="radio-card-title">Светлая</div><div class="radio-card-sub">Для работы днём</div></div>
                             </label>
                             <label class="radio-card">
                                 <input type="radio" name="theme-mode" value="dark" id="theme-mode-dark">
-                                <div>
-                                    <div class="radio-card-title">Тёмная</div>
-                                    <div class="radio-card-sub">Контрастная палитра, бережёт глаза и батарею.</div>
-                                </div>
+                                <div><div class="radio-card-title">Тёмная</div><div class="radio-card-sub">Для работы ночью</div></div>
                             </label>
                         </div>
                     </div>
                 </div>
 
                 <div class="settings-pane" data-pane="blocks">
-                    <div class="settings-section">
-                        <div class="settings-section-title">Отображение блоков</div>
-                        <div class="settings-section-sub">Скройте элементы, которые мешают фокусу. Превью ниже покажут, как выглядят блоки.</div>
-                        <div class="settings-options settings-columns">
-                            <div class="block-setting" data-block="backup">
-                                <div class="settings-row">
-                                    <div>
-                                        <div class="settings-row-title">Предупреждение и бэкап</div>
-                                        <div class="settings-row-sub">Плашка с напоминанием, что данные хранятся локально.</div>
-                                    </div>
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" id="block-toggle-backup">
-                                        <span class="toggle-slider"></span>
-                                    </label>
-                                </div>
-                                <div class="block-preview block-preview--neutral">
-                                    <div class="preview-banner">⚠ Важно: данные хранятся локально.<span style="color: var(--muted); font-weight: 700; font-size: 12px;">Сделайте бэкап</span></div>
-                                    <div class="preview-state">Скрыто</div>
-                                </div>
-                            </div>
-                            <div class="block-setting" data-block="pace">
-                                <div class="settings-row">
-                                    <div>
-                                        <div class="settings-row-title">Индикатор темпа</div>
-                                        <div class="settings-row-sub">Карточка с подсказками по дедлайнам и марже.</div>
-                                    </div>
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" id="block-toggle-pace">
-                                        <span class="toggle-slider"></span>
-                                    </label>
-                                </div>
-                                <div class="block-preview">
-                                    <div class="preview-card small"><div class="settings-row-title">Темп недели</div><div class="preview-bar" style="margin-top:8px"><span style="width: 62%"></span></div></div>
-                                    <div class="preview-card small"><div class="settings-row-title">Репутация</div><div class="preview-bar" style="margin-top:8px"><span style="width: 38%"></span></div></div>
-                                    <div class="preview-state">Скрыто</div>
-                                </div>
-                            </div>
-                            <div class="block-setting" data-block="dashboard">
-                                <div class="settings-row">
-                                    <div>
-                                        <div class="settings-row-title">Дашборд и графики</div>
-                                        <div class="settings-row-sub">Карточки по целям, денежным потокам и топам клиентов.</div>
-                                    </div>
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" id="block-toggle-dashboard">
-                                        <span class="toggle-slider"></span>
-                                    </label>
-                                </div>
-                                <div class="block-preview">
-                                    <div class="preview-pill">Цель месяца</div>
-                                    <div class="preview-grid">
-                                    <div class="preview-card"><div class="settings-row-title">Факт</div><div class="preview-bar" style="margin-top:8px"><span style="width:76%"></span></div></div>
-                                        <div class="preview-card"><div class="settings-row-title">Прогноз</div><div class="preview-bar"style="margin-top:8px"><span style="width:54%"></span></div></div>
-                                        <div class="preview-card"><div class="settings-row-title">Расходы</div><div class="preview-bar"style="margin-top:8px"><span style="width:42%"></span></div></div>
-                                    </div>
-                                    <div class="preview-state">Скрыто</div>
-                                </div>
-                            </div>
-                            <div class="block-setting" data-block="efficiency">
-                                <div class="settings-row">
-                                    <div>
-                                        <div class="settings-row-title">Эффективность</div>
-                                        <div class="settings-row-sub">Круговая диаграмма получено/потенциал и динамика по месяцам.</div>
-                                    </div>
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" id="block-toggle-efficiency">
-                                        <span class="toggle-slider"></span>
-                                    </label>
-                                </div>
-                                <div class="block-preview">
-                                    <div class="preview-card"><div class="settings-row-title">Получено</div><div class="preview-bar" style="margin-top:8px"><span style="width: 58%"></span></div></div>
-                                    <div class="preview-card"><div class="settings-row-title">Динамика</div><div class="preview-bar" style="margin-top:8px"><span style="width: 44%"></span></div></div>
-                                    <div class="preview-state">Скрыто</div>
-                                </div>
-                            </div>
-                            <div class="block-setting" data-block="topClients">
-                                <div class="settings-row">
-                                    <div>
-                                        <div class="settings-row-title">Топ клиентов</div>
-                                        <div class="settings-row-sub">Столбики по чистой прибыли среди 5 лучших клиентов.</div>
-                                    </div>
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" id="block-toggle-top-clients">
-                                        <span class="toggle-slider"></span>
-                                    </label>
-                                </div>
-                                <div class="block-preview">
-                                    <div class="preview-card"><div class="settings-row-title">Top 5</div><div class="preview-bar" style="margin-top:8px"><span style="width: 65%"></span></div><div class="settings-row-sub" style="margin-top:8px">Лучшие клиенты месяца</div></div>
-                                    <div class="preview-state">Скрыто</div>
-                                </div>
-                            </div>
-                            <div class="block-setting" data-block="record">
-                                <div class="settings-row">
-                                    <div>
-                                        <div class="settings-row-title">Рекорд месяца</div>
-                                        <div class="settings-row-sub">Прогресс-бар к личному рекорду по чистой прибыли.</div>
-                                    </div>
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" id="block-toggle-record">
-                                        <span class="toggle-slider"></span>
-                                    </label>
-                                </div>
-                                <div class="block-preview">
-                                    <div class="preview-banner">🏆 Прогресс к рекорду</div>
-                                    <div class="preview-bar" style="margin-top:8px"><span style="width:72%"></span></div>
-                                    <div class="preview-state">Скрыто</div>
-                                </div>
-                            </div>
-                            <div class="block-setting" data-block="reputation">
-                                <div class="settings-row">
-                                    <div>
-                                        <div class="settings-row-title">Репутация</div>
-                                        <div class="settings-row-sub">Карточка с рейтингом дедлайнов и советами.</div>
-                                    </div>
-                                    <label class="toggle-switch">
-                                        <input type="checkbox" id="block-toggle-reputation">
-                                        <span class="toggle-slider"></span>
-                                    </label>
-                                </div>
-                                <div class="block-preview">
-                                    <div class="preview-grid">
-                                        <div class="preview-card"><div class="settings-row-title">Репутация</div><div class="settings-row-sub" style="margin-top:6px">100 / 100</div></div>
-                                        <div class="preview-card"><div class="settings-row-title">Просрочки</div><div class="settings-row-sub" style="margin-top:6px">0 задач</div></div>
-                                    </div>
-                                    <div class="preview-state">Скрыто</div>
-                                </div>
-                            </div>
+                    <div class="stg-card">
+                        <div class="stg-card-title">Видимость блоков</div>
+                        <div class="stg-card-desc">Отключите элементы, которые вам не нужны, чтобы освободить место.</div>
+                        
+                        <div class="stg-row">
+                            <div class="stg-info"><h4>Темп недели</h4><p>Показывает горящие дедлайны.</p></div>
+                            <label class="switch-clean"><input type="checkbox" id="block-toggle-pace"><span class="slider-clean"></span></label>
                         </div>
-                    </div>
-                    <div class="settings-section">
-                        <div class="settings-section-title">Карточки статистики</div>
-                        <div class="settings-section-sub">Включайте только нужные показатели в дашборде.</div>
-                        <div class="settings-chip-grid">
-                            <div class="settings-chip">
-                                <div><strong>Прогресс цели</strong><br><small>Полоса и подписи по месячной цели</small></div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="stat-toggle-goal">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-chip">
-                                <div><strong>Факт</strong><br><small>Чистая прибыль за месяц</small></div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="stat-toggle-fact">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-chip">
-                                <div><strong>Получено (в работе)</strong><br><small>Уже оплачено в активных проектах</small></div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="stat-toggle-active-fact">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-chip">
-                                <div><strong>Оплачено</strong><br><small>Грязные поступления</small></div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="stat-toggle-paid-gross">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-chip">
-                                <div><strong>Общая сумма</strong><br><small>Все бюджеты по разделам</small></div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="stat-toggle-total-gross">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-chip">
-                                <div><strong>План</strong><br><small>Остаток до цели</small></div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="stat-toggle-plan">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-chip">
-                                <div><strong>Прогноз итога</strong><br><small>Факт + ожидаемые платежи</small></div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="stat-toggle-forecast">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-chip">
-                                <div><strong>Расходы</strong><br><small>Все траты по проектам</small></div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="stat-toggle-expenses">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-chip">
-                                <div><strong>Налоги</strong><br><small>Предварительные начисления</small></div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="stat-toggle-taxes">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+                        <div class="stg-row">
+                            <div class="stg-info"><h4>Эффективность</h4><p>Круговой график и динамика по месяцам.</p></div>
+                            <label class="switch-clean"><input type="checkbox" id="block-toggle-efficiency"><span class="slider-clean"></span></label>
+                        </div>
+                        <div class="stg-row">
+                            <div class="stg-info"><h4>Рекорд месяца</h4><p>Блок с прогресс-баром к личной цели.</p></div>
+                            <label class="switch-clean"><input type="checkbox" id="block-toggle-record"><span class="slider-clean"></span></label>
+                        </div>
+                        <div class="stg-row">
+                            <div class="stg-info"><h4>Репутация</h4><p>Рейтинг дедлайнов и советы.</p></div>
+                            <label class="switch-clean"><input type="checkbox" id="block-toggle-reputation"><span class="slider-clean"></span></label>
+                        </div>
+                        <div class="stg-row">
+                            <div class="stg-info"><h4>Топ клиентов</h4><p>График топ-5 клиентов.</p></div>
+                            <label class="switch-clean"><input type="checkbox" id="block-toggle-top-clients"><span class="slider-clean"></span></label>
+                        </div>
+                         <div class="stg-row">
+                            <div class="stg-info"><h4>Бэкап предупреждение</h4><p>Плашка о локальном хранении.</p></div>
+                            <label class="switch-clean"><input type="checkbox" id="block-toggle-backup"><span class="slider-clean"></span></label>
                         </div>
                     </div>
                 </div>
 
                 <div class="settings-pane" data-pane="tables">
-                    <div class="settings-section">
-                        <div class="settings-section-title">Разделы таблицы</div>
-                        <div class="settings-section-sub">Выберите, какие статусы показывать в навигации и таблице.</div>
-                        <div class="settings-options settings-columns">
-                            <div class="settings-row">
-                                <div>
-                                    <div class="settings-row-title">Заявки</div>
-                                    <div class="settings-row-sub">Новые обращения из каналов и лидогенерации.</div>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="table-toggle-requests">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-row">
-                                <div>
-                                    <div class="settings-row-title">Ожидает</div>
-                                    <div class="settings-row-sub">Проекты, где ждём материалов или ответа клиента.</div>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="table-toggle-waiting">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="settings-row">
-                                <div>
-                                    <div class="settings-row-title">На паузе</div>
-                                    <div class="settings-row-sub">Замороженные проекты, которые можно временно скрыть.</div>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="table-toggle-paused">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+                     <div class="stg-card">
+                        <div class="stg-card-title">Вкладки проектов</div>
+                        <div class="stg-card-desc">Скройте разделы, которыми не пользуетесь.</div>
+                        <div class="stg-row">
+                            <div class="stg-info"><h4>Заявки</h4><p>Входящие лиды.</p></div>
+                            <label class="switch-clean"><input type="checkbox" id="table-toggle-requests"><span class="slider-clean"></span></label>
                         </div>
-                        <div class="settings-footer-note">Если статус скрыт, вкладка и её иконка исчезнут, а переключение вернётся на доступный раздел.</div>
+                        <div class="stg-row">
+                            <div class="stg-info"><h4>В ожидании</h4><p>Проекты, где ждем клиента.</p></div>
+                            <label class="switch-clean"><input type="checkbox" id="table-toggle-waiting"><span class="slider-clean"></span></label>
+                        </div>
+                        <div class="stg-row">
+                            <div class="stg-info"><h4>На паузе</h4><p>Замороженные проекты.</p></div>
+                            <label class="switch-clean"><input type="checkbox" id="table-toggle-paused"><span class="slider-clean"></span></label>
+                        </div>
                     </div>
                 </div>
 
                 <div class="settings-pane" data-pane="data">
-                    <div class="settings-section">
-                        <div class="settings-section-title">Резервные копии</div>
-                        <div class="settings-section-sub">Скачайте или загрузите JSON, либо выгрузите таблицу в CSV.</div>
-                        <div class="settings-actions">
-                            <button onclick="exp()"><svg class="btn-icon"><use href="#icon-download"/></svg><span class="btn-label">Скачать базу (Бэкап)</span></button>
-                            <button onclick="document.getElementById('imp').click()"><svg class="btn-icon"><use href="#icon-upload"/></svg><span class="btn-label">Загрузить базу</span></button>
-                            <button onclick="expCSV()"><svg class="btn-icon"><use href="#icon-csv"/></svg><span class="btn-label">Экспорт в CSV</span></button>
-                        </div>
-                        <input type="file" id="imp" accept=".json" style="display:none" onchange="imp(this.files[0])">
-                        <div class="settings-footer-note">Данные хранятся только в вашем браузере. Делайте резервную копию перед очисткой кэша или переустановкой системы.</div>
-                    </div>
-
-                    <div class="settings-section">
-                <div style="display: flex !important; flex-direction: row !important; align-items: baseline !important; gap: 10px !important; margin-bottom: 10px !important; flex-wrap: nowrap !important;">
-    <div class="settings-section-title" style="margin: 0 !important; display: inline-block !important; white-space: nowrap !important;">
-        Цели и рекорд
-    </div>
-    <span style="color:#56657d; font-size: 13px; line-height: 1.5; display: inline-block !important;">
-        Эти значения мы покажем на дашборде и в напоминаниях.
-    </span>
-</div><br>
-                        <div class="settings-actions" style="margin-top: 0; gap: 16px;">
-                            <div class="inp-group" style="flex:1">
-                                <label>Цель на месяц (₽)</label>
+                    <div class="stg-card">
+                        <div class="stg-card-title">Финансовые цели</div>
+                        <div class="stg-card-desc">Задайте план на этот месяц и ваш глобальный рекорд.</div>
+                        <div class="stg-input-row">
+                            <div class="inp-group">
+                                <label>План на месяц (₽)</label>
                                 <input type="text" id="stg-goal" oninput="formatNumberInput(this)">
                             </div>
-                            <div class="inp-group" style="flex:1">
+                            <div class="inp-group">
                                 <label>Рекорд (₽)</label>
                                 <input type="text" id="stg-rec" oninput="formatNumberInput(this)">
                             </div>
                         </div>
                     </div>
+
+                    <div class="stg-card">
+                        <div class="stg-card-title">Резервное копирование</div>
+                        <div class="stg-card-desc">Скачайте файл с базой, чтобы не потерять данные при очистке кэша.</div>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <button class="save-stg" onclick="exp()" style="background:var(--card-alt); border-color:var(--border); color:var(--text); width:auto;">Скачать Backup</button>
+                            <button class="save-stg" onclick="document.getElementById('imp').click()" style="background:var(--card-alt); border-color:var(--border); color:var(--text); width:auto;">Загрузить Backup</button>
+                            <button class="save-stg" onclick="expCSV()" style="background:var(--card-alt); border-color:var(--border); color:var(--text); width:auto;">Экспорт CSV</button>
+                        </div>
+                        <input type="file" id="imp" accept=".json" style="display:none" onchange="imp(this.files[0])">
+                    </div>
+                    
+                    <div style="margin-top:20px; text-align:right;">
+                         <button class="btn-ghost" type="button" onclick="resetInterface()" style="color:var(--red); border-color:var(--red);">Сброс интерфейса</button>
+                    </div>
                 </div>
+
             </div>
         </div>
-
-        <div class="settings-actions-row">
-            <button class="btn-ghost" type="button" onclick="resetInterface()">Сброс интерфейса</button>
-            <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue);" onclick="saveSettings()">Сохранить настройки</button>
+        
+        <div style="padding: 16px 24px; border-top:1px solid var(--border); background:var(--card); display:flex; justify-content:flex-end;">
+            <button class="save-stg" style="background:var(--btn-blue); border-color:var(--btn-blue); width:auto; padding: 10px 24px;" onclick="saveSettings()">Сохранить настройки</button>
         </div>
     </div>
 </div>
@@ -6438,48 +5681,79 @@ let chL = null, chP = null, chB = null, chRep = null, chTopClients = null;
 let topClientsMode = 'net';
 let lastTopClientsScope = null;
 function updateCharts(fact, plan, scope){
-    const ctxL = document.getElementById('lineChart').getContext('2d');
-    const ctxP = document.getElementById('pieChart').getContext('2d');
-    const ctxB = document.getElementById('barChart').getContext('2d');
+    const lineCanvas = document.getElementById('lineChart');
+    const pieCanvas = document.getElementById('pieChart');
+    const barCanvas = document.getElementById('barChart');
+    if (!lineCanvas || !pieCanvas || !barCanvas) return;
 
-    // Line Chart (оставляем логику)
-    const daysInM = new Date(currentMonth.split('-')[0], currentMonth.split('-')[1], 0).getDate();
-    const labelsL = Array.from({length:daysInM},(_,i)=>i+1);
+    const ctxL = lineCanvas.getContext('2d');
+    const ctxP = pieCanvas.getContext('2d');
+    const ctxB = barCanvas.getContext('2d');
+
+    const [year, month] = currentMonth.split('-').map(Number);
+
+    // Line Chart — опираемся на выбранный месяц
+    const daysInM = new Date(year, month, 0).getDate();
+    const labelsL = Array.from({ length: daysInM }, (_, i) => i + 1);
     const dataL = new Array(daysInM).fill(0);
-    scope.archive.forEach(i => {
-        const d = parseInt(i.date.split('-')[2]) - 1;
-        if(d>=0 && d<daysInM) dataL[d] += calcNet(i);
+
+    (scope.archive || []).forEach(item => {
+        const [itemYear, itemMonth, itemDay] = (item.date || '').split('-').map(Number);
+        if (itemYear === year && itemMonth === month && itemDay) {
+            const idx = itemDay - 1;
+            if (idx >= 0 && idx < daysInM) dataL[idx] += calcNet(item);
+        }
     });
-    let acc = 0; 
-    const dataAcc = dataL.map(v => acc+=v);
-    
-    if(chL) chL.destroy();
+
+    let acc = 0;
+    const dataAcc = dataL.map(v => (acc += v));
+
+    if (chL) chL.destroy();
     chL = new Chart(ctxL, {
         type: 'line',
-        data: { labels: labelsL, datasets: [{label:'Факт', data:dataAcc, borderColor:'#2ea043', backgroundColor:'rgba(46,160,67,0.1)', fill:true, tension:0.4, pointRadius:0}] },
-        options: {responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{display:false}, y:{grid:{color: getCssVar('--border')}}}}
-    });
-    
-    // PIE CHART - Новый стильный вид (Gradient Ring)
-    if(chP) chP.destroy();
-    chP = new Chart(ctxP, {
-        type: 'doughnut',
-        data: { 
-            labels: ['Получено', 'Потенциал/Остаток'], 
+        data: {
+            labels: labelsL,
             datasets: [{
-                data: [fact, plan], 
-                backgroundColor: [getCssVar('--green'), getCssVar('--border')], 
-                borderWidth: 0,
-                borderRadius: 20, // Закругленные края сегментов
-                hoverOffset: 4
-            }] 
+                label: 'Факт',
+                data: dataAcc,
+                borderColor: '#2ea043',
+                backgroundColor: 'rgba(46,160,67,0.1)',
+                fill: true,
+                tension: 0.4,
+                pointRadius: 0
+            }]
         },
         options: {
-            responsive:true, 
-            maintainAspectRatio:false, 
-            cutout:'85%', // Очень тонкое кольцо
-            plugins:{
-                legend:{display:false},
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { x: { display: false }, y: { grid: { color: getCssVar('--border') } } }
+        }
+    });
+
+    // Pie chart — факт против остатка/потенциала
+    const safeFact = Math.max(0, fact || 0);
+    const safePlan = Math.max(0, plan || 0);
+
+    if (chP) chP.destroy();
+    chP = new Chart(ctxP, {
+        type: 'doughnut',
+        data: {
+            labels: ['Получено', 'Потенциал/Остаток'],
+            datasets: [{
+                data: [safeFact, safePlan],
+                backgroundColor: [getCssVar('--green'), getCssVar('--border')],
+                borderWidth: 0,
+                borderRadius: 20,
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '85%',
+            plugins: {
+                legend: { display: false },
                 tooltip: {
                     backgroundColor: getCssVar('--card'),
                     titleColor: getCssVar('--text'),
@@ -6492,62 +5766,55 @@ function updateCharts(fact, plan, scope){
             }
         }
     });
-    
-    // BAR CHART - Исправленная динамика (последние 6 месяцев от текущего)
-    const h = {};
-    // Собираем данные из архива
-    scope.archive.forEach(i => { const m = (i.date||'').slice(0,7); if(m) h[m] = (h[m]||0) + calcNet(i); });
 
-    // Генерируем последние 6 месяцев корректно
+    // Bar chart — последние 6 месяцев относительно выбранного месяца
+    const monthlyTotals = {};
+    (scope.archive || []).forEach(item => {
+        const key = (item.date || '').slice(0, 7);
+        if (key) monthlyTotals[key] = (monthlyTotals[key] || 0) + calcNet(item);
+    });
+
     const barLabels = [];
     const barData = [];
     const barColors = [];
-    
-    // Берем текущий месяц как точку отсчета или выбранный месяц
-    const anchorDate = new Date(); 
-    anchorDate.setDate(1); // Первое число, чтобы избежать проблем с 31-м числом
-    
-    // Цикл для генерации 6 месяцев назад
+
+    const anchorDate = new Date(year, month - 1, 1);
+
     for (let i = 5; i >= 0; i--) {
         const d = new Date(anchorDate);
         d.setMonth(d.getMonth() - i);
-        
+
         const y = d.getFullYear();
         const m = String(d.getMonth() + 1).padStart(2, '0');
         const key = `${y}-${m}`;
-        
-        // Форматируем название месяца
-        const monthName = d.toLocaleString('ru', {month:'short'});
-        barLabels.push(monthName);
-        barData.push(h[key] || 0);
-        
-        // Подсветка текущего месяца
-        const isCurrent = key === currentMonth;
-        barColors.push(isCurrent ? getCssVar('--accent') : getCssVar('--chart-bar-bg'));
+
+        barLabels.push(d.toLocaleString('ru', { month: 'short' }));
+        barData.push(monthlyTotals[key] || 0);
+        barColors.push(key === currentMonth ? getCssVar('--accent') : getCssVar('--chart-bar-bg'));
     }
 
-    if(chB) chB.destroy();
+    if (chB) chB.destroy();
     chB = new Chart(ctxB, {
         type: 'bar',
-        data: { 
-            labels: barLabels, 
+        data: {
+            labels: barLabels,
             datasets: [{
-                data: barData, 
-                backgroundColor: barColors, 
+                data: barData,
+                backgroundColor: barColors,
                 borderRadius: 4,
                 barPercentage: 0.6
-            }] 
+            }]
         },
         options: {
-            responsive: true, 
-            maintainAspectRatio: false, 
-            plugins:{legend:{display:false}}, 
-            scales:{
-                x:{
-                    grid:{display:false},
-                    ticks: { color: getCssVar('--muted'), font: {size: 11}, autoSkip: false } 
-                }, 
-                y:{display:false}
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { color: getCssVar('--muted'), font: { size: 11 }, autoSkip: false }
+                },
+                y: { display: false }
             }
         }
     });
