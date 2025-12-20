@@ -3,6 +3,15 @@ const TODAY_K = 'DesignFlowToday';
 const SETTINGS_K = 'DesignFlowSettings';
 const STATUS_KEYS = ['active', 'waiting', 'potential', 'paused', 'archive'];
 
+function escapeHTML(value) {
+  return (value ?? '').toString()
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function createEmptyData() {
   return STATUS_KEYS.reduce((acc, status) => {
     acc[status] = [];
@@ -269,35 +278,84 @@ function renderItem(item) {
     paidClass = 'success';
   }
 
-  return `
-    <div class="card" onclick="openModal(${JSON.stringify(item).replace(/"/g, '&quot;')})">
-      <div class="c-row">
-        <div class="c-client">${item.c || '—'}</div>
-        <div class="c-price">${formatCurrency(item.p)}</div>
-      </div>
-      <div class="c-row">
-        <div class="c-name">${item.n || '—'}</div>
-        <div class="c-tax">${tax ? `Налог: ${formatCurrency(tax)} (${item.taxPrc || 0}%)` : 'Без налога'}</div>
-      </div>
-      <div class="c-row">
-        <div class="c-net">Чистыми: ${formatCurrency(net)}</div>
-        <div class="c-paid ${paidClass}">Оплачено: ${item.paid || 0}%</div>
-      </div>
-      ${contractor ? `<div class="c-row"><div class="c-contractor">Расходы: ${formatCurrency(contractor)}</div></div>` : ''}
-      <div class="c-dates">
-        <span>Старт: ${item.start || '—'}</span>
-        <span>Дедлайн: ${item.dl || item.date || '—'}</span>
-      </div>
-      ${item.link ? `<div class="c-link"><a href="${item.link}" target="_blank">Ссылка</a></div>` : ''}
-    </div>
-  `;
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.addEventListener('click', () => openModal(item));
+
+  const rowClient = document.createElement('div');
+  rowClient.className = 'c-row';
+  const clientEl = document.createElement('div');
+  clientEl.className = 'c-client';
+  clientEl.innerHTML = escapeHTML(item.c || '—');
+  const priceEl = document.createElement('div');
+  priceEl.className = 'c-price';
+  priceEl.textContent = formatCurrency(item.p);
+  rowClient.append(clientEl, priceEl);
+
+  const rowName = document.createElement('div');
+  rowName.className = 'c-row';
+  const nameEl = document.createElement('div');
+  nameEl.className = 'c-name';
+  nameEl.innerHTML = escapeHTML(item.n || '—');
+  const taxEl = document.createElement('div');
+  taxEl.className = 'c-tax';
+  taxEl.textContent = tax ? `Налог: ${formatCurrency(tax)} (${item.taxPrc || 0}%)` : 'Без налога';
+  rowName.append(nameEl, taxEl);
+
+  const rowAmounts = document.createElement('div');
+  rowAmounts.className = 'c-row';
+  const netEl = document.createElement('div');
+  netEl.className = 'c-net';
+  netEl.textContent = `Чистыми: ${formatCurrency(net)}`;
+  const paidEl = document.createElement('div');
+  paidEl.className = `c-paid ${paidClass}`.trim();
+  paidEl.textContent = `Оплачено: ${item.paid || 0}%`;
+  rowAmounts.append(netEl, paidEl);
+
+  const datesEl = document.createElement('div');
+  datesEl.className = 'c-dates';
+  const startSpan = document.createElement('span');
+  startSpan.innerHTML = `Старт: ${escapeHTML(item.start || '—')}`;
+  const deadlineSpan = document.createElement('span');
+  deadlineSpan.innerHTML = `Дедлайн: ${escapeHTML(item.dl || item.date || '—')}`;
+  datesEl.append(startSpan, deadlineSpan);
+
+  card.append(rowClient, rowName, rowAmounts);
+
+  if (contractor) {
+    const contractorRow = document.createElement('div');
+    contractorRow.className = 'c-row';
+    const contractorEl = document.createElement('div');
+    contractorEl.className = 'c-contractor';
+    contractorEl.textContent = `Расходы: ${formatCurrency(contractor)}`;
+    contractorRow.appendChild(contractorEl);
+    card.appendChild(contractorRow);
+  }
+
+  card.appendChild(datesEl);
+
+  if (item.link) {
+    const linkContainer = document.createElement('div');
+    linkContainer.className = 'c-link';
+    const linkEl = document.createElement('a');
+    linkEl.href = item.link;
+    linkEl.target = '_blank';
+    linkEl.rel = 'noopener noreferrer';
+    linkEl.textContent = 'Ссылка';
+    linkContainer.appendChild(linkEl);
+    card.appendChild(linkContainer);
+  }
+
+  return card;
 }
 
 function renderList(list, containerId) {
   const container = document.querySelector(`#${containerId} .list`);
   container.innerHTML = '';
   list.forEach(item => {
-    container.innerHTML += renderItem({ ...item, status: containerId });
+    const safeItem = { ...item, status: containerId };
+    const card = renderItem(safeItem);
+    container.appendChild(card);
   });
 }
 
@@ -529,6 +587,29 @@ document.addEventListener('DOMContentLoaded', () => {
   getToday();
   document.querySelector('.tab[data-tab="active"]').classList.add('active');
   updateStats();
+
+  (function runXssSmokeTest() {
+    const malicious = {
+      id: -1,
+      c: '<script>window.__designFlowXSS = true;</script>',
+      n: '<script>alert("XSS")</script>',
+      p: 0,
+      taxPrc: 0,
+      contractorAmount: 0,
+      paid: 0,
+      start: '<script>alert(1)</script>',
+      dl: '<img src=x onerror=alert(1)>',
+      link: 'javascript:alert(1)',
+      status: 'active'
+    };
+
+    const container = document.createElement('div');
+    container.appendChild(renderItem(malicious));
+    const hasScriptTag = container.querySelector('script');
+    const textContainsScript = container.textContent.includes('<script>');
+
+    console.assert(!hasScriptTag && textContainsScript, 'XSS guard failed: script tag detected');
+  })();
 
   flatpickr('#start', {
     "locale": "ru",
