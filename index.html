@@ -187,7 +187,7 @@
   .bulk-checkbox:checked { background: var(--accent); border-color: var(--accent); }
 
   /* Table Footer (Totals) */
-  tfoot td { padding: 15px 10px; border-top: 1px solid var(--border); background: transparent; font-weight: 600; color: var(--muted); text-align: right; font-size: 14px; white-space: nowrap; }
+  tfoot td { padding: 16px 10px; border-top: 2px solid var(--border); background: var(--card-alt); font-weight: 700; color: var(--muted); text-align: right; font-size: 14px; white-space: nowrap; }
   tfoot td:first-child { text-align: left; color: var(--text); font-size: 15px; }
   tfoot td:nth-last-child(3) { color: var(--gold); } /* Total gross (Archive) */
   tfoot td:nth-last-child(2) { color: var(--green); } /* Total net (Archive) */
@@ -267,11 +267,11 @@
   .paid-select option, .tax-select option { background: var(--card); }
 
   /* Actions */
-  .client-wrap{display:flex;align-items:center;gap:8px; width: 100%;}
-  .client-name, .project-name { display:block; line-height:1.45; white-space:pre-wrap; -webkit-line-clamp:unset; -webkit-box-orient:vertical; overflow:visible; text-overflow:unset; word-break: break-word; min-height: calc(1.4em * 2); padding: 4px 0; }
+  .client-wrap{display:flex;align-items:center;gap:8px; width: 100%; min-height: 44px;}
+  .client-name, .project-name { display:block; line-height:1.45; white-space:pre-wrap; -webkit-line-clamp:unset; -webkit-box-orient:vertical; overflow:visible; text-overflow:unset; word-break: break-word; padding: 4px 0; }
   .client-name { max-width: 210px; font-weight:700; color:var(--text); }
-  .project-name-wrap { display: flex; align-items: center; gap: 8px; overflow: visible; }
-  .project-name { max-width: 320px; font-weight:600; }
+  .project-name-wrap { display: flex; align-items: center; gap: 8px; overflow: visible; min-height: 44px; }
+  .project-name { max-width: 320px; font-weight:600; padding: 0; min-height: 44px; display: block; }
 
   .sort-icon { color: var(--muted); font-size: 11px; margin-left: 6px; opacity: 0.5; }
   th.sorted .sort-icon { opacity: 1; color: var(--text); }
@@ -289,6 +289,7 @@
   .row-controls { position:absolute; left:-28px; top:50%; transform:translate(-140%,-50%); display:flex; gap:10px; align-items:center; opacity:0; transition:opacity .2s; }
   tr:hover .row-controls, .row-selected .row-controls { opacity:1; }
   .row-controls .bulk-checkbox { width: 18px; height: 18px; }
+  .row-selected td { background: var(--row-hover); }
 
   .client-name.has-link { color: var(--link-blue); font-weight: 700; }
 
@@ -1384,10 +1385,10 @@
   #t-trash tbody td { border-bottom: 1px solid var(--table-border); padding: 12px 10px; }
   #t-trash tbody tr:hover td { background: var(--row-hover); }
   .trash-label { color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 4px; }
-  .trash-client { font-weight: 800; color: var(--text); }
-  .trash-project { font-weight: 800; color: var(--accent); }
+  .trash-client { font-weight: 800; color: var(--text); display: flex; align-items: center; min-height: 22px; }
+  .trash-project { font-weight: 800; color: var(--accent); display: flex; align-items: center; min-height: 22px; }
   .trash-amount { font-size: 17px; font-weight: 900; color: var(--text); }
-  .trash-row-meta { display: flex; flex-direction: column; gap: 6px; }
+  .trash-row-meta { display: flex; flex-direction: column; gap: 6px; min-height: 56px; justify-content: center; }
   .trash-row { transition: background .2s, box-shadow .2s; }
   .trash-row:hover td { background: var(--row-hover); }
   .trash-row .row-controls { position: absolute; z-index: 2; }
@@ -1450,9 +1451,9 @@
   .contractor-amount { display: flex; flex-direction: column; gap: 8px; background: var(--pill-bg); border: 1px solid transparent; padding: 14px; border-radius: 12px; width: 100%; box-shadow: inset 0 1px 0 rgba(255,255,255,0.03); }
   .contractor-amount-row { margin-top: 2px; }
   .input-with-suffix { display: grid; grid-template-columns: 1fr auto; align-items: stretch; gap: 0; width: 100%; }
-  .input-with-suffix input { border-radius: 10px 0 0 10px; min-width: 0; padding: 11px 14px; border: 1px solid var(--border); background: var(--card); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .input-with-suffix input { border-radius: 10px 0 0 10px; min-width: 0; padding: 11px 14px; border: 1px solid var(--border); background: var(--card); box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); height: 44px; }
   .input-with-suffix input:focus { z-index: 1; border-color: var(--accent); }
-  .input-suffix { display: inline-flex; align-items: center; justify-content: center; padding: 0 14px; background: var(--card-alt); border: 1px solid var(--border); border-left: none; border-radius: 0 10px 10px 0; font-weight: 800; color: var(--muted); min-width: 52px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .input-suffix { display: inline-flex; align-items: center; justify-content: center; padding: 0 14px; background: var(--card-alt); border: 1px solid var(--border); border-left: none; border-radius: 0 10px 10px 0; font-weight: 800; color: var(--muted); min-width: 52px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); height: 44px; }
   .contractor-helper { color: var(--muted); font-size: 12px; font-weight: 700; line-height: 1.4; }
   .contractor-input { width: 100%; }
   .tax-group { align-self: flex-end; }
@@ -1929,7 +1930,7 @@ body:not([data-theme="dark"]) .header-new-badge {
 
   <div class="tabs-container">
     <div class="tabs">
-        <div class="tab" id="tab-all" onclick="switchTab('all')"><svg><use href="#icon-all"/></svg> Все проекты <span class="tab-count" id="count-all">0</span></div>
+        <div class="tab" id="tab-all" onclick="switchTab('all')"><svg><use href="#icon-all"/></svg> Все <span class="tab-count" id="count-all">0</span></div>
         <div class="tab active" id="tab-active" onclick="switchTab('active')"><svg><use href="#icon-active"/></svg> В работе <span class="tab-count" id="count-active">0</span></div>
         <div class="tab" id="tab-waiting" onclick="switchTab('waiting')"><svg><use href="#icon-waiting"/></svg> Ожидает <span class="tab-count" id="count-waiting">0</span></div>
         <div class="tab" id="tab-potential" onclick="switchTab('potential')"><svg><use href="#icon-potential"/></svg> Потенциал <span class="tab-count" id="count-potential">0</span></div>
@@ -2529,7 +2530,7 @@ body:not([data-theme="dark"]) .header-new-badge {
     
     <div class="date-panel-row">
         <div class="date-panel-item">
-            <label><b>⚡ Дата старта</b></label>
+            <label>🚀 Дата старта</label>
              <div class="date-input-wrap" id="add-proj-start-display" onclick="openDateInModal('add-proj-start-val')" style="background:var(--input-bg); width:100%; height:44px;">
                 <svg class="date-icon"><use href="#icon-calendar"/></svg>
                 <span class="date-text-display">Сегодня</span>
@@ -2538,7 +2539,7 @@ body:not([data-theme="dark"]) .header-new-badge {
         </div>
 
         <div class="date-panel-item">
-             <label><b>🏁 Дедлайн</b></label>
+             <label>🏁 Дедлайн</label>
              <div class="deadline-row" style="width:100%">
                  <div class="date-input-wrap" id="add-proj-dl-display" onclick="openDateInModal('add-proj-dl-val')" style="background:var(--input-bg); width:100%; height:44px;">
                    <svg class="date-icon"><use href="#icon-calendar"/></svg>
@@ -2552,7 +2553,7 @@ body:not([data-theme="dark"]) .header-new-badge {
         </div>
 
         <div class="date-panel-item shrink">
-            <label><b>⚡ Быстрый срок</b></label>
+            <label>⚡ Быстрый срок</label>
             <select id="add-proj-dl-days" onchange="applyDeadlinePreset()" class="bulk-move-select" style="background:var(--input-bg); width:100%; height:44px; margin:0;">
                 <option value="">Выбрать...</option>
                 <option value="1">1 день</option>
@@ -3112,7 +3113,7 @@ const TAB_DESCRIPTIONS = {
     requests: "Новые заявки и обращения с каналов.",
     paused: "Замороженные проекты.",
     archive: "Успешно завершенные заказы.",
-    all: "Все проекты и архив в одном месте.",
+    all: "Все статусы и архив в одном месте.",
     trash: "Удаленные объекты. Хранятся 7 дней."
 };
 
@@ -4127,17 +4128,18 @@ function handleNewContractorModeChange(mode) {
     if (!input || !helper || !wrapper || !suffix) return;
     const showInput = mode !== 'none';
     wrapper.classList.toggle('is-hidden', !showInput);
+    helper.classList.toggle('is-hidden', mode === 'amount');
     input.disabled = !showInput;
     if (!showInput) {
         input.value = '';
         suffix.textContent = '';
         helper.textContent = 'Выберите тип расходов, чтобы добавить сумму.';
+        helper.classList.remove('is-hidden');
         return;
     }
     const isPercent = mode === 'percent';
-    helper.textContent = isPercent
-        ? 'Укажите процент расходов от общей суммы.'
-        : 'Укажите фиксированную сумму расходов.';
+    helper.textContent = isPercent ? 'Укажите процент расходов от общей суммы.' : '';
+    helper.classList.toggle('is-hidden', !helper.textContent);
     input.placeholder = isPercent ? 'Например, 20' : 'Например, 30 000';
     suffix.textContent = isPercent ? '%' : '₽';
     input.focus();
@@ -4473,7 +4475,7 @@ function askBulkMove(targetType) {
         paused: 'На паузе',
         archive: 'Выполнено',
         requests: 'В заявки',
-        all: 'Все проекты',
+        all: 'Все',
         trash: 'Корзина'
     };
     const sourceName = tabNames[currentType] || document.getElementById(`tab-${currentType}`)?.textContent.replace(/\s+\d+$/, '').trim();
@@ -4635,8 +4637,8 @@ function formatDeadlineDisplay(str) {
     if (isNaN(dateObj.getTime())) return '—';
     const delta = formatDeadlineDelta(dateObj);
     const dateText = formatDateDisplay(str);
-    if (!delta) return dateText;
     const overdue = dateObj.getTime() < Date.now();
+    if (!delta || overdue) return `<div class="deadline-display"><span class="date-text">${dateText}</span></div>`;
     return `<div class="deadline-display"><span class="date-text">${dateText}</span><span class="deadline-delta ${overdue ? 'overdue' : ''}">${delta}</span></div>`;
 }
 
@@ -4696,9 +4698,12 @@ function calcMarginPrc(item) {
 
 function setupModalsBackgroundCheck() {
     window.onclick = function(event) {
-        if (event.target.classList.contains('modal')) {
-            event.target.style.display = 'none';
+        if (!event.target.classList.contains('modal')) return;
+        if (event.target.id === 'addProjectModal') {
+            attemptCloseProjectModal();
+            return;
         }
+        event.target.style.display = 'none';
     }
 }
 
@@ -5260,7 +5265,7 @@ function renderAll(){
         const deadlineValue = wrap.__type === 'archive' ? item.date : (item.dl || item.date || item.start);
         const dateField = wrap.__type === 'archive' ? 'date' : 'dl';
         const rem = wrap.__type === 'archive' ? { cls: '', txt: '' } : getTimeRemaining(deadlineValue);
-        const remText = wrap.__type === 'archive' || (rem && rem.isInfinite) ? '' : ` (${rem.txt})`;
+        const remText = (wrap.__type === 'archive' || (rem && rem.isInfinite) || (rem && rem.days < 0)) ? '' : ` (${rem.txt})`;
         const dateDisplay = wrap.__type === 'archive'
             ? (deadlineValue ? formatDateDisplay(deadlineValue) : '—')
             : formatDeadlineDisplay(deadlineValue);
@@ -5279,7 +5284,7 @@ function renderAll(){
             <td class="select-col"><div class="row-index">${i + 1}</div></td>
             <td><span class="status-pill ${status.cls}">${status.label}</span></td>
             <td><div class="client-wrap">${item.c || '—'}${linkIcon}</div></td>
-            <td class="project-name-wrap">${item.n || '—'}</td>
+            <td class="project-name-wrap"><span class="project-name">${item.n || '—'}</span></td>
             <td class="date-cell"><div class="date-input-wrap ${dateCls}" onclick="openDate('${wrap.__type}',${wrap.idx},'${dateField}')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${dateDisplay}${remText}</span>${overdueIcon}</div></td>
             <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(gross)}" oninput="formatNumberInput(this)" onblur="updVal('${wrap.__type}',${wrap.idx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td style="text-align:right;">
@@ -6320,7 +6325,7 @@ function saveSettings(){
 }
 
 function resetInterface() {
-    const ok = confirm('Вернуть интерфейс к заводским настройкам? Настройки отображения и темы будут сброшены.');
+    const ok = confirm('Вернуть интерфейс к заводским настройкам? Настройки отображения и темы будут сброшены, на базу данных это не повлияет — проекты останутся.');
     if (!ok) return;
     UI_PREFS = JSON.parse(JSON.stringify(DEFAULT_UI_PREFS));
     persistUiPrefs();
