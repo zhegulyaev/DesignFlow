@@ -487,7 +487,10 @@ body.light .pace-block.critical {
   .rep-cta:hover { border-color: var(--accent); color: var(--accent); }
   .rep-cta svg { width: 16px; height: 16px; }
   .link-preview { margin-top: 10px; padding: 10px 12px; border: 1px dashed var(--border); border-radius: 12px; background: var(--card-alt); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-  .link-preview-url { font-weight: 800; color: var(--accent); word-break: break-all; text-decoration: underline; }
+  .link-preview-info { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .link-preview-url { font-weight: 800; color: var(--accent); word-break: break-all; text-decoration: underline; transition: color .2s; }
+  .link-preview-url:hover { color: #8ab4ff; }
+  .link-preview-title { color: var(--muted); font-size: 13px; line-height: 1.4; word-break: break-word; }
   .link-preview-actions { display: flex; gap: 8px; }
   .link-preview button { padding: 8px 12px; min-height: 36px; }
   /* Bulk Toolbar */
@@ -1811,7 +1814,10 @@ body:not([data-theme="dark"]) .header-new-badge {
                         </button>
                     </div>
                     <div class="link-preview" id="new-project-link-preview" style="display:none">
-                        <a class="link-preview-url" id="new-project-link-text" href="#" target="_blank" rel="noopener noreferrer"></a>
+                        <div class="link-preview-info">
+                            <a class="link-preview-url" id="new-project-link-text" href="#" target="_blank" rel="noopener noreferrer"></a>
+                            <div class="link-preview-title" id="new-project-link-title" style="display:none"></div>
+                        </div>
                         <div class="link-preview-actions">
                             <button class="btn-ghost" type="button" onclick="openLink('new')">Редактировать</button>
                             <button class="del-btn" type="button" onclick="clearNewProjectLink()" title="Очистить ссылку">×</button>
@@ -3347,6 +3353,8 @@ let toastTimeout = null;
 let templateHelperTimeout = null;
 let lastPermanentDeletion = null;
 let newProjectLink = '';
+let newProjectLinkTitle = '';
+let lastFetchedLinkForTitle = '';
 let datePicker = null;
 let timePicker = null;
 
@@ -4646,6 +4654,65 @@ function clearTrashForever() {
     };
 }
 
+function formatLinkDisplay(url) {
+    return (url || '').replace(/^https?:\/\//, '');
+}
+
+function buildFallbackLinkTitle(url) {
+    try {
+        const parsed = new URL(url);
+        const cleanPath = parsed.pathname.replace(/\/+$/, '').replace(/^\//, '');
+        return cleanPath ? `${parsed.hostname} • ${cleanPath}` : parsed.hostname;
+    } catch (e) {
+        return formatLinkDisplay(url);
+    }
+}
+
+function setLinkPreviewTitle(titleText) {
+    const titleEl = document.getElementById('new-project-link-title');
+    if (!titleEl) return;
+    titleEl.textContent = titleText;
+    titleEl.style.display = titleText ? 'block' : 'none';
+}
+
+async function fetchPageTitle(url) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) return '';
+        const contentType = response.headers.get('content-type') || '';
+        if (!contentType.includes('text/html')) return '';
+        const html = await response.text();
+        const match = html.match(/<title[^>]*>([^<]*)<\/title>/i);
+        return match ? match[1].trim() : '';
+    } catch (e) {
+        return '';
+    }
+}
+
+async function refreshNewProjectLinkTitle() {
+    if (!newProjectLink) {
+        newProjectLinkTitle = '';
+        lastFetchedLinkForTitle = '';
+        setLinkPreviewTitle('');
+        return;
+    }
+
+    const fallback = buildFallbackLinkTitle(newProjectLink);
+
+    if (newProjectLink === lastFetchedLinkForTitle && newProjectLinkTitle) {
+        setLinkPreviewTitle(newProjectLinkTitle || fallback);
+        return;
+    }
+
+    lastFetchedLinkForTitle = newProjectLink;
+    const resolvedTitle = await fetchPageTitle(newProjectLink);
+    newProjectLinkTitle = resolvedTitle || fallback;
+
+    if (newProjectLink === lastFetchedLinkForTitle) {
+        setLinkPreviewTitle(newProjectLinkTitle);
+    }
+}
+
 function updateNewProjectLinkButton() {
     const btn = document.getElementById('new-project-link-btn');
     const preview = document.getElementById('new-project-link-preview');
@@ -4656,14 +4723,19 @@ function updateNewProjectLinkButton() {
     const label = btn.querySelector('span');
     if (label) label.textContent = hasLink ? 'Ссылка добавлена' : 'Ссылка на чат/материалы';
     if (preview && text) {
+        const displayText = hasLink ? formatLinkDisplay(newProjectLink) : '';
         preview.style.display = hasLink ? 'flex' : 'none';
-        text.textContent = hasLink ? newProjectLink : '';
+        text.textContent = displayText;
         text.href = hasLink ? newProjectLink : '#';
+        setLinkPreviewTitle(hasLink ? (newProjectLinkTitle || buildFallbackLinkTitle(newProjectLink)) : '');
+        if (hasLink) refreshNewProjectLinkTitle();
     }
 }
 
 function clearNewProjectLink() {
     newProjectLink = '';
+    newProjectLinkTitle = '';
+    lastFetchedLinkForTitle = '';
     updateNewProjectLinkButton();
 }
 
@@ -4715,6 +4787,8 @@ function openAddModal(type = null, idx = null){
         document.getElementById('add-proj-dl-custom').value = '';
         if (presetTimeInput) presetTimeInput.value = item.dl && item.dl.includes('T') ? item.dl.slice(11, 16) : '';
         newProjectLink = item.link || '';
+        newProjectLinkTitle = item.linkTitle || '';
+        lastFetchedLinkForTitle = newProjectLinkTitle && newProjectLink ? newProjectLink : '';
         toggleProjectNameClear();
         handleStatusChange(type, { preservePaid: true });
     } else {
@@ -4736,6 +4810,8 @@ function openAddModal(type = null, idx = null){
         document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDeadlineDisplay('');
         handleStatusChange('active');
         newProjectLink = '';
+        newProjectLinkTitle = '';
+        lastFetchedLinkForTitle = '';
     }
     updateNewProjectLinkButton();
     document.getElementById('addProjectModal').style.display = 'flex';
@@ -4760,6 +4836,7 @@ function saveNewProject(){
     const item = {
         ...base,
         n: name, c: client, p: price, contractor: contr, contractorMode: contrMode, taxPrc: tax, link: newProjectLink,
+        linkTitle: newProjectLink ? (newProjectLinkTitle || buildFallbackLinkTitle(newProjectLink)) : undefined,
         start: type==='active'? start : base.start,
         dl: type==='active' || type==='waiting' || type==='paused'
             ? (isDeadlineCleared ? '' : (finalDeadline || base.dl || ''))
@@ -5089,16 +5166,35 @@ function saveLink(){
     const isTelegram = document.getElementById('link-is-telegram').checked;
     const raw = document.getElementById('link-input').value;
     const normalized = normalizeLinkValue(raw, isTelegram);
+    const fallbackTitle = normalized ? buildFallbackLinkTitle(normalized) : '';
+
+    lastFetchedLinkForTitle = '';
 
     if (queue.type === 'new') {
         newProjectLink = normalized;
+        newProjectLinkTitle = fallbackTitle;
         updateNewProjectLinkButton();
         queue = { type: null, idx: null, field: null, targetId: null };
         closeLinkModal();
         return;
     }
 
-    DATA[queue.type][queue.idx].link = normalized;
+    const queueType = queue.type;
+    const queueIdx = queue.idx;
+    const targetItem = DATA[queueType][queueIdx];
+    if (targetItem) {
+        targetItem.link = normalized;
+        targetItem.linkTitle = normalized ? fallbackTitle : undefined;
+
+        if (normalized) {
+            fetchPageTitle(normalized).then(title => {
+                const updatedItem = DATA[queueType]?.[queueIdx];
+                if (!title || !updatedItem || updatedItem.link !== normalized) return;
+                updatedItem.linkTitle = title;
+                save();
+            });
+        }
+    }
     closeLinkModal(); save(); upd();
 }
 
