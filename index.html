@@ -584,6 +584,18 @@
     color: var(--muted);
     font-weight: 600;
   }
+  .delay-card { gap: 10px; }
+  .delay-label-row { display:flex; justify-content: space-between; align-items:center; gap:10px; }
+  .delay-chip { font-size:11px; font-weight:800; text-transform: uppercase; letter-spacing:0.4px; padding:6px 10px; border-radius:8px; border:1px solid var(--border); background: var(--card); color: var(--text); }
+  .delay-chip.good { background: rgba(46,160,67,0.1); color: var(--green); border-color: rgba(46,160,67,0.3); }
+  .delay-chip.warn { background: rgba(210,153,34,0.12); color: var(--gold); border-color: rgba(210,153,34,0.3); }
+  .delay-chip.bad { background: rgba(248,81,73,0.12); color: var(--red); border-color: rgba(248,81,73,0.35); }
+  .delay-stats { display:flex; align-items:center; gap:12px; padding:10px 12px; border:1px dashed var(--border); border-radius:10px; background: var(--card); }
+  .delay-stat { display:flex; flex-direction:column; gap:4px; }
+  .delay-caption { font-size:11px; text-transform: uppercase; letter-spacing:0.4px; color: var(--muted); font-weight:800; }
+  .delay-value { font-size:18px; font-weight:900; color: var(--text); }
+  .delay-divider { width:1px; height:28px; background: var(--border); opacity:0.5; }
+  .delay-foot { font-size:12px; color: var(--muted); font-weight:700; }
 
   /* Основное тело: график + советы */
   .rep-body-split {
@@ -1379,9 +1391,15 @@ td.date-cell + td.date-cell {
 /* --- New Project Modal (Redesign) --- */
   /* Сетка модального окна */
   .modal-layout-modern {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
     gap: 24px;
+  }
+  .modal-full-row { grid-column: 1 / -1; }
+
+  @media(max-width: 1100px) {
+    .modal-layout-modern { grid-template-columns: 1fr; }
+    .modal-full-row { grid-column: auto; }
   }
   
   .modal-section-title {
@@ -1455,10 +1473,14 @@ td.date-cell + td.date-cell {
     cursor: pointer;
     border: 1px solid transparent;
     transition: .2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
   .tpl-btn-chip.create { background: rgba(88,166,255,0.1); color: var(--accent); }
   .tpl-btn-chip.list { background: var(--card-alt); border-color: var(--border); color: var(--muted); }
   .tpl-btn-chip:hover { transform: translateY(-1px); filter: brightness(1.1); }
+  .tpl-btn-chip .tpl-icon { width: 14px; height: 14px; }
 
   /* Секция дат (визуальное выделение) */
   .date-panel {
@@ -1524,39 +1546,32 @@ td.date-cell + td.date-cell {
     background: var(--card-alt);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 12px;
+    padding: 16px;
     min-height: 180px;
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
+  .eff-label-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
   .eff-label {
     font-size: 11px;
     text-transform: uppercase;
     color: var(--muted);
-    font-weight: 700;
-    position: absolute;
-    top: 10px; left: 12px;
-    z-index: 2;
+    font-weight: 800;
+    letter-spacing: 0.4px;
   }
+  .eff-range { font-size: 11px; color: var(--text); font-weight: 700; opacity: 0.8; }
 
   /* --- Record Block (Redesign) --- */
   .record-modern {
     position: relative;
-    background: linear-gradient(135deg, var(--card) 0%, var(--card-alt) 100%);
-    border: 1px solid var(--gold); /* Золотая обводка */
+    background: var(--card);
+    border: 1px solid var(--border);
     border-radius: 16px;
     padding: 18px;
     overflow: hidden;
-    box-shadow: 0 4px 24px rgba(210, 153, 34, 0.08);
-  }
-  .record-modern::before {
-    content: "🏆";
-    position: absolute;
-    right: -10px;
-    top: -10px;
-    font-size: 80px;
-    opacity: 0.05;
-    transform: rotate(15deg);
-    pointer-events: none;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.12);
   }
   
   .rec-header {
@@ -1565,26 +1580,30 @@ td.date-cell + td.date-cell {
     align-items: flex-start;
     margin-bottom: 12px;
   }
-  .rec-title { font-size: 13px; font-weight: 800; color: var(--gold); letter-spacing: 0.5px; text-transform: uppercase; }
+  .rec-title { font-size: 13px; font-weight: 800; color: var(--text); letter-spacing: 0.5px; text-transform: uppercase; display:flex; align-items:center; gap:8px; }
+  .rec-title::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 6px rgba(88,166,255,0.14); }
   .rec-edit-btn { font-size: 11px; color: var(--muted); cursor: pointer; text-decoration: underline; }
-  
-  .rec-main-val { font-size: 26px; font-weight: 900; color: var(--text); line-height: 1; margin-bottom: 4px; }
+
+  .rec-main-val { font-size: 28px; font-weight: 900; color: var(--text); line-height: 1; margin-bottom: 4px; }
   .rec-sub-text { font-size: 13px; color: var(--muted); font-weight: 600; }
+  .rec-earned { font-size: 12px; color: var(--text); font-weight: 800; background: var(--card-alt); border: 1px solid var(--border); padding: 8px 10px; border-radius: 10px; display: inline-flex; align-items: center; gap: 8px; }
   
   .rec-bar-box {
     margin-top: 14px;
-    background: rgba(210, 153, 34, 0.1);
-    height: 8px;
-    border-radius: 4px;
+    background: var(--progress-bg);
+    height: 10px;
+    border-radius: 6px;
     overflow: hidden;
     position: relative;
+    border: 1px solid var(--progress-border);
+    box-shadow: var(--progress-shadow);
   }
   .rec-bar-fill {
     height: 100%;
-    background: var(--gold);
+    background: linear-gradient(90deg, var(--progress-fill-start), var(--progress-fill-end));
     width: 0%;
-    border-radius: 4px;
-    box-shadow: 0 0 10px rgba(210, 153, 34, 0.4);
+    border-radius: 6px;
+    box-shadow: var(--progress-fill-shadow);
     transition: width 1s ease;
   }
 
@@ -1632,6 +1651,7 @@ td.date-cell + td.date-cell {
     </symbol>
     <symbol id="icon-duplicate" viewBox="0 0 16 16"><path fill="currentColor" d="M2.25 1.75a.75.75 0 0 1 .75-.75h7.25a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0V2.5h-6.5v8h2a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1-.75-.75Zm4.5 4a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 .75.75v8a.75.75 0 0 1-.75.75h-6a.75.75 0 0 1-.75-.75v-8Z"/></symbol>
     <symbol id="icon-link" viewBox="0 0 24 24"><path fill="currentColor" d="M13.06 3.94a5.5 5.5 0 0 1 7.78 7.78l-2.12 2.12a5.5 5.5 0 0 1-7.78 0a1 1 0 0 1 1.42-1.42a3.5 3.5 0 0 0 4.94 0l2.12-2.12a3.5 3.5 0 0 0-4.94-4.94l-.88.88a1 1 0 1 1-1.42-1.42Zm-6.72 6.72a5.5 5.5 0 0 1 7.78 0a1 1 0 1 1-1.42 1.42a3.5 3.5 0 0 0-4.94 0l-2.12 2.12a3.5 3.5 0 0 0 4.94 4.94l.88-.88a1 1 0 0 1 1.42 1.42l-.88.88a5.5 5.5 0 0 1-7.78-7.78Z"/></symbol>
+    <symbol id="icon-folder" viewBox="0 0 24 24"><path fill="currentColor" d="M3 6.5A2.5 2.5 0 0 1 5.5 4H10l1.2 1.6c.19.25.49.4.8.4H18.5A2.5 2.5 0 0 1 21 8.5v8A2.5 2.5 0 0 1 18.5 19h-13A2.5 2.5 0 0 1 3 16.5Z"/><path fill="currentColor" d="M4.5 9A1.5 1.5 0 0 0 3 10.5v6A2.5 2.5 0 0 0 5.5 19h13a2.5 2.5 0 0 0 2.5-2.5v-6A1.5 1.5 0 0 0 19.5 9Z" opacity=".2"/></symbol>
     <symbol id="icon-external" viewBox="0 0 24 24"><path fill="currentColor" d="M14 4a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V6.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L17.586 5H15a1 1 0 0 1-1-1Z"/><path fill="currentColor" d="M5 6a1 1 0 0 1 1-1h5a1 1 0 1 1 0 2H7v10h10v-4a1 1 0 1 1 2 0v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1Z"/></symbol>
     <symbol id="icon-calendar-off" viewBox="0 0 24 24"><path fill="currentColor" d="M7 2a1 1 0 0 0-1 1v1H5a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3h-1V3a1 1 0 1 0-2 0v1H8V3a1 1 0 0 0-1-1Zm12 6v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V8h14Z"/><path fill="currentColor" d="M9.7 10.3a1 1 0 0 0-1.4 1.4L10.6 14l-2.3 2.3a1 1 0 0 0 1.4 1.4L12 15.4l2.3 2.3a1 1 0 0 0 1.4-1.4L13.4 14l2.3-2.3a1 1 0 1 0-1.4-1.4L12 12.6Z"/></symbol>
     <symbol id="icon-calendar" viewBox="0 0 16 16"><path fill="currentColor" d="M3 2.75A.75.75 0 0 1 3.75 2h.5a.75.75 0 0 1 0 1.5h-.5A.75.75 0 0 1 3 2.75ZM12.25 2a.75.75 0 0 1 .75.75v.5a.75.75 0 0 1-1.5 0v-.5c0-.414.336-.75.75-.75ZM2 5.5a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 5.5Zm12.5 2.25v7.25c0 .414-.336.75-.75.75H2.25a.75.75 0 0 1-.75-.75V7.75c0-.414.336-.75.75-.75h11.5c.414 0 .75.336.75.75Z"/></symbol>
@@ -2121,14 +2141,19 @@ body:not([data-theme="dark"]) .header-new-badge {
                   
                   <div class="eff-content-grid">
                       <div class="eff-chart-box">
-                          <div class="eff-label">Потенциал vs Факт</div>
+                          <div class="eff-label-row">
+                              <div class="eff-label">Потенциал vs Факт</div>
+                          </div>
                           <div style="height:160px;width:100%; display:flex; justify-content:center;">
                               <canvas id="pieChart"></canvas>
                           </div>
                       </div>
-                      
+
                       <div class="eff-chart-box">
-                          <div class="eff-label">Динамика (6 мес)</div>
+                          <div class="eff-label-row">
+                              <div class="eff-label">Динамика (6 мес)</div>
+                              <div class="eff-range" id="bar-months-range"></div>
+                          </div>
                           <div style="height:140px;width:100%">
                               <canvas id="barChart"></canvas>
                           </div>
@@ -2141,10 +2166,11 @@ body:not([data-theme="dark"]) .header-new-badge {
                       <div class="rec-title">Личный Рекорд</div>
                       <span class="rec-edit-btn" onclick="openRecordSettings()">Изменить</span>
                   </div>
-                  
+
                   <div class="rec-main-val mono" id="record-amount">0 ₽</div>
                   <div class="rec-sub-text" id="record-motiv">Задай цель!</div>
-                  
+                  <div class="rec-earned">Получено: <span id="record-earned">0 ₽</span></div>
+
                   <div class="rec-bar-box">
                       <div class="rec-bar-fill" id="record-progress"></div>
                   </div>
@@ -2178,10 +2204,23 @@ body:not([data-theme="dark"]) .header-new-badge {
                           <div class="rm-value" id="rep-overdue">0</div>
                           <div class="rm-sub" id="reputation-grade">Задач нет</div>
                       </div>
-                      <div class="rep-metric-item">
-                          <div class="rm-label">Задержка</div>
-                          <div class="rm-value" id="rep-delay">0 дн.</div>
-                          <div class="rm-sub">Максимальная</div>
+                      <div class="rep-metric-item delay-card">
+                          <div class="delay-label-row">
+                              <div class="rm-label">Задержка</div>
+                              <div class="delay-chip" id="rep-delay-chip">Без просрочек</div>
+                          </div>
+                          <div class="delay-stats">
+                              <div class="delay-stat">
+                                  <span class="delay-caption">Макс</span>
+                                  <span class="delay-value" id="rep-delay-max">0 дн.</span>
+                              </div>
+                              <div class="delay-divider"></div>
+                              <div class="delay-stat">
+                                  <span class="delay-caption">Средняя</span>
+                                  <span class="delay-value" id="rep-delay-avg">0 дн.</span>
+                              </div>
+                          </div>
+                          <div class="delay-foot" id="rep-delay">Просрочек нет</div>
                       </div>
                   </div>
                   <div class="rep-body-split">
@@ -2244,7 +2283,21 @@ body:not([data-theme="dark"]) .header-new-badge {
         <h2 style="margin-bottom:20px; font-size: 24px;">Новый проект</h2>
         
         <div class="modal-layout-modern">
-            
+
+            <div class="inp-modern modal-full-row project-name-field">
+                <label>Название проекта</label>
+                <div style="position:relative;">
+                    <input type="text" id="add-proj-name" list="project-name-templates" placeholder="Например: Дизайн сайта">
+                    <button type="button" class="clear-input-btn hidden" id="project-name-clear" onclick="clearProjectName()" style="top:10px; right:10px;">×</button>
+                </div>
+                <div class="template-control-group">
+                    <div class="tpl-btn-chip create" onclick="saveNameTemplate()">+ В шаблоны</div>
+                    <div class="tpl-btn-chip list" onclick="openTemplateManagerModal()"><svg class="tpl-icon"><use href="#icon-folder"/></svg> Мои шаблоны</div>
+                    <div class="template-helper" id="template-helper" style="margin:0; font-size:11px;"></div>
+                    <datalist id="project-name-templates"></datalist>
+                </div>
+            </div>
+
             <div>
                 <div class="modal-section-title">Основное</div>
                 <div class="form-grid-row">
@@ -2263,20 +2316,7 @@ body:not([data-theme="dark"]) .header-new-badge {
                         <input type="text" id="add-proj-client" placeholder="Имя или Компания">
                     </div>
                 </div>
-                
-                <div class="inp-modern">
-                    <label>Название проекта</label>
-                    <div style="position:relative;">
-                        <input type="text" id="add-proj-name" list="project-name-templates" placeholder="Например: Дизайн сайта">
-                        <button type="button" class="clear-input-btn hidden" id="project-name-clear" onclick="clearProjectName()" style="top:10px; right:10px;">×</button>
-                    </div>
-                    <div class="template-control-group">
-                        <div class="tpl-btn-chip create" onclick="saveNameTemplate()">+ В шаблоны</div>
-                        <div class="tpl-btn-chip list" onclick="openTemplateManagerModal()">📂 Мои шаблоны</div>
-                        <div class="template-helper" id="template-helper" style="margin:0; font-size:11px;"></div>
-                        <datalist id="project-name-templates"></datalist>
-                    </div>
-                </div>
+
             </div>
 
             <div>
@@ -2320,7 +2360,7 @@ body:not([data-theme="dark"]) .header-new-badge {
                 </div>
             </div>
 
-            <div>
+            <div class="modal-full-row">
                 <div class="modal-section-title">Сроки и детали</div>
                 <div class="date-panel">
                     <div class="inp-modern">
@@ -2350,8 +2390,9 @@ body:not([data-theme="dark"]) .header-new-badge {
                             <option value="custom">Свой...</option>
                         </select>
                         <input type="number" id="add-proj-dl-custom" placeholder="Дней" oninput="applyDeadlinePreset()" style="width: 80px; display:none; background:var(--input-bg); border:1px solid var(--border); border-radius:6px; padding:6px;">
+                        <input type="date" id="add-proj-dl-custom-date" oninput="applyDeadlinePreset()" style="display:none; background:var(--input-bg); border:1px solid var(--border); border-radius:6px; padding:6px;">
                          <input type="time" id="add-proj-dl-time" class="deadline-time" step="300" oninput="applyDeadlinePreset()" style="background:var(--input-bg); border:1px solid var(--border); border-radius:6px; padding:6px;">
-                        
+
                         <button type="button" class="deadline-clear-btn" onclick="clearNewProjectDeadline()" title="Убрать дедлайн">
                             <svg><use href="#icon-calendar-off"/></svg>
                         </button>
@@ -5426,6 +5467,7 @@ function saveNewProject(){
 function applyDeadlinePreset() {
     const select = document.getElementById('add-proj-dl-days');
     const customInput = document.getElementById('add-proj-dl-custom');
+    const customDateInput = document.getElementById('add-proj-dl-custom-date');
     const timeInput = document.getElementById('add-proj-dl-time');
     deadlineUnset = false;
     const currentStart = document.getElementById('add-proj-start-val').value || today;
@@ -5442,6 +5484,14 @@ function applyDeadlinePreset() {
         previousDeadlineValue = currentDl;
     }
 
+    const isCustom = select.value === 'custom';
+    if (customInput) customInput.style.display = isCustom ? 'inline-block' : 'none';
+    if (customDateInput) customDateInput.style.display = isCustom ? 'inline-block' : 'none';
+    if (!isCustom) {
+        if (customInput) customInput.value = '';
+        if (customDateInput) customDateInput.value = '';
+    }
+
     if (document.activeElement === customInput && select.value !== 'custom') {
         select.value = 'custom';
     }
@@ -5450,32 +5500,43 @@ function applyDeadlinePreset() {
         const restoreVal = previousDeadlineValue || currentDl;
         document.getElementById('add-proj-dl-val').value = restoreVal;
         document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDeadlineDisplay(restoreVal);
-        customInput.value = '';
+        if (customInput) customInput.value = '';
+        if (customDateInput) customDateInput.value = '';
         previousDeadlineValue = '';
         return;
     }
 
-    if (select.value === 'custom' && customInput.value.trim() === '') {
-        select.value = '';
-        document.getElementById('add-proj-dl-val').value = previousDeadlineValue || currentDl;
-        const restoredDl = document.getElementById('add-proj-dl-val').value || currentDl;
-        document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDeadlineDisplay(restoredDl);
-        previousDeadlineValue = '';
-        return;
-    }
-
-    let days = parseInt(select.value, 10);
-    if (select.value === 'custom') {
-        days = parseInt(customInput.value, 10);
-    }
-
-    if (!days || days <= 0) return;
     const startRaw = document.getElementById('add-proj-start-val').value || today;
     const baseDate = new Date(startRaw.replace(' ', 'T'));
     if (isNaN(baseDate)) return;
-    const dlDate = new Date(baseDate);
-    dlDate.setDate(dlDate.getDate() + days);
-    const deadlineValue = formatDateWithTime(dlDate, finalTime);
+
+    let deadlineValue = '';
+
+    if (isCustom) {
+        if (customDateInput && customDateInput.value) {
+            const manualDate = new Date(customDateInput.value + 'T00:00');
+            if (!isNaN(manualDate)) {
+                deadlineValue = formatDateWithTime(manualDate, finalTime);
+            }
+        } else if (customInput && customInput.value.trim() !== '') {
+            const days = parseInt(customInput.value, 10);
+            if (!isNaN(days) && days > 0) {
+                const dlDate = new Date(baseDate);
+                dlDate.setDate(dlDate.getDate() + days);
+                deadlineValue = formatDateWithTime(dlDate, finalTime);
+            }
+        } else {
+            return;
+        }
+    } else {
+        const presetDays = parseInt(select.value, 10);
+        if (!presetDays || presetDays <= 0) return;
+        const dlDate = new Date(baseDate);
+        dlDate.setDate(dlDate.getDate() + presetDays);
+        deadlineValue = formatDateWithTime(dlDate, finalTime);
+    }
+
+    if (!deadlineValue) return;
     document.getElementById('add-proj-dl-val').value = deadlineValue;
     document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDeadlineDisplay(deadlineValue);
     previousDeadlineValue = deadlineValue;
@@ -5487,6 +5548,8 @@ function clearNewProjectDeadline() {
     document.getElementById('add-proj-dl-display').querySelector('.date-text-display').innerHTML = formatDeadlineDisplay('');
     document.getElementById('add-proj-dl-days').value = '';
     document.getElementById('add-proj-dl-custom').value = '';
+    const customDateInput = document.getElementById('add-proj-dl-custom-date');
+    if (customDateInput) customDateInput.value = '';
     previousDeadlineValue = '';
     const presetTimeInput = document.getElementById('add-proj-dl-time');
     if (presetTimeInput) presetTimeInput.value = '';
@@ -5499,6 +5562,8 @@ function handleStatusChange(status, options = {}) {
     if (status === 'potential') {
         document.getElementById('add-proj-dl-days').value = '';
         document.getElementById('add-proj-dl-custom').value = '';
+        const customDateInput = document.getElementById('add-proj-dl-custom-date');
+        if (customDateInput) customDateInput.value = '';
     }
 
     const paidSelect = document.getElementById('add-proj-paid');
@@ -6118,7 +6183,17 @@ function updateReputationUI(){
     if (repOverdue) repOverdue.innerText = state.total;
 
     const repDelay = document.getElementById('rep-delay');
-    if (repDelay) repDelay.innerText = state.total ? `Макс ${state.worst} дн. · Ср ${state.avg} дн.` : 'Просрочек нет';
+    if (repDelay) repDelay.innerText = state.total ? `${state.total} ${pluralize(state.total, ['просрочка', 'просрочки', 'просрочек'])}` : 'Просрочек нет';
+    const repDelayMax = document.getElementById('rep-delay-max');
+    if (repDelayMax) repDelayMax.innerText = state.total ? `${state.worst} дн.` : '0 дн.';
+    const repDelayAvg = document.getElementById('rep-delay-avg');
+    if (repDelayAvg) repDelayAvg.innerText = state.total ? `${state.avg} дн.` : '—';
+    const repDelayChip = document.getElementById('rep-delay-chip');
+    if (repDelayChip) {
+        repDelayChip.classList.remove('good','warn','bad');
+        repDelayChip.classList.add(state.level);
+        repDelayChip.innerText = state.level === 'good' ? 'Чисто' : state.level === 'warn' ? 'Подтяни сроки' : 'Нужен план';
+    }
 
     const tipsEl = document.getElementById('reputation-tips');
     if (tipsEl) {
@@ -6299,6 +6374,8 @@ function calcStats(){
     document.getElementById('record-motiv').innerText = motivText;
     document.getElementById('record-remaining').innerText = record ? (recordRemaining > 0 ? `До рекорда ${formatCurrency(recordRemaining)}` : 'Рекорд побит!') : 'Задайте рекорд в настройках';
     document.getElementById('record-amount').innerText = formatCurrency(record);
+    const recordEarnedEl = document.getElementById('record-earned');
+    if (recordEarnedEl) recordEarnedEl.innerText = formatCurrency(totalFact);
     document.getElementById('record-progress').style.width = record ? Math.min(100, (totalFact/record)*100) + '%' : '0%';
 
     document.getElementById('p-bar').style.width = goal > 0 ? Math.min(100, (totalFact/goal)*100) + '%' : '0%';
@@ -6351,14 +6428,30 @@ function updateCharts(fact, plan, scope){
     
     const h = {};
     scope.archive.forEach(i => { const m = (i.date||'').slice(0,7); if(m) h[m] = (h[m]||0) + calcNet(i); });
-    const allMonths = Object.keys(h);
-    allMonths.sort();
-    const keys = allMonths.slice(-6); 
+
+    const [curYear, curMonth] = currentMonth.split('-').map(Number);
+    const lastMonths = Array.from({ length: 6 }).map((_, idx) => {
+        const d = new Date(curYear, (curMonth - 1) - (5 - idx), 1);
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    });
+
+    const monthsRangeEl = document.getElementById('bar-months-range');
+    if (monthsRangeEl) {
+        const shortLabels = lastMonths.map(m => new Date(m + '-01').toLocaleString('ru', { month:'short' }));
+        monthsRangeEl.innerText = shortLabels.join(' · ');
+    }
 
     if(chB) chB.destroy();
     chB = new Chart(ctxB, {
         type: 'bar',
-        data: { labels: keys.map(m => new Date(m + '-01').toLocaleString('ru', {month:'short'})), datasets: [{data: keys.map(k=>h[k]), backgroundColor: keys.map(k=>k===currentMonth?'#58a6ff':getCssVar('--chart-bar-bg')||'#21262d'), borderRadius:4}] },
+        data: {
+            labels: lastMonths.map(m => new Date(m + '-01').toLocaleString('ru', {month:'short'})),
+            datasets: [{
+                data: lastMonths.map(k=>h[k] || 0),
+                backgroundColor: lastMonths.map(k=>k===currentMonth?'#58a6ff':getCssVar('--chart-bar-bg')||'#21262d'),
+                borderRadius:4
+            }]
+        },
         options: {responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{grid:{display:false}}, y:{display:false, ticks:{beginAtZero:true}}}}
     });
 }
