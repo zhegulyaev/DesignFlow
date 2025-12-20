@@ -1556,6 +1556,19 @@ td.date-cell + td.date-cell {
       gap: 20px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.02);
   }
+  .eff-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+  }
+  .eff-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+  }
   .eff-content-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -3038,7 +3051,11 @@ function normalizeBlockOrder(orderMap, fallback = DEFAULT_BLOCK_ORDER) {
 function loadUiPrefs() {
     try {
         const storedTheme = localStorage.getItem(THEME_KEY);
-        const stored = JSON.parse(localStorage.getItem(UI_PREFS_KEY));
+        let stored = JSON.parse(localStorage.getItem(UI_PREFS_KEY));
+        if (!stored) {
+            const snapshot = JSON.parse(localStorage.getItem(K) || 'null');
+            stored = snapshot?.uiPrefs || null;
+        }
         if (stored) {
             UI_PREFS = {
                 ...DEFAULT_UI_PREFS,
