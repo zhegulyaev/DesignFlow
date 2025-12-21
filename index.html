@@ -239,7 +239,20 @@
   #t-all .date-input-wrap { width: auto; display: inline-flex; min-width: 148px; }
   #t-all .price-cell-wrap input { min-width: 110px; max-width: 150px; }
   #t-all th:nth-child(6), #t-all td:nth-child(6) { min-width: 180px; }
+  #t-all td.actions-cell { text-align: left; }
+  #t-all td.actions-cell .link-btn { margin-left: 0; }
+
+  /* Archive tweaks */
   #t-archive .date-input-wrap { width: auto; display: inline-flex; min-width: 136px; }
+  #t-archive th:nth-child(5), #t-archive th:nth-child(6), #t-archive th:nth-child(7),
+  #t-archive td:nth-child(5), #t-archive td:nth-child(6), #t-archive td:nth-child(7) { text-align: right; }
+  #t-archive .archive-date-cell { padding: 8px 8px !important; }
+  #t-archive .archive-date-cell .deadline-block { display: grid; gap: 6px; }
+  #t-archive .deadline-row { display: flex; align-items: center; gap: 8px; }
+  #t-archive .deadline-label { font-size: 12px; font-weight: 700; color: var(--muted); min-width: 66px; }
+  #t-archive .deadline-value { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
+  #t-archive .deadline-value .date-text-display { padding: 2px 0; }
+  #t-archive .deadline-value.muted { color: var(--muted); }
 
   /* Deadline Colors */
   .days-critical { color: var(--red); font-weight: 700; }
@@ -2260,7 +2273,7 @@ body:not([data-theme="dark"]) .header-new-badge {
               <th class="select-col">№</th>
               <th width="16%" data-type="archive" data-key="c" onclick="sortData('archive', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
               <th width="28%" data-type="archive" data-key="n" onclick="sortData('archive', 'n', 'string')">Проект <span class="sort-icon"></span></th>
-              <th width="12%" data-type="archive" data-key="date" onclick="sortData('archive', 'date', 'date')">Дата сдачи <span class="sort-icon"></span></th>
+              <th width="12%" data-type="archive" data-key="date" onclick="sortData('archive', 'date', 'date')">Дедлайн / сдача <span class="sort-icon"></span></th>
               <th width="10%" data-type="archive" data-key="p" onclick="sortData('archive', 'p', 'number')">Сумма <span class="sort-icon"></span></th>
               <th width="10%" data-type="archive" data-key="contractor" onclick="sortData('archive', 'contractor', 'number')">Расходы <span class="sort-icon"></span></th>
               <th width="10%">Чистыми</th>
@@ -2280,8 +2293,8 @@ body:not([data-theme="dark"]) .header-new-badge {
             <tr>
               <th class="select-col">№</th>
               <th width="12%">Статус</th>
-              <th width="16%">Клиент</th>
-              <th width="24%">Проект</th>
+              <th width="20%">Клиент</th>
+              <th width="22%">Проект</th>
               <th width="12%">Срок</th>
               <th width="10%">Сумма</th>
               <th width="10%">Расходы</th>
@@ -5500,6 +5513,10 @@ function renderArchive(){
             ? `<span class="deadline-warning-icon" title="Просрочено на ${completionStatus.delayDays} ${pluralize(completionStatus.delayDays, ['день','дня','дней'])}">●</span>`
             : '';
         const dateCls = completionStatus.onTime ? 'days-normal' : '';
+        const deadlineSnapshot = item.deadlineSnapshot || item.dl || null;
+        const deadlineBadge = deadlineSnapshot
+            ? `<span class="date-text-display">${formatDateDisplay(deadlineSnapshot)}</span>`
+            : `<span class="date-text-display">—</span>`;
 
         const contractorMode = item.contractorMode || 'none';
         const contractorSymbol = contractorMode === 'percent' ? '%' : contractorMode === 'none' ? '' : '₽';
@@ -5523,7 +5540,20 @@ function renderArchive(){
             <td class="project-name-wrap">
                 <span class="project-name" contenteditable onblur="updVal('archive',${realIdx},'n',this.innerText)">${item.n}</span>
             </td>
-            <td class="date-cell"><div class="date-input-wrap ${dateCls}" onclick="openDate('archive',${realIdx},'date')"><svg class="date-icon"><use href="#icon-calendar"/></svg>${completionBadge}${overdueIcon}</div></td>
+            <td class="date-cell archive-date-cell">
+                <div class="deadline-block">
+                    <div class="deadline-row">
+                        <div class="deadline-label">Дедлайн</div>
+                        <div class="deadline-value ${deadlineSnapshot ? '' : 'muted'}">${deadlineBadge}</div>
+                    </div>
+                    <div class="deadline-row">
+                        <div class="deadline-label">Сдано</div>
+                        <div class="date-input-wrap ${dateCls}" onclick="openDate('archive',${realIdx},'date')">
+                            <svg class="date-icon"><use href="#icon-calendar"/></svg>${completionBadge}${overdueIcon}
+                        </div>
+                    </div>
+                </div>
+            </td>
             <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('archive',${realIdx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td>
                 <div class="price-cell-wrap expense-cell">
@@ -6912,8 +6942,8 @@ function pluralize(num, forms){
   function hydrateArchiveCompletionMeta() {
       if (!Array.isArray(DATA.archive)) return;
       DATA.archive.forEach((item = {}) => {
-          if (!item.deadlineSnapshot) {
-              item.deadlineSnapshot = item.dl || item.date || null;
+          if (!item.deadlineSnapshot && item.dl) {
+              item.deadlineSnapshot = item.dl;
           }
           if (item.completedOnTime === undefined) {
               const status = analyzeCompletionStatus(item);
@@ -6926,7 +6956,7 @@ function pluralize(num, forms){
       if (!item) return { completionDate: null };
 
       const completionDate = normalizeDateTimeValue(item.date, { endOfDayIfDateOnly: true });
-      const deadlineRaw = item.deadlineSnapshot || item.dl || item.date;
+      const deadlineRaw = item.deadlineSnapshot || item.dl || null;
       const deadlineDate = normalizeDateTimeValue(deadlineRaw, { endOfDayIfDateOnly: true });
 
       let onTime = null;
