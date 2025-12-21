@@ -222,6 +222,7 @@
   /* All-projects tweaks */
   #t-all .date-cell { padding: 8px 8px !important; }
   #t-all .date-input-wrap { width: auto; display: inline-flex; min-width: 148px; }
+  #t-archive .date-input-wrap { width: auto; display: inline-flex; min-width: 136px; }
 
   /* Deadline Colors */
   .days-critical { color: var(--red); font-weight: 700; }
@@ -280,11 +281,11 @@
   .paid-select option, .tax-select option { background: var(--card); }
 
   /* Actions */
-  .client-wrap{display:flex;align-items:center;gap:8px; width: 100%; min-height: 44px;}
+  .client-wrap{display:flex;align-items:center;gap:8px; width: 100%; min-height: 48px;}
   .client-name, .project-name { display:block; line-height:1.45; white-space:pre-wrap; -webkit-line-clamp:unset; -webkit-box-orient:vertical; overflow:visible; text-overflow:unset; word-break: break-word; padding: 4px 0; }
   .client-name { max-width: 210px; font-weight:700; color:var(--text); }
-  .project-name-wrap { display: flex; align-items: center; gap: 8px; overflow: visible; min-height: 44px; }
-  .project-name { max-width: 320px; font-weight:600; padding: 5px 0 6px; min-height: 48px; display: block; }
+  .project-name-wrap { display: flex; align-items: center; gap: 8px; overflow: visible; min-height: 48px; }
+  .project-name { max-width: 320px; font-weight:600; padding: 7px 0 8px; min-height: 52px; display: block; }
 
   .sort-icon { color: var(--muted); font-size: 11px; margin-left: 6px; opacity: 0.5; }
   th.sorted .sort-icon { opacity: 1; color: var(--text); }
@@ -1390,7 +1391,7 @@
   .trash-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0 6px; }
   .trash-clean-btn { padding: 12px 16px; border-radius: 10px; background: var(--button-bg); border: 1px solid var(--border); color: var(--text); font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
   .trash-clean-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .trash-date-cell { display: flex; flex-direction: column; gap: 4px; }
+  .trash-date-cell { display: flex; flex-direction: column; gap: 4px; min-height: 48px; justify-content: center; }
   .trash-deleted-label { font-weight: 800; color: var(--text); font-size: 13px; }
   #view-trash .table-wrap { padding: 5px 14px 5px 18px; }
   #t-trash { border-collapse: collapse; border-spacing: 0; min-width: 1200px; width: 100%; }
@@ -2125,9 +2126,9 @@ body:not([data-theme="dark"]) .header-new-badge {
           <thead>
             <tr>
               <th class="select-col">№</th>
-              <th width="15%" data-type="archive" data-key="c" onclick="sortData('archive', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
-              <th width="25%" data-type="archive" data-key="n" onclick="sortData('archive', 'n', 'string')">Проект <span class="sort-icon"></span></th>
-              <th width="15%" data-type="archive" data-key="date" onclick="sortData('archive', 'date', 'date')">Дата сдачи <span class="sort-icon"></span></th>
+              <th width="16%" data-type="archive" data-key="c" onclick="sortData('archive', 'c', 'string')">Клиент <span class="sort-icon"></span></th>
+              <th width="28%" data-type="archive" data-key="n" onclick="sortData('archive', 'n', 'string')">Проект <span class="sort-icon"></span></th>
+              <th width="12%" data-type="archive" data-key="date" onclick="sortData('archive', 'date', 'date')">Дата сдачи <span class="sort-icon"></span></th>
               <th width="10%" data-type="archive" data-key="p" onclick="sortData('archive', 'p', 'number')">Сумма <span class="sort-icon"></span></th>
               <th width="10%" data-type="archive" data-key="contractor" onclick="sortData('archive', 'contractor', 'number')">Расходы <span class="sort-icon"></span></th>
               <th width="10%">Чистыми</th>
@@ -2181,7 +2182,7 @@ body:not([data-theme="dark"]) .header-new-badge {
         </table>
       </div>
       <div class="trash-toolbar">
-          <div style="color: var(--muted); font-size: 13px;">Объекты хранятся здесь 7 дней, затем удаляются навсегда.</div>
+          <div style="color: var(--muted); font-size: 13px;">Объекты хранятся здесь 30 дней, затем удаляются навсегда.</div>
           <button class="trash-clean-btn" onclick="clearTrashForever()">
               <svg class="btn-icon"><use href="#icon-trash"/></svg>
               <span class="btn-label">Очистить корзину</span>
@@ -3059,7 +3060,7 @@ body:not([data-theme="dark"]) .header-new-badge {
     <div class="modal-content">
         <span class="close-modal-x" onclick="document.getElementById('deleteConfirmModal').style.display='none'">×</span>
         <h3 style="color:var(--text); margin-bottom:10px;" id="del-modal-title">Удалить в корзину?</h3>
-        <p style="color:var(--muted); margin-bottom: 20px; font-size:14px;" id="del-modal-desc">Объект будет храниться 7 дней.</p>
+        <p style="color:var(--muted); margin-bottom: 20px; font-size:14px;" id="del-modal-desc">Объект будет храниться 30 дней.</p>
         <div style="display:flex;gap:15px;">
             <button onclick="document.getElementById('deleteConfirmModal').style.display='none'" style="flex:1">Отмена</button>
             <button class="confirm-del-btn" style="background:var(--red); border-color:var(--red);" id="finalDeleteBtn" style="flex:1">Удалить</button>
@@ -3128,7 +3129,7 @@ const TAB_DESCRIPTIONS = {
     paused: "Замороженные проекты.",
     archive: "Успешно завершенные заказы.",
     all: "Все статусы и архив в одном месте.",
-    trash: "Удаленные объекты. Хранятся 7 дней."
+    trash: "Удаленные объекты. Хранятся 30 дней."
 };
 
 const STATUS_META = {
@@ -3730,6 +3731,7 @@ function applyTableVisibility() {
         if (viewEl) viewEl.style.display = enabled ? (currentTab === key ? 'block' : 'none') : 'none';
     });
     updateBulkMoveOptions();
+    updateStatusSelectOptions();
     const available = getEnabledTabs();
     if (!available.includes(currentTab) && available.length) {
         const fallback = available.includes('active') ? 'active' : available[0];
@@ -3749,6 +3751,22 @@ function updateBulkMoveOptions() {
     });
     if (select.selectedOptions.length && select.selectedOptions[0].hidden) {
         select.value = '';
+    }
+}
+
+function updateStatusSelectOptions() {
+    const visibility = UI_PREFS.tableVisibility || {};
+    const select = document.getElementById('add-proj-type');
+    if (select) {
+        Array.from(select.options).forEach(opt => {
+            if (['waiting','paused','requests'].includes(opt.value)) {
+                opt.hidden = visibility[opt.value] === false;
+            }
+        });
+        if (select.selectedOptions.length && select.selectedOptions[0].hidden) {
+            select.value = 'active';
+            handleStatusChange('active');
+        }
     }
 }
 
@@ -4229,18 +4247,21 @@ function hideToast() {
 }
 
 function undoPermanentDelete() {
-    if (!lastPermanentDeletion || !Array.isArray(lastPermanentDeletion.items)) return;
+    if (!lastPermanentDeletion) return;
 
-    const { type, items } = lastPermanentDeletion;
-    const targetList = DATA[type];
-    if (!Array.isArray(targetList)) return;
+    const entries = Array.isArray(lastPermanentDeletion) ? lastPermanentDeletion : [lastPermanentDeletion];
 
-    items
-        .slice()
-        .sort((a, b) => a.index - b.index)
-        .forEach(({ item, index }) => {
-            targetList.splice(index, 0, item);
-        });
+    entries.forEach(({ type, items }) => {
+        const targetList = DATA[type];
+        if (!Array.isArray(targetList) || !Array.isArray(items)) return;
+
+        items
+            .slice()
+            .sort((a, b) => a.index - b.index)
+            .forEach(({ item, index }) => {
+                targetList.splice(index, 0, item);
+            });
+    });
 
     lastPermanentDeletion = null;
     save();
@@ -4249,20 +4270,23 @@ function undoPermanentDelete() {
 }
 
 function undoMoveToTrash() {
-    if (!lastTrashMove || !Array.isArray(lastTrashMove.items)) return;
+    if (!lastTrashMove) return;
 
-    const { type, items } = lastTrashMove;
-    if (!Array.isArray(DATA[type])) return;
+    const entries = Array.isArray(lastTrashMove) ? lastTrashMove : [lastTrashMove];
 
-    items
-        .slice()
-        .sort((a, b) => a.index - b.index)
-        .forEach(({ item, index }) => {
-            const trashIndex = DATA.trash.indexOf(item);
-            if (trashIndex > -1) DATA.trash.splice(trashIndex, 1);
-            delete item.deletedAt;
-            DATA[type].splice(Math.max(0, Math.min(index, DATA[type].length)), 0, item);
-        });
+    entries.forEach(({ type, items }) => {
+        if (!Array.isArray(DATA[type]) || !Array.isArray(items)) return;
+
+        items
+            .slice()
+            .sort((a, b) => a.index - b.index)
+            .forEach(({ item, index }) => {
+                const trashIndex = DATA.trash.indexOf(item);
+                if (trashIndex > -1) DATA.trash.splice(trashIndex, 1);
+                delete item.deletedAt;
+                DATA[type].splice(Math.max(0, Math.min(index, DATA[type].length)), 0, item);
+            });
+    });
 
     lastTrashMove = null;
     save();
@@ -4272,6 +4296,7 @@ function undoMoveToTrash() {
 
 // --- BULK ACTIONS ---
 let selectedRows = {}; // {active: Set(), waiting: Set(), ...}
+const TRASH_RETENTION_DAYS = 30;
 
 function renderLinkControls(item, idx, type) {
     const hasLink = !!item.link;
@@ -4302,8 +4327,8 @@ function getClientNameClass(item) {
 
 function toggleSelect(type, idx, checkbox) {
     if (!selectedRows[type]) selectedRows[type] = new Set();
-    const indexStr = idx.toString();
     const row = checkbox.closest('tr');
+    const indexStr = type === 'all' ? (checkbox.dataset.key || idx.toString()) : idx.toString();
 
     if (checkbox.checked) {
         selectedRows[type].add(indexStr);
@@ -4313,8 +4338,9 @@ function toggleSelect(type, idx, checkbox) {
         if (row) row.classList.remove('row-selected');
     }
     updateBulkToolbar(type);
-    
-    const allChecked = selectedRows[type].size === DATA[type].length && DATA[type].length > 0;
+
+    const totalRows = type === 'all' ? document.querySelectorAll('#t-all tbody tr').length : DATA[type].length;
+    const allChecked = selectedRows[type].size === totalRows && totalRows > 0;
     const selectAllCheckbox = document.getElementById(`selectAll${type.charAt(0).toUpperCase() + type.slice(1)}`);
     if(selectAllCheckbox) selectAllCheckbox.checked = allChecked;
 }
@@ -4325,14 +4351,14 @@ function toggleSelectAll(type) {
 
     const isChecked = selectAllCheckbox.checked;
     const checkboxes = document.querySelectorAll(`#t-${type} tbody .bulk-checkbox`);
-    
+
     if (!selectedRows[type]) selectedRows[type] = new Set();
     
     checkboxes.forEach((cb, i) => {
         cb.checked = isChecked;
         const row = cb.closest('tr');
-        if (row && row.dataset.index) {
-            const indexStr = row.dataset.index;
+        const indexStr = type === 'all' ? (cb.dataset.key || row?.dataset.index) : row?.dataset.index;
+        if (row && indexStr) {
             row.classList.toggle('row-selected', isChecked);
             if (isChecked) {
                 selectedRows[type].add(indexStr);
@@ -4370,7 +4396,7 @@ function toggleFooterSelection(type) {
         });
     } else {
         rows.forEach(row => {
-            const indexStr = row.dataset.index;
+            const indexStr = type === 'all' ? row.dataset.index : row.dataset.index;
             row.classList.toggle('row-selected', shouldSelectAll);
             if (indexStr) {
                 if (shouldSelectAll) {
@@ -4425,6 +4451,14 @@ function clearSelection(type = currentTab) {
     updateBulkToolbar(type);
 }
 
+function getAllSelectionEntries() {
+    if (!selectedRows.all || selectedRows.all.size === 0) return [];
+    return Array.from(selectedRows.all).map(key => {
+        const [srcType, idxStr] = key.split(':');
+        return { type: srcType, idx: Number(idxStr) };
+    }).filter(entry => DATA[entry.type] && Number.isInteger(entry.idx) && entry.idx >= 0 && entry.idx < DATA[entry.type].length);
+}
+
 function formatItemsWord(count) {
     const mod10 = count % 10;
     const mod100 = count % 100;
@@ -4440,7 +4474,7 @@ function askBulkDelete(type = currentTab) {
     const isTrash = type === 'trash';
     const word = formatItemsWord(count);
     document.getElementById('del-modal-title').innerText = isTrash ? `Удалить ${count} ${word} навсегда?` : `Удалить ${count} ${word} в корзину?`;
-    document.getElementById('del-modal-desc').innerText = isTrash ? "Элементы будут удалены безвозвратно." : "Объекты будут храниться 7 дней.";
+    document.getElementById('del-modal-desc').innerText = isTrash ? "Элементы будут удалены безвозвратно." : `Объекты будут храниться ${TRASH_RETENTION_DAYS} дней.`;
     document.getElementById('deleteConfirmModal').style.display = 'flex';
     document.getElementById('finalDeleteBtn').style.backgroundColor = 'var(--red)';
     document.getElementById('finalDeleteBtn').style.borderColor = 'var(--red)';
@@ -4451,27 +4485,41 @@ function askBulkDelete(type = currentTab) {
 function bulkDelete(type = currentTab, deleteForever = false) {
     if (!selectedRows[type] || selectedRows[type].size === 0) return;
 
-    const indicesToDelete = Array.from(selectedRows[type])
-        .map(Number)
-        .sort((a, b) => b - a);
-
-    const deletedItems = [];
-
-    indicesToDelete.forEach(idx => {
-        const itemIndex = DATA[type].findIndex((_, i) => i === idx);
-        if (itemIndex > -1) {
-            const item = DATA[type].splice(itemIndex, 1)[0];
-            deletedItems.push({ item, index: itemIndex });
-            if (deleteForever) {
-                return;
+    const processDeletion = (sourceType, indices) => {
+        const deletedItems = [];
+        indices.sort((a, b) => b - a).forEach(idx => {
+            const itemIndex = DATA[sourceType].findIndex((_, i) => i === idx);
+            if (itemIndex > -1) {
+                const item = DATA[sourceType].splice(itemIndex, 1)[0];
+                deletedItems.push({ item, index: itemIndex });
+                if (!deleteForever) {
+                    item.deletedAt = Date.now();
+                    DATA.trash.unshift(item);
+                }
             }
-            item.deletedAt = Date.now();
-            DATA.trash.unshift(item);
-        }
-    });
+        });
+        return deletedItems;
+    };
 
-    lastPermanentDeletion = deleteForever ? { type, items: deletedItems } : null;
-    lastTrashMove = deleteForever ? null : { type, items: deletedItems };
+    const deletionsLog = [];
+    if (type === 'all') {
+        const grouped = {};
+        getAllSelectionEntries().forEach(({ type: src, idx }) => {
+            if (!grouped[src]) grouped[src] = [];
+            grouped[src].push(idx);
+        });
+        Object.entries(grouped).forEach(([src, list]) => {
+            const removed = processDeletion(src, list);
+            if (removed.length) deletionsLog.push({ type: src, items: removed });
+        });
+    } else {
+        const indicesToDelete = Array.from(selectedRows[type]).map(Number);
+        const removed = processDeletion(type, indicesToDelete);
+        if (removed.length) deletionsLog.push({ type, items: removed });
+    }
+
+    lastPermanentDeletion = deleteForever ? deletionsLog : null;
+    lastTrashMove = deleteForever ? null : deletionsLog;
 
     selectedRows[type].clear();
     document.getElementById('deleteConfirmModal').style.display = 'none';
@@ -4479,28 +4527,40 @@ function bulkDelete(type = currentTab, deleteForever = false) {
     if (deleteForever) {
         showToast('Удалено навсегда', 'Отмена', undoPermanentDelete);
     } else {
-        showToast(`Перемещено в корзину: ${indicesToDelete.length}`, 'Отменить', undoMoveToTrash);
+        const movedCount = deletionsLog.reduce((acc, entry) => acc + entry.items.length, 0);
+        showToast(`Перемещено в корзину: ${movedCount}`, 'Отменить', undoMoveToTrash);
     }
 }
 
 function bulkDuplicate(type = currentTab) {
     if (!selectedRows[type] || selectedRows[type].size === 0) return;
-    
-    const indicesToDuplicate = Array.from(selectedRows[type])
-        .map(Number)
-        .sort((a, b) => a - b);
-    
-    const newItems = [];
-    
-    indicesToDuplicate.forEach(idx => {
-        const item = JSON.parse(JSON.stringify(DATA[type].find((_, i) => i === idx)));
-        if(item) {
-             item.n = item.n + " (Копия)";
-             newItems.push(item);
+
+    const addCopies = (sourceType, indices) => {
+        const newItems = [];
+        indices.sort((a, b) => a - b).forEach(idx => {
+            const item = JSON.parse(JSON.stringify(DATA[sourceType].find((_, i) => i === idx)));
+            if(item) {
+                 item.n = item.n + " (Копия)";
+                 newItems.push(item);
+            }
+        });
+        if (newItems.length) {
+            DATA[sourceType].unshift(...newItems);
         }
-    });
-    
-    DATA[type].unshift(...newItems);
+    };
+
+    if (type === 'all') {
+        const grouped = {};
+        getAllSelectionEntries().forEach(({ type: src, idx }) => {
+            if (!grouped[src]) grouped[src] = [];
+            grouped[src].push(idx);
+        });
+        Object.entries(grouped).forEach(([src, list]) => addCopies(src, list));
+    } else {
+        const indicesToDuplicate = Array.from(selectedRows[type]).map(Number);
+        addCopies(type, indicesToDuplicate);
+    }
+
     selectedRows[type].clear();
     save(); upd();
 }
@@ -4541,36 +4601,53 @@ function askBulkMove(targetType) {
 function bulkMove(from, to) {
     if (!selectedRows[from] || selectedRows[from].size === 0) return;
 
-    const indicesToMove = Array.from(selectedRows[from])
-        .map(Number)
-        .sort((a, b) => b - a);
-
-    indicesToMove.forEach(idx => {
-        const itemIndex = DATA[from].findIndex((_, i) => i === idx);
-        if (itemIndex > -1) {
-            const item = DATA[from].splice(itemIndex, 1)[0];
-            if (to === 'requests') {
-                DATA.requests.unshift({
-                    name: item.c || item.n || 'Новая заявка',
-                    source: item.n ? `Проект: ${item.n}` : 'Проект',
-                    note: item.n || '—',
-                    link: normalizeLinkValue(item.link || ''),
-                    budget: toNumeric(item.p),
-                    created: new Date().toISOString()
-                });
-                return;
-            }
-            if(to === 'active') { item.start = item.start || today; item.dl = item.dl || today; item.paid = item.paid || 50; delete item.date; }
-            if(to === 'archive') { item.date = today; item.paid = 100; delete item.start; delete item.dl; }
-            if(to === 'potential' || to === 'waiting' || to === 'paused') { delete item.date; delete item.start; delete item.dl; item.paid = 0; }
-            DATA[to].unshift(item);
+    const moveItemToTarget = (item) => {
+        if (to === 'requests') {
+            DATA.requests.unshift({
+                name: item.c || item.n || 'Новая заявка',
+                source: item.n ? `Проект: ${item.n}` : 'Проект',
+                note: item.n || '—',
+                link: normalizeLinkValue(item.link || ''),
+                budget: toNumeric(item.p),
+                created: new Date().toISOString()
+            });
+            return null;
         }
-    });
-    
+        if(to === 'active') { item.start = item.start || today; item.dl = item.dl || today; item.paid = item.paid || 50; delete item.date; }
+        if(to === 'archive') { item.date = today; item.paid = 100; delete item.start; delete item.dl; }
+        if(to === 'potential' || to === 'waiting' || to === 'paused') { delete item.date; delete item.start; delete item.dl; item.paid = 0; }
+        return item;
+    };
+
+    const processMoves = (sourceType, indices) => {
+        indices.sort((a, b) => b - a).forEach(idx => {
+            const itemIndex = DATA[sourceType].findIndex((_, i) => i === idx);
+            if (itemIndex > -1) {
+                const item = DATA[sourceType].splice(itemIndex, 1)[0];
+                const prepared = moveItemToTarget(item);
+                if (prepared) {
+                    DATA[to].unshift(prepared);
+                }
+            }
+        });
+    };
+
+    if (from === 'all') {
+        const grouped = {};
+        getAllSelectionEntries().forEach(({ type: src, idx }) => {
+            if (!grouped[src]) grouped[src] = [];
+            grouped[src].push(idx);
+        });
+        Object.entries(grouped).forEach(([src, list]) => processMoves(src, list));
+    } else {
+        const indicesToMove = Array.from(selectedRows[from]).map(Number);
+        processMoves(from, indicesToMove);
+    }
+
     selectedRows[from].clear();
     document.getElementById('deleteConfirmModal').style.display = 'none';
     document.getElementById('bulkMoveSelect').value = '';
-    save(); 
+    save();
     if(from === to) {
         upd();
     } else {
@@ -5218,8 +5295,12 @@ function renderArchive(){
 
         const isSelected = selectedRows.archive?.has(realIdx.toString());
         if (isSelected) tr.classList.add('row-selected');
-        
+
         const linkIcon = renderLinkControls(item, realIdx, 'archive');
+
+        const rem = getTimeRemaining(item.date);
+        const overdueIcon = rem && rem.days < 0 ? `<span class="deadline-warning-icon" title="${rem.overdueTooltip}">●</span>` : '';
+        const dateCls = rem?.cls || '';
 
         const contractorMode = item.contractorMode || 'none';
         const contractorSymbol = contractorMode === 'percent' ? '%' : contractorMode === 'none' ? '' : '₽';
@@ -5243,7 +5324,7 @@ function renderArchive(){
             <td class="project-name-wrap">
                 <span class="project-name" contenteditable onblur="updVal('archive',${realIdx},'n',this.innerText)">${item.n}</span>
             </td>
-            <td class="date-cell"><div class="date-input-wrap" onclick="openDate('archive',${realIdx},'date')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.date)}</span></div></td>
+            <td class="date-cell"><div class="date-input-wrap ${dateCls}" onclick="openDate('archive',${realIdx},'date')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.date)}</span>${overdueIcon}</div></td>
             <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('archive',${realIdx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td>
                 <div class="price-cell-wrap expense-cell">
@@ -5317,12 +5398,12 @@ function renderAll(){
         const tr = document.createElement('tr');
         const deadlineValue = wrap.__type === 'archive' ? item.date : (item.dl || item.date || item.start);
         const dateField = wrap.__type === 'archive' ? 'date' : 'dl';
-        const rem = wrap.__type === 'archive' ? { cls: '', txt: '' } : getTimeRemaining(deadlineValue);
+        const rem = getTimeRemaining(deadlineValue);
         const remText = (wrap.__type === 'archive' || (rem && rem.isInfinite) || (rem && rem.days < 0)) ? '' : ` (${rem.txt})`;
         const dateDisplay = wrap.__type === 'archive'
             ? (deadlineValue ? formatDateDisplay(deadlineValue) : '—')
             : formatDeadlineDisplay(deadlineValue);
-        const dateCls = wrap.__type === 'archive' ? '' : rem.cls;
+        const dateCls = rem?.cls || '';
         const linkIcon = renderLinkControls(item, wrap.idx, wrap.__type);
 
         const contractorMode = item.contractorMode || 'none';
@@ -5332,9 +5413,22 @@ function renderAll(){
         const contractorHelper = contractorMode === 'none' ? 'Расходы не учитываются' : `≈ ${formatCurrency(contractorAmount)}`;
 
         const overdueIcon = rem && rem.days < 0 ? `<span class="deadline-warning-icon" title="${rem.overdueTooltip}">●</span>` : '';
+        const selectionKey = `${wrap.__type}:${wrap.idx}`;
+        const isSelected = selectedRows.all?.has(selectionKey);
+        tr.dataset.index = selectionKey;
+        tr.dataset.type = wrap.__type;
+        tr.dataset.sourceIndex = wrap.idx;
+        if (isSelected) tr.classList.add('row-selected');
 
         tr.innerHTML = `
-            <td class="select-col"><div class="row-index">${i + 1}</div></td>
+            <td class="select-col">
+                <div class="row-index">${i + 1}</div>
+                <div class="row-controls">
+                    <svg class="dup-icon" onclick="duplicateRow('${wrap.__type}',${wrap.idx})" title="Дублировать"><use href="#icon-duplicate"/></svg>
+                    <input type="checkbox" class="bulk-checkbox" id="check-all-${i}" data-key="${selectionKey}" onchange="toggleSelect('all', '${selectionKey}', this)" ${isSelected ? 'checked' : ''}>
+                    <label for="check-all-${i}" style="display:none;"></label>
+                </div>
+            </td>
             <td><span class="status-pill ${status.cls}">${status.label}</span></td>
             <td><div class="client-wrap">
                 <span contenteditable onblur="updVal('${wrap.__type}',${wrap.idx},'c',this.innerText)" class="${getClientNameClass(item)}">${item.c || ''}</span>
@@ -5347,17 +5441,23 @@ function renderAll(){
                 <div class="price-cell-wrap expense-cell">
                     <input type="text" value="${contractorValue}" ${contractorMode === 'none' ? 'disabled' : ''} oninput="formatNumberInput(this)" onblur="updateContractorValue('${wrap.__type}',${wrap.idx},this.value)">
                     <span class="currency-symbol ${contractorSymbolClass}">${contractorSymbol || 'нет'}</span>
+                    <select class="expense-mode" onchange="updateContractorMode('${wrap.__type}',${wrap.idx},this.value)">
+                        <option value="none" ${contractorMode==='none'?'selected':''}>Нет</option>
+                        <option value="amount" ${contractorMode==='amount'?'selected':''}>₽</option>
+                        <option value="percent" ${contractorMode==='percent'?'selected':''}>%</option>
+                    </select>
                 </div>
                 <div class="expense-helper">${contractorHelper}</div>
             </td>
             <td style="text-align:right;">${item.taxPrc || 0}%</td>
-            <td style="text-align:right;"><div class="net-display-wrap">${formatCurrency(net)}</div></td>
+            <td style="text-align:right;"><div class="net-display-wrap">${formatCurrency(net)}<span class="net-prc-val">(${calcMarginPrc(item)}%)</span></div></td>
             <td class="actions-cell" style="text-align:right;">
                 <button class="link-btn" onclick="startProjectEdit('${wrap.__type}', ${wrap.idx})" title="Редактировать">
                     <svg class="btn-icon"><use href="#icon-pen"/></svg>
                 </button>
             </td>
         `;
+        attachRowSelection(tr, 'all', selectionKey, `check-all-${i}`);
         tbody.appendChild(tr);
     });
 
@@ -5389,8 +5489,8 @@ function renderAll(){
 function formatTrashExpire(item) {
     const fallback = { text: 'Будет удалено в течение часа', tone: 'danger' };
     if (!item.deletedAt) return fallback;
-    const sevenDays = 7 * 24 * 60 * 60 * 1000;
-    const expiresAt = new Date(item.deletedAt + sevenDays);
+    const retentionMs = TRASH_RETENTION_DAYS * 24 * 60 * 60 * 1000;
+    const expiresAt = new Date(item.deletedAt + retentionMs);
     const remainingMs = expiresAt - Date.now();
     if (remainingMs <= 0) return fallback;
     const days = Math.floor(remainingMs / (24 * 60 * 60 * 1000));
@@ -5717,6 +5817,8 @@ function openAddModal(type = null, idx = null){
     editContext = isEdit ? { type, idx } : null;
     const titleEl = document.querySelector('#addProjectModal h2');
     const saveBtn = document.querySelector('.add-modal-actions .save-stg');
+
+    updateStatusSelectOptions();
 
     if (titleEl) titleEl.textContent = isEdit ? 'Редактировать проект' : 'Новый проект';
     if (saveBtn) saveBtn.textContent = isEdit ? 'Сохранить изменения' : 'Создать новый проект';
