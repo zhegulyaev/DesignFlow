@@ -1925,6 +1925,81 @@ td.date-cell + td.date-cell {
   .rep-sub-val { font-size: 14px; font-weight: 700; color: var(--text); }
   .rep-sub-lbl { font-size: 10px; color: var(--muted); }
 
+  /* --- Стили для раздела "Все проекты" (Табличный вид) --- */
+  .all-projects-table {
+    display: grid;
+    grid-template-columns: 40px 1fr 120px 100px; /* Статус | Имя | Дата | Сумма */
+    gap: 10px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+
+  .all-projects-header {
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid var(--card-alt);
+    margin-bottom: 10px;
+  }
+
+  .apt-status { display: flex; justify-content: center; }
+  .apt-name { display: flex; flex-direction: column; overflow: hidden; }
+  .apt-name strong { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
+  .apt-name span { font-size: 11px; color: var(--muted); }
+  .apt-date { color: var(--muted); font-size: 12px; text-align: right; }
+  .apt-price { font-weight: 600; color: var(--accent); text-align: right; font-family: monospace; font-size: 13px; }
+
+  /* --- Новые стили для дат в Архиве --- */
+  .archive-date-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--bg);
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-top: 8px;
+    width: fit-content;
+  }
+
+  .archive-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: help;
+    position: relative;
+  }
+
+  /* Цвета статусов */
+  .status-ok { background-color: #2ea043; box-shadow: 0 0 5px rgba(46, 160, 67, 0.4); }
+  .status-late { background-color: #f85149; box-shadow: 0 0 5px rgba(248, 81, 73, 0.4); }
+
+  /* Простая подсказка при наведении */
+  .archive-status-dot:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    font-size: 11px;
+    pointer-events: none;
+    margin-bottom: 6px;
+    z-index: 10;
+    border: 1px solid var(--border);
+  }
+
 
 
 </style>
@@ -4950,6 +5025,20 @@ function cleanupTrash(){
 
 function formatCurrency(n) { return new Intl.NumberFormat('ru-RU').format(Math.round(n)) + ' ₽'; }
 
+function formatPrice(value) {
+    return formatCurrency(value || 0);
+}
+
+function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const parsed = new Date(dateStr);
+    if (Number.isNaN(parsed.getTime())) return dateStr;
+    const day = String(parsed.getDate()).padStart(2, '0');
+    const month = String(parsed.getMonth() + 1).padStart(2, '0');
+    const year = parsed.getFullYear();
+    return `${day}.${month}.${year}`;
+}
+
 function formatDateDisplay(str) {
     if (!str || str.startsWith('0000')) return '—';
     const hasTime = str.includes('T') && str.length > 10;
@@ -5000,6 +5089,157 @@ function formatDateWithTime(dateObj, timeStr) {
     const d = String(dateObj.getDate()).padStart(2, '0');
     const base = `${y}-${m}-${d}`;
     return timeStr ? `${base}T${timeStr}` : base;
+}
+
+// 1. Обновленная функция рендера карточки (улучшен Архив)
+const getProjectCard = (item, type, index) => {
+    // Логика подсчета дней (для прогресса или архива)
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const dlDate = item.dl ? new Date(item.dl) : null;
+    let daysLeftText = '';
+    let daysClass = '';
+
+    if (type !== 'archive' && dlDate) {
+        const diff = Math.ceil((dlDate - today) / (1000 * 60 * 60 * 24));
+        if (diff < 0) { daysLeftText = `Просрочено: ${Math.abs(diff)} дн.`; daysClass = 'text-red'; }
+        else if (diff === 0) { daysLeftText = 'Сдача сегодня'; daysClass = 'text-orange'; }
+        else { daysLeftText = `${diff} дн.`; daysClass = 'text-green'; }
+    }
+
+    // Логика специально для АРХИВА (Новая)
+    let archiveHtml = '';
+    if (type === 'archive') {
+        const doneDateStr = item.date || formatDate(today); // Дата завершения
+        const doneDateObj = new Date(doneDateStr.split('.').reverse().join('-')); // Преобразуем для сравнения
+        
+        let statusDot = '';
+        
+        if (dlDate) {
+            // Считаем разницу между Дедлайном и Сдачей
+            const diffTime = dlDate - doneDateObj;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+            
+            // Если diffDays >= 0 -> Сдали вовремя или заранее. Если < 0 -> Просрочили
+            if (diffDays >= 0) {
+                const tip = diffDays === 0 ? "Сдано ровно в срок" : `В запасе было: ${diffDays} дн.`;
+                statusDot = `<span class="archive-status-dot status-ok" data-tooltip="${tip}"></span>`;
+            } else {
+                const overdue = Math.abs(diffDays);
+                const tip = `Просрочка: ${overdue} дн.`;
+                statusDot = `<span class="archive-status-dot status-late" data-tooltip="${tip}"></span>`;
+            }
+        }
+        
+        archiveHtml = `
+            <div class="archive-date-wrapper">
+                <span>Сдано: ${doneDateStr}</span>
+                ${statusDot}
+            </div>
+        `;
+    }
+
+    // Стандартные блоки (прогресс, даты для активных)
+    const showProgress = (type === 'active' || type === 'active_pinned');
+    const progressHtml = showProgress ? 
+        `<div class="progress-bar"><div class="fill" style="width:${item.progress||0}%"></div></div>` : '';
+    
+    const dateHtml = (type !== 'archive' && item.dl) ? 
+        `<div class="card-meta">
+           <span><i class="fa-regular fa-clock"></i> ${formatDate(item.dl)}</span>
+           <span class="${daysClass}" style="font-weight:600">${daysLeftText}</span>
+         </div>` : '';
+
+    // Блок кнопок (оставляем как есть, чуть компактнее код)
+    let btns = '';
+    if(type === 'waiting') btns = `<button onclick="moveItem('waiting','active',${index})" title="В работу">▶</button>`;
+    if(type.startsWith('active')) btns = `<button onclick="completeProject('${type}',${index})" title="Завершить">✔</button>`;
+    if(type === 'paused') btns = `<button onclick="moveItem('paused','active',${index})" title="Возобновить">▶</button>`;
+    if(type === 'potential') btns = `<button onclick="moveItem('potential','active',${index})" title="Принять">✚</button>`;
+    if(type === 'archive') btns = `<button onclick="moveItem('archive','active',${index})" title="Вернуть">↺</button>`;
+
+    // Иконка приоритета
+    const prioIcon = item.prio ? `<span class="prio-star">★</span>` : '';
+    const pinIcon = (item.pinned) ? `<span style="color:var(--accent);margin-right:5px">📌</span>` : '';
+
+    return `
+    <div class="card" draggable="true" 
+         ondragstart="drag(event, '${type}', ${index})" 
+         ondblclick="editItem('${type}', ${index})">
+      <div class="card-header">
+        <span class="card-title">${pinIcon}${prioIcon}${item.name}</span>
+        <div class="card-actions">
+            ${btns}
+            <button class="danger" onclick="delItem('${type}',${index})" title="Удалить">×</button>
+        </div>
+      </div>
+      <div class="card-client">${item.client || ''}</div>
+      <div class="card-price">${formatPrice(item.price)}</div>
+      ${progressHtml}
+      ${dateHtml}
+      ${archiveHtml} </div>
+    `;
+};
+
+// 2. Обновленная функция "Все проекты" (Редизайн с Grid)
+function renderAllProjectsModal() {
+  const modal = document.getElementById('allProjectsModal');
+  const list = document.getElementById('allProjectsList');
+  if(!modal || !list) return;
+
+  const all = [];
+  // Собираем все проекты в один массив
+  ['active','active_pinned','waiting','paused','potential','archive'].forEach(k => {
+    const src = (k === 'active_pinned') ? DATA.active.filter(x=>x.pinned) : 
+                (k === 'active') ? DATA.active.filter(x=>!x.pinned) : DATA[k];
+    if(src) src.forEach(i => all.push({...i, _status: k}));
+  });
+
+  // Сортировка по дате (свежие сверху)
+  all.sort((a,b) => new Date(b.date||b.dl||0) - new Date(a.date||a.dl||0));
+
+  let html = `
+    <div class="all-projects-table all-projects-header">
+        <div class="apt-status">СТАТУС</div>
+        <div>ПРОЕКТ / КЛИЕНТ</div>
+        <div style="text-align:right">ДАТА</div>
+        <div style="text-align:right">СУММА</div>
+    </div>
+  `;
+
+  let total = 0;
+
+  all.forEach(p => {
+    total += (parseInt(p.price) || 0);
+    
+    // Иконка статуса
+    let stIcon = '•';
+    let stColor = 'var(--muted)';
+    if(p._status.includes('active')) { stIcon = '▶'; stColor = '#3fb950'; }
+    if(p._status === 'archive') { stIcon = '✔'; stColor = 'var(--accent)'; }
+    if(p._status === 'waiting') { stIcon = 'clock'; stColor = '#e3b341'; }
+    if(p._status === 'paused') { stIcon = '||'; stColor = '#f85149'; }
+
+    // Дата: для архива - завершение, для остальных - дедлайн
+    let dLabel = p.dl ? formatDate(p.dl) : '-';
+    if(p._status === 'archive' && p.date) dLabel = p.date;
+
+    html += `
+    <div class="all-projects-table">
+        <div class="apt-status" style="color:${stColor}; font-size:16px;">${stIcon}</div>
+        <div class="apt-name">
+            <strong title="${p.name}">${p.name}</strong>
+            <span>${p.client || 'Без клиента'}</span>
+        </div>
+        <div class="apt-date">${dLabel}</div>
+        <div class="apt-price">${formatPrice(p.price)}</div>
+    </div>
+    `;
+  });
+
+  document.getElementById('allProjectsTotal').innerText = formatPrice(total);
+  list.innerHTML = html;
+  modal.style.display = 'flex';
 }
 
 function calcContractorAmount(item) {
