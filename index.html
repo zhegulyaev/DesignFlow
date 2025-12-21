@@ -232,6 +232,7 @@
     margin-left: 6px;
     white-space: nowrap;
   }
+  .deadline-success-badge .time-text { margin-left: 6px; }
 
   /* All-projects tweaks */
   #t-all .date-cell { padding: 8px 8px !important; }
@@ -300,8 +301,8 @@
   .client-wrap{display:flex;align-items:center;gap:8px; width: 100%; min-height: 48px;}
   .client-name, .project-name { display:block; line-height:1.45; white-space:pre-wrap; -webkit-line-clamp:unset; -webkit-box-orient:vertical; overflow:visible; text-overflow:unset; word-break: break-word; padding: 4px 0; }
   .client-name { max-width: 210px; font-weight:700; color:var(--text); }
-  .project-name-wrap { display: flex; align-items: center; gap: 8px; overflow: visible; min-height: 48px; }
-  .project-name { max-width: 320px; font-weight:600; padding: 7px 0 8px; min-height: 52px; display: block; }
+  .project-name-wrap { display: flex; align-items: center; gap: 8px; overflow: visible; min-height: 52px; }
+  .project-name { max-width: 320px; font-weight:600; padding: 10px 0; min-height: 56px; display: block; }
 
   .sort-icon { color: var(--muted); font-size: 11px; margin-left: 6px; opacity: 0.5; }
   th.sorted .sort-icon { opacity: 1; color: var(--text); }
@@ -4878,6 +4879,7 @@ function init(){
         } catch(e) { console.error("Data load error", e); }
     }
 
+    hydrateArchiveCompletionMeta();
     loadUiPrefs();
     initTheme();
     loadNameTemplates();
@@ -6907,11 +6909,24 @@ function pluralize(num, forms){
       return {txt: text, cls:'days-normal', days: dayDiff};
   }
 
+  function hydrateArchiveCompletionMeta() {
+      if (!Array.isArray(DATA.archive)) return;
+      DATA.archive.forEach((item = {}) => {
+          if (!item.deadlineSnapshot) {
+              item.deadlineSnapshot = item.dl || item.date || null;
+          }
+          if (item.completedOnTime === undefined) {
+              const status = analyzeCompletionStatus(item);
+              if (status.onTime !== null) item.completedOnTime = status.onTime;
+          }
+      });
+  }
+
   function analyzeCompletionStatus(item) {
       if (!item) return { completionDate: null };
 
       const completionDate = normalizeDateTimeValue(item.date, { endOfDayIfDateOnly: true });
-      const deadlineRaw = item.deadlineSnapshot || item.dl;
+      const deadlineRaw = item.deadlineSnapshot || item.dl || item.date;
       const deadlineDate = normalizeDateTimeValue(deadlineRaw, { endOfDayIfDateOnly: true });
 
       let onTime = null;
