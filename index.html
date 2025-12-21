@@ -218,6 +218,20 @@
   .date-icon { display: inline-flex; width: 14px; height: 14px; color: var(--muted); opacity: 0.85; }
   .time-text { color: var(--muted); font-weight: 700; font-size: 12px; }
   .deadline-warning-icon { color: var(--red); font-size: 12px; margin-left: 6px; cursor: help; opacity: 0.9; }
+  .deadline-success-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--green);
+    background: rgba(46,160,67,0.12);
+    border: 1px solid rgba(46,160,67,0.35);
+    margin-left: 6px;
+    white-space: nowrap;
+  }
 
   /* All-projects tweaks */
   #t-all .date-cell { padding: 8px 8px !important; }
@@ -5475,9 +5489,15 @@ function renderArchive(){
 
         const linkIcon = renderLinkControls(item, realIdx, 'archive');
 
-        const rem = getTimeRemaining(item.date);
-        const overdueIcon = rem && rem.days < 0 ? `<span class="deadline-warning-icon" title="${rem.overdueTooltip}">●</span>` : '';
-        const dateCls = rem?.cls || '';
+        const completionStatus = analyzeCompletionStatus(item);
+        const completionText = formatDateDisplay(item.date);
+        const completionBadge = completionStatus.onTime
+            ? `<span class="deadline-success-badge" title="Сдано в срок">${completionText}</span>`
+            : `<span class="date-text-display">${completionText}</span>`;
+        const overdueIcon = completionStatus.delayDays > 0
+            ? `<span class="deadline-warning-icon" title="Просрочено на ${completionStatus.delayDays} ${pluralize(completionStatus.delayDays, ['день','дня','дней'])}">●</span>`
+            : '';
+        const dateCls = completionStatus.onTime ? 'days-normal' : '';
 
         const contractorMode = item.contractorMode || 'none';
         const contractorSymbol = contractorMode === 'percent' ? '%' : contractorMode === 'none' ? '' : '₽';
@@ -5501,7 +5521,7 @@ function renderArchive(){
             <td class="project-name-wrap">
                 <span class="project-name" contenteditable onblur="updVal('archive',${realIdx},'n',this.innerText)">${item.n}</span>
             </td>
-            <td class="date-cell"><div class="date-input-wrap ${dateCls}" onclick="openDate('archive',${realIdx},'date')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${formatDateDisplay(item.date)}</span>${overdueIcon}</div></td>
+            <td class="date-cell"><div class="date-input-wrap ${dateCls}" onclick="openDate('archive',${realIdx},'date')"><svg class="date-icon"><use href="#icon-calendar"/></svg>${completionBadge}${overdueIcon}</div></td>
             <td><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(item.p || 0)}" oninput="formatNumberInput(this)" onblur="updVal('archive',${realIdx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td>
                 <div class="price-cell-wrap expense-cell">
@@ -5581,7 +5601,14 @@ function renderAll(){
         const dateDisplay = isArchiveRow
             ? (deadlineValue ? formatDateDisplay(deadlineValue) : '—')
             : formatDeadlineDisplay(deadlineValue);
-        const dateCls = rem?.cls || '';
+        const completionStatus = isArchiveRow ? analyzeCompletionStatus(item) : null;
+        const dateCls = isArchiveRow ? (completionStatus?.onTime ? 'days-normal' : '') : (rem?.cls || '');
+        let dateBadge = `<span class="date-text-display">${dateDisplay}${remText}</span>`;
+        if (isArchiveRow && deadlineValue) {
+            dateBadge = completionStatus?.onTime
+                ? `<span class="deadline-success-badge" title="Сдано в срок">${dateDisplay}</span>`
+                : `<span class="date-text-display">${dateDisplay}</span>`;
+        }
         const linkIcon = renderLinkControls(item, wrap.idx, wrap.__type);
 
         const contractorMode = item.contractorMode || 'none';
@@ -5590,7 +5617,9 @@ function renderAll(){
         const contractorValue = contractorMode === 'none' ? '' : formatPlainNumber(item.contractor ?? 0);
         const contractorHelper = contractorMode === 'none' ? 'Расходы не учитываются' : `≈ ${formatCurrency(contractorAmount)}`;
 
-        const overdueIcon = (!rem || isArchiveRow || !rem.overdueTooltip) ? '' : `<span class="deadline-warning-icon" title="${rem.overdueTooltip}">●</span>`;
+        const overdueIcon = isArchiveRow
+            ? (completionStatus?.delayDays ? `<span class="deadline-warning-icon" title="Просрочено на ${completionStatus.delayDays} ${pluralize(completionStatus.delayDays, ['день','дня','дней'])}">●</span>` : '')
+            : (!rem || !rem.overdueTooltip) ? '' : `<span class="deadline-warning-icon" title="${rem.overdueTooltip}">●</span>`;
         const selectionKey = `${wrap.__type}:${wrap.idx}`;
         const isSelected = selectedRows.all?.has(selectionKey);
         tr.dataset.index = selectionKey;
@@ -5613,7 +5642,7 @@ function renderAll(){
                 ${linkIcon}
             </div></td>
             <td class="project-name-wrap"><span class="project-name" contenteditable onblur="updVal('${wrap.__type}',${wrap.idx},'n',this.innerText)">${item.n || ''}</span></td>
-            <td class="date-cell"><div class="date-input-wrap ${dateCls}" onclick="openDate('${wrap.__type}',${wrap.idx},'${dateField}')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${dateDisplay}${remText}</span>${overdueIcon}</div></td>
+            <td class="date-cell"><div class="date-input-wrap ${dateCls}" onclick="openDate('${wrap.__type}',${wrap.idx},'${dateField}')"><svg class="date-icon"><use href="#icon-calendar"/></svg>${dateBadge}${overdueIcon}</div></td>
             <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(gross)}" oninput="formatNumberInput(this)" onblur="updVal('${wrap.__type}',${wrap.idx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td style="text-align:right;">
                 <div class="price-cell-wrap expense-cell">
@@ -5899,6 +5928,14 @@ function confirmCompletion() {
     if (!item) { closeCompleteModal(); return; }
 
     const completedAt = getCompletionDateTime();
+    const deadlineSnapshot = item.dl || item.date || null;
+    const normalizedCompletion = normalizeDateTimeValue(completedAt, { endOfDayIfDateOnly: true });
+    const normalizedDeadline = normalizeDateTimeValue(deadlineSnapshot, { endOfDayIfDateOnly: true });
+    const completedOnTime = (normalizedCompletion && normalizedDeadline)
+        ? normalizedCompletion.getTime() <= normalizedDeadline.getTime()
+        : null;
+    item.deadlineSnapshot = deadlineSnapshot;
+    item.completedOnTime = completedOnTime;
     DATA[from].splice(idx, 1);
     item.date = completedAt;
     item.paid = 100;
@@ -6868,6 +6905,31 @@ function pluralize(num, forms){
       if(dayDiff === 0) return {txt: text, cls:'days-critical', days: dayDiff};
       if(dayDiff <= 3) return {txt: text, cls:'days-warning', days: dayDiff};
       return {txt: text, cls:'days-normal', days: dayDiff};
+  }
+
+  function analyzeCompletionStatus(item) {
+      if (!item) return { completionDate: null };
+
+      const completionDate = normalizeDateTimeValue(item.date, { endOfDayIfDateOnly: true });
+      const deadlineRaw = item.deadlineSnapshot || item.dl;
+      const deadlineDate = normalizeDateTimeValue(deadlineRaw, { endOfDayIfDateOnly: true });
+
+      let onTime = null;
+      if (typeof item.completedOnTime === 'boolean') {
+          onTime = item.completedOnTime;
+      } else if (completionDate && deadlineDate) {
+          onTime = completionDate.getTime() <= deadlineDate.getTime();
+      }
+
+      const delayMs = (completionDate && deadlineDate) ? completionDate.getTime() - deadlineDate.getTime() : 0;
+      const delayDays = delayMs > 0 ? Math.ceil(delayMs / (1000 * 60 * 60 * 24)) : 0;
+
+      return {
+          completionDate,
+          deadlineDate,
+          onTime,
+          delayDays
+      };
   }
 
 function getArchiveByMonth(month = currentMonth) {
