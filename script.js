@@ -758,6 +758,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadSettings();
   loadData();
   getToday();
+  renderAll();
   document.querySelector('.tab[data-tab="active"]').classList.add('active');
   updateStats();
 
