@@ -970,6 +970,47 @@
   .modal .save-stg { width: 100%; margin-top: 20px; }
   .request-add-btn { width: auto; align-self: flex-end; min-width: 140px; height: 46px; margin-top: 0; }
   .request-add-btn:hover { box-shadow: none; transform: none; }
+
+  /* Completion modal */
+  .complete-modal-card { max-width: 540px; text-align: left; padding: 28px; }
+  .complete-modal { display: flex; flex-direction: column; gap: 14px; }
+  .complete-head { display: flex; flex-direction: column; gap: 6px; }
+  .complete-title { font-size: 24px; font-weight: 900; letter-spacing: -0.3px; }
+  .complete-sub { color: var(--muted); font-weight: 700; line-height: 1.5; font-size: 14px; }
+  .complete-status-flow { background: var(--card-alt); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .status-flow-label { font-weight: 750; color: var(--muted); font-size: 13px; }
+  .status-flow { display: flex; align-items: center; gap: 10px; font-weight: 800; }
+  .status-pill { padding: 8px 12px; border-radius: 999px; background: var(--pill-bg); border: 1px solid var(--border); font-size: 13px; color: var(--text); display: inline-flex; align-items: center; gap: 6px; }
+  .status-pill-done { background: rgba(46,160,67,0.16); border-color: rgba(46,160,67,0.42); color: var(--green); }
+  body.light .status-pill-done { background: rgba(34,180,109,0.14); border-color: rgba(34,180,109,0.35); color: #15803d; }
+  .status-flow-arrow { color: var(--muted); font-weight: 900; letter-spacing: -0.1px; }
+  .complete-date-card { background: var(--card-alt); border: 1px solid var(--border); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 12px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); }
+  .complete-date-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .complete-date-title { font-weight: 850; letter-spacing: -0.1px; }
+  .complete-date-caption { color: var(--muted); font-size: 13px; font-weight: 700; }
+  .complete-date-chip { padding: 8px 10px; border-radius: 10px; background: var(--pill-bg); border: 1px solid var(--border); color: var(--muted); font-weight: 800; font-size: 12px; letter-spacing: -0.1px; }
+  .complete-date-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+  .complete-field { display: flex; flex-direction: column; gap: 6px; }
+  .complete-field label { font-weight: 800; color: var(--text); font-size: 14px; letter-spacing: -0.1px; }
+  .complete-input-wrap { display: flex; align-items: center; gap: 10px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; transition: border .15s, box-shadow .15s, background .15s; }
+  .complete-input-wrap:hover { border-color: var(--date-hover-border); background: var(--date-hover-bg); }
+  .complete-input-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(88,166,255,0.16); background: var(--date-focus-bg); }
+  .complete-input { width: 100%; background: transparent; border: none; color: var(--text); font-weight: 800; font-size: 15px; outline: none; }
+  .complete-date-icon { width: 18px; height: 18px; color: var(--muted); opacity: 0.9; }
+  .complete-feedback { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--border); background: var(--card-alt); }
+  .complete-feedback .feedback-icon { width: 28px; height: 28px; border-radius: 10px; display: grid; place-items: center; font-size: 16px; font-weight: 800; }
+  .complete-feedback .feedback-title { font-weight: 850; letter-spacing: -0.1px; }
+  .complete-feedback .feedback-note { color: var(--muted); font-size: 13px; font-weight: 700; margin-top: 2px; }
+  .complete-feedback.success { background: rgba(46,160,67,0.14); border-color: rgba(46,160,67,0.45); }
+  .complete-feedback.success .feedback-icon { background: rgba(46,160,67,0.2); color: var(--green); }
+  .complete-feedback.warning { background: rgba(210,153,34,0.14); border-color: rgba(210,153,34,0.45); }
+  .complete-feedback.warning .feedback-icon { background: rgba(210,153,34,0.22); color: var(--gold); }
+  .complete-feedback.info .feedback-icon { background: var(--pill-bg); color: var(--muted); }
+  .complete-feedback.info { background: var(--card-alt); }
+  .complete-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+  .complete-actions .btn-ghost { flex: 1; min-width: 180px; justify-content: center; color: var(--muted); border-color: var(--border); }
+  .complete-actions .btn-ghost:hover { color: var(--text); border-color: var(--accent); }
+  .complete-actions .save-stg { flex: 1; min-width: 200px; width: auto; margin-top: 0; box-shadow: 0 14px 28px rgba(47,129,247,0.25); }
   
   /* Settings Modal specific padding fix */
   #settingsModal .modal-content {
@@ -3072,17 +3113,64 @@ body:not([data-theme="dark"]) .header-new-badge {
 </div>
 
 <div class="modal" id="completeModal" style="display:none;">
-    <div class="modal-content" style="max-width: 480px;">
+    <div class="modal-content complete-modal-card">
         <span class="close-modal-x" onclick="closeCompleteModal()">×</span>
-        <h3 style="margin-bottom: 6px;">Когда проект был выполнен?</h3>
-        <p style="color:var(--muted); margin-bottom: 14px; font-weight: 700; line-height: 1.4;">Укажи фактическую дату завершения, чтобы не считать выполненный проект просроченным.</p>
-        <label style="display:block; font-weight: 700; margin-bottom: 6px;">Дата и время сдачи</label>
-        <input type="datetime-local" id="completeDateInput" onchange="updateCompleteHint()" style="width:100%; background:var(--input-bg); color:var(--text); border:1px solid var(--border); padding:12px 10px; border-radius:10px; font-weight:700;">
-        <div id="completeDestination" style="margin-top:12px; color:var(--muted); font-weight:700;">Будет перемещен в «Выполнено».</div>
-        <div id="completeHint" style="margin-top:6px; color:var(--accent); font-weight:800;"></div>
-        <div style="display:flex; gap:12px; margin-top: 18px; flex-wrap: wrap;">
-            <button class="btn-ghost" onclick="closeCompleteModal()" style="flex:1; min-width: 180px;">Отмена</button>
-            <button class="save-stg" onclick="confirmCompletion()" style="flex:1; min-width: 180px; background:var(--btn-blue); border-color: var(--btn-blue); color: #fff;">Перенести в выполнено</button>
+        <div class="complete-modal">
+            <div class="complete-head">
+                <div class="complete-title">Когда проект был выполнен?</div>
+                <p class="complete-sub">Укажи фактическую дату завершения проекта.</p>
+            </div>
+
+            <div class="complete-status-flow">
+                <div class="status-flow-label">Проект будет перемещён:</div>
+                <div class="status-flow" id="completeDestination">
+                    <span class="status-pill" id="completeSourcePill">В работе</span>
+                    <span class="status-flow-arrow">→</span>
+                    <span class="status-pill status-pill-done">Выполнено</span>
+                </div>
+            </div>
+
+            <div class="complete-date-card">
+                <div class="complete-date-head">
+                    <div>
+                        <div class="complete-date-title">Фактическая дата завершения</div>
+                        <div class="complete-date-caption">Дата фиксирует репутацию и обновит аналитику.</div>
+                    </div>
+                    <div class="complete-date-chip">Дата и время сдачи</div>
+                </div>
+                <div class="complete-date-grid">
+                    <div class="complete-field">
+                        <label>Дата сдачи</label>
+                        <div class="complete-input-wrap">
+                            <svg class="date-icon complete-date-icon"><use href="#icon-calendar"/></svg>
+                            <input type="date" id="completeDateInput" class="complete-input" onchange="updateCompleteHint()" oninput="updateCompleteHint()">
+                        </div>
+                    </div>
+                    <div class="complete-field">
+                        <label>Время</label>
+                        <div class="complete-input-wrap">
+                            <svg class="date-icon complete-date-icon"><use href="#icon-clock"/></svg>
+                            <input type="time" id="completeTimeInput" class="complete-input" step="300" onchange="updateCompleteHint()" oninput="updateCompleteHint()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="complete-feedback info" id="completeFeedback">
+                <div class="feedback-icon" id="completeFeedbackIcon">ℹ️</div>
+                <div class="feedback-body">
+                    <div class="feedback-title" id="completeHint">Срок соблюдён — отлично сработано!</div>
+                    <div class="feedback-note">Отметка зафиксирует факт и обновит статистику.</div>
+                </div>
+            </div>
+
+            <div class="complete-actions">
+                <button class="btn-ghost" onclick="closeCompleteModal()">Отмена</button>
+                <button class="save-stg" onclick="confirmCompletion()" style="background:var(--btn-blue); border-color: var(--btn-blue); color: #fff;">
+                    <svg class="btn-icon"><use href="#icon-check"/></svg>
+                    <span class="btn-label">Перенести в выполнено</span>
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -5643,12 +5731,16 @@ function openCompleteModal(idx, from) {
     const item = DATA[from]?.[idx];
     if (!item) return;
     completionContext = { idx, from };
-    const input = document.getElementById('completeDateInput');
+    const dateInput = document.getElementById('completeDateInput');
+    const timeInput = document.getElementById('completeTimeInput');
     const now = new Date();
-    input.value = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+    const isoNow = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString();
+    if (dateInput) dateInput.value = isoNow.slice(0, 10);
+    if (timeInput) timeInput.value = isoNow.slice(11, 16);
 
     const sourceLabel = STATUS_META[from]?.label || 'Текущий раздел';
-    document.getElementById('completeDestination').innerText = `Будет перемещен: «${sourceLabel}» → «Выполнено».`;
+    const sourcePill = document.getElementById('completeSourcePill');
+    if (sourcePill) sourcePill.innerText = sourceLabel;
     updateCompleteHint();
     document.getElementById('completeModal').style.display = 'flex';
 }
@@ -5658,17 +5750,27 @@ function closeCompleteModal() {
     document.getElementById('completeModal').style.display = 'none';
 }
 
+function getCompletionDateTime() {
+    const dateVal = document.getElementById('completeDateInput')?.value || today;
+    const timeVal = document.getElementById('completeTimeInput')?.value || '00:00';
+    return `${dateVal}T${timeVal}`;
+}
+
 function buildCompletionMessage(item, completedAt) {
     const deadline = item.dl || item.date;
-    if (!deadline) return 'Дедлайн не был указан — отметка сохранит правильную историю.';
+    if (!deadline) {
+        return { status: 'info', message: 'Дедлайн не был указан — отметка сохранит правильную историю.' };
+    }
 
     const deadlineDate = new Date(deadline.includes('T') ? deadline : `${deadline}T23:59:59`);
     const doneDate = new Date(completedAt);
-    if (isNaN(deadlineDate) || isNaN(doneDate)) return 'Проверь дату — если все ок, сохраняем.';
+    if (isNaN(deadlineDate) || isNaN(doneDate)) {
+        return { status: 'warning', message: 'Проверь дату — если все ок, сохраняем.' };
+    }
 
     return doneDate <= deadlineDate
-        ? 'Срок соблюден — отлично сработано!'
-        : 'Есть просрочка. Зафиксируй дату и постарайся не повторять.';
+        ? { status: 'success', message: 'Срок соблюдён — отлично сработано!' }
+        : { status: 'warning', message: 'Есть просрочка. Зафиксируй дату и постарайся не повторять.' };
 }
 
 function updateCompleteHint() {
@@ -5676,8 +5778,19 @@ function updateCompleteHint() {
     const { idx, from } = completionContext;
     const item = DATA[from]?.[idx];
     if (!item) return;
-    const val = document.getElementById('completeDateInput').value || today;
-    document.getElementById('completeHint').innerText = buildCompletionMessage(item, val);
+    const val = getCompletionDateTime();
+    const { status, message } = buildCompletionMessage(item, val);
+    const hint = document.getElementById('completeHint');
+    const feedback = document.getElementById('completeFeedback');
+    const icon = document.getElementById('completeFeedbackIcon');
+    if (hint) hint.innerText = message;
+    if (feedback) {
+        feedback.classList.remove('success', 'warning', 'info');
+        feedback.classList.add(status || 'info');
+    }
+    if (icon) {
+        icon.innerText = status === 'success' ? '✅' : status === 'warning' ? '⚠️' : 'ℹ️';
+    }
 }
 
 function confirmCompletion() {
@@ -5686,7 +5799,7 @@ function confirmCompletion() {
     const item = DATA[from]?.[idx];
     if (!item) { closeCompleteModal(); return; }
 
-    const completedAt = document.getElementById('completeDateInput').value || today;
+    const completedAt = getCompletionDateTime();
     DATA[from].splice(idx, 1);
     item.date = completedAt;
     item.paid = 100;
