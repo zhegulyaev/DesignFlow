@@ -1,7 +1,7 @@
 const K = 'DesignFlowData';
 const TODAY_K = 'DesignFlowToday';
 const SETTINGS_K = 'DesignFlowSettings';
-const STATUS_KEYS = ['active', 'waiting', 'potential', 'paused', 'archive'];
+const STATUS_KEYS = ['active', 'waiting', 'potential', 'paused', 'archive', 'requests', 'trash'];
 
 function escapeHTML(value) {
   return (value ?? '').toString()
@@ -252,12 +252,49 @@ function deleteItem() {
   Object.keys(DATA).forEach(key => {
     const index = DATA[key].findIndex(i => i.id === id);
     if (index !== -1) {
-      DATA[key].splice(index, 1);
+      const [item] = DATA[key].splice(index, 1);
+      if (key !== 'trash') {
+        moveToTrash(item, key);
+      }
     }
   });
 
   saveData();
   closeModal();
+}
+
+function addRequest() {
+  const name = document.getElementById('req-name')?.value?.trim();
+  const source = document.getElementById('req-source')?.value?.trim();
+  const note = document.getElementById('req-note')?.value?.trim();
+  const link = document.getElementById('req-link')?.value?.trim();
+  const budgetRaw = document.getElementById('req-budget')?.value;
+  const budget = parseAmount(budgetRaw);
+
+  if (!name && !note) {
+    alert('Заполните хотя бы имя или описание заявки');
+    return;
+  }
+
+  const request = {
+    id: getNewId(),
+    name,
+    source,
+    note,
+    link,
+    budget,
+    created: new Date().toISOString()
+  };
+
+  DATA.requests.push(request);
+
+  ['req-name', 'req-source', 'req-note', 'req-link', 'req-budget'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+
+  saveData();
+  renderRequests();
 }
 
 function switchTab(el) {
@@ -354,12 +391,88 @@ function renderItem(item) {
 
 function renderList(list, containerId) {
   const container = document.querySelector(`#${containerId} .list`);
+  if (!container) return;
   container.innerHTML = '';
   list.forEach(item => {
     const safeItem = { ...item, status: containerId };
     const card = renderItem(safeItem);
     container.appendChild(card);
   });
+}
+
+function renderRequests() {
+  const tbody = document.querySelector('#t-requests tbody');
+  const totalRow = document.querySelector('#total-row-requests td:nth-child(2)');
+  const totalBudgetCell = document.querySelector('#total-row-requests td:nth-child(6)');
+  if (!tbody) return;
+
+  tbody.innerHTML = '';
+  let totalBudget = 0;
+
+  (DATA.requests || []).forEach((req, idx) => {
+    const budget = parseAmount(req.budget) || 0;
+    totalBudget += budget;
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="select-col">${idx + 1}</td>
+      <td>${escapeHTML(req.name || '—')}</td>
+      <td>${escapeHTML(req.source || '—')}</td>
+      <td>${escapeHTML(req.note || '—')}</td>
+      <td>${req.link ? `<a href="${escapeHTML(req.link)}" target="_blank">Ссылка</a>` : '—'}</td>
+      <td class="mono">${fmtCurrency(budget)}</td>
+      <td>
+        <button class="table-btn" onclick="convertRequestToProject(${req.id})">В работу</button>
+        <button class="table-btn danger" onclick="deleteRequest(${req.id})">Удалить</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  if (totalRow) totalRow.textContent = DATA.requests.length;
+  if (totalBudgetCell) totalBudgetCell.textContent = fmtCurrency(totalBudget);
+}
+
+function renderTrash() {
+  const tbody = document.querySelector('#t-trash tbody');
+  const totalRow = document.querySelector('#total-row-trash td:last-child');
+  if (!tbody) return;
+
+  tbody.innerHTML = '';
+  let totalNet = 0;
+
+  (DATA.trash || []).forEach((item, idx) => {
+    const deletedAt = item.deletedAt ? new Date(item.deletedAt) : null;
+    const deletedText = deletedAt
+      ? deletedAt.toLocaleString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+      : '—';
+
+    const price = item.p ?? parseAmount(item.budget) ?? 0;
+    const net = item.priceClean ?? calcNet(item) ?? price;
+    const paid = item.paid ?? 0;
+    totalNet += net || 0;
+
+    const title = item.title || item.n || item.note || 'Без названия';
+    const client = item.c || item.name || 'Неизвестно';
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="select-col">${idx + 1}</td>
+      <td>${deletedText}</td>
+      <td>${escapeHTML(client)}</td>
+      <td>${escapeHTML(title)}</td>
+      <td class="mono">${fmtCurrency(price)}</td>
+      <td class="mono">${fmtCurrency(net)}</td>
+      <td>${paid || 0}%</td>
+      <td>
+        <button class="table-btn" onclick="restoreFromTrash(${item.id})">Восстановить</button>
+        <button class="table-btn danger" onclick="deleteProject(${item.id}, 'trash')">Удалить навсегда</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  if (totalRow) totalRow.textContent = `Итого: ${fmtCurrency(totalNet)}`;
 }
 
 function renderArchive() {
@@ -511,11 +624,14 @@ function renderAllProjects() {
 }
 
 function renderAll() {
-  Object.keys(DATA).forEach(key => {
-    renderList(DATA[key], key);
-  });
-  updateTabCounts();
+  renderList(DATA.active, 'active');
+  renderList(DATA.waiting, 'waiting');
+  renderList(DATA.potential, 'potential');
+  renderList(DATA.paused, 'paused');
   renderArchive();
+  renderRequests();
+  renderTrash();
+  updateTabCounts();
   renderAllProjects();
 }
 
@@ -526,8 +642,9 @@ function updateTabCounts() {
     potential: DATA.potential.length,
     paused: DATA.paused.length,
     archive: DATA.archive.length,
-    all: DATA.active.length + DATA.waiting.length + DATA.potential.length + DATA.paused.length + DATA.archive.length,
-    trash: 0
+    requests: DATA.requests.length,
+    trash: DATA.trash.length,
+    all: DATA.active.length + DATA.waiting.length + DATA.potential.length + DATA.paused.length + DATA.archive.length + DATA.requests.length
   };
 
   Object.entries(counts).forEach(([key, value]) => {
@@ -564,8 +681,10 @@ function updateStats() {
   let allTax = 0;
   let allContractor = 0;
 
-  Object.values(DATA).forEach(list => {
-    list.forEach(item => {
+  Object.entries(DATA).forEach(([status, list]) => {
+    if (status === 'trash' || status === 'requests') return;
+
+    (list || []).forEach(item => {
       allSum += item.p || 0;
       allNet += calcNet(item);
       allTax += calcTax(item);
@@ -652,6 +771,53 @@ function toggleSettings() {
   document.querySelector('.menu').classList.add('hidden');
 }
 
+function moveToTrash(item, fromStatus = 'active') {
+  if (!item) return;
+  const entry = { ...item, deletedAt: new Date().toISOString(), _fromStatus: fromStatus };
+  if (!Array.isArray(DATA.trash)) {
+    DATA.trash = [];
+  }
+
+  const exists = DATA.trash.some(p => String(p.id) === String(item.id));
+  if (!exists) {
+    DATA.trash.push(entry);
+  }
+}
+
+function deleteRequest(id) {
+  const idx = (DATA.requests || []).findIndex(r => String(r.id) === String(id));
+  if (idx === -1) return;
+
+  const [item] = DATA.requests.splice(idx, 1);
+  moveToTrash(item, 'requests');
+  saveData();
+}
+
+function convertRequestToProject(id) {
+  const idx = (DATA.requests || []).findIndex(r => String(r.id) === String(id));
+  if (idx === -1) return;
+
+  const [req] = DATA.requests.splice(idx, 1);
+  const project = {
+    id: req.id,
+    c: req.name || 'Клиент',
+    n: req.note || 'Новая заявка',
+    p: parseAmount(req.budget) || 0,
+    paid: 0,
+    taxPrc: SETTINGS.taxPrc,
+    contractorAmount: 0,
+    start: today,
+    dl: '',
+    link: req.link,
+    source: req.source,
+    status: 'active',
+    created: Date.now()
+  };
+
+  DATA.active.push(project);
+  saveData();
+}
+
 function restoreFromArchive(id) {
   const idx = (DATA.archive || []).findIndex(p => String(p.id) === String(id));
   if (idx === -1) return;
@@ -668,19 +834,43 @@ function deleteProject(id, scope = 'archive') {
   const idx = list.findIndex(p => String(p.id) === String(id));
   if (idx === -1) return;
 
-  list.splice(idx, 1);
+  const [item] = list.splice(idx, 1);
+  if (scope !== 'trash') {
+    moveToTrash(item, scope);
+  }
+  saveData();
+}
+
+function restoreFromTrash(id) {
+  const idx = (DATA.trash || []).findIndex(p => String(p.id) === String(id));
+  if (idx === -1) return;
+
+  const [item] = DATA.trash.splice(idx, 1);
+  const target = STATUS_KEYS.includes(item._fromStatus) && item._fromStatus !== 'trash'
+    ? item._fromStatus
+    : 'active';
+
+  if (!Array.isArray(DATA[target])) {
+    DATA[target] = [];
+  }
+
+  const cleaned = { ...item };
+  delete cleaned._fromStatus;
+  delete cleaned.deletedAt;
+
+  DATA[target].push(cleaned);
+  saveData();
+}
+
+function clearTrashForever() {
+  if (!confirm('Очистить корзину без возможности восстановления?')) return;
+  DATA.trash = [];
   saveData();
 }
 
 function clearAll() {
   if (confirm('Вы уверены, что хотите полностью очистить все данные? Это действие необратимо.')) {
-    DATA = {
-      active: [],
-      waiting: [],
-      potential: [],
-      paused: [],
-      archive: []
-    };
+    DATA = createEmptyData();
     saveData();
     closeModal();
   }
@@ -688,7 +878,8 @@ function clearAll() {
 
 function exp() {
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([localStorage.getItem(K)], { type: 'application/json' }));
+  const snapshot = JSON.stringify(DATA || createEmptyData());
+  a.href = URL.createObjectURL(new Blob([snapshot], { type: 'application/json' }));
   a.download = `DesignFlow-Backup-${today}.json`;
   a.click();
 }
@@ -736,7 +927,8 @@ function imp() {
         try {
           const importedData = JSON.parse(e.target.result);
           if (importedData && typeof importedData === 'object') {
-            DATA = { ...DATA, ...importedData };
+            const { normalized } = normalizeData(importedData);
+            DATA = normalized;
             saveData();
             alert('Данные успешно импортированы!');
           } else {
