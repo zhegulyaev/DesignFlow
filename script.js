@@ -2,6 +2,23 @@ const K = 'DesignFlowData';
 const TODAY_K = 'DesignFlowToday';
 const SETTINGS_K = 'DesignFlowSettings';
 const STATUS_KEYS = ['active', 'waiting', 'potential', 'paused', 'archive'];
+const KNOWN_ITEM_KEYS = [
+  'id',
+  'c',
+  'n',
+  'p',
+  'taxPrc',
+  'contractorAmount',
+  'paid',
+  'start',
+  'dl',
+  'link',
+  'status',
+  'date',
+  'title',
+  'price',
+  'priceClean'
+];
 
 function escapeHTML(value) {
   return (value ?? '').toString()
@@ -53,24 +70,92 @@ function parseAmount(value) {
 
 let today = new Date().toISOString().slice(0, 10);
 
+function sanitizeItem(raw, status, nextId) {
+  if (!raw || typeof raw !== 'object') return { valid: false };
+
+  const name = typeof raw.n === 'string' && raw.n.trim()
+    ? raw.n.trim()
+    : (typeof raw.title === 'string' && raw.title.trim() ? raw.title.trim() : '');
+
+  if (!name) return { valid: false };
+
+  const sanitized = {};
+
+  const numericId = Number.parseInt(raw.id, 10);
+  sanitized.id = Number.isFinite(numericId) ? numericId : nextId();
+
+  sanitized.n = name;
+  sanitized.title = typeof raw.title === 'string' ? raw.title.trim() : undefined;
+  sanitized.c = typeof raw.c === 'string' ? raw.c.trim() : '';
+  sanitized.p = parseAmount(raw.p ?? raw.price ?? 0);
+  sanitized.price = Number.isFinite(Number(raw.price)) ? Number(raw.price) : sanitized.p;
+  sanitized.taxPrc = Number.isFinite(Number(raw.taxPrc)) ? Number(raw.taxPrc) : 0;
+  sanitized.contractorAmount = parseAmount(raw.contractorAmount);
+  sanitized.paid = Number.isFinite(Number(raw.paid)) ? Math.max(0, Math.min(100, Number(raw.paid))) : 0;
+  sanitized.start = typeof raw.start === 'string' ? raw.start : '';
+  sanitized.dl = typeof raw.dl === 'string' ? raw.dl : (typeof raw.date === 'string' ? raw.date : '');
+  sanitized.date = typeof raw.date === 'string' ? raw.date : undefined;
+  sanitized.link = typeof raw.link === 'string' ? raw.link : '';
+  sanitized.status = STATUS_KEYS.includes(raw.status) ? raw.status : status;
+  sanitized.priceClean = Number.isFinite(Number(raw.priceClean)) ? Number(raw.priceClean) : undefined;
+
+  // Фильтруем неизвестные свойства
+  return {
+    valid: true,
+    value: Object.keys(sanitized).reduce((acc, key) => {
+      if (KNOWN_ITEM_KEYS.includes(key) && sanitized[key] !== undefined) {
+        acc[key] = sanitized[key];
+      }
+      return acc;
+    }, {})
+  };
+}
+
 function normalizeData(data) {
   const normalized = createEmptyData();
 
   if (!data || typeof data !== 'object') {
-    return { normalized, migrated: !!data };
+    return { normalized, migrated: !!data, skipped: 0, total: 0 };
   }
 
   let migrated = false;
+  let skipped = 0;
+  let total = 0;
+  let maxId = 0;
 
   STATUS_KEYS.forEach(status => {
-    if (Array.isArray(data[status])) {
-      normalized[status] = data[status];
-    } else {
-      migrated = true;
-    }
+    const incomingList = Array.isArray(data[status]) ? data[status] : [];
+    if (!Array.isArray(data[status])) migrated = true;
+
+    incomingList.forEach(item => {
+      const parsedId = Number.parseInt(item?.id, 10);
+      if (Number.isFinite(parsedId)) {
+        maxId = Math.max(maxId, parsedId);
+      }
+    });
   });
 
-  return { normalized, migrated };
+  const nextId = () => {
+    maxId += 1;
+    return maxId;
+  };
+
+  STATUS_KEYS.forEach(status => {
+    const incomingList = Array.isArray(data[status]) ? data[status] : [];
+
+    incomingList.forEach(item => {
+      total += 1;
+      const { valid, value } = sanitizeItem(item, status, nextId);
+      if (!valid) {
+        skipped += 1;
+        migrated = true;
+        return;
+      }
+      normalized[status].push(value);
+    });
+  });
+
+  return { normalized, migrated, skipped, total };
 }
 
 function loadData() {
@@ -80,12 +165,12 @@ function loadData() {
     if (!stored) return;
 
     const data = JSON.parse(stored);
-    const { normalized, migrated } = normalizeData(data);
+    const { normalized, migrated, skipped } = normalizeData(data);
 
     DATA = normalized;
 
-    if (migrated) {
-      console.warn('DesignFlow: stored data has invalid structure. Missing lists reset to defaults.');
+    if (migrated || skipped) {
+      console.warn('DesignFlow: stored data normalized to prevent invalid entries.', { migrated, skipped });
       localStorage.setItem(K, JSON.stringify(DATA));
     }
   } catch (e) {
@@ -96,6 +181,11 @@ function loadData() {
 }
 
 function saveData() {
+  const { normalized, migrated, skipped } = normalizeData(DATA);
+  DATA = normalized;
+  if (migrated || skipped) {
+    console.warn('DesignFlow: sanitized data before saving.', { migrated, skipped });
+  }
   localStorage.setItem(K, JSON.stringify(DATA));
   renderAll();
   updateStats();
@@ -736,9 +826,23 @@ function imp() {
         try {
           const importedData = JSON.parse(e.target.result);
           if (importedData && typeof importedData === 'object') {
-            DATA = { ...DATA, ...importedData };
+            const { normalized, migrated, skipped, total } = normalizeData(importedData);
+            const importedCount = STATUS_KEYS.reduce((sum, key) => sum + normalized[key].length, 0);
+
+            if (!importedCount) {
+              throw new Error('Не удалось найти ни одной корректной записи в файле');
+            }
+
+            DATA = normalized;
             saveData();
-            alert('Данные успешно импортированы!');
+
+            const details = [];
+            details.push(`Загружено: ${importedCount}`);
+            if (skipped) details.push(`Отброшено: ${skipped}`);
+            if (total && skipped) details.push(`Всего в файле: ${total}`);
+            if (migrated) details.push('Структура была автоматически исправлена');
+
+            alert(`Импорт завершен. ${details.join('. ')}.`);
           } else {
             throw new Error('Неверный формат данных');
           }
