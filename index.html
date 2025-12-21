@@ -758,15 +758,18 @@
 
   /* Stats Dashboard fixes */
   .stats-full { margin-top: 50px; display: flex; flex-direction: column; gap: 20px; }
+  .dashboard { margin-top: 28px; }
   .dashboard-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 26px; margin-bottom: 6px; }
   .dashboard-title-wrap { display: flex; flex-direction: column; gap: 6px; }
-  .dashboard-title { font-size: 24px; font-weight: 900; letter-spacing: -0.4px; color: var(--text); }
-  .dashboard-subtitle { color: var(--muted); font-weight: 700; font-size: 13px; }
-  .dashboard-toggle { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--button-bg); color: var(--text); font-weight: 800; cursor: pointer; min-height: 44px; }
-  .dashboard-toggle:hover { border-color: var(--accent); color: var(--accent); }
+  .dashboard-title { font-size: 24px; font-weight: 800; letter-spacing: -0.4px; color: var(--text); }
+  .dashboard-subtitle { color: var(--muted); font-weight: 500; font-size: 13px; }
+  .dashboard-toggle { display: inline-flex; align-items: center; gap: 8px; padding: 6px 0; border: none; background: transparent; color: var(--muted); font-weight: 700; cursor: pointer; min-height: 32px; transition: color .18s ease; }
+  .dashboard-toggle:hover { color: var(--accent); }
+  .dashboard-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
   .dashboard.collapsed .dashboard-body { display: none; }
-  .dashboard-toggle::before { content: '\25BC'; font-size: 12px; }
+  .dashboard-toggle::before { content: '\25BC'; font-size: 12px; color: inherit; transition: transform .2s ease; }
   .dashboard.collapsed .dashboard-toggle::before { content: '\25B6'; }
+  .dashboard-body { margin-top: 10px; }
   .stats-two-columns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; align-items: start; }
   .stats-main { display: flex; flex-direction: column; gap: 16px; }
   .side-stack { display: flex; flex-direction: column; gap: 16px; }
@@ -3686,7 +3689,11 @@ function applyDashboardCollapse() {
     const toggle = document.getElementById('dashboardToggle');
     const collapsed = UI_PREFS.dashboardCollapsed === true;
     if (dashboard) dashboard.classList.toggle('collapsed', collapsed);
-    if (toggle) toggle.textContent = collapsed ? 'Развернуть' : 'Свернуть';
+    if (toggle) {
+        toggle.textContent = collapsed ? 'Развернуть' : 'Свернуть';
+        toggle.setAttribute('aria-expanded', (!collapsed).toString());
+        toggle.setAttribute('aria-label', collapsed ? 'Развернуть статистику' : 'Свернуть статистику');
+    }
 }
 
 function toggleDashboardCollapse() {
