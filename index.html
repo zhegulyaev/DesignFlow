@@ -222,6 +222,8 @@
   /* All-projects tweaks */
   #t-all .date-cell { padding: 8px 8px !important; }
   #t-all .date-input-wrap { width: auto; display: inline-flex; min-width: 148px; }
+  #t-all .price-cell-wrap input { min-width: 110px; max-width: 150px; }
+  #t-all th:nth-child(6), #t-all td:nth-child(6) { min-width: 180px; }
   #t-archive .date-input-wrap { width: auto; display: inline-flex; min-width: 136px; }
 
   /* Deadline Colors */
@@ -1392,6 +1394,7 @@
   .trash-clean-btn { padding: 12px 16px; border-radius: 10px; background: var(--button-bg); border: 1px solid var(--border); color: var(--text); font-weight: 800; display: inline-flex; align-items: center; gap: 8px; }
   .trash-clean-btn:hover { border-color: var(--accent); color: var(--accent); }
   .trash-date-cell { display: flex; flex-direction: column; gap: 4px; min-height: 48px; justify-content: center; }
+  #t-trash .trash-date-cell { min-height: 68px; }
   .trash-deleted-label { font-weight: 800; color: var(--text); font-size: 13px; }
   #view-trash .table-wrap { padding: 5px 14px 5px 18px; }
   #t-trash { border-collapse: collapse; border-spacing: 0; min-width: 1200px; width: 100%; }
@@ -3068,6 +3071,22 @@ body:not([data-theme="dark"]) .header-new-badge {
     </div>
 </div>
 
+<div class="modal" id="completeModal" style="display:none;">
+    <div class="modal-content" style="max-width: 480px;">
+        <span class="close-modal-x" onclick="closeCompleteModal()">×</span>
+        <h3 style="margin-bottom: 6px;">Когда проект был выполнен?</h3>
+        <p style="color:var(--muted); margin-bottom: 14px; font-weight: 700; line-height: 1.4;">Укажи фактическую дату завершения, чтобы не считать выполненный проект просроченным.</p>
+        <label style="display:block; font-weight: 700; margin-bottom: 6px;">Дата и время сдачи</label>
+        <input type="datetime-local" id="completeDateInput" onchange="updateCompleteHint()" style="width:100%; background:var(--input-bg); color:var(--text); border:1px solid var(--border); padding:12px 10px; border-radius:10px; font-weight:700;">
+        <div id="completeDestination" style="margin-top:12px; color:var(--muted); font-weight:700;">Будет перемещен в «Выполнено».</div>
+        <div id="completeHint" style="margin-top:6px; color:var(--accent); font-weight:800;"></div>
+        <div style="display:flex; gap:12px; margin-top: 18px; flex-wrap: wrap;">
+            <button class="btn-ghost" onclick="closeCompleteModal()" style="flex:1; min-width: 180px;">Отмена</button>
+            <button class="save-stg" onclick="confirmCompletion()" style="flex:1; min-width: 180px; background:var(--btn-blue); border-color: var(--btn-blue); color: #fff;">Перенести в выполнено</button>
+        </div>
+    </div>
+</div>
+
 <script>
 const K = 'grok_design_v5';
 const THEME_KEY = 'designflow_theme';
@@ -4201,6 +4220,7 @@ let toastTimeout = null;
 let templateHelperTimeout = null;
 let lastPermanentDeletion = null;
 let lastTrashMove = null;
+let completionContext = null;
 let projectFormSnapshot = null;
 let newProjectLink = '';
 let newProjectLinkTitle = '';
@@ -4414,11 +4434,6 @@ function toggleFooterSelection(type) {
 }
 
 function updateBulkToolbar(type) {
-    if (type === 'all') {
-        const toolbar = document.getElementById('bulkToolbar');
-        if (toolbar) toolbar.style.display = 'none';
-        return;
-    }
     const count = selectedRows[type] ? selectedRows[type].size : 0;
     const toolbar = document.getElementById('bulkToolbar');
     
@@ -5396,11 +5411,12 @@ function renderAll(){
         totalTax += taxAmount;
 
         const tr = document.createElement('tr');
-        const deadlineValue = wrap.__type === 'archive' ? item.date : (item.dl || item.date || item.start);
-        const dateField = wrap.__type === 'archive' ? 'date' : 'dl';
-        const rem = getTimeRemaining(deadlineValue);
-        const remText = (wrap.__type === 'archive' || (rem && rem.isInfinite) || (rem && rem.days < 0)) ? '' : ` (${rem.txt})`;
-        const dateDisplay = wrap.__type === 'archive'
+        const isArchiveRow = wrap.__type === 'archive';
+        const deadlineValue = isArchiveRow ? item.date : (item.dl || item.date || item.start);
+        const dateField = isArchiveRow ? 'date' : 'dl';
+        const rem = isArchiveRow ? null : getTimeRemaining(deadlineValue);
+        const remText = (!rem || (rem && rem.isInfinite) || (rem && rem.days < 0)) ? '' : ` (${rem.txt})`;
+        const dateDisplay = isArchiveRow
             ? (deadlineValue ? formatDateDisplay(deadlineValue) : '—')
             : formatDeadlineDisplay(deadlineValue);
         const dateCls = rem?.cls || '';
@@ -5412,7 +5428,7 @@ function renderAll(){
         const contractorValue = contractorMode === 'none' ? '' : formatPlainNumber(item.contractor ?? 0);
         const contractorHelper = contractorMode === 'none' ? 'Расходы не учитываются' : `≈ ${formatCurrency(contractorAmount)}`;
 
-        const overdueIcon = rem && rem.days < 0 ? `<span class="deadline-warning-icon" title="${rem.overdueTooltip}">●</span>` : '';
+        const overdueIcon = (!rem || isArchiveRow || !rem.overdueTooltip) ? '' : `<span class="deadline-warning-icon" title="${rem.overdueTooltip}">●</span>`;
         const selectionKey = `${wrap.__type}:${wrap.idx}`;
         const isSelected = selectedRows.all?.has(selectionKey);
         tr.dataset.index = selectionKey;
@@ -5449,7 +5465,14 @@ function renderAll(){
                 </div>
                 <div class="expense-helper">${contractorHelper}</div>
             </td>
-            <td style="text-align:right;">${item.taxPrc || 0}%</td>
+            <td style="text-align:right;">
+                <select class="tax-select" onchange="updVal('${wrap.__type}',${wrap.idx},'taxPrc',this.value)">
+                    <option value="0" ${+item.taxPrc===0?'selected':''}>0%</option>
+                    <option value="4" ${+item.taxPrc===4?'selected':''}>4%</option>
+                    <option value="6" ${+item.taxPrc===6?'selected':''}>6%</option>
+                    <option value="13" ${+item.taxPrc===13?'selected':''}>13%</option>
+                </select>
+            </td>
             <td style="text-align:right;"><div class="net-display-wrap">${formatCurrency(net)}<span class="net-prc-val">(${calcMarginPrc(item)}%)</span></div></td>
             <td class="actions-cell" style="text-align:right;">
                 <button class="link-btn" onclick="startProjectEdit('${wrap.__type}', ${wrap.idx})" title="Редактировать">
@@ -5528,6 +5551,7 @@ function renderTrash(){
         if (isSelected) tr.classList.add('row-selected');
         const delDate = formatTrashDate(item.deletedAt);
         const expireInfo = formatTrashExpire(item);
+        const linkBtns = renderLinkControls(item, i, 'trash');
         tr.innerHTML = `
             <td class="select-col">
                 <div class="row-index">${i + 1}</div>
@@ -5551,6 +5575,7 @@ function renderTrash(){
                 <div class="trash-row-meta">
                     <div class="trash-label">Проект</div>
                     <div class="trash-project">${item.n}</div>
+                    <div class="trash-action-btns" style="justify-content:flex-start;">${linkBtns}</div>
                 </div>
             </td>
             <td>
@@ -5598,10 +5623,13 @@ function updateContractorMode(type, idx, mode) {
 }
 
 function mv(idx, from, to){
+    if (to === 'archive') {
+        openCompleteModal(idx, from);
+        return;
+    }
     const item = DATA[from][idx];
     DATA[from].splice(idx, 1);
     if(to === 'active') { item.start = item.start || today; item.dl = item.dl || today; item.paid = item.paid || 50; delete item.date; }
-    if(to === 'archive') { item.date = today; item.paid = 100; delete item.start; delete item.dl; }
     if(to === 'potential') { delete item.date; delete item.start; delete item.dl; item.paid = 0; }
     if(to === 'waiting' || to === 'paused') { delete item.date; item.paid = 0; }
 
@@ -5609,6 +5637,69 @@ function mv(idx, from, to){
     sortData('active', 'dl', 'date', true);
     save();
     setTimeout(() => { switchTab(to); }, 10);
+}
+
+function openCompleteModal(idx, from) {
+    const item = DATA[from]?.[idx];
+    if (!item) return;
+    completionContext = { idx, from };
+    const input = document.getElementById('completeDateInput');
+    const now = new Date();
+    input.value = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+
+    const sourceLabel = STATUS_META[from]?.label || 'Текущий раздел';
+    document.getElementById('completeDestination').innerText = `Будет перемещен: «${sourceLabel}» → «Выполнено».`;
+    updateCompleteHint();
+    document.getElementById('completeModal').style.display = 'flex';
+}
+
+function closeCompleteModal() {
+    completionContext = null;
+    document.getElementById('completeModal').style.display = 'none';
+}
+
+function buildCompletionMessage(item, completedAt) {
+    const deadline = item.dl || item.date;
+    if (!deadline) return 'Дедлайн не был указан — отметка сохранит правильную историю.';
+
+    const deadlineDate = new Date(deadline.includes('T') ? deadline : `${deadline}T23:59:59`);
+    const doneDate = new Date(completedAt);
+    if (isNaN(deadlineDate) || isNaN(doneDate)) return 'Проверь дату — если все ок, сохраняем.';
+
+    return doneDate <= deadlineDate
+        ? 'Срок соблюден — отлично сработано!'
+        : 'Есть просрочка. Зафиксируй дату и постарайся не повторять.';
+}
+
+function updateCompleteHint() {
+    if (!completionContext) return;
+    const { idx, from } = completionContext;
+    const item = DATA[from]?.[idx];
+    if (!item) return;
+    const val = document.getElementById('completeDateInput').value || today;
+    document.getElementById('completeHint').innerText = buildCompletionMessage(item, val);
+}
+
+function confirmCompletion() {
+    if (!completionContext) return;
+    const { idx, from } = completionContext;
+    const item = DATA[from]?.[idx];
+    if (!item) { closeCompleteModal(); return; }
+
+    const completedAt = document.getElementById('completeDateInput').value || today;
+    DATA[from].splice(idx, 1);
+    item.date = completedAt;
+    item.paid = 100;
+    delete item.start;
+    delete item.dl;
+
+    DATA.archive.unshift(item);
+    completionContext = null;
+    closeCompleteModal();
+    sortData('active', 'dl', 'date', true);
+    save();
+    setTimeout(() => { switchTab('archive'); }, 10);
+    showToast('Проект перенесен в выполнено');
 }
 
 function duplicateRow(type, idx){
