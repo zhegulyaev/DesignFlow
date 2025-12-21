@@ -758,18 +758,6 @@
 
   /* Stats Dashboard fixes */
   .stats-full { margin-top: 50px; display: flex; flex-direction: column; gap: 20px; }
-  .dashboard { margin-top: 28px; }
-  .dashboard-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 26px; margin-bottom: 6px; }
-  .dashboard-title-wrap { display: flex; flex-direction: column; gap: 6px; }
-  .dashboard-title { font-size: 24px; font-weight: 800; letter-spacing: -0.4px; color: var(--text); }
-  .dashboard-subtitle { color: var(--muted); font-weight: 500; font-size: 13px; }
-  .dashboard-toggle { display: inline-flex; align-items: center; gap: 8px; padding: 6px 0; border: none; background: transparent; color: var(--muted); font-weight: 700; cursor: pointer; min-height: 32px; transition: color .18s ease; }
-  .dashboard-toggle:hover { color: var(--accent); }
-  .dashboard-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
-  .dashboard.collapsed .dashboard-body { display: none; }
-  .dashboard-toggle::before { content: '\25BC'; font-size: 12px; color: inherit; transition: transform .2s ease; }
-  .dashboard.collapsed .dashboard-toggle::before { content: '\25B6'; }
-  .dashboard-body { margin-top: 10px; }
   .stats-two-columns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; align-items: start; }
   .stats-main { display: flex; flex-direction: column; gap: 16px; }
   .side-stack { display: flex; flex-direction: column; gap: 16px; }
@@ -812,7 +800,6 @@
   .mono { font-family: monospace; }
   .stat-scope-note { margin-top: 6px; color: var(--muted); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; }
   .status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: var(--status-bg); border: 1px solid var(--status-border); color: var(--status-text); white-space: nowrap; }
-  .status-icon { width: 14px; height: 14px; opacity: 0.8; }
   .status-pill.active { color: #58ffb3; border-color: rgba(88,255,179,0.25); background: rgba(88,255,179,0.05); }
   .status-pill.waiting { color: #facc15; border-color: rgba(250,204,21,0.25); background: rgba(250,204,21,0.05); }
   .status-pill.potential { color: #58a6ff; border-color: rgba(88,166,255,0.25); background: rgba(88,166,255,0.05); }
@@ -2178,7 +2165,7 @@ body:not([data-theme="dark"]) .header-new-badge {
 
   <div class="tabs-container">
     <div class="tabs">
-        <div class="tab" id="tab-all" onclick="switchTab('all')" aria-label="Все проекты" title="Все проекты"><svg><use href="#icon-all"/></svg><span class="tab-count" id="count-all">0</span></div>
+        <div class="tab" id="tab-all" onclick="switchTab('all')"><svg><use href="#icon-all"/></svg> Все <span class="tab-count" id="count-all">0</span></div>
         <div class="tab active" id="tab-active" onclick="switchTab('active')"><svg><use href="#icon-active"/></svg> В работе <span class="tab-count" id="count-active">0</span></div>
         <div class="tab" id="tab-waiting" onclick="switchTab('waiting')"><svg><use href="#icon-waiting"/></svg> Ожидает <span class="tab-count" id="count-waiting">0</span></div>
         <div class="tab" id="tab-potential" onclick="switchTab('potential')"><svg><use href="#icon-potential"/></svg> Потенциал <span class="tab-count" id="count-potential">0</span></div>
@@ -2383,42 +2370,35 @@ body:not([data-theme="dark"]) .header-new-badge {
               <th width="12%">Статус</th>
               <th width="20%">Клиент</th>
               <th width="22%">Проект</th>
-              <th width="8%">Старт</th>
-              <th width="10%">Срок</th>
-              <th width="9%">Сумма</th>
+              <th width="12%">Срок</th>
+              <th width="10%">Сумма</th>
               <th width="10%">Расходы</th>
               <th width="8%">Налог</th>
               <th width="10%">Чистыми</th>
-              <th width="9%">Оплачено</th>
               <th width="6%"></th>
             </tr>
           </thead>
           <tbody></tbody>
-          <tfoot id="total-row-all"><tr><td colspan="6">Итого:</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tfoot>
+          <tfoot id="total-row-all"><tr><td colspan="5">Итого:</td><td></td><td></td><td></td><td></td><td></td></tr></tfoot>
         </table>
       </div>
     </div>
-
+    
     <div id="view-trash" style="display:none">
       <div class="table-wrap">
         <table id="t-trash">
           <thead>
             <tr>
               <th class="select-col">№</th>
-              <th width="18%">Удалено</th>
-              <th width="16%">Клиент</th>
-              <th width="20%">Проект</th>
-              <th width="10%">Осталось</th>
-              <th width="8%">Налог</th>
-              <th width="8%">Расходы</th>
-              <th width="8%">Чистыми</th>
-              <th width="8%">Оплачено</th>
-              <th width="10%">Сумма</th>
-              <th width="10%">Действия</th>
+              <th width="20%">Удалено</th>
+              <th width="20%">Клиент</th>
+              <th width="30%">Проект</th>
+              <th width="15%">Сумма</th>
+              <th width="15%">Действия</th>
             </tr>
           </thead>
           <tbody></tbody>
-          <tfoot id="total-row-trash"><tr><td colspan="11">Итого</td></tr></tfoot>
+          <tfoot id="total-row-trash"><tr><td colspan="6">Итого</td></tr></tfoot>
         </table>
       </div>
       <div class="trash-toolbar">
@@ -2430,16 +2410,8 @@ body:not([data-theme="dark"]) .header-new-badge {
       </div>
     </div>
   </div>
-
+  
   <div class="dashboard" id="analytics-dashboard">
-    <div class="dashboard-header">
-        <div class="dashboard-title-wrap">
-            <div class="dashboard-title">Статистика и дашборды</div>
-            <div class="dashboard-subtitle">Финансовые показатели, графики и топ-данные месяца</div>
-        </div>
-        <button class="dashboard-toggle" id="dashboardToggle" type="button"></button>
-    </div>
-    <div class="dashboard-body">
     <div class="stats-full">
       <div class="stats-two-columns">
           <div class="stats-main" data-block-container="main">
@@ -2669,7 +2641,6 @@ body:not([data-theme="dark"]) .header-new-badge {
           </div>
 
       </div>
-    </div>
     </div>
   </div>
 
@@ -3397,7 +3368,6 @@ const DEFAULT_BLOCK_ORDER = {
 };
 const DEFAULT_UI_PREFS = {
     themeMode: 'dark',
-    dashboardCollapsed: false,
     blockVisibility: {
         backup: true,
         pace: true,
@@ -3447,11 +3417,11 @@ const TAB_DESCRIPTIONS = {
 };
 
 const STATUS_META = {
-    active: { label: 'В работе', cls: 'active', icon: '#icon-active' },
-    waiting: { label: 'Ожидает', cls: 'waiting', icon: '#icon-waiting' },
-    potential: { label: 'Потенциал', cls: 'potential', icon: '#icon-potential' },
-    paused: { label: 'На паузе', cls: 'paused', icon: '#icon-paused' },
-    archive: { label: 'Выполнено', cls: 'archive', icon: '#icon-archive' },
+    active: { label: 'В работе', cls: 'active' },
+    waiting: { label: 'Ожидает', cls: 'waiting' },
+    potential: { label: 'Потенциал', cls: 'potential' },
+    paused: { label: 'На паузе', cls: 'paused' },
+    archive: { label: 'Выполнено', cls: 'archive' },
 };
 
 const toNumeric = (val) => {
@@ -3681,25 +3651,6 @@ function applyBlockVisibility() {
     if (record) record.classList.toggle('is-hidden', hideAnalytics || visibility.record === false);
     if (reputation) reputation.classList.toggle('is-hidden', hideAnalytics || visibility.reputation === false);
     if (paceDetails) paceDetails.classList.toggle('is-hidden', visibility.reputation === false || hideAnalytics);
-    applyDashboardCollapse();
-}
-
-function applyDashboardCollapse() {
-    const dashboard = document.getElementById('analytics-dashboard');
-    const toggle = document.getElementById('dashboardToggle');
-    const collapsed = UI_PREFS.dashboardCollapsed === true;
-    if (dashboard) dashboard.classList.toggle('collapsed', collapsed);
-    if (toggle) {
-        toggle.textContent = collapsed ? 'Развернуть' : 'Свернуть';
-        toggle.setAttribute('aria-expanded', (!collapsed).toString());
-        toggle.setAttribute('aria-label', collapsed ? 'Развернуть статистику' : 'Свернуть статистику');
-    }
-}
-
-function toggleDashboardCollapse() {
-    UI_PREFS.dashboardCollapsed = !(UI_PREFS.dashboardCollapsed === true);
-    applyDashboardCollapse();
-    save();
 }
 
 function updateSettingsPreviewStates() {
@@ -5032,7 +4983,6 @@ function init(){
     }
     cleanupTrash();
     applyBlockVisibility();
-    applyDashboardCollapse();
     updateSettingsPreviewStates();
     applyStatVisibility();
     applyStatOrder();
@@ -5045,8 +4995,6 @@ function init(){
     document.getElementById('saveLinkBtn').onclick = saveLink;
     document.getElementById('add-proj-start-val').value = today;
     document.getElementById('add-proj-dl-val').value = '';
-    const dashboardToggle = document.getElementById('dashboardToggle');
-    if (dashboardToggle) dashboardToggle.addEventListener('click', toggleDashboardCollapse);
     sortData('active', 'dl', 'date', true);
     ['active','waiting','potential','paused','archive'].forEach(t => {
         DATA[t].sortDirection = DATA[t].sortDirection || 1;
@@ -5902,7 +5850,7 @@ function renderAll(){
     });
     getArchiveByMonth().forEach(item => allItems.push({ item, __type: 'archive', idx: DATA.archive.indexOf(item) }));
 
-    let totalGross = 0, totalNet = 0, totalExp = 0, totalTax = 0, totalPaidGross = 0;
+    let totalGross = 0, totalNet = 0, totalExp = 0, totalTax = 0;
 
     allItems.forEach((wrap, i) => {
         const item = wrap.item;
@@ -5911,12 +5859,10 @@ function renderAll(){
         const net = calcNet(item);
         const gross = toNumeric(item.p);
         const taxAmount = gross * ((toNumeric(item.taxPrc) || 0) / 100);
-        const paidAmount = Math.round(gross * ((toNumeric(item.paid) || 0) / 100));
         totalGross += gross;
         totalNet += net;
         totalExp += contractorAmount;
         totalTax += taxAmount;
-        totalPaidGross += paidAmount;
 
         const tr = document.createElement('tr');
         const isArchiveRow = wrap.__type === 'archive';
@@ -5953,10 +5899,6 @@ function renderAll(){
         tr.dataset.sourceIndex = wrap.idx;
         if (isSelected) tr.classList.add('row-selected');
 
-        const statusIcon = status.icon ? `<svg class="status-icon"><use href="${status.icon}"/></svg>` : '';
-
-        const startDisplay = item.start ? formatDateDisplay(item.start) : '—';
-
         tr.innerHTML = `
             <td class="select-col">
                 <div class="row-index">${i + 1}</div>
@@ -5966,13 +5908,12 @@ function renderAll(){
                     <label for="check-all-${i}" style="display:none;"></label>
                 </div>
             </td>
-            <td><span class="status-pill ${status.cls}">${statusIcon}${status.label}</span></td>
+            <td><span class="status-pill ${status.cls}">${status.label}</span></td>
             <td><div class="client-wrap">
                 <span contenteditable onblur="updVal('${wrap.__type}',${wrap.idx},'c',this.innerText)" class="${getClientNameClass(item)}">${item.c || ''}</span>
                 ${linkIcon}
             </div></td>
             <td class="project-name-wrap"><span class="project-name" contenteditable onblur="updVal('${wrap.__type}',${wrap.idx},'n',this.innerText)">${item.n || ''}</span></td>
-            <td class="date-cell"><div class="date-input-wrap" onclick="openDate('${wrap.__type}',${wrap.idx},'start')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${startDisplay}</span></div></td>
             <td class="date-cell"><div class="date-input-wrap ${dateCls}" onclick="openDate('${wrap.__type}',${wrap.idx},'${dateField}')"><svg class="date-icon"><use href="#icon-calendar"/></svg>${dateBadge}${overdueIcon}</div></td>
             <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(gross)}" oninput="formatNumberInput(this)" onblur="updVal('${wrap.__type}',${wrap.idx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td style="text-align:right;">
@@ -5996,20 +5937,9 @@ function renderAll(){
                 </select>
             </td>
             <td style="text-align:right;"><div class="net-display-wrap">${formatCurrency(net)}<span class="net-prc-val">(${calcMarginPrc(item)}%)</span></div></td>
-            <td class="paid-cell">
-                <select class="paid-select" onchange="updVal('${wrap.__type}',${wrap.idx},'paid',this.value)">
-                    <option value="0" ${+item.paid===0?'selected':''}>0%</option>
-                    <option value="50" ${+item.paid===50?'selected':''}>50%</option>
-                    <option value="100" ${+item.paid===100?'selected':''}>100%</option>
-                </select>
-                <div class="paid-amount">${formatCurrency(paidAmount)}</div>
-            </td>
             <td class="actions-cell" style="text-align:right;">
                 <button class="link-btn" onclick="startProjectEdit('${wrap.__type}', ${wrap.idx})" title="Редактировать">
                     <svg class="btn-icon"><use href="#icon-pen"/></svg>
-                </button>
-                <button class="del-btn" onclick="askDel('${wrap.__type}', ${wrap.idx})" aria-label="Удалить в корзину" title="Удалить">
-                    <svg><use href="#icon-trash"/></svg>
                 </button>
             </td>
         `;
@@ -6020,7 +5950,7 @@ function renderAll(){
     const footer = document.querySelector('#total-row-all');
     if (footer) {
         footer.innerHTML = `<tr>
-            <td colspan="6" class="footer-total-toggle" onclick="toggleFooterSelection('all')">Всего ${allItems.length} проектов</td>
+            <td colspan="5" class="footer-total-toggle" onclick="toggleFooterSelection('all')">Всего ${allItems.length} проектов</td>
             <td style="text-align:right;">
                 <div class="footer-note">Сумма</div>
                 <div>${formatCurrency(totalGross)}</div>
@@ -6036,10 +5966,6 @@ function renderAll(){
             <td style="text-align:right;">
                 <div class="footer-note">Чистыми</div>
                 <div>${formatCurrency(totalNet)}</div>
-            </td>
-            <td style="text-align:right;">
-                <div class="footer-note">Оплачено</div>
-                <div>${formatCurrency(totalPaidGross)}</div>
             </td>
             <td></td>
         </tr>`;
@@ -6089,16 +6015,6 @@ function renderTrash(){
         const delDate = formatTrashDate(item.deletedAt);
         const expireInfo = formatTrashExpire(item);
         const linkBtns = renderLinkControls(item, i, 'trash');
-        const gross = toNumeric(item.p);
-        const contractorAmount = calcContractorAmount(item);
-        const taxAmount = calcTax(item);
-        const net = calcNet(item);
-        const paidAmount = Math.round(gross * ((toNumeric(item.paid) || 0) / 100));
-        const deadlineRaw = item.dl || item.deadlineSnapshot || item.date || '';
-        const rem = deadlineRaw ? getTimeRemaining(deadlineRaw) : null;
-        const remText = deadlineRaw
-            ? `${formatDeadlineDisplay(deadlineRaw)}${(!rem || rem.isInfinite || rem.days < 0) ? '' : ` (${rem.txt})`}`
-            : '—';
         tr.innerHTML = `
             <td class="select-col">
                 <div class="row-index">${i + 1}</div>
@@ -6112,17 +6028,25 @@ function renderTrash(){
                 <div class="trash-deleted-label">Удалено: ${delDate}</div>
                 <div class="trash-expire ${expireInfo.tone}">${expireInfo.text}</div>
             </td>
-            <td><div class="trash-client">${item.c}</div></td>
             <td>
-                <div class="trash-project">${item.n}</div>
-                <div class="trash-action-btns" style="justify-content:flex-start;">${linkBtns}</div>
+                <div class="trash-row-meta">
+                    <div class="trash-label">Клиент</div>
+                    <div class="trash-client">${item.c}</div>
+                </div>
             </td>
-            <td class="mono">${remText}</td>
-            <td class="mono">${formatCurrency(taxAmount)}</td>
-            <td class="mono">${formatCurrency(contractorAmount)}</td>
-            <td class="mono">${formatCurrency(net)}</td>
-            <td class="mono">${formatCurrency(paidAmount)}</td>
-            <td class="mono">${formatCurrency(item.p)}</td>
+            <td>
+                <div class="trash-row-meta">
+                    <div class="trash-label">Проект</div>
+                    <div class="trash-project">${item.n}</div>
+                    <div class="trash-action-btns" style="justify-content:flex-start;">${linkBtns}</div>
+                </div>
+            </td>
+            <td>
+                <div class="trash-row-meta">
+                    <div class="trash-label">Сумма</div>
+                    <div class="trash-amount">${formatCurrency(item.p)}</div>
+                </div>
+            </td>
             <td>
                 <div class="trash-action-btns">
                     <div class="restore-trash-btn" onclick="restoreFromTrash(${i})">Восстановить</div>
@@ -6168,14 +6092,7 @@ function mv(idx, from, to){
     }
     const item = DATA[from][idx];
     DATA[from].splice(idx, 1);
-    if(to === 'active') {
-        const fallbackDeadline = item.dl || item.deadlineSnapshot || item.date || today;
-        const fallbackStart = item.start || item.startSnapshot || today;
-        item.start = fallbackStart;
-        item.dl = fallbackDeadline;
-        item.paid = item.paid || 50;
-        delete item.date;
-    }
+    if(to === 'active') { item.start = item.start || today; item.dl = item.dl || today; item.paid = item.paid || 50; delete item.date; }
     if(to === 'potential') { delete item.date; delete item.start; delete item.dl; item.paid = 0; }
     if(to === 'waiting' || to === 'paused') { delete item.date; item.paid = 0; }
 
@@ -6290,11 +6207,12 @@ function confirmCompletion() {
         ? normalizedCompletion.getTime() <= normalizedDeadline.getTime()
         : null;
     item.deadlineSnapshot = deadlineSnapshot;
-    item.startSnapshot = item.start || item.startSnapshot || '';
     item.completedOnTime = completedOnTime;
     DATA[from].splice(idx, 1);
     item.date = completedAt;
     item.paid = 100;
+    delete item.start;
+    delete item.dl;
 
     DATA.archive.unshift(item);
     completionContext = null;
