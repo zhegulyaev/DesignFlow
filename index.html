@@ -6180,7 +6180,9 @@ function parseLocalDateTime(value, fallbackToEndOfDay = false) {
 }
 
   function buildCompletionMessage(item, completedAt) {
-      const deadline = item.dl || item.date;
+      // Используем только явный дедлайн или заранее сохранённый снимок, чтобы
+      // проекты без срока не считались просроченными из-за других дат
+      const deadline = item.dl || item.deadlineSnapshot;
       if (!deadline) {
           return { status: 'info', message: 'Дедлайн не был указан — отметка сохранит правильную историю.' };
       }
