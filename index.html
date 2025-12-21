@@ -985,7 +985,7 @@
   
   .complete-head { display: flex; flex-direction: column; gap: 8px; }
   .complete-title { font-size: 26px; font-weight: 900; letter-spacing: -0.5px; line-height: 1.1; }
-  .complete-sub { color: var(--muted); font-weight: 600; font-size: 15px; line-height: 1.5; }
+  .complete-sub { color: var(--muted); font-weight: 500; font-size: 15px; line-height: 1.5; }
 
   /* Блок "Откуда -> Куда" */
   .complete-status-flow { 
@@ -1081,7 +1081,8 @@
   .btn-cancel { background: transparent; border: 2px solid var(--border); color: var(--text); }
   .btn-cancel:hover { border-color: var(--muted); }
   .btn-submit { background: var(--btn-blue); border: none; color: #fff; box-shadow: 0 8px 20px rgba(47,129,247,0.25); }
-  .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(47,129,247,0.35); filter: brightness(1.1); }
+  .btn-submit:hover,
+  .btn-submit:focus { color: #fff; border: none; transform: translateY(-2px); box-shadow: 0 12px 24px rgba(47,129,247,0.35); filter: brightness(1.1); }
   
   /* Settings Modal specific padding fix */
   #settingsModal .modal-content {
@@ -5844,22 +5845,22 @@ function parseLocalDateTime(value, fallbackToEndOfDay = false) {
     return new Date(year, month - 1, day, hours, minutes, seconds, fallbackToEndOfDay ? 999 : 0);
 }
 
-function buildCompletionMessage(item, completedAt) {
-    const deadline = item.dl || item.date;
-    if (!deadline) {
-        return { status: 'info', message: 'Дедлайн не был указан — отметка сохранит правильную историю.' };
-    }
+  function buildCompletionMessage(item, completedAt) {
+      const deadline = item.dl || item.date;
+      if (!deadline) {
+          return { status: 'info', message: 'Дедлайн не был указан — отметка сохранит правильную историю.' };
+      }
 
-    const deadlineDate = parseLocalDateTime(deadline, !deadline.includes('T'));
-    const doneDate = parseLocalDateTime(completedAt, true);
-    if (!deadlineDate || !doneDate || isNaN(deadlineDate.getTime()) || isNaN(doneDate.getTime())) {
-        return { status: 'warning', message: 'Проверь дату — если все ок, сохраняем.' };
-    }
+      const deadlineDate = normalizeDateTimeValue(deadline, { endOfDayIfDateOnly: true });
+      const doneDate = normalizeDateTimeValue(completedAt, { endOfDayIfDateOnly: true });
+      if (!deadlineDate || !doneDate) {
+          return { status: 'warning', message: 'Проверь дату — если все ок, сохраняем.' };
+      }
 
-    return doneDate <= deadlineDate
-        ? { status: 'success', message: 'Срок соблюдён — отлично сработано!' }
-        : { status: 'warning', message: 'Есть просрочка. Зафиксируй дату и постарайся не повторять.' };
-}
+      return doneDate.getTime() <= deadlineDate.getTime()
+          ? { status: 'success', message: 'Срок соблюдён — отлично сработано!' }
+          : { status: 'warning', message: 'Есть просрочка. Зафиксируй дату и постарайся не повторять.' };
+  }
 
 function updateCompleteHint() {
     if (!completionContext) return;
@@ -6823,42 +6824,51 @@ function pluralize(num, forms){
     return forms[2];
 }
 
-function getTimeRemaining(dl){
-    if(!dl) return {txt:'∞', cls:'days-infinite', days: Infinity, isInfinite: true};
-    const targetDay = new Date(dl.slice(0, 10) + 'T00:00:00');
-    const todayNormalized = new Date(today + 'T00:00:00');
+  function normalizeDateTimeValue(val, { endOfDayIfDateOnly = true } = {}) {
+      if (!val) return null;
+      const normalized = val.replace(' ', 'T');
+      const hasTime = normalized.includes('T') && normalized.length > 10;
+      const base = normalized.slice(0, 10);
+      if (!base) return null;
+      const dateString = hasTime ? normalized : `${base}T${endOfDayIfDateOnly ? '23:59:59' : '00:00:00'}`;
+      const parsed = new Date(dateString);
+      return isNaN(parsed.getTime()) ? null : parsed;
+  }
 
-    if (isNaN(targetDay.getTime())) return {txt:'∞', cls:'days-infinite', days: Infinity, isInfinite: true};
+  function normalizeToMidnight(dateObj) {
+      return new Date(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate());
+  }
 
-    const dayDiff = Math.ceil((targetDay.getTime() - todayNormalized.getTime()) / (1000 * 60 * 60 * 24));
-    const targetExact = dl.includes('T') ? new Date(dl.replace(' ', 'T')) : new Date(dl + 'T23:59:59');
-    if (isNaN(targetExact.getTime())) return {txt:'∞', cls:'days-infinite', days: Infinity, isInfinite: true};
-    const msLeft = targetExact.getTime() - Date.now();
+  function getTimeRemaining(dl){
+      const targetExact = normalizeDateTimeValue(dl, { endOfDayIfDateOnly: true });
+      if(!targetExact) return {txt:'∞', cls:'days-infinite', days: Infinity, isInfinite: true};
+      const now = new Date();
+      const dayMs = 1000 * 60 * 60 * 24;
+      const hourMs = 1000 * 60 * 60;
+      const dayDiff = Math.ceil((normalizeToMidnight(targetExact).getTime() - normalizeToMidnight(now).getTime()) / dayMs);
+      const msLeft = targetExact.getTime() - now.getTime();
+      const hoursRemainder = Math.max(0, Math.floor((msLeft % dayMs) / hourMs));
+      const shortHours = Math.max(1, hoursRemainder);
 
-    const dayMs = 1000 * 60 * 60 * 24;
-    const hourMs = 1000 * 60 * 60;
-    const hoursRemainder = Math.max(0, Math.floor((msLeft % dayMs) / hourMs));
-    const shortHours = Math.max(1, hoursRemainder);
+      if(msLeft < 0) {
+          const overdueDays = Math.floor(Math.abs(msLeft) / dayMs);
+          const overdueHours = Math.floor((Math.abs(msLeft) % dayMs) / hourMs);
+          const overdueText = `${overdueDays} ${pluralize(overdueDays, ['день','дня','дней'])} ${overdueHours} ${pluralize(overdueHours || 1, ['час','часа','часов'])}`.trim();
+          return {
+              txt:'Срок вышел',
+              cls:'days-critical',
+              days: -1,
+              overdue: true,
+              overdueTooltip: `Срок вышел: просрочка ${overdueText}`
+          };
+      }
+      const hoursText = dayDiff === 0 ? shortHours : hoursRemainder;
+      const text = `${Math.max(0, dayDiff)}д ${hoursText}ч`;
 
-    if(msLeft < 0) {
-        const overdueDays = Math.floor(Math.abs(msLeft) / dayMs);
-        const overdueHours = Math.floor((Math.abs(msLeft) % dayMs) / hourMs);
-        const overdueText = `${overdueDays} ${pluralize(overdueDays, ['день','дня','дней'])} ${overdueHours} ${pluralize(overdueHours || 1, ['час','часа','часов'])}`.trim();
-        return {
-            txt:'Срок вышел',
-            cls:'days-critical',
-            days: -1,
-            overdue: true,
-            overdueTooltip: `Срок вышел: просрочка ${overdueText}`
-        };
-    }
-    const hoursText = dayDiff === 0 ? shortHours : hoursRemainder;
-    const text = `${Math.max(0, dayDiff)}д ${hoursText}ч`;
-
-    if(dayDiff === 0) return {txt: text, cls:'days-critical', days: dayDiff};
-    if(dayDiff <= 3) return {txt: text, cls:'days-warning', days: dayDiff};
-    return {txt: text, cls:'days-normal', days: dayDiff};
-}
+      if(dayDiff === 0) return {txt: text, cls:'days-critical', days: dayDiff};
+      if(dayDiff <= 3) return {txt: text, cls:'days-warning', days: dayDiff};
+      return {txt: text, cls:'days-normal', days: dayDiff};
+  }
 
 function getArchiveByMonth(month = currentMonth) {
     return DATA.archive.filter(i => (i.date || '').startsWith(month));
