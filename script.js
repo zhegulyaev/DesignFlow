@@ -33,6 +33,9 @@ function formatCurrency(value) {
   return `${amount.toLocaleString('ru-RU')} ${SETTINGS.currency}`;
 }
 
+// Унифицированное форматирование валюты для новых представлений
+const fmtCurrency = (value) => formatCurrency(value);
+
 function parseAmount(value) {
   const normalized = (value || '').toString().trim().replace(/\s+/g, '').toLowerCase();
   if (!normalized) return 0;
@@ -359,11 +362,161 @@ function renderList(list, containerId) {
   });
 }
 
+function renderArchive() {
+  const el = document.getElementById('col-archive');
+  if (!el) return;
+
+  const list = el.querySelector('.list');
+  if (!list) return;
+
+  list.innerHTML = '';
+
+  const archiveItems = Array.isArray(DATA.archive) ? DATA.archive : [];
+  const total = archiveItems.reduce((sum, p) => sum + (calcNet(p) || parseFloat(p.priceClean) || 0), 0);
+
+  const countEl = el.querySelector('.count');
+  const totalEl = el.querySelector('.total');
+  if (countEl) countEl.textContent = archiveItems.length;
+  if (totalEl) totalEl.textContent = fmtCurrency(total);
+
+  archiveItems.forEach(p => {
+    const doneDate = p.date ? new Date(p.date) : new Date();
+    const deadline = p.dl ? new Date(p.dl) : null;
+
+    let isLate = false;
+    if (deadline) {
+      isLate = doneDate.getTime() > deadline.getTime();
+    }
+
+    const doneTimeStr = doneDate.toLocaleString('ru-RU', {
+      day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit'
+    });
+
+    const badgeClass = isLate
+      ? 'bg-red-500/20 text-red-400 border border-red-500/30'
+      : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+
+    const dlDisplay = deadline
+      ? deadline.toLocaleString('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+      : 'Без срока';
+
+    const priceValue = p.priceClean ?? calcNet(p) ?? p.p ?? 0;
+    const title = p.title || p.n || 'Без названия';
+
+    const card = document.createElement('div');
+    card.className = 'card-item p-3 mb-2 rounded-lg border border-white/5 hover:border-white/10 transition-all group';
+    card.innerHTML = `
+            <div class="flex justify-between items-start mb-2">
+                <div class="font-medium text-white/90 select-all">${title}</div>
+                <div class="text-xs font-mono text-white/40">${fmtCurrency(priceValue)}</div>
+            </div>
+            
+            <div class="flex justify-between items-center text-xs">
+                <div class="flex flex-col">
+                    <span class="text-white/30 text-[10px]">Дедлайн</span>
+                    <span class="text-white/60">${dlDisplay}</span>
+                </div>
+
+                <div class="flex flex-col items-end" title="Сдано: ${doneTimeStr}">
+                    <span class="text-white/30 text-[10px] mb-0.5">Сдано</span>
+                    <span class="${badgeClass} px-2 py-0.5 rounded text-[10px] font-medium cursor-help">
+                        ${doneDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
+                    </span>
+                </div>
+            </div>
+            
+            <div class="mt-3 pt-2 border-t border-white/5 flex justify-between opacity-0 group-hover:opacity-100 transition-opacity">
+                <button onclick="restoreFromArchive('${p.id ?? ''}')" class="text-[10px] text-blue-400 hover:text-blue-300">Вернуть</button>
+                <button onclick="deleteProject('${p.id ?? ''}', 'archive')" class="text-[10px] text-red-400 hover:text-red-300">Удалить</button>
+            </div>
+        `;
+    list.appendChild(card);
+  });
+}
+
+function renderAllProjects() {
+  const list = document.getElementById('allProjectsList');
+  if (!list) return;
+
+  list.innerHTML = '';
+  const all = [
+    ...(DATA.active || []).map(i => ({ ...i, st: 'active', stName: 'В работе' })),
+    ...(DATA.waiting || []).map(i => ({ ...i, st: 'waiting', stName: 'Ожидает' })),
+    ...(DATA.potential || []).map(i => ({ ...i, st: 'potential', stName: 'Потенциал' })),
+    ...(DATA.paused || []).map(i => ({ ...i, st: 'paused', stName: 'На паузе' })),
+    ...(DATA.archive || []).map(i => ({ ...i, st: 'archive', stName: 'Выполнено' }))
+  ];
+
+  all.sort((a, b) => (Number(b.created) || 0) - (Number(a.created) || 0));
+
+  const header = document.createElement('div');
+  const gridStyle = 'grid-template-columns: 1fr 130px 100px 100px 110px; display: grid; gap: 1rem; align-items: center;';
+  header.className = 'px-4 py-3 border-b border-white/10 text-xs text-white/40 uppercase font-bold tracking-wider';
+  header.style.cssText = gridStyle;
+  header.innerHTML = `
+        <div>Проект</div>
+        <div>Дедлайн</div>
+        <div class="text-right">Сумма</div>
+        <div class="text-right">Чистыми</div>
+        <div class="text-right">Статус</div>
+    `;
+  list.appendChild(header);
+
+  all.forEach(p => {
+    const row = document.createElement('div');
+    row.className = 'px-4 py-3 border-b border-white/5 hover:bg-white/5 transition-colors text-sm text-white/80';
+    row.style.cssText = gridStyle;
+
+    let dlHtml = `<span class="text-white/30">—</span>`;
+    let statusHtml = `<span class="text-white/50">${p.stName}</span>`;
+
+    if (p.st === 'archive') {
+      const doneDate = p.date ? new Date(p.date) : new Date();
+      const dlDate = p.dl ? new Date(p.dl) : null;
+      const isLate = dlDate && doneDate > dlDate;
+
+      if (dlDate) {
+        dlHtml = `<span>${dlDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}</span>`;
+      }
+
+      const badgeClass = isLate
+        ? 'bg-red-500/20 text-red-400 border-red-500/30'
+        : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+
+      statusHtml = `<span class="${badgeClass} border px-2 py-0.5 rounded text-[10px] whitespace-nowrap" title="Сдано: ${doneDate.toLocaleString()}">
+                ${isLate ? 'Просрочено' : 'Сдано'}
+            </span>`;
+    } else {
+      if (p.dl) {
+        const d = new Date(p.dl);
+        const isOverdue = d < new Date();
+        const color = isOverdue ? 'text-red-400 font-bold' : '';
+        dlHtml = `<span class="${color}">${d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}</span>`;
+      }
+    }
+
+    const title = p.title || p.n || 'Без названия';
+    const price = p.price ?? p.p ?? 0;
+    const priceClean = p.priceClean ?? calcNet(p);
+
+    row.innerHTML = `
+            <div class="truncate font-medium pr-2" title="${title}">${title}</div>
+            <div class="text-xs">${dlHtml}</div>
+            <div class="text-right font-mono opacity-70">${fmtCurrency(price)}</div>
+            <div class="text-right font-mono text-emerald-400/80">${fmtCurrency(priceClean)}</div>
+            <div class="text-right flex justify-end">${statusHtml}</div>
+        `;
+    list.appendChild(row);
+  });
+}
+
 function renderAll() {
   Object.keys(DATA).forEach(key => {
     renderList(DATA[key], key);
   });
   updateTabCounts();
+  renderArchive();
+  renderAllProjects();
 }
 
 function updateTabCounts() {
@@ -497,6 +650,26 @@ function toggleDonate() {
 function toggleSettings() {
   document.querySelector('.settings').classList.toggle('open');
   document.querySelector('.menu').classList.add('hidden');
+}
+
+function restoreFromArchive(id) {
+  const idx = (DATA.archive || []).findIndex(p => String(p.id) === String(id));
+  if (idx === -1) return;
+
+  const [item] = DATA.archive.splice(idx, 1);
+  DATA.active.push(item);
+  saveData();
+}
+
+function deleteProject(id, scope = 'archive') {
+  const list = DATA[scope];
+  if (!Array.isArray(list)) return;
+
+  const idx = list.findIndex(p => String(p.id) === String(id));
+  if (idx === -1) return;
+
+  list.splice(idx, 1);
+  saveData();
 }
 
 function clearAll() {
