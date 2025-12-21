@@ -1002,8 +1002,9 @@
   .status-pill-static {
       padding: 6px 12px; border-radius: 8px; background: var(--card); border: 1px solid var(--border);
   }
-  .status-pill-done { 
-      background: rgba(46,160,67,0.15); border-color: transparent; color: var(--green); 
+  .status-pill-done {
+      padding: 6px 12px; border-radius: 8px;
+      background: rgba(46,160,67,0.15); border: 1px solid transparent; color: var(--green);
   }
   .status-flow-arrow { color: var(--muted); opacity: 0.5; }
 
@@ -1050,17 +1051,19 @@
   .complete-icon { color: var(--muted); width: 20px; height: 20px; }
 
   /* Блок успеха/предупреждения */
-  .complete-feedback { 
-      display: flex; gap: 14px; padding: 16px; border-radius: 16px; 
+  .complete-feedback {
+      display: flex; gap: 14px; padding: 16px; border-radius: 16px;
       align-items: flex-start; transition: .3s;
   }
   .complete-feedback.success { background: rgba(46,160,67,0.12); border: 1px solid rgba(46,160,67,0.2); }
   .complete-feedback.warning { background: rgba(210,153,34,0.12); border: 1px solid rgba(210,153,34,0.2); }
+  .complete-feedback.info { background: var(--card-alt); border: 1px solid var(--border); }
   
-  .feedback-check { 
-      width: 24px; height: 24px; border-radius: 6px; display: grid; place-items: center; 
-      flex-shrink: 0; font-size: 14px; 
+  .feedback-check {
+      width: 24px; height: 24px; border-radius: 6px; display: grid; place-items: center;
+      flex-shrink: 0; font-size: 14px;
   }
+  .feedback-check svg { width: 14px; height: 14px; }
   .success .feedback-check { background: #2ea043; color: white; box-shadow: 0 4px 10px rgba(46,160,67,0.3); }
   .warning .feedback-check { background: #d29922; color: white; box-shadow: 0 4px 10px rgba(210,153,34,0.3); }
 
@@ -1942,6 +1945,7 @@ td.date-cell + td.date-cell {
     <symbol id="icon-table" viewBox="0 0 24 24"><path fill="currentColor" d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm0 2v3h14V6H5Zm0 5v7h14v-7H5Zm4 2h2v3H9v-3Zm6 0h2v3h-2v-3Z"/></symbol>
     <symbol id="icon-download" viewBox="0 0 24 24"><path fill="currentColor" d="M12 17a1 1 0 0 1-.707-.293l-4-4a1 1 0 0 1 1.414-1.414L11 13.586V4a1 1 0 1 1 2 0v9.586l2.293-2.293a1 1 0 0 1 1.414 1.414l-4 4A1 1 0 0 1 12 17Z"/><path fill="currentColor" d="M5 18a1 1 0 0 1 1 1v2h12v-2a1 1 0 1 1 2 0v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a1 1 0 0 1 1-1Z"/></symbol>
     <symbol id="icon-alert" viewBox="0 0 24 24"><path fill="currentColor" d="M12.867 3.499a1 1 0 0 0-1.734 0l-8 14A1 1 0 0 0 4 19.5h16a1 1 0 0 0 .867-1.501l-8-14ZM12 8a1 1 0 0 1 1 1v4a1 1 0 1 1-2 0V9a1 1 0 0 1 1-1Zm0 9a1.25 1.25 0 1 1 0-2.5a1.25 1.25 0 0 1 0 2.5Z"/></symbol>
+    <symbol id="icon-info" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20a10 10 0 0 0 0-20Zm0 4.75a1.25 1.25 0 1 1 0 2.5a1.25 1.25 0 0 1 0-2.5Zm-1.25 4a1 1 0 0 1 1-1h.5a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1h-.5a1 1 0 0 1-1-1Z"/></symbol>
     <symbol id="icon-csv" viewBox="0 0 24 24"><path fill="currentColor" d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9.414a2 2 0 0 0-.586-1.414l-4.414-4.414A2 2 0 0 0 14.586 3ZM5 5h9v4a2 2 0 0 0 2 2h4v8H5Zm11 0.414L18.586 8H16Z"/><path fill="currentColor" d="M7.5 13c-1.105 0-1.9.726-1.9 1.75S6.41 16.5 7.5 16.5c.57 0 1.06-.18 1.43-.51a.75.75 0 0 0-.99-1.12c-.12.1-.25.13-.44.13-.37 0-.65-.24-.65-.75s.28-.75.65-.75c.17 0 .31.04.44.14a.75.75 0 0 0 .99-1.12c-.37-.33-.86-.48-1.43-.48Zm2.43.1a.75.75 0 0 0-.57.9l.6 2.4a.75.75 0 1 0 1.46-.36l-.6-2.4a.75.75 0 0 0-.89-.54Zm3.93 0c-.62 0-1.07.29-1.31.66a1.6 1.6 0 0 0-.25.82c0 .36.12.67.31.93a1.88 1.88 0 0 0 1.53.79c.59 0 1.05-.17 1.39-.5a.75.75 0 1 0-1.02-1.09c-.08.08-.2.14-.38.14-.23 0-.44-.16-.44-.32c0-.12.03-.2.08-.26c.07-.1.19-.17.36-.17c.16 0 .26.04.35.12c.3.26.82.24 1.06-.1c.27-.35.1-.8-.1-1.02c-.27-.29-.7-.5-1.38-.5Z"/></symbol>
     <symbol id="icon-arrow-up" viewBox="0 0 24 24"><path fill="currentColor" d="M12 5a1 1 0 0 1 .707.293l5 5a1 1 0 0 1-1.414 1.414L13 8.414V19a1 1 0 1 1-2 0V8.414l-3.293 3.293A1 1 0 0 1 6.293 10.293l5-5A1 1 0 0 1 12 5Z"/></symbol>
     <symbol id="icon-arrow-down" viewBox="0 0 24 24"><path fill="currentColor" d="M12 19a1 1 0 0 1-.707-.293l-5-5a1 1 0 0 1 1.414-1.414L11 15.586V5a1 1 0 1 1 2 0v10.586l3.293-3.293a1 1 0 0 1 1.414 1.414l-5 5A1 1 0 0 1 12 19Z"/></symbol>
@@ -3227,7 +3231,7 @@ body:not([data-theme="dark"]) .header-new-badge {
             </div>
 
             <div class="complete-feedback success" id="completeFeedback">
-                <div class="feedback-check" id="completeFeedbackIcon">✓</div>
+                <div class="feedback-check" id="completeFeedbackIcon"><svg class="feedback-icon"><use href="#icon-check"/></svg></div>
                 <div class="feedback-content">
                     <h4 id="completeHintTitle">Отлично сработано!</h4>
                     <p id="completeHint">Срок соблюдён. Это положительно скажется на вашей репутации.</p>
@@ -5825,15 +5829,30 @@ function getCompletionDateTime() {
     return `${dateVal}T${timeVal}`;
 }
 
+function parseLocalDateTime(value, fallbackToEndOfDay = false) {
+    if (!value) return null;
+    const normalized = value.replace(' ', 'T');
+    const [datePart, timePartRaw = ''] = normalized.split('T');
+    const [year, month, day] = (datePart || '').split('-').map(Number);
+    if (![year, month, day].every(Number.isFinite)) return null;
+
+    const [hoursRaw, minutesRaw] = timePartRaw.split(':').map(Number);
+    const hours = Number.isFinite(hoursRaw) ? hoursRaw : (fallbackToEndOfDay ? 23 : 0);
+    const minutes = Number.isFinite(minutesRaw) ? minutesRaw : (fallbackToEndOfDay ? 59 : 0);
+    const seconds = fallbackToEndOfDay ? 59 : 0;
+
+    return new Date(year, month - 1, day, hours, minutes, seconds, fallbackToEndOfDay ? 999 : 0);
+}
+
 function buildCompletionMessage(item, completedAt) {
     const deadline = item.dl || item.date;
     if (!deadline) {
         return { status: 'info', message: 'Дедлайн не был указан — отметка сохранит правильную историю.' };
     }
 
-    const deadlineDate = new Date(deadline.includes('T') ? deadline : `${deadline}T23:59:59`);
-    const doneDate = new Date(completedAt);
-    if (isNaN(deadlineDate) || isNaN(doneDate)) {
+    const deadlineDate = parseLocalDateTime(deadline, !deadline.includes('T'));
+    const doneDate = parseLocalDateTime(completedAt, true);
+    if (!deadlineDate || !doneDate || isNaN(deadlineDate.getTime()) || isNaN(doneDate.getTime())) {
         return { status: 'warning', message: 'Проверь дату — если все ок, сохраняем.' };
     }
 
@@ -5852,13 +5871,23 @@ function updateCompleteHint() {
     const hint = document.getElementById('completeHint');
     const feedback = document.getElementById('completeFeedback');
     const icon = document.getElementById('completeFeedbackIcon');
+    const title = document.getElementById('completeHintTitle');
     if (hint) hint.innerText = message;
+    if (title) {
+        const titles = {
+            success: 'Отлично сработано!',
+            warning: 'Есть просрочка',
+            info: 'Нет дедлайна'
+        };
+        title.innerText = titles[status] || 'Обновление статуса';
+    }
     if (feedback) {
         feedback.classList.remove('success', 'warning', 'info');
         feedback.classList.add(status || 'info');
     }
     if (icon) {
-        icon.innerText = status === 'success' ? '✅' : status === 'warning' ? '⚠️' : 'ℹ️';
+        const iconId = status === 'success' ? '#icon-check' : status === 'warning' ? '#icon-alert' : '#icon-info';
+        icon.innerHTML = `<svg class="feedback-icon"><use href="${iconId}"/></svg>`;
     }
 }
 
