@@ -219,6 +219,10 @@
   .time-text { color: var(--muted); font-weight: 700; font-size: 12px; }
   .deadline-warning-icon { color: var(--red); font-size: 12px; margin-left: 6px; cursor: help; opacity: 0.9; }
 
+  /* All-projects tweaks */
+  #t-all .date-cell { padding: 8px 8px !important; }
+  #t-all .date-input-wrap { width: auto; display: inline-flex; min-width: 148px; }
+
   /* Deadline Colors */
   .days-critical { color: var(--red); font-weight: 700; }
   .days-warning { color: var(--gold); font-weight: 700; }
@@ -280,7 +284,7 @@
   .client-name, .project-name { display:block; line-height:1.45; white-space:pre-wrap; -webkit-line-clamp:unset; -webkit-box-orient:vertical; overflow:visible; text-overflow:unset; word-break: break-word; padding: 4px 0; }
   .client-name { max-width: 210px; font-weight:700; color:var(--text); }
   .project-name-wrap { display: flex; align-items: center; gap: 8px; overflow: visible; min-height: 44px; }
-  .project-name { max-width: 320px; font-weight:600; padding: 0; min-height: 52px; display: block; }
+  .project-name { max-width: 320px; font-weight:600; padding: 5px 0 6px; min-height: 48px; display: block; }
 
   .sort-icon { color: var(--muted); font-size: 11px; margin-left: 6px; opacity: 0.5; }
   th.sorted .sort-icon { opacity: 1; color: var(--text); }
@@ -5332,8 +5336,11 @@ function renderAll(){
         tr.innerHTML = `
             <td class="select-col"><div class="row-index">${i + 1}</div></td>
             <td><span class="status-pill ${status.cls}">${status.label}</span></td>
-            <td><div class="client-wrap">${item.c || '—'}${linkIcon}</div></td>
-            <td class="project-name-wrap"><span class="project-name">${item.n || '—'}</span></td>
+            <td><div class="client-wrap">
+                <span contenteditable onblur="updVal('${wrap.__type}',${wrap.idx},'c',this.innerText)" class="${getClientNameClass(item)}">${item.c || ''}</span>
+                ${linkIcon}
+            </div></td>
+            <td class="project-name-wrap"><span class="project-name" contenteditable onblur="updVal('${wrap.__type}',${wrap.idx},'n',this.innerText)">${item.n || ''}</span></td>
             <td class="date-cell"><div class="date-input-wrap ${dateCls}" onclick="openDate('${wrap.__type}',${wrap.idx},'${dateField}')"><svg class="date-icon"><use href="#icon-calendar"/></svg><span class="date-text-display">${dateDisplay}${remText}</span>${overdueIcon}</div></td>
             <td style="text-align:right;"><div class="price-cell-wrap"><input type="text" value="${formatPlainNumber(gross)}" oninput="formatNumberInput(this)" onblur="updVal('${wrap.__type}',${wrap.idx},'p',this.value)"><span class="currency-symbol">₽</span></div></td>
             <td style="text-align:right;">
