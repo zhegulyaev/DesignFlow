@@ -1,31 +1,28 @@
 /**
- * DesignFlow Plus: Zen Mode (Ultra Stability)
- * Исправлен сброс при обновлении + мгновенная активация
+ * DesignFlow Plus: Zen Mode (Persistence Edition)
+ * Фикс сброса при обновлении + уменьшенная иконка на подложке
  */
 
 (function() {
     'use strict';
 
     const K = 'grok_design_v5';
-    const UI_PREFS_KEY = 'designflow_ui_prefs';
+    const PREFS_KEY = 'designflow_ui_prefs';
 
-    // Иконка (увеличенная)
-    const ICON_EYE = `<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+    // SVG Иконка (уменьшена, 20px)
+    const ICON_EYE = `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
 
-    // 1. МГНОВЕННОЕ ПОЛУЧЕНИЕ СТАТУСА (до рендера)
-    function isZenActive() {
-        try {
-            const prefs = JSON.parse(localStorage.getItem(UI_PREFS_KEY));
-            return prefs && prefs.zenMode === true;
-        } catch(e) { return false; }
+    // 1. ПРИНУДИТЕЛЬНОЕ ЧТЕНИЕ СТАТУСА (игнорируя сбои app.js)
+    function getStoredZen() {
+        return localStorage.getItem('force_zen_state') === 'true';
     }
 
-    // 2. ВНЕДРЕНИЕ КРИТИЧЕСКИХ СТИЛЕЙ СРАЗУ
+    // 2. СТИЛИ (активация через класс на HTML)
     const zenStyle = document.createElement('style');
-    zenStyle.id = 'zen-core-css';
+    zenStyle.id = 'zen-permanent-v3';
     document.documentElement.appendChild(zenStyle);
 
-    function syncStyles(active) {
+    function applyZenUI(active) {
         if (active) {
             document.documentElement.classList.add('zen-mode-active');
             zenStyle.textContent = `
@@ -34,22 +31,16 @@
                 html.zen-mode-active header, 
                 html.zen-mode-active footer, 
                 html.zen-mode-active .welcome-block,
-                html.zen-mode-active #efficiency-card, 
-                html.zen-mode-active #record-banner, 
-                html.zen-mode-active #reputation-card, 
-                html.zen-mode-active #top-clients-card, 
-                html.zen-mode-active .side-stack,
                 html.zen-mode-active .stats-grid,
+                html.zen-mode-active .side-stack,
                 html.zen-mode-active [id^="tab-"]:not(#tab-active) { 
                     display: none !important; 
                 }
                 html.zen-mode-active .main-container { 
-                    max-width: 98% !important; 
-                    width: 98% !important; 
-                    margin: 0 auto !important; 
-                    padding-top: 20px !important; 
+                    max-width: 96% !important; width: 96% !important; 
+                    margin: 0 auto !important; padding-top: 30px !important; 
                 }
-                #zen-btn.active-zen { background: var(--green) !important; color: white !important; border-color: var(--green) !important; }
+                #zen-btn.active-zen .zen-icon-bg { background: var(--green) !important; color: white !important; }
             `;
         } else {
             document.documentElement.classList.remove('zen-mode-active');
@@ -57,69 +48,67 @@
         }
     }
 
-    // Вызываем немедленно при чтении скрипта
-    const initialState = isZenActive();
-    syncStyles(initialState);
-
-    // 3. ЛОГИКА СОХРАНЕНИЯ И ПЕРЕКЛЮЧЕНИЯ
-    function saveStatus(active) {
-        if (window.UI_PREFS) window.UI_PREFS.zenMode = active;
+    // 3. СОХРАНЕНИЕ (с защитой от перезаписи)
+    function setZenState(active) {
+        localStorage.setItem('force_zen_state', active); // Наш независимый ключ
+        
+        // Пытаемся синхронизироваться с app.js
         try {
-            const prefs = JSON.parse(localStorage.getItem(UI_PREFS_KEY)) || {};
+            if (window.UI_PREFS) window.UI_PREFS.zenMode = active;
+            let prefs = JSON.parse(localStorage.getItem(PREFS_KEY)) || {};
             prefs.zenMode = active;
-            localStorage.setItem(UI_PREFS_KEY, JSON.stringify(prefs));
-
-            const mainData = JSON.parse(localStorage.getItem(K));
-            if (mainData) {
-                if (!mainData.uiPrefs) mainData.uiPrefs = {};
-                mainData.uiPrefs.zenMode = active;
-                localStorage.setItem(K, JSON.stringify(mainData));
-            }
+            localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
             if (typeof window.save === 'function') window.save();
         } catch(e) {}
+        
+        applyZenUI(active);
     }
 
-    function toggle() {
-        const active = !isZenActive();
-        saveStatus(active);
-        syncStyles(active);
-        document.getElementById('zen-btn')?.classList.toggle('active-zen', active);
-    }
-
-    // 4. ОТРИСОВКА КНОПКИ (проверка через интервал на случай затирания)
+    // 4. КНОПКА С ПОДЛОЖКОЙ
     function renderBtn() {
         if (document.getElementById('zen-btn')) return;
-        
+
         const btn = document.createElement('button');
         btn.id = 'zen-btn';
-        btn.innerHTML = ICON_EYE;
         btn.style = `
-            position: fixed; bottom: 25px; left: 25px; z-index: 9999999;
-            width: 52px; height: 52px; border-radius: 50%;
-            border: 1px solid var(--border); background: var(--card); color: var(--accent);
+            position: fixed; bottom: 25px; left: 25px; z-index: 1000000;
+            width: 50px; height: 50px; border-radius: 50%;
+            border: 1px solid var(--border); background: var(--card);
             cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s ease; outline: none; padding: 0;
+            transition: 0.3s; padding: 0; outline: none;
         `;
+
+        // Внутренняя подложка
+        btn.innerHTML = `
+            <div class="zen-icon-bg" style="
+                width: 36px; height: 36px; border-radius: 50%;
+                display: flex; align-items: center; justify-content: center;
+                transition: 0.2s; color: var(--accent); background: var(--button-bg);
+            ">${ICON_EYE}</div>
+        `;
+
         document.body.appendChild(btn);
-        btn.onclick = toggle;
+        btn.onclick = () => {
+            const newState = !getStoredZen();
+            setZenState(newState);
+            btn.classList.toggle('active-zen', newState);
+        };
+
+        if (getStoredZen()) btn.classList.add('active-zen');
+    }
+
+    // 5. "СТОРОЖ" (проверяет состояние каждые 500мс)
+    // Это решит проблему, если app.js сбросит класс при загрузке
+    setInterval(() => {
+        const shouldBeActive = getStoredZen();
+        const isCurrentlyActive = document.documentElement.classList.contains('zen-mode-active');
         
-        if (isZenActive()) btn.classList.add('active-zen');
-    }
-
-    // Хоткей F
-    window.addEventListener('keydown', e => {
-        if (e.code === 'KeyF' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
-            e.preventDefault(); toggle();
+        if (shouldBeActive !== isCurrentlyActive) {
+            applyZenUI(shouldBeActive);
         }
-    }, true);
-
-    // Циклическая проверка наличия кнопки
-    setInterval(renderBtn, 1500);
-
-    // Инициализация при загрузке
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', renderBtn);
-    } else {
         renderBtn();
-    }
+    }, 500);
+
+    // Запуск мгновенно
+    applyZenUI(getStoredZen());
 })();
