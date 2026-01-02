@@ -1,6 +1,6 @@
 /**
- * DesignFlow Plus: Pro Zen Mode
- * С иконками Font Awesome и плавной анимацией
+ * DesignFlow Plus: Zen Mode (Clean SVG Edition)
+ * Без теней, со встроенной иконкой и плавной логикой
  */
 
 (function() {
@@ -9,7 +9,10 @@
     const MAIN_KEY = 'grok_design_v5';
     const PREFS_KEY = 'designflow_ui_prefs';
 
-    // 1. Получаем статус
+    // SVG иконки (Глаз открыт / Глаз закрыт)
+    const ICON_EYE = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+    const ICON_ZEN = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+
     function getZenStatus() {
         try {
             const prefs = JSON.parse(localStorage.getItem(PREFS_KEY));
@@ -17,7 +20,6 @@
         } catch(e) { return false; }
     }
 
-    // 2. Сохраняем статус
     function saveZenStatus(isActive) {
         try {
             let prefs = JSON.parse(localStorage.getItem(PREFS_KEY)) || {};
@@ -33,22 +35,17 @@
         } catch(e) {}
     }
 
-    // 3. Стили с анимацией
     const styleZen = document.createElement('style');
-    styleZen.id = 'zen-pro-styles';
+    styleZen.id = 'zen-clean-styles';
     document.documentElement.appendChild(styleZen);
 
     function applyZen(isActive) {
         if (isActive) {
             styleZen.textContent = `
-                /* Плавное скрытие */
                 #analytics-dashboard, .stats-full, header, footer, .welcome-block,
                 #efficiency-card, #record-banner, #reputation-card, #top-clients-card, .side-stack,
                 [id^="tab-"]:not(#tab-active) {
-                    opacity: 0;
-                    pointer-events: none;
                     display: none !important;
-                    transition: opacity 0.3s ease;
                 }
                 
                 .main-container {
@@ -56,20 +53,13 @@
                     width: 98% !important;
                     margin: 0 auto !important;
                     padding-top: 20px !important;
-                    animation: slideUp 0.4s ease forwards;
+                    transition: all 0.3s ease;
                 }
 
                 #zen-btn {
                     background: var(--green) !important;
                     color: white !important;
                     border-color: var(--green) !important;
-                    transform: scale(1.1);
-                    box-shadow: 0 0 20px rgba(46, 160, 67, 0.4);
-                }
-
-                @keyframes slideUp {
-                    from { opacity: 0; transform: translateY(10px); }
-                    to { opacity: 1; transform: translateY(0); }
                 }
             `;
             if (typeof window.switchTab === 'function') window.switchTab('active');
@@ -86,11 +76,8 @@
     }
 
     function updateIcon(isActive) {
-        const icon = document.querySelector('#zen-btn i');
-        if (icon) {
-            // Меняем иконку: глаз или зачеркнутый глаз
-            icon.className = isActive ? 'fa-solid fa-eye-low-vision' : 'fa-solid fa-eye';
-        }
+        const btn = document.getElementById('zen-btn');
+        if (btn) btn.innerHTML = isActive ? ICON_ZEN : ICON_EYE;
     }
 
     function injectButton() {
@@ -98,31 +85,29 @@
 
         const btn = document.createElement('button');
         btn.id = 'zen-btn';
-        // Вставляем иконку Font Awesome
-        btn.innerHTML = '<i class="fa-solid fa-eye"></i>';
         
         btn.style = `
             position: fixed; bottom: 25px; left: 25px; z-index: 999999;
-            width: 48px; height: 48px; border-radius: 50%;
+            width: 46px; height: 46px; border-radius: 50%;
             border: 1px solid var(--border);
             background: var(--card); color: var(--accent);
-            cursor: pointer; font-size: 18px;
+            cursor: pointer; 
             display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+            transition: all 0.2s ease-in-out;
+            box-shadow: none;
+            outline: none;
         `;
 
         document.body.appendChild(btn);
         btn.onclick = toggleZen;
-        
         updateIcon(getZenStatus());
     }
 
-    // Цикл проверки
+    // Регулярная проверка (чтобы app.js не перетирал кнопку)
     setInterval(() => {
         injectButton();
         applyZen(getZenStatus());
-    }, 2000);
+    }, 1500);
 
     // Хоткей F
     window.addEventListener('keydown', (e) => {
@@ -132,8 +117,7 @@
         }
     }, true);
 
-    window.addEventListener('load', () => {
-        injectButton();
-        applyZen(getZenStatus());
-    });
+    // Старт
+    if (document.readyState === 'complete') injectButton();
+    else window.addEventListener('load', injectButton);
 })();
