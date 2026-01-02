@@ -2950,14 +2950,7 @@ function clearTrashForever() {
 function formatLinkDisplay(url) {
     if (!url) return '';
 
-    try {
-        const parsed = new URL(url);
-        const cleanPath = parsed.pathname.split('?')[0].replace(/\/+$/, '');
-        const withoutQuery = `${parsed.host}${cleanPath}`;
-        return withoutQuery || parsed.host;
-    } catch (e) {
-        return (url || '').replace(/^https?:\/\//, '').split(/[?#]/)[0];
-    }
+    return (url || '').replace(/^https?:\/\//, '');
 }
 
 function buildFallbackLinkTitle(url) {
