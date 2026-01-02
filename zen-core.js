@@ -1,28 +1,19 @@
 (function() {
     'use strict';
 
-    // Функция для работы с Cookie (вместо localStorage)
-    const Cookie = {
-        set(name, value, days = 365) {
-            const date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/;SameSite=Lax`;
-        },
-        get(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-            return null;
-        }
-    };
+    // Используем максимально странное имя, которое app.js точно не тронет
+    const ZEN_STORAGE_KEY = 'DEBUG_ZEN_MODE_999';
+    
+    // Функция получения статуса
+    const getZenStatus = () => localStorage.getItem(ZEN_STORAGE_KEY) === 'true';
 
-    let isZen = Cookie.get('zen_mode') === 'true';
-
+    // Создаем стиль
     const styleZen = document.createElement('style');
-    styleZen.id = 'zen-logic-final';
+    styleZen.id = 'zen-force-styles';
     document.documentElement.appendChild(styleZen);
 
     function applyZen() {
+        const isZen = getZenStatus();
         if (isZen) {
             styleZen.textContent = `
                 #analytics-dashboard, .stats-full, header, footer, .welcome-block,
@@ -36,9 +27,15 @@
                     margin: 0 auto !important;
                     padding-top: 20px !important;
                 }
-                #zen-btn { background: #2ea043 !important; color: white !important; border-color: #2ea043 !important; }
+                #zen-btn { 
+                    background: #2ea043 !important; 
+                    color: white !important; 
+                    border-color: #2ea043 !important;
+                }
             `;
-            if (document.querySelector('.tab.active')?.id === 'tab-archive') {
+            // Если мы в Архиве - переключаем (switchTab должна быть глобальной)
+            const activeTab = document.querySelector('.tab.active');
+            if (activeTab && activeTab.id === 'tab-archive') {
                 if (typeof window.switchTab === 'function') window.switchTab('active');
             }
         } else {
@@ -47,10 +44,10 @@
     }
 
     function toggleZen() {
-        isZen = !isZen;
-        Cookie.set('zen_mode', isZen);
+        const current = getZenStatus();
+        localStorage.setItem(ZEN_STORAGE_KEY, !current);
         applyZen();
-        console.log("Zen saved to Cookie:", isZen);
+        console.log("Zen Status Switched to:", !current);
     }
 
     function injectButton() {
@@ -59,7 +56,7 @@
         btn.id = 'zen-btn';
         btn.innerHTML = '🧘';
         btn.style = `
-            position: fixed; bottom: 20px; left: 20px; z-index: 2147483647;
+            position: fixed; bottom: 20px; left: 20px; z-index: 999999;
             width: 44px; height: 44px; border-radius: 10px; border: 1px solid #30363d;
             background: #21262d; color: #c9d1d9; cursor: pointer; font-size: 20px;
             display: flex; align-items: center; justify-content: center;
@@ -68,16 +65,20 @@
         btn.onclick = toggleZen;
     }
 
-    // Запуск проверки каждые 300мс в течение 3 секунд (чтобы победить перерисовку app.js)
-    let count = 0;
-    const timer = setInterval(() => {
+    // 1. Немедленный запуск
+    applyZen();
+
+    // 2. "Вечный" цикл (проверка каждые 1.5 сек)
+    // Это лечит проблему, когда app.js загружает данные и перерисовывает экран
+    setInterval(() => {
         applyZen();
         injectButton();
-        if (++count > 10) clearInterval(timer);
-    }, 300);
+    }, 1500);
 
+    // 3. Горячая клавиша
     window.addEventListener('keydown', (e) => {
-        if (e.code === 'KeyF' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+        const isInput = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName) || document.activeElement.isContentEditable;
+        if (e.code === 'KeyF' && !isInput) {
             e.preventDefault();
             toggleZen();
         }
