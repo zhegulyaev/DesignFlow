@@ -1,5 +1,7 @@
-/* DesignFlow: Pack (Zen Mode + Status Highlighting) 
-*/
+/**
+ * DesignFlow Plus: Zen Mode & Sharp Highlighting
+ * С сохранением состояния (localStorage)
+ */
 
 document.addEventListener('DOMContentLoaded', function() {
     
@@ -27,13 +29,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // === 2. ДЗЕН-РЕЖИМ (ФОКУСИРОВКА) ===
-    let isZen = false;
     const styleZen = document.createElement('style');
     document.head.appendChild(styleZen);
 
-    function toggleZen() {
-        isZen = !isZen;
-        if (isZen) {
+    // Функция применения стилей
+    function applyZen(isActive) {
+        if (isActive) {
             styleZen.innerHTML = `
                 #analytics-dashboard, .stats-full, header, footer, .welcome-block,
                 #tab-all, #tab-potential, #tab-paused, #tab-archive, #tab-trash,
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     margin: 0 auto !important;
                     padding-top: 15px !important;
                 }
-                #zen-btn { background: var(--green) !important; color: white !important; }
+                #zen-btn { background: var(--green) !important; color: white !important; border-color: var(--green) !important; }
             `;
             // Переключаем на активные проекты, если пользователь был в архиве
             if (document.querySelector('.tab.active')?.id === 'tab-archive') {
@@ -57,15 +58,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Инициализация состояния из localStorage
+    let isZen = localStorage.getItem('zenModeActive') === 'true';
+    applyZen(isZen); // Применяем сразу при загрузке
+
+    function toggleZen() {
+        isZen = !isZen;
+        localStorage.setItem('zenModeActive', isZen); // Сохраняем выбор
+        applyZen(isZen);
+    }
+
     // Создаем кнопку 🧘
     const btn = document.createElement('button');
     btn.id = 'zen-btn';
     btn.innerHTML = '🧘';
+    btn.title = 'Zen Mode (F)';
     btn.style = `
         position: fixed; bottom: 20px; left: 20px; z-index: 10000;
         width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--border);
         background: var(--card); color: var(--text); cursor: pointer; font-size: 20px;
-        display: flex; align-items: center; justify-content: center;
+        display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
     `;
     document.body.appendChild(btn);
     btn.onclick = toggleZen;
