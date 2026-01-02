@@ -1,150 +1,221 @@
 (function() {
     'use strict';
 
-    // 1. СТИЛИ (улучшенные)
+    // 1. СТИЛИ, АДАПТИРОВАННЫЕ ПОД ТВОЙ ДИЗАЙН
     const style = document.createElement('style');
     style.textContent = `
         .kanban-board {
             display: none;
-            gap: 16px;
-            padding: 20px;
-            background: var(--bg);
-            min-height: 80vh;
+            gap: 20px;
             width: 100%;
-            box-sizing: border-box;
-            position: relative;
-            z-index: 10;
+            margin-top: 20px;
+            align-items: flex-start;
+            justify-content: flex-start;
+            overflow-x: auto;
+            padding-bottom: 20px;
         }
+        
+        /* Колонки в стиле твоих карточек */
         .kanban-column {
             background: var(--card-alt);
             border: 1px solid var(--border);
             border-radius: 12px;
-            min-width: 300px;
-            flex: 1;
-            padding: 15px;
+            min-width: 320px;
+            max-width: 320px;
+            flex-shrink: 0;
             display: flex;
             flex-direction: column;
+            max-height: 80vh;
         }
-        .kanban-column h3 {
-            font-size: 12px;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 15px;
+
+        .kanban-header {
+            padding: 15px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
         }
+
+        .kanban-header h3 {
+            margin: 0;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+        }
+
+        .kanban-count {
+            background: var(--button-bg);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            color: var(--accent);
+        }
+
         .kanban-cards {
+            padding: 10px;
+            overflow-y: auto;
             flex-grow: 1;
-            min-height: 200px;
+            min-height: 150px;
         }
+
+        /* Карточки как в твоем списке */
         .kanban-card {
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: 8px;
             padding: 12px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             cursor: grab;
+            transition: 0.2s ease;
         }
-        .kanban-card:hover { border-color: var(--accent); }
-        .kanban-card .name { font-weight: 600; font-size: 14px; margin-bottom: 5px; display: block; }
-        .kanban-card .price { color: var(--green); font-family: monospace; font-size: 13px; }
 
-        /* Кнопка переключателя */
-        .view-toggle-container {
+        .kanban-card:hover {
+            border-color: var(--accent);
+            background: var(--row-hover);
+        }
+
+        .kanban-card .proj-name {
+            display: block;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .kanban-card .proj-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .kanban-card .proj-price {
+            color: var(--green);
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .kanban-card .proj-date {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        /* Кнопка переключения */
+        .view-switcher-wrap {
             display: inline-flex;
             background: var(--button-bg);
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 2px;
-            margin-left: 10px;
+            padding: 3px;
+            margin-right: 15px;
         }
-        .view-toggle-btn {
-            padding: 6px 12px;
-            border: none;
+
+        .view-btn {
             background: none;
+            border: none;
             color: var(--muted);
+            padding: 6px 12px;
             cursor: pointer;
             border-radius: 6px;
+            transition: 0.2s;
         }
-        .view-toggle-btn.active {
+
+        .view-btn.active {
             background: var(--accent);
             color: white;
         }
     `;
     document.head.appendChild(style);
 
-    // 2. ФУНКЦИЯ РЕНДЕРА
+    // 2. ФУНКЦИЯ ОТРИСОВКИ
     window.renderKanban = function() {
-        let board = document.getElementById('kanban-board');
+        // Находим главный контейнер, где лежат таблицы
+        const mainContent = document.querySelector('.main-content') || document.querySelector('.main-container');
         
-        // Если доски еще нет, создаем её и вставляем ПОСЛЕ основной таблицы
+        let board = document.getElementById('kanban-board');
         if (!board) {
             board = document.createElement('div');
             board.id = 'kanban-board';
             board.className = 'kanban-board';
-            const container = document.querySelector('.main-container') || document.body;
-            container.appendChild(board);
+            mainContent.appendChild(board);
         }
 
         board.innerHTML = '';
-        board.style.display = 'flex'; // Принудительно показываем
+        board.style.display = 'flex';
 
-        const cols = [
+        const sections = [
             { id: 'waiting', title: 'Ожидают', data: window.DATA.waiting },
             { id: 'active', title: 'В работе', data: window.DATA.active },
-            { id: 'archive', title: 'Готово', data: window.DATA.archive.slice(0, 10) }
+            { id: 'archive', title: 'Выполнено', data: window.DATA.archive.slice(0, 10) }
         ];
 
-        cols.forEach(col => {
-            const colEl = document.createElement('div');
-            colEl.className = 'kanban-column';
-            colEl.innerHTML = `<h3>${col.title} <span>${col.data.length}</span></h3>`;
+        sections.forEach(sec => {
+            const col = document.createElement('div');
+            col.className = 'kanban-column';
+            col.innerHTML = `
+                <div class="kanban-header">
+                    <h3>${sec.title}</h3>
+                    <span class="kanban-count">${sec.data.length}</span>
+                </div>
+                <div class="kanban-cards" data-cat="${sec.id}"></div>
+            `;
+
+            const cardsContainer = col.querySelector('.kanban-cards');
             
-            const cardsCont = document.createElement('div');
-            cardsCont.className = 'kanban-cards';
-            
-            col.data.forEach(p => {
+            sec.data.forEach(proj => {
                 const card = document.createElement('div');
                 card.className = 'kanban-card';
-                card.innerHTML = `<span class="name">${p.name}</span><span class="price">${p.amount || 0} ₽</span>`;
-                cardsCont.appendChild(card);
+                card.innerHTML = `
+                    <span class="proj-name">${proj.name}</span>
+                    <div class="proj-meta">
+                        <span class="proj-price">${proj.amount ? proj.amount.toLocaleString() : 0} ₽</span>
+                        <span class="proj-date">${proj.dl || ''}</span>
+                    </div>
+                `;
+                cardsContainer.appendChild(card);
             });
-            
-            colEl.appendChild(cardsCont);
-            board.appendChild(colEl);
+
+            board.appendChild(col);
         });
     };
 
-    // 3. ИНЪЕКЦИЯ КНОПКИ
-    function injectToggle() {
-        if (document.getElementById('view-toggle-wrapper')) return;
+    // 3. ПЕРЕКЛЮЧАТЕЛЬ
+    function initSwitcher() {
+        if (document.getElementById('view-switcher')) return;
 
-        const wrapper = document.createElement('div');
-        wrapper.id = 'view-toggle-wrapper';
-        wrapper.className = 'view-toggle-container';
-        wrapper.innerHTML = `
-            <button id="btn-table-view" class="view-toggle-btn active"><i class="fa-solid fa-table-list"></i></button>
-            <button id="btn-kanban-view" class="view-toggle-btn"><i class="fa-solid fa-grip-vertical"></i></button>
+        const headerActions = document.querySelector('.header-actions');
+        if (!headerActions) return;
+
+        const wrap = document.createElement('div');
+        wrap.id = 'view-switcher';
+        wrap.className = 'view-switcher-wrap';
+        wrap.innerHTML = `
+            <button id="show-table" class="view-btn active"><i class="fa-solid fa-table"></i></button>
+            <button id="show-kanban" class="view-btn"><i class="fa-solid fa-columns-gap"></i></button>
         `;
+        headerActions.prepend(wrap);
 
-        // Ищем место для кнопки (в твоем хедере)
-        const header = document.querySelector('.header-actions') || document.querySelector('header');
-        if (header) header.appendChild(wrapper);
+        const bTable = document.getElementById('show-table');
+        const bKanban = document.getElementById('show-kanban');
 
-        document.getElementById('btn-kanban-view').onclick = function() {
-            this.classList.add('active');
-            document.getElementById('btn-table-view').classList.remove('active');
+        bKanban.onclick = () => {
+            bKanban.classList.add('active');
+            bTable.classList.remove('active');
             
-            // Прячем всё, кроме нашего Канбана
-            document.querySelectorAll('.table-container, .stats-grid, #analytics-dashboard, .welcome-block').forEach(el => {
-                el.style.display = 'none';
+            // Скрываем все элементы, которые мешают Канбану
+            document.querySelectorAll('.table-container, #analytics-dashboard, .welcome-block, .stats-grid').forEach(el => {
+                el.style.setProperty('display', 'none', 'important');
             });
-            
+
             window.renderKanban();
         };
 
-        document.getElementById('btn-table-view').onclick = () => location.reload();
+        bTable.onclick = () => {
+            location.reload(); // Возвращаемся к таблице
+        };
     }
 
-    setInterval(injectToggle, 1000);
+    // Запускаем инициализацию кнопки
+    setInterval(initSwitcher, 1000);
 })();
