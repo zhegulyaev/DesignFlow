@@ -1,20 +1,23 @@
 /**
- * DesignFlow Plus: Zen Mode (PRO Integration)
- * Внедрение в UI_PREFS и SVG иконки
+ * DesignFlow Plus: Zen Mode (Lotus Icon Edition)
+ * Чистый SVG, без теней, полная интеграция
  */
 
 (function() {
     'use strict';
 
-    // Ключи из твоего app.js
     const K = 'grok_design_v5';
     const UI_PREFS_KEY = 'designflow_ui_prefs';
 
-    // Иконки SVG (Глаз открыт / Глаз перечеркнут)
-    const ICON_OFF = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
-    const ICON_ON = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+    // SVG Иконка Лотоса (Дзен)
+    const ICON_LOTUS = `
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>
+        <path d="M12 22s8-4.5 8-11.8c0-2-1-3.8-2.5-4.8"/>
+        <path d="M12 22s-8-4.5-8-11.8c0-2 1-3.8 2.5-4.8"/>
+        <circle cx="12" cy="10" r="2"/>
+    </svg>`;
 
-    // Функция получения статуса из памяти или хранилища
     function isZenActive() {
         if (window.UI_PREFS && typeof window.UI_PREFS.zenMode !== 'undefined') {
             return window.UI_PREFS.zenMode;
@@ -25,14 +28,8 @@
         } catch(e) { return false; }
     }
 
-    // Принудительное сохранение в структуру app.js
     function saveStatus(active) {
-        // 1. Обновляем глобальную переменную сайта
-        if (window.UI_PREFS) {
-            window.UI_PREFS.zenMode = active;
-        }
-
-        // 2. Пишем в localStorage для обоих ключей
+        if (window.UI_PREFS) window.UI_PREFS.zenMode = active;
         try {
             const prefs = JSON.parse(localStorage.getItem(UI_PREFS_KEY)) || {};
             prefs.zenMode = active;
@@ -44,15 +41,12 @@
                 mainData.uiPrefs.zenMode = active;
                 localStorage.setItem(K, JSON.stringify(mainData));
             }
-
-            // 3. Вызываем родной метод сохранения сайта (если он доступен)
             if (typeof window.save === 'function') window.save();
         } catch(e) {}
     }
 
-    // Создаем стили (без теней)
     const style = document.createElement('style');
-    style.id = 'zen-pro-logic';
+    style.id = 'zen-lotus-logic';
     document.documentElement.appendChild(style);
 
     function applyStyles(active) {
@@ -62,9 +56,13 @@
                 #efficiency-card, #record-banner, #reputation-card, #top-clients-card, .side-stack,
                 [id^="tab-"]:not(#tab-active) { display: none !important; }
                 .main-container { max-width: 98% !important; width: 98% !important; margin: 0 auto !important; padding-top: 20px !important; }
-                #zen-btn { background: var(--green) !important; color: white !important; border-color: var(--green) !important; }
+                #zen-btn { 
+                    background: var(--green) !important; 
+                    color: white !important; 
+                    border-color: var(--green) !important;
+                    transform: rotate(360deg);
+                }
             `;
-            // Переключение вкладок через движок сайта
             if (typeof window.switchTab === 'function') {
                 const cur = document.querySelector('.tab.active');
                 if (cur && cur.id !== 'tab-active') window.switchTab('active');
@@ -78,38 +76,34 @@
         const active = !isZenActive();
         saveStatus(active);
         applyStyles(active);
-        updateBtn(active);
-    }
-
-    function updateBtn(active) {
         const btn = document.getElementById('zen-btn');
-        if (btn) {
-            btn.innerHTML = active ? ICON_ON : ICON_OFF;
-        }
+        if (btn) btn.style.transform = active ? 'rotate(360deg)' : 'rotate(0deg)';
     }
 
     function renderBtn() {
         if (document.getElementById('zen-btn')) return;
         const btn = document.createElement('button');
         btn.id = 'zen-btn';
+        btn.innerHTML = ICON_LOTUS;
         btn.style = `
             position: fixed; bottom: 25px; left: 25px; z-index: 999999;
-            width: 46px; height: 46px; border-radius: 50%;
+            width: 48px; height: 48px; border-radius: 50%;
             border: 1px solid var(--border); background: var(--card); color: var(--accent);
             cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s ease; box-shadow: none; outline: none;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+            box-shadow: none; outline: none;
         `;
         document.body.appendChild(btn);
         btn.onclick = toggle;
-        updateBtn(isZenActive());
+        
+        if (isZenActive()) btn.style.transform = 'rotate(360deg)';
     }
 
-    // Интервал для проверки (защита от перерисовки app.js)
+    // Постоянный мониторинг состояния
     setInterval(() => {
         const active = isZenActive();
         renderBtn();
         applyStyles(active);
-        updateBtn(active);
     }, 1000);
 
     // Хоткей F
