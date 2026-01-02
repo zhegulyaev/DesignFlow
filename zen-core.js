@@ -1,123 +1,123 @@
 /**
- * DesignFlow Plus: Zen Mode (Clean SVG Edition)
- * Без теней, со встроенной иконкой и плавной логикой
+ * DesignFlow Plus: Zen Mode (PRO Integration)
+ * Внедрение в UI_PREFS и SVG иконки
  */
 
 (function() {
     'use strict';
 
-    const MAIN_KEY = 'grok_design_v5';
-    const PREFS_KEY = 'designflow_ui_prefs';
+    // Ключи из твоего app.js
+    const K = 'grok_design_v5';
+    const UI_PREFS_KEY = 'designflow_ui_prefs';
 
-    // SVG иконки (Глаз открыт / Глаз закрыт)
-    const ICON_EYE = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
-    const ICON_ZEN = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+    // Иконки SVG (Глаз открыт / Глаз перечеркнут)
+    const ICON_OFF = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+    const ICON_ON = `<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
 
-    function getZenStatus() {
+    // Функция получения статуса из памяти или хранилища
+    function isZenActive() {
+        if (window.UI_PREFS && typeof window.UI_PREFS.zenMode !== 'undefined') {
+            return window.UI_PREFS.zenMode;
+        }
         try {
-            const prefs = JSON.parse(localStorage.getItem(PREFS_KEY));
+            const prefs = JSON.parse(localStorage.getItem(UI_PREFS_KEY));
             return prefs && prefs.zenMode === true;
         } catch(e) { return false; }
     }
 
-    function saveZenStatus(isActive) {
-        try {
-            let prefs = JSON.parse(localStorage.getItem(PREFS_KEY)) || {};
-            prefs.zenMode = isActive;
-            localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
+    // Принудительное сохранение в структуру app.js
+    function saveStatus(active) {
+        // 1. Обновляем глобальную переменную сайта
+        if (window.UI_PREFS) {
+            window.UI_PREFS.zenMode = active;
+        }
 
-            let mainData = JSON.parse(localStorage.getItem(MAIN_KEY));
+        // 2. Пишем в localStorage для обоих ключей
+        try {
+            const prefs = JSON.parse(localStorage.getItem(UI_PREFS_KEY)) || {};
+            prefs.zenMode = active;
+            localStorage.setItem(UI_PREFS_KEY, JSON.stringify(prefs));
+
+            const mainData = JSON.parse(localStorage.getItem(K));
             if (mainData) {
                 if (!mainData.uiPrefs) mainData.uiPrefs = {};
-                mainData.uiPrefs.zenMode = isActive;
-                localStorage.setItem(MAIN_KEY, JSON.stringify(mainData));
+                mainData.uiPrefs.zenMode = active;
+                localStorage.setItem(K, JSON.stringify(mainData));
             }
+
+            // 3. Вызываем родной метод сохранения сайта (если он доступен)
+            if (typeof window.save === 'function') window.save();
         } catch(e) {}
     }
 
-    const styleZen = document.createElement('style');
-    styleZen.id = 'zen-clean-styles';
-    document.documentElement.appendChild(styleZen);
+    // Создаем стили (без теней)
+    const style = document.createElement('style');
+    style.id = 'zen-pro-logic';
+    document.documentElement.appendChild(style);
 
-    function applyZen(isActive) {
-        if (isActive) {
-            styleZen.textContent = `
+    function applyStyles(active) {
+        if (active) {
+            style.textContent = `
                 #analytics-dashboard, .stats-full, header, footer, .welcome-block,
                 #efficiency-card, #record-banner, #reputation-card, #top-clients-card, .side-stack,
-                [id^="tab-"]:not(#tab-active) {
-                    display: none !important;
-                }
-                
-                .main-container {
-                    max-width: 98% !important;
-                    width: 98% !important;
-                    margin: 0 auto !important;
-                    padding-top: 20px !important;
-                    transition: all 0.3s ease;
-                }
-
-                #zen-btn {
-                    background: var(--green) !important;
-                    color: white !important;
-                    border-color: var(--green) !important;
-                }
+                [id^="tab-"]:not(#tab-active) { display: none !important; }
+                .main-container { max-width: 98% !important; width: 98% !important; margin: 0 auto !important; padding-top: 20px !important; }
+                #zen-btn { background: var(--green) !important; color: white !important; border-color: var(--green) !important; }
             `;
-            if (typeof window.switchTab === 'function') window.switchTab('active');
+            // Переключение вкладок через движок сайта
+            if (typeof window.switchTab === 'function') {
+                const cur = document.querySelector('.tab.active');
+                if (cur && cur.id !== 'tab-active') window.switchTab('active');
+            }
         } else {
-            styleZen.textContent = '';
+            style.textContent = '';
         }
     }
 
-    function toggleZen() {
-        const newState = !getZenStatus();
-        saveZenStatus(newState);
-        applyZen(newState);
-        updateIcon(newState);
+    function toggle() {
+        const active = !isZenActive();
+        saveStatus(active);
+        applyStyles(active);
+        updateBtn(active);
     }
 
-    function updateIcon(isActive) {
+    function updateBtn(active) {
         const btn = document.getElementById('zen-btn');
-        if (btn) btn.innerHTML = isActive ? ICON_ZEN : ICON_EYE;
+        if (btn) {
+            btn.innerHTML = active ? ICON_ON : ICON_OFF;
+        }
     }
 
-    function injectButton() {
+    function renderBtn() {
         if (document.getElementById('zen-btn')) return;
-
         const btn = document.createElement('button');
         btn.id = 'zen-btn';
-        
         btn.style = `
             position: fixed; bottom: 25px; left: 25px; z-index: 999999;
             width: 46px; height: 46px; border-radius: 50%;
-            border: 1px solid var(--border);
-            background: var(--card); color: var(--accent);
-            cursor: pointer; 
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s ease-in-out;
-            box-shadow: none;
-            outline: none;
+            border: 1px solid var(--border); background: var(--card); color: var(--accent);
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s ease; box-shadow: none; outline: none;
         `;
-
         document.body.appendChild(btn);
-        btn.onclick = toggleZen;
-        updateIcon(getZenStatus());
+        btn.onclick = toggle;
+        updateBtn(isZenActive());
     }
 
-    // Регулярная проверка (чтобы app.js не перетирал кнопку)
+    // Интервал для проверки (защита от перерисовки app.js)
     setInterval(() => {
-        injectButton();
-        applyZen(getZenStatus());
-    }, 1500);
+        const active = isZenActive();
+        renderBtn();
+        applyStyles(active);
+        updateBtn(active);
+    }, 1000);
 
     // Хоткей F
-    window.addEventListener('keydown', (e) => {
+    window.addEventListener('keydown', e => {
         if (e.code === 'KeyF' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
-            e.preventDefault();
-            toggleZen();
+            e.preventDefault(); toggle();
         }
     }, true);
 
-    // Старт
-    if (document.readyState === 'complete') injectButton();
-    else window.addEventListener('load', injectButton);
+    window.addEventListener('load', renderBtn);
 })();
