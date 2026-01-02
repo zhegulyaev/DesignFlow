@@ -1,22 +1,28 @@
-/**
- * DesignFlow Plus: Iron Zen Mode
- * Самый надежный метод сохранения
- */
-
 (function() {
     'use strict';
 
-    const KEY = 'zenMode_status';
-    
-    // Проверка сохраненного статуса (с доп. проверкой на тип данных)
-    let isZen = localStorage.getItem(KEY) === 'true';
+    // Функция для работы с Cookie (вместо localStorage)
+    const Cookie = {
+        set(name, value, days = 365) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/;SameSite=Lax`;
+        },
+        get(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+    };
 
-    // Создаем стиль и добавляем в самый низ head, чтобы он имел приоритет
+    let isZen = Cookie.get('zen_mode') === 'true';
+
     const styleZen = document.createElement('style');
-    styleZen.id = 'zen-iron-logic';
-    document.documentElement.appendChild(styleZen); 
+    styleZen.id = 'zen-logic-final';
+    document.documentElement.appendChild(styleZen);
 
-    function applyZenStyles() {
+    function applyZen() {
         if (isZen) {
             styleZen.textContent = `
                 #analytics-dashboard, .stats-full, header, footer, .welcome-block,
@@ -30,16 +36,9 @@
                     margin: 0 auto !important;
                     padding-top: 20px !important;
                 }
-                #zen-btn { 
-                    background: #2ea043 !important; 
-                    color: white !important; 
-                    border-color: #2ea043 !important;
-                    box-shadow: 0 0 12px rgba(46, 160, 67, 0.5);
-                }
+                #zen-btn { background: #2ea043 !important; color: white !important; border-color: #2ea043 !important; }
             `;
-            // Переключение вкладок
-            const archiveTab = document.getElementById('tab-archive');
-            if (archiveTab && archiveTab.classList.contains('active')) {
+            if (document.querySelector('.tab.active')?.id === 'tab-archive') {
                 if (typeof window.switchTab === 'function') window.switchTab('active');
             }
         } else {
@@ -49,14 +48,13 @@
 
     function toggleZen() {
         isZen = !isZen;
-        localStorage.setItem(KEY, isZen);
-        applyZenStyles();
-        console.log("Zen Mode saved:", isZen);
+        Cookie.set('zen_mode', isZen);
+        applyZen();
+        console.log("Zen saved to Cookie:", isZen);
     }
 
     function injectButton() {
         if (document.getElementById('zen-btn')) return;
-        
         const btn = document.createElement('button');
         btn.id = 'zen-btn';
         btn.innerHTML = '🧘';
@@ -70,31 +68,19 @@
         btn.onclick = toggleZen;
     }
 
-    // 1. Применяем стили немедленно (еще до загрузки body)
-    applyZenStyles();
-
-    // 2. Повторяем применение несколько раз после загрузки (борьба с app.js)
-    let checks = 0;
-    const interval = setInterval(() => {
-        applyZenStyles();
+    // Запуск проверки каждые 300мс в течение 3 секунд (чтобы победить перерисовку app.js)
+    let count = 0;
+    const timer = setInterval(() => {
+        applyZen();
         injectButton();
-        checks++;
-        if (checks > 10) clearInterval(interval); // Проверяем 5 секунд
-    }, 500);
+        if (++count > 10) clearInterval(timer);
+    }, 300);
 
-    // 3. Горячая клавиша
     window.addEventListener('keydown', (e) => {
-        const isInput = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName) || document.activeElement.isContentEditable;
-        if (e.code === 'KeyF' && !isInput) {
+        if (e.code === 'KeyF' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
             e.preventDefault();
             toggleZen();
         }
     }, true);
-
-    // 4. На всякий случай слушаем событие загрузки
-    window.addEventListener('load', () => {
-        applyZenStyles();
-        injectButton();
-    });
 
 })();
