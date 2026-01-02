@@ -1,83 +1,102 @@
 /**
- * DesignFlow Plus: Zen Mode
- * С исправленным сохранением состояния
+ * DesignFlow Plus: Ultimate Zen Mode
+ * С защитой от перехвата и MutationObserver
  */
 
 (function() {
-    // Функция применения стилей
-    function applyZen(isActive, styleElement) {
-        if (isActive) {
-            styleElement.innerHTML = `
-                #analytics-dashboard, .stats-full, header, footer, .welcome-block,
-                #tab-all, #tab-potential, #tab-paused, #tab-archive, #tab-trash,
-                #efficiency-card, #record-banner, #reputation-card, #top-clients-card, .side-stack {
-                    display: none !important;
-                }
-                .main-container {
-                    max-width: 98% !important;
-                    width: 98% !important;
-                    margin: 0 auto !important;
-                    padding-top: 15px !important;
-                }
-                #zen-btn { 
-                    background: var(--green) !important; 
-                    color: white !important; 
-                    border-color: var(--green) !important;
-                }
-            `;
-            // Переключаем вкладку, если мы в архиве
-            if (document.querySelector('.tab.active')?.id === 'tab-archive') {
-                if (typeof switchTab === 'function') switchTab('active');
+    'use strict';
+
+    const STORAGE_KEY = 'zenModeActive';
+    let isZen = localStorage.getItem(STORAGE_KEY) === 'true';
+
+    // 1. Создаем стиль один раз
+    const styleZen = document.createElement('style');
+    styleZen.id = 'zen-mode-permanent-css';
+    document.head.appendChild(styleZen);
+
+    function getZenStyles() {
+        return `
+            #analytics-dashboard, .stats-full, header, footer, .welcome-block,
+            #efficiency-card, #record-banner, #reputation-card, #top-clients-card, .side-stack,
+            #tab-all, #tab-potential, #tab-paused, #tab-archive, #tab-trash {
+                display: none !important;
+            }
+            .main-container {
+                max-width: 98% !important;
+                width: 98% !important;
+                margin: 0 auto !important;
+                padding-top: 15px !important;
+            }
+            #zen-btn { 
+                background: var(--green) !important; 
+                color: white !important; 
+                border-color: var(--green) !important;
+                box-shadow: 0 0 10px rgba(46, 160, 67, 0.4);
+            }
+        `;
+    }
+
+    function updateUI() {
+        if (isZen) {
+            styleZen.innerHTML = getZenStyles();
+            // Проверка вкладок (переключаем, если в Архиве)
+            const activeTab = document.querySelector('.tab.active');
+            if (activeTab && activeTab.id === 'tab-archive') {
+                if (typeof window.switchTab === 'function') window.switchTab('active');
             }
         } else {
-            styleElement.innerHTML = '';
+            styleZen.innerHTML = '';
         }
     }
 
-    function initZen() {
-        const styleZen = document.createElement('style');
-        styleZen.id = 'zen-mode-styles';
-        document.head.appendChild(styleZen);
+    // 2. Наблюдатель: если app.js изменит DOM, мы вернем Дзен на место
+    const observer = new MutationObserver(() => {
+        if (isZen && styleZen.innerHTML === '') {
+            updateUI();
+        }
+    });
 
-        // Читаем из localStorage (преобразуем строку 'true' в булево значение true)
-        let isZen = localStorage.getItem('zenModeActive') === 'true';
-
-        // Применяем состояние
-        applyZen(isZen, styleZen);
-
+    function init() {
         // Создаем кнопку
-        const btn = document.createElement('button');
-        btn.id = 'zen-btn';
-        btn.innerHTML = '🧘';
-        btn.style = `
-            position: fixed; bottom: 20px; left: 20px; z-index: 10000;
-            width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--border);
-            background: var(--card); color: var(--text); cursor: pointer; font-size: 20px;
-            display: flex; align-items: center; justify-content: center; transition: all 0.2s ease;
-        `;
-        document.body.appendChild(btn);
+        if (!document.getElementById('zen-btn')) {
+            const btn = document.createElement('button');
+            btn.id = 'zen-btn';
+            btn.innerHTML = '🧘';
+            btn.style = `
+                position: fixed; bottom: 20px; left: 20px; z-index: 999999;
+                width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--border);
+                background: var(--card); color: var(--text); cursor: pointer; font-size: 20px;
+                display: flex; align-items: center; justify-content: center; transition: 0.3s;
+            `;
+            document.body.appendChild(btn);
 
-        // Логика клика
-        btn.onclick = function() {
-            isZen = !isZen;
-            localStorage.setItem('zenModeActive', isZen); // Сохраняем
-            applyZen(isZen, styleZen);
-        };
+            btn.onclick = () => {
+                isZen = !isZen;
+                localStorage.setItem(STORAGE_KEY, isZen);
+                updateUI();
+            };
+        }
 
-        // Горячая клавиша F
-        window.addEventListener('keydown', (e) => {
-            const isInput = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName) || document.activeElement.isContentEditable;
-            if (e.code === 'KeyF' && !isInput) {
-                e.preventDefault();
-                btn.click(); // Имитируем клик по кнопке
-            }
-        }, true);
+        updateUI();
+        
+        // Запускаем слежку за изменениями в head и body
+        observer.observe(document.body, { childList: true, subtree: true });
     }
 
-    // Запускаем через небольшую паузу, чтобы app.js успел прогрузить данные
+    // Слушаем горячую клавишу F
+    window.addEventListener('keydown', (e) => {
+        const isInput = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName) || document.activeElement.isContentEditable;
+        if (e.code === 'KeyF' && !isInput) {
+            e.preventDefault();
+            const btn = document.getElementById('zen-btn');
+            if (btn) btn.click();
+        }
+    }, true);
+
+    // Запуск
     if (document.readyState === 'complete') {
-        setTimeout(initZen, 100);
+        init();
     } else {
-        window.addEventListener('load', () => setTimeout(initZen, 100));
+        window.addEventListener('load', init);
     }
 })();
