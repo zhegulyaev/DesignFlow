@@ -19,7 +19,7 @@
         .kanban-column {
             background: var(--card-alt);
             border: 1px solid var(--border);
-            border-radius: 12px / calc(12px * 1.35);
+            border-radius: 12px;
             min-width: 320px;
             max-width: 320px;
             flex-shrink: 0;
@@ -47,7 +47,7 @@
         .kanban-count {
             background: var(--button-bg);
             padding: 2px 8px;
-            border-radius: 10px / calc(10px * 1.35);
+            border-radius: 10px;
             font-size: 11px;
             color: var(--accent);
         }
@@ -63,7 +63,7 @@
         .kanban-card {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 8px / calc(8px * 1.35);
+            border-radius: 8px;
             padding: 12px;
             margin-bottom: 12px;
             cursor: grab;
@@ -106,7 +106,7 @@
             display: inline-flex;
             background: var(--button-bg);
             border: 1px solid var(--border);
-            border-radius: 8px / calc(8px * 1.35);
+            border-radius: 8px;
             padding: 3px;
             margin-right: 15px;
         }
@@ -117,7 +117,7 @@
             color: var(--muted);
             padding: 6px 12px;
             cursor: pointer;
-            border-radius: 6px / calc(6px * 1.35);
+            border-radius: 6px;
             transition: 0.2s;
         }
 
