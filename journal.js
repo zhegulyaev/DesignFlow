@@ -335,6 +335,9 @@
         const root = document.documentElement;
         const activate = !root.classList.contains(VISIBILITY_CLASS);
         root.classList.toggle(VISIBILITY_CLASS, activate);
+        if (activate && typeof renderJournalButtons === 'function') {
+            renderJournalButtons();
+        }
         if (activate) {
             if (typeof showToast === 'function') showToast('Режим журнала активирован');
             else alert('Режим разработчика активирован');
