@@ -299,6 +299,7 @@
     }
 
     function renderJournalButtons() {
+        const isVisible = document.documentElement.classList.contains(VISIBILITY_CLASS);
         const rows = document.querySelectorAll('table tbody tr[data-project-id]');
         rows.forEach(row => {
             const pid = row.dataset.projectId;
@@ -317,6 +318,7 @@
             link.dataset.projectId = pid;
             link.dataset.projectType = row.dataset.type || '';
             link.innerHTML = `<i class="fa fa-plus-circle"></i> <b>${done}/${total}</b>`;
+            link.style.display = isVisible ? 'inline-flex' : 'none';
         });
     }
 
