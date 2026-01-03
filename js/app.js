@@ -11,6 +11,7 @@ const DEFAULT_BLOCK_ORDER = {
     main: ['topClients'],
     side: ['efficiency','record','reputation']
 };
+let EXTRA_TASKS = {};
 const DEFAULT_UI_PREFS = {
     themeMode: 'dark',
     blockVisibility: {
@@ -137,6 +138,25 @@ function normalizeBlockOrder(orderMap, fallback = DEFAULT_BLOCK_ORDER) {
         result[fallbackZone].push(key);
     });
     return result;
+}
+
+function generateProjectId() {
+    return `p-${Math.random().toString(36).slice(2, 8)}-${Date.now().toString(36)}`;
+}
+
+function ensureProjectIds() {
+    const buckets = ['active', 'waiting', 'potential', 'requests', 'paused', 'archive', 'trash'];
+    let changed = false;
+    buckets.forEach(type => {
+        DATA[type] = DATA[type] || [];
+        DATA[type].forEach(item => {
+            if (!item.id) {
+                item.id = generateProjectId();
+                changed = true;
+            }
+        });
+    });
+    return changed;
 }
 
 function loadUiPrefs() {
@@ -1142,6 +1162,7 @@ function buildBackupSnapshot() {
     return {
         version: 2,
         data: DATA,
+        extraTasks: EXTRA_TASKS,
         uiPrefs: UI_PREFS,
         nameTemplates: NAME_TEMPLATES,
         theme: UI_PREFS.themeMode
@@ -1591,6 +1612,7 @@ function init(){
             DATA = { ...DATA, ...(payload.data || {}) };
             if(!DATA.trash) DATA.trash = [];
             if(!DATA.requests) DATA.requests = [];
+            EXTRA_TASKS = { ...(payload.extraTasks || payload.extra_tasks || {}) };
             ['active', 'archive', 'paused', 'waiting', 'potential'].forEach(type => {
                  DATA[type].forEach(i => {
                     if(i.contractor === undefined) i.contractor = 0;
@@ -1611,6 +1633,8 @@ function init(){
             }
         } catch(e) { console.error("Data load error", e); }
     }
+
+    const idsAdded = ensureProjectIds();
 
     hydrateArchiveCompletionMeta();
     loadUiPrefs();
@@ -1652,6 +1676,7 @@ function init(){
     updateScrollToggle();
     window.addEventListener('scroll', updateScrollToggle);
     window.addEventListener('resize', updateScrollToggle);
+    if (idsAdded) save();
     upd();
 }
 
@@ -2030,6 +2055,7 @@ function upd(){
     if (desc) desc.innerHTML = getTabSummary(currentTab, TAB_DESCRIPTIONS[currentTab]);
     updateBulkToolbar(currentTab);
     updateTabCounts();
+    if (typeof window.renderJournalButtons === 'function') window.renderJournalButtons();
 }
 
 function renderActive(){
@@ -2048,6 +2074,8 @@ function renderActive(){
         const rem = getTimeRemaining(item.dl);
         const tr = document.createElement('tr');
         tr.dataset.index = i;
+        tr.dataset.type = 'active';
+        tr.dataset.projectId = item.id;
 
         const isSelected = selectedRows.active?.has(i.toString());
         if (isSelected) tr.classList.add('row-selected');
@@ -2198,6 +2226,8 @@ function renderSimple(type){
         tot += toNumeric(item.p);
         const tr = document.createElement('tr');
         tr.dataset.index = i;
+        tr.dataset.type = type;
+        tr.dataset.projectId = item.id;
 
         const isSelected = selectedRows[type]?.has(i.toString());
         if (isSelected) tr.classList.add('row-selected');
@@ -2255,6 +2285,8 @@ function renderPotential(){
         tot += toNumeric(item.p);
         const tr = document.createElement('tr');
         tr.dataset.index = i;
+        tr.dataset.type = 'potential';
+        tr.dataset.projectId = item.id;
 
         const isSelected = selectedRows.potential?.has(i.toString());
         if (isSelected) tr.classList.add('row-selected');
@@ -2309,6 +2341,9 @@ function renderRequests(){
         const budget = toNumeric(item.budget);
         total += budget;
         const tr = document.createElement('tr');
+        tr.dataset.index = i;
+        tr.dataset.type = 'requests';
+        tr.dataset.projectId = item.id;
         const linkBtns = renderLinkControls(item, i, 'requests');
         tr.innerHTML = `
             <td class="select-col"><div class="row-index">${i + 1}</div></td>
@@ -2339,7 +2374,7 @@ function addRequest() {
     const link = document.getElementById('req-link').value.trim();
     const budget = toNumeric(document.getElementById('req-budget').value);
     if (!name && !note) return;
-    DATA.requests.unshift({ name, source, note, link: normalizeLinkValue(link), budget, created: new Date().toISOString() });
+    DATA.requests.unshift({ name, source, note, link: normalizeLinkValue(link), budget, created: new Date().toISOString(), id: generateProjectId() });
     ['req-name','req-source','req-note','req-link','req-budget'].forEach(id => document.getElementById(id).value = '');
     save(); upd();
     showToast('Заявка добавлена');
@@ -2363,7 +2398,11 @@ function deleteRequest(idx) {
 function convertRequestToPotential(idx) {
     const req = DATA.requests.splice(idx, 1)[0];
     if (!req) return;
-    DATA.potential.unshift({ n: req.note || req.name || 'Новый лид', c: req.name || '—', p: req.budget || 0, contractor: 0, contractorMode: 'none', taxPrc: 0, paid: 0, link: req.link || '' });
+    const targetId = req.id || generateProjectId();
+    DATA.potential.unshift({ n: req.note || req.name || 'Новый лид', c: req.name || '—', p: req.budget || 0, contractor: 0, contractorMode: 'none', taxPrc: 0, paid: 0, link: req.link || '', id: targetId });
+    if (req.id && EXTRA_TASKS[req.id]) {
+        EXTRA_TASKS[targetId] = EXTRA_TASKS[req.id];
+    }
     save();
     showToast('Перенесено в потенциал');
     switchTab('potential');
@@ -2383,6 +2422,8 @@ function renderArchive(){
         tTax += toNumeric(item.p) * ((toNumeric(item.taxPrc) || 0) / 100);
         const tr = document.createElement('tr');
         tr.dataset.index = realIdx;
+        tr.dataset.type = 'archive';
+        tr.dataset.projectId = item.id;
 
         const isSelected = selectedRows.archive?.has(realIdx.toString());
         if (isSelected) tr.classList.add('row-selected');
@@ -2545,6 +2586,7 @@ function renderAll(){
         tr.dataset.index = selectionKey;
         tr.dataset.type = wrap.__type;
         tr.dataset.sourceIndex = wrap.idx;
+        tr.dataset.projectId = item.id;
         if (isSelected) tr.classList.add('row-selected');
 
         const statusIcon = status.icon ? `<svg class="status-pill-icon"><use href="#${status.icon}"/></svg>` : '';
@@ -2672,6 +2714,8 @@ function renderTrash(){
         const tr = document.createElement('tr');
         tr.classList.add('trash-row');
         tr.dataset.index = i;
+        tr.dataset.type = 'trash';
+        tr.dataset.projectId = item.id;
 
         const isSelected = selectedRows.trash?.has(i.toString());
         if (isSelected) tr.classList.add('row-selected');
@@ -2895,7 +2939,9 @@ function duplicateRow(type, idx){
     const item = JSON.parse(JSON.stringify(DATA[type].find((_, i) => i === idx)));
     if(!item) return;
     item.n = item.n + " (Копия)";
+    item.id = generateProjectId();
     DATA[type].unshift(item);
+    if (item.id) EXTRA_TASKS[item.id] = [];
     save(); upd();
 }
 
@@ -3194,7 +3240,8 @@ function saveNewProject(){
             ? (isDeadlineCleared ? '' : (finalDeadline || base.dl || ''))
             : undefined,
         paid: type==='archive' ? 100 : paid,
-        date: type==='archive' ? today : base.date
+        date: type==='archive' ? today : base.date,
+        id: base.id || generateProjectId()
     };
 
     if (type === 'potential') {
@@ -4510,6 +4557,7 @@ function imp(f){
       const normalized = {
         version: payload.version || 2,
         data: { ...DATA, ...(payload.data || {}) },
+        extraTasks: payload.extraTasks || payload.extra_tasks || EXTRA_TASKS,
         uiPrefs: payload.uiPrefs || UI_PREFS,
         nameTemplates: Array.isArray(payload.nameTemplates) ? payload.nameTemplates : NAME_TEMPLATES,
         theme: (payload.uiPrefs || UI_PREFS).themeMode || payload.theme
