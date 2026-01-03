@@ -20,7 +20,7 @@
             height: 32px;
             background: var(--pill-bg);
             border: 1px solid var(--border);
-            border-radius: 8px / calc(8px * 1.35);
+            border-radius: 8px;
             cursor: pointer !important;
             color: var(--muted);
             font-size: 13px;
@@ -46,7 +46,7 @@
         .df-modal {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 16px / calc(16px * 1.35);
+            border-radius: 16px;
             width: 900px;
             max-height: 85vh;
             display: flex;
@@ -64,7 +64,7 @@
             margin-bottom: 8px;
             background: var(--bg);
             padding: 10px 14px;
-            border-radius: 10px / calc(10px * 1.35);
+            border-radius: 10px;
             border: 1px solid var(--border);
             position: relative;
         }
@@ -72,7 +72,7 @@
         .task-row.is-done input, .task-row.is-done select { text-decoration: line-through !important; }
         .check-wrapper { position: relative; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; }
         .c-input {
-            appearance: none; -webkit-appearance: none; width: 22px; height: 22px; border-radius: 6px / calc(6px * 1.35);
+            appearance: none; -webkit-appearance: none; width: 22px; height: 22px; border-radius: 6px;
             background: #21262d; border: 2px solid #444c56; cursor: pointer; transition: 0.2s; margin: 0; position: absolute;
         }
         .c-input:checked { background: #316dca !important; border-color: #316dca !important; }
@@ -82,12 +82,12 @@
         }
         .c-input:checked + .check-mark { border-left: 3px solid white !important; border-bottom: 3px solid white !important; }
         .task-row input, .task-row select { background: transparent; border: none !important; color: inherit; outline: none; font-size: 14px; width: 100%; }
-        .price-wrapper { display: flex; align-items: center; color: var(--gold); font-weight: bold; background: rgba(255, 215, 0, 0.05); padding: 4px 10px; border-radius: 6px / calc(6px * 1.35); }
+        .price-wrapper { display: flex; align-items: center; color: var(--gold); font-weight: bold; background: rgba(255, 215, 0, 0.05); padding: 4px 10px; border-radius: 6px; }
         .t-price { text-align: right; padding-right: 5px !important; }
-        .hours-wrapper { display: flex; align-items: center; gap: 6px; background: rgba(46, 160, 67, 0.05); padding: 6px 10px; border-radius: 8px / calc(8px * 1.35); border: 1px solid rgba(46, 160, 67, 0.2); }
+        .hours-wrapper { display: flex; align-items: center; gap: 6px; background: rgba(46, 160, 67, 0.05); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(46, 160, 67, 0.2); }
         .hours-wrapper span { color: var(--muted); font-size: 12px; }
         .hours-input { text-align: right; font-weight: 600; }
-        .date-input-wrapper { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.03); padding: 4px 10px; border-radius: 8px / calc(8px * 1.35); position: relative; border: 1px solid var(--border); min-height: 40px; }
+        .date-input-wrapper { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.03); padding: 4px 10px; border-radius: 8px; position: relative; border: 1px solid var(--border); min-height: 40px; }
         .deadline-btn { display: inline-flex; align-items: center; gap: 8px; background: transparent; border: none; color: var(--muted); padding: 0; cursor: pointer; width: 100%; text-align: left; font-weight: 600; }
         .deadline-btn svg { width: 16px; height: 16px; color: var(--muted); }
         .deadline-btn .deadline-text { color: var(--text); }
@@ -108,21 +108,21 @@
             border: 1px solid var(--border);
             color: var(--muted);
             padding: 8px 14px;
-            border-radius: 8px / calc(8px * 1.35);
+            border-radius: 8px;
             cursor: pointer;
         }
-        .add-task { width: 100%; padding: 12px; background: transparent; border: 1px dashed var(--border); color: var(--muted); border-radius: 10px / calc(10px * 1.35); cursor: pointer; margin-top: 10px; }
+        .add-task { width: 100%; padding: 12px; background: transparent; border: 1px dashed var(--border); color: var(--muted); border-radius: 10px; cursor: pointer; margin-top: 10px; }
         .deadline-dialog { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 1000001; background: rgba(0,0,0,0.35); padding: 16px; }
-        .deadline-dialog-inner { background: var(--card); border: 1px solid var(--border); border-radius: 12px / calc(12px * 1.35); padding: 18px; width: 380px; box-shadow: 0 20px 40px rgba(0,0,0,0.35); }
+        .deadline-dialog-inner { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; width: 380px; box-shadow: 0 20px 40px rgba(0,0,0,0.35); }
         .deadline-dialog h4 { margin: 0 0 6px; }
         .deadline-dialog .preset-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 10px 0; }
-        .deadline-dialog .preset-btn { padding: 10px; border: 1px solid var(--border); border-radius: 8px / calc(8px * 1.35); background: var(--bg); color: var(--text); cursor: pointer; text-align: left; }
+        .deadline-dialog .preset-btn { padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); cursor: pointer; text-align: left; }
         .deadline-dialog .preset-btn:hover { border-color: var(--accent); color: var(--accent); }
         .deadline-dialog .inputs { display: grid; gap: 10px; margin: 10px 0; }
         .deadline-dialog .inputs label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); }
-        .deadline-dialog .inputs input { width: 100%; padding: 10px; border-radius: 10px / calc(10px * 1.35); border: 1px solid var(--border); background: var(--bg); color: var(--text); }
+        .deadline-dialog .inputs input { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
         .deadline-dialog .actions { display: flex; justify-content: space-between; gap: 8px; margin-top: 8px; }
-        .deadline-dialog .actions button { flex: 1; padding: 10px; border-radius: 10px / calc(10px * 1.35); border: 1px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; }
+        .deadline-dialog .actions button { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; }
         .deadline-dialog .actions .primary { background: var(--btn-blue, #316dca); border-color: var(--btn-blue, #316dca); color: white; }
         .deadline-dialog .actions .danger { color: #ff7b72; border-color: #ff7b72; }
     `;
