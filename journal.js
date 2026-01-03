@@ -47,7 +47,7 @@
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: 16px;
-            width: 820px;
+            width: 900px;
             max-height: 85vh;
             display: flex;
             flex-direction: column;
@@ -58,7 +58,7 @@
         .df-modal-body { padding: 20px; overflow-y: auto; flex-grow: 1; }
         .task-row {
             display: grid;
-            grid-template-columns: 35px 1fr 115px 130px 140px 35px;
+            grid-template-columns: 26px 35px 1fr 130px 140px 170px 35px;
             align-items: center;
             gap: 12px;
             margin-bottom: 8px;
@@ -66,6 +66,7 @@
             padding: 10px 14px;
             border-radius: 10px;
             border: 1px solid var(--border);
+            position: relative;
         }
         .task-row.is-done { opacity: 0.6; }
         .task-row.is-done input, .task-row.is-done select { text-decoration: line-through !important; }
@@ -83,15 +84,22 @@
         .task-row input, .task-row select { background: transparent; border: none !important; color: inherit; outline: none; font-size: 14px; width: 100%; }
         .price-wrapper { display: flex; align-items: center; color: var(--gold); font-weight: bold; background: rgba(255, 215, 0, 0.05); padding: 4px 10px; border-radius: 6px; }
         .t-price { text-align: right; padding-right: 5px !important; }
-        .date-input-wrapper { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.03); padding: 4px 8px; border-radius: 6px; position: relative; }
-        .t-date-txt { font-size: 13px !important; color: var(--muted); }
-        .calendar-trigger { cursor: pointer; color: var(--muted); font-size: 14px; transition: 0.2s; }
-        .calendar-trigger:hover { color: var(--accent); }
-        .t-date-picker { position: absolute; right: 0; top: 0; width: 30px !important; opacity: 0; cursor: pointer; }
+        .hours-wrapper { display: flex; align-items: center; gap: 6px; background: rgba(46, 160, 67, 0.05); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(46, 160, 67, 0.2); }
+        .hours-wrapper span { color: var(--muted); font-size: 12px; }
+        .hours-input { text-align: right; font-weight: 600; }
+        .date-input-wrapper { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.03); padding: 4px 10px; border-radius: 8px; position: relative; border: 1px solid var(--border); min-height: 40px; }
+        .deadline-btn { display: inline-flex; align-items: center; gap: 8px; background: transparent; border: none; color: var(--muted); padding: 0; cursor: pointer; width: 100%; text-align: left; font-weight: 600; }
+        .deadline-btn svg { width: 16px; height: 16px; color: var(--muted); }
+        .deadline-btn .deadline-text { color: var(--text); }
+        .deadline-btn.is-empty .deadline-text { color: var(--muted); font-weight: 500; }
         .btn-del { cursor: pointer; opacity: 0.3; text-align: right; color: var(--muted); padding: 5px; }
         .btn-del:hover { opacity: 1; color: #ff7b72; }
+        .drag-handle { cursor: grab; display: flex; align-items: center; justify-content: center; color: var(--muted); }
+        .drag-handle:hover { color: var(--text); }
+        .task-row.drag-over { outline: 1px dashed var(--accent); }
         .df-modal-footer { padding: 18px 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .total-val { color: var(--accent); font-weight: bold; }
+        .hours-total { color: var(--muted); font-weight: 600; margin-left: 12px; }
         .copy-btn, .snap-btn {
             display: flex;
             align-items: center;
@@ -104,6 +112,19 @@
             cursor: pointer;
         }
         .add-task { width: 100%; padding: 12px; background: transparent; border: 1px dashed var(--border); color: var(--muted); border-radius: 10px; cursor: pointer; margin-top: 10px; }
+        .deadline-dialog { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 1000001; background: rgba(0,0,0,0.35); padding: 16px; }
+        .deadline-dialog-inner { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; width: 380px; box-shadow: 0 20px 40px rgba(0,0,0,0.35); }
+        .deadline-dialog h4 { margin: 0 0 6px; }
+        .deadline-dialog .preset-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 10px 0; }
+        .deadline-dialog .preset-btn { padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); cursor: pointer; text-align: left; }
+        .deadline-dialog .preset-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .deadline-dialog .inputs { display: grid; gap: 10px; margin: 10px 0; }
+        .deadline-dialog .inputs label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--muted); }
+        .deadline-dialog .inputs input { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); }
+        .deadline-dialog .actions { display: flex; justify-content: space-between; gap: 8px; margin-top: 8px; }
+        .deadline-dialog .actions button { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; }
+        .deadline-dialog .actions .primary { background: var(--btn-blue, #316dca); border-color: var(--btn-blue, #316dca); color: white; }
+        .deadline-dialog .actions .danger { color: #ff7b72; border-color: #ff7b72; }
     `;
     document.head.appendChild(style);
 
@@ -187,50 +208,226 @@
 
         const persist = () => setTasks(projectId, tasks);
 
+        const normalizeDeadline = (task = {}) => {
+            const dl = typeof task.deadline === 'object' && task.deadline !== null
+                ? { ...task.deadline }
+                : {};
+
+            if (!dl.date && typeof task.date === 'string' && task.date.trim()) {
+                const raw = task.date.trim();
+                const parts = raw.split('.');
+                if (parts.length >= 2) {
+                    const [d, m, y] = parts;
+                    const year = y ? (y.length === 2 ? `20${y}` : y) : String(new Date().getFullYear());
+                    dl.date = `${year}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+                } else {
+                    dl.legacyLabel = raw;
+                }
+            }
+
+            return {
+                date: typeof dl.date === 'string' ? dl.date : '',
+                time: typeof dl.time === 'string' ? dl.time : '',
+                legacyLabel: typeof dl.legacyLabel === 'string' ? dl.legacyLabel : ''
+            };
+        };
+
+        const formatDeadlineLabel = (deadline = {}) => {
+            if (!deadline.date) {
+                return deadline.legacyLabel || 'Без дедлайна';
+            }
+            const dt = new Date(`${deadline.date}T${deadline.time || '12:00'}`);
+            if (Number.isNaN(dt.getTime())) {
+                return deadline.legacyLabel || 'Без дедлайна';
+            }
+            const dateText = new Intl.DateTimeFormat('ru-RU', { day: '2-digit', month: '2-digit' }).format(dt);
+            return deadline.time ? `${dateText} ${deadline.time}` : dateText;
+        };
+
+        const normalizeTask = (raw = {}) => {
+            const hoursVal = Number.isFinite(Number(raw.hours)) ? Number(raw.hours) : (calculate(raw.time || 0) || 0);
+            const priceVal = calculate(raw.price);
+            const deadline = normalizeDeadline(raw);
+            return {
+                ...raw,
+                text: raw.text || '',
+                done: !!raw.done,
+                hours: hoursVal,
+                hours_view: raw.hours_view || formatNumber(hoursVal || ''),
+                time: String(hoursVal || ''),
+                price: priceVal,
+                price_view: raw.price_view || formatNumber(priceVal),
+                deadline,
+                date: raw.date || ''
+            };
+        };
+
+        const normalizeTasks = () => {
+            tasks = tasks.map(normalizeTask);
+        };
+
+        const presetISODate = (daysFromNow = 0) => {
+            const d = new Date();
+            d.setDate(d.getDate() + daysFromNow);
+            return d.toISOString().slice(0, 10);
+        };
+
+        const applyDeadline = (idx, nextDeadline) => {
+            tasks[idx].deadline = nextDeadline;
+            tasks[idx].date = nextDeadline.date ? formatDeadlineLabel(nextDeadline) : '';
+            persist();
+            render();
+            if (typeof showToast === 'function') {
+                showToast(nextDeadline.date ? 'Срок сохранён' : 'Без дедлайна');
+            }
+        };
+
+        const openDeadlineDialog = (idx) => {
+            const existing = document.querySelector('.deadline-dialog');
+            if (existing) existing.remove();
+
+            const targetTask = tasks[idx];
+            const dialog = document.createElement('div');
+            dialog.className = 'deadline-dialog';
+            const dateId = `deadline-date-${idx}`;
+            const timeId = `deadline-time-${idx}`;
+            dialog.innerHTML = `
+                <div class="deadline-dialog-inner">
+                    <h4>Дедлайн</h4>
+                    <p class="helper-note">Выберите готовый срок или задайте свой.</p>
+                    <div class="preset-grid">
+                        <button type="button" class="preset-btn" data-preset="0">Сегодня</button>
+                        <button type="button" class="preset-btn" data-preset="1">Завтра</button>
+                        <button type="button" class="preset-btn" data-preset="3">Через 3 дня</button>
+                        <button type="button" class="preset-btn" data-preset="7">Неделя</button>
+                        <button type="button" class="preset-btn" data-preset="custom">Свой срок</button>
+                        <button type="button" class="preset-btn" data-preset="clear">Без дедлайна</button>
+                    </div>
+                    <div class="inputs">
+                        <label>Дата
+                            <input type="date" id="${dateId}" value="${targetTask.deadline?.date || ''}">
+                        </label>
+                        <label>Время (опционально)
+                            <input type="time" id="${timeId}" value="${targetTask.deadline?.time || ''}" step="300">
+                        </label>
+                    </div>
+                    <div class="actions">
+                        <button type="button" class="danger" data-action="clear">Без дедлайна</button>
+                        <button type="button" class="primary" data-action="save">Сохранить</button>
+                    </div>
+                </div>
+            `;
+
+            const dateInput = dialog.querySelector(`#${dateId}`);
+            const timeInput = dialog.querySelector(`#${timeId}`);
+
+            dialog.querySelectorAll('.preset-btn').forEach(btn => {
+                btn.onclick = () => {
+                    const preset = btn.dataset.preset;
+                    if (preset === 'custom') {
+                        dateInput.focus();
+                        return;
+                    }
+                    if (preset === 'clear') {
+                        dateInput.value = '';
+                        timeInput.value = '';
+                        applyDeadline(idx, { date: '', time: '', legacyLabel: '' });
+                        dialog.remove();
+                        return;
+                    }
+                    const days = Number(preset);
+                    if (!Number.isNaN(days)) {
+                        dateInput.value = presetISODate(days);
+                        timeInput.value = '';
+                    }
+                };
+            });
+
+            dialog.querySelector('[data-action="save"]').onclick = () => {
+                applyDeadline(idx, { date: dateInput.value, time: timeInput.value, legacyLabel: '' });
+                dialog.remove();
+            };
+
+            dialog.querySelector('[data-action="clear"]').onclick = () => {
+                applyDeadline(idx, { date: '', time: '', legacyLabel: '' });
+                dialog.remove();
+            };
+
+            dialog.onclick = (e) => { if (e.target === dialog) dialog.remove(); };
+
+            document.body.appendChild(dialog);
+        };
+
+        let dragIndex = null;
+        const removeDeadlineDialog = () => {
+            const dlg = document.querySelector('.deadline-dialog');
+            if (dlg) dlg.remove();
+        };
+        const closeModal = () => {
+            removeDeadlineDialog();
+            if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        };
+
         const render = () => {
+            normalizeTasks();
             const totalCash = tasks.reduce((s, t) => s + calculate(t.price), 0);
+            const totalHours = tasks.reduce((s, t) => s + (Number(t.hours) || 0), 0);
+            const rowsHTML = tasks.map((t, i) => {
+                const deadlineText = formatDeadlineLabel(t.deadline);
+                const priceDisplay = t.price_view || formatNumber(calculate(t.price));
+                const hoursDisplay = t.hours_view || formatNumber(t.hours || '');
+                return `
+                    <div class="task-row ${t.done ? 'is-done' : ''}" data-idx="${i}">
+                        <div class="drag-handle" data-drag="${i}" title="Перетащите, чтобы изменить порядок">
+                            <svg><use href="#icon-grip"/></svg>
+                        </div>
+                        <div class="check-wrapper">
+                            <input type="checkbox" ${t.done ? 'checked' : ''} data-idx="${i}" class="c-input">
+                            <div class="check-mark"></div>
+                        </div>
+                        <input type="text" value="${t.text || ''}" placeholder="Название этапа..." data-idx="${i}" class="txt">
+                        <div class="hours-wrapper">
+                            <input type="text" value="${hoursDisplay}" class="hours-input" data-idx="${i}" placeholder="0">
+                            <span>ч</span>
+                        </div>
+                        <div class="price-wrapper">
+                            <input type="text" value="${priceDisplay}" class="t-price" data-idx="${i}" placeholder="0">
+                            <span>₽</span>
+                        </div>
+                        <div class="date-input-wrapper">
+                            <button type="button" class="deadline-btn ${t.deadline?.date ? '' : 'is-empty'}" data-idx="${i}">
+                                <svg class="date-icon"><use href="#icon-calendar"/></svg>
+                                <span class="deadline-text">${deadlineText}</span>
+                            </button>
+                        </div>
+                        <span class="btn-del" data-del="${i}"><i class="fa fa-trash"></i></span>
+                    </div>`;
+            }).join('');
+
             modal.innerHTML = `
                 <div class="df-modal-header">
                     <strong>${projectLabel}</strong>
                     <span class="close-modal" style="cursor:pointer; font-size:24px">&times;</span>
                 </div>
                 <div class="df-modal-body">
-                    <div id="tasks-root">${tasks.map((t, i) => `
-                        <div class="task-row ${t.done ? 'is-done' : ''}">
-                            <div class="check-wrapper">
-                                <input type="checkbox" ${t.done ? 'checked' : ''} data-idx="${i}" class="c-input">
-                                <div class="check-mark"></div>
-                            </div>
-                            <input type="text" value="${t.text || ''}" placeholder="Название этапа..." data-idx="${i}" class="txt">
-                            <select class="t-time-select" style="color: var(--green)" data-idx="${i}">
-                                <option value="0.5" ${t.time === '0.5' ? 'selected' : ''}>30 мин</option>
-                                <option value="1" ${t.time === '1' || !t.time ? 'selected' : ''}>1 час</option>
-                                <option value="2" ${t.time === '2' ? 'selected' : ''}>2 часа</option>
-                                <option value="4" ${t.time === '4' ? 'selected' : ''}>4 часа</option>
-                                <option value="8" ${t.time === '8' ? 'selected' : ''}>8 часов</option>
-                            </select>
-                            <div class="price-wrapper">
-                                <input type="text" value="${t.price_view || formatNumber(calculate(t.price))}" class="t-price" data-idx="${i}" placeholder="0">
-                                <span>₽</span>
-                            </div>
-                            <div class="date-input-wrapper">
-                                <input type="text" value="${t.date || ''}" placeholder="Срок" class="t-date-txt" data-idx="${i}">
-                                <i class="fa fa-calendar-alt calendar-trigger"></i>
-                                <input type="date" class="t-date-picker" data-idx="${i}">
-                            </div>
-                            <span class="btn-del" data-del="${i}"><i class="fa fa-trash"></i></span>
-                        </div>`).join('')}</div>
+                    <div id="tasks-root">${rowsHTML}</div>
                     <button class="add-task"><i class="fa fa-plus-circle"></i> Добавить этап</button>
                 </div>
                 <div class="df-modal-footer">
-                    <span>Бюджет: <span class="total-val">${formatMoney(totalCash)}</span></span>
+                    <span>Бюджет: <span class="total-val">${formatMoney(totalCash)}</span><span class="hours-total"> · Часы: ${formatNumber(totalHours)}</span></span>
                     <div style="display:flex; gap:10px">
                         <button class="snap-btn"><i class="fa fa-camera"></i> Скриншот</button>
                         <button class="copy-btn"><i class="fa fa-copy"></i> Текст</button>
                     </div>
                 </div>`;
 
-            modal.querySelector('.close-modal').onclick = () => document.body.removeChild(overlay);
+            const applyCalcFormatting = (el) => {
+                if (typeof formatNumberInput === 'function') {
+                    formatNumberInput(el);
+                }
+            };
+
+            modal.querySelector('.close-modal').onclick = closeModal;
             modal.querySelector('.snap-btn').onclick = () => makeScreenshot(projectLabel, projectId, tasks);
             modal.querySelector('.copy-btn').onclick = () => {
                 const textStr = tasks.map(t => {
@@ -239,17 +436,19 @@
                     return `${t.done ? '🔵' : '⚪'} ${name}`;
                 }).join('\n');
                 navigator.clipboard?.writeText(`Проект ${projectLabel}\n${textStr}\nИтого: ${formatMoney(totalCash)}`);
+                if (typeof showToast === 'function') showToast('Чек-лист скопирован');
             };
 
             modal.querySelector('.add-task').onclick = () => {
-                tasks.push({ text:'', done:false, time:'1', price:'0', price_view:'0', date:'' });
+                tasks.push(normalizeTask({ text: '', done: false, hours: 1, price: 0, price_view: '0', deadline: { date: '', time: '' } }));
                 persist();
                 render();
             };
 
             modal.querySelectorAll('.t-price').forEach(el => {
+                el.oninput = () => applyCalcFormatting(el);
                 el.onblur = (e) => {
-                    const idx = e.target.dataset.idx;
+                    const idx = Number(e.target.dataset.idx);
                     const val = calculate(e.target.value);
                     tasks[idx].price = val;
                     tasks[idx].price_view = formatNumber(val);
@@ -258,29 +457,39 @@
                 };
             });
 
-            modal.querySelectorAll('input, select').forEach(el => {
+            modal.querySelectorAll('.hours-input').forEach(el => {
+                el.oninput = () => applyCalcFormatting(el);
+                el.onkeydown = (e) => { if (e.key === 'Enter') e.target.blur(); };
+                el.onblur = (e) => {
+                    const idx = Number(e.target.dataset.idx);
+                    const val = calculate(e.target.value);
+                    tasks[idx].hours = val;
+                    tasks[idx].hours_view = formatNumber(val);
+                    tasks[idx].time = String(val || '');
+                    persist();
+                    render();
+                };
+            });
+
+            modal.querySelectorAll('.txt').forEach(el => {
                 el.oninput = (e) => {
-                    const idx = e.target.dataset.idx;
-                    if (e.target.classList.contains('c-input')) {
-                        tasks[idx].done = e.target.checked;
-                        persist();
-                        render();
-                        return;
-                    }
-                    if (e.target.classList.contains('txt')) tasks[idx].text = e.target.value;
-                    else if (e.target.classList.contains('t-time-select')) tasks[idx].time = e.target.value;
-                    else if (e.target.classList.contains('t-date-txt')) tasks[idx].date = e.target.value;
-                    else if (e.target.classList.contains('t-date-picker')) {
-                        const val = e.target.value;
-                        if (val) {
-                            const [y, m, d] = val.split('-');
-                            tasks[idx].date = `${d}.${m}`;
-                        }
-                        render();
-                        return;
-                    }
+                    const idx = Number(e.target.dataset.idx);
+                    tasks[idx].text = e.target.value;
                     persist();
                 };
+            });
+
+            modal.querySelectorAll('.c-input').forEach(el => {
+                el.onchange = (e) => {
+                    const idx = Number(e.target.dataset.idx);
+                    tasks[idx].done = e.target.checked;
+                    persist();
+                    render();
+                };
+            });
+
+            modal.querySelectorAll('.deadline-btn').forEach(btn => {
+                btn.onclick = () => openDeadlineDialog(Number(btn.dataset.idx));
             });
 
             modal.querySelectorAll('[data-del]').forEach(btn => {
@@ -290,12 +499,37 @@
                     render();
                 };
             });
+
+            modal.querySelectorAll('.drag-handle').forEach(handle => {
+                handle.draggable = true;
+                handle.addEventListener('dragstart', (e) => {
+                    dragIndex = Number(handle.dataset.drag);
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+                handle.addEventListener('dragend', () => { dragIndex = null; });
+            });
+
+            modal.querySelectorAll('.task-row').forEach(row => {
+                row.addEventListener('dragover', (e) => { e.preventDefault(); row.classList.add('drag-over'); });
+                row.addEventListener('dragleave', () => row.classList.remove('drag-over'));
+                row.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    row.classList.remove('drag-over');
+                    const targetIdx = Number(row.dataset.idx);
+                    if (dragIndex === null || dragIndex === targetIdx) return;
+                    const [moved] = tasks.splice(dragIndex, 1);
+                    tasks.splice(targetIdx, 0, moved);
+                    dragIndex = null;
+                    persist();
+                    render();
+                });
+            });
         };
 
         render();
         overlay.appendChild(modal);
         document.body.appendChild(overlay);
-        overlay.onmousedown = (e) => { if (e.target === overlay) document.body.removeChild(overlay); };
+        overlay.onmousedown = (e) => { if (e.target === overlay) closeModal(); };
     }
 
     function renderJournalButtons() {
