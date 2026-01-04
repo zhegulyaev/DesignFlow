@@ -46,27 +46,28 @@
         .df-modal {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            width: 900px;
-            max-height: 85vh;
+            border-radius: 18px;
+            width: 980px;
+            max-height: 88vh;
             display: flex;
             flex-direction: column;
             color: var(--text);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.55);
         }
         .df-modal-header { padding: 18px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .df-modal-body { padding: 20px; overflow-y: auto; flex-grow: 1; }
         .task-row {
             display: grid;
-            grid-template-columns: 26px 35px 1fr 130px 140px 170px 35px;
+            grid-template-columns: 26px 34px 1fr 120px 125px 210px 28px;
             align-items: center;
             gap: 12px;
-            margin-bottom: 8px;
-            background: var(--bg);
-            padding: 10px 14px;
-            border-radius: 10px;
+            margin-bottom: 10px;
+            background: linear-gradient(120deg, rgba(88,166,255,0.06), rgba(163,113,247,0.05)), var(--card);
+            padding: 8px 14px;
+            border-radius: 14px;
             border: 1px solid var(--border);
             position: relative;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
         }
         .task-row.is-done { opacity: 0.6; }
         .task-row.is-done input, .task-row.is-done select { text-decoration: line-through !important; }
@@ -87,15 +88,20 @@
         .hours-wrapper { display: flex; align-items: center; gap: 6px; background: rgba(46, 160, 67, 0.05); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(46, 160, 67, 0.2); }
         .hours-wrapper span { color: var(--muted); font-size: 12px; }
         .hours-input { text-align: right; font-weight: 600; }
-        .date-input-wrapper { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.03); padding: 4px 10px; border-radius: 8px; position: relative; border: 1px solid var(--border); min-height: 40px; }
-        .deadline-btn { display: inline-flex; align-items: center; gap: 8px; background: transparent; border: none; color: var(--muted); padding: 0; cursor: pointer; width: 100%; text-align: left; font-weight: 600; }
-        .deadline-btn svg { width: 16px; height: 16px; color: var(--muted); }
+        .date-input-wrapper { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.03); padding: 8px 12px; border-radius: 12px; position: relative; border: 1px solid var(--border); min-height: 48px; }
+        .deadline-copy { display: grid; gap: 2px; min-width: 120px; }
+        .deadline-copy .title { font-size: 12px; font-weight: 800; letter-spacing: 0.3px; color: var(--muted); text-transform: uppercase; }
+        .deadline-copy .hint { font-size: 12px; color: var(--muted); opacity: 0.85; }
+        .deadline-btn { display: inline-flex; align-items: center; gap: 10px; background: transparent; border: none; color: var(--muted); padding: 6px 10px; cursor: pointer; width: 100%; text-align: left; font-weight: 700; border-radius: 10px; transition: .15s; }
+        .deadline-btn:hover { border: 1px dashed var(--accent); color: var(--text); }
+        .deadline-btn svg { width: 18px; height: 18px; color: var(--muted); }
         .deadline-btn .deadline-text { color: var(--text); }
-        .deadline-btn.is-empty .deadline-text { color: var(--muted); font-weight: 500; }
+        .deadline-btn.is-empty .deadline-text { color: var(--muted); font-weight: 600; }
         .btn-del { cursor: pointer; opacity: 0.3; text-align: right; color: var(--muted); padding: 5px; }
         .btn-del:hover { opacity: 1; color: #ff7b72; }
-        .drag-handle { cursor: grab; display: flex; align-items: center; justify-content: center; color: var(--muted); }
-        .drag-handle:hover { color: var(--text); }
+        .drag-handle { cursor: grab; display: flex; align-items: center; justify-content: center; color: var(--muted); width: 28px; height: 28px; border-radius: 10px; border: 1px dashed var(--border); background: rgba(255,255,255,0.02); transition: .15s; }
+        .drag-handle svg { width: 14px; height: 14px; opacity: 0.8; }
+        .drag-handle:hover { color: var(--text); border-color: var(--accent); background: rgba(88,166,255,0.08); }
         .task-row.drag-over { outline: 1px dashed var(--accent); }
         .df-modal-footer { padding: 18px 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .total-val { color: var(--accent); font-weight: bold; }
@@ -395,6 +401,10 @@
                             <span>₽</span>
                         </div>
                         <div class="date-input-wrapper">
+                            <div class="deadline-copy">
+                                <span class="title">Срок</span>
+                                <span class="hint">Выбери пресет или поставь свой</span>
+                            </div>
                             <button type="button" class="deadline-btn ${t.deadline?.date ? '' : 'is-empty'}" data-idx="${i}">
                                 <svg class="date-icon"><use href="#icon-calendar"/></svg>
                                 <span class="deadline-text">${deadlineText}</span>
