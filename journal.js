@@ -58,7 +58,7 @@
         .df-modal-body { padding: 20px; overflow-y: auto; flex-grow: 1; }
         .task-row {
             display: grid;
-            grid-template-columns: 26px 34px 1fr 120px 125px 210px 28px;
+            grid-template-columns: 26px 34px 1fr 120px 125px minmax(230px, 260px) 28px;
             align-items: center;
             gap: 12px;
             margin-bottom: 10px;
