@@ -665,10 +665,16 @@ function isTableEnabled(key) {
 }
 
 function getEnabledTabs() {
-    return ['all','active','waiting','potential','requests','paused','archive','trash'].filter(tab => {
+    const tabs = ['all','active','waiting','potential','requests','paused','archive','trash'].filter(tab => {
         if (['waiting','requests','paused'].includes(tab)) return isTableEnabled(tab);
         return true;
     });
+    // В режиме с ограниченными вкладками гарантируем, что вместе с "В работе"
+    // отображается и блок "Ожидает" (если он не скрыт в настройках).
+    if (tabs.length === 1 && tabs[0] === 'active' && isTableEnabled('waiting')) {
+        tabs.splice(1, 0, 'waiting');
+    }
+    return tabs;
 }
 
 function applyTableVisibility() {
