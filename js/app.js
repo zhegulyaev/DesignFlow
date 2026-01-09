@@ -2935,6 +2935,7 @@ function confirmCompletion() {
     DATA.archive.unshift(item);
     completionContext = null;
     closeCompleteModal();
+    document.documentElement.classList.add('zen-show-archive');
     sortData('active', 'dl', 'date', true);
     save();
     setTimeout(() => { switchTab('archive'); }, 10);

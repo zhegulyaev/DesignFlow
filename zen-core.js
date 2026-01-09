@@ -33,8 +33,11 @@
                 html.zen-mode-active .welcome-block,
                 html.zen-mode-active .stats-grid,
                 html.zen-mode-active .side-stack,
-                html.zen-mode-active [id^="tab-"]:not(#tab-active) { 
+                html.zen-mode-active [id^="tab-"]:not(#tab-active):not(#tab-waiting) { 
                     display: none !important; 
+                }
+                html.zen-mode-active.zen-show-archive #tab-archive {
+                    display: flex !important;
                 }
                 html.zen-mode-active .main-container { 
                     max-width: 96% !important; width: 96% !important; 
