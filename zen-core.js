@@ -36,6 +36,9 @@
                 html.zen-mode-active [id^="tab-"]:not(#tab-active):not(#tab-waiting) { 
                     display: none !important; 
                 }
+                html.zen-mode-active.zen-hide-waiting #tab-waiting {
+                    display: none !important;
+                }
                 html.zen-mode-active.zen-show-archive #tab-archive {
                     display: flex !important;
                 }
@@ -48,6 +51,9 @@
         } else {
             document.documentElement.classList.remove('zen-mode-active');
             zenStyle.textContent = '';
+        }
+        if (typeof window.updateZenTabVisibility === 'function') {
+            window.updateZenTabVisibility();
         }
     }
 

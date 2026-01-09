@@ -49,6 +49,7 @@ const now = new Date();
 const today = now.toISOString().slice(0, 10);
 let currentMonth = today.slice(0,7);
 let currentTab = 'active';
+let zenArchiveVisible = false;
 let settingsSnapshot = null;
 let settingsInitialState = null;
 const TAB_DESCRIPTIONS = {
@@ -2010,6 +2011,27 @@ function updateTabCounts() {
         const el = document.getElementById(`count-${key}`);
         if (el) el.innerText = val;
     });
+    updateZenTabVisibility();
+}
+
+function setZenArchiveVisible(value) {
+    zenArchiveVisible = value;
+    document.documentElement.classList.toggle('zen-show-archive', value);
+}
+
+function updateZenTabVisibility() {
+    const root = document.documentElement;
+    const isZen = root.classList.contains('zen-mode-active');
+    if (!isZen) {
+        root.classList.remove('zen-hide-waiting');
+        return;
+    }
+    const waitingCount = DATA.waiting.length;
+    root.classList.toggle('zen-hide-waiting', waitingCount === 0);
+    root.classList.toggle('zen-show-archive', zenArchiveVisible);
+    if (waitingCount === 0 && currentTab === 'waiting') {
+        switchTab('active');
+    }
 }
 
 function sortData(type, key, dataType, initial = false) {
@@ -2935,7 +2957,7 @@ function confirmCompletion() {
     DATA.archive.unshift(item);
     completionContext = null;
     closeCompleteModal();
-    document.documentElement.classList.add('zen-show-archive');
+    setZenArchiveVisible(true);
     sortData('active', 'dl', 'date', true);
     save();
     setTimeout(() => { switchTab('archive'); }, 10);
