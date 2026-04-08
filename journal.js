@@ -1829,7 +1829,6 @@ ${tasks.map(t => `<div class="task ${t.done ? 'done' : ''}">
 })();
 
 
-
 // ========== ДОБАВЛЕНИЕ КНОПОК ЖУРНАЛА В ТАБЛИЦУ ==========
 function addJournalButtonsToRows() {
     const tables = ['t-active', 't-waiting', 't-potential', 't-paused', 't-archive', 't-requests', 't-all', 't-trash'];
@@ -1862,6 +1861,16 @@ function addJournalButtonsToRows() {
                 project = cells[2]?.textContent?.trim() || '';
             }
             
+            // Создаём фейковую строку (row) для передачи в openJournal
+            const fakeRow = document.createElement('tr');
+            fakeRow.innerHTML = `
+                <td></td>
+                <td data-key="c">${client}</td>
+                <td data-key="n">${project}</td>
+                <td data-key="p"></td>
+                <td data-key="dl"></td>
+            `;
+            
             const actionCell = cells[cells.length - 1];
             
             const btn = document.createElement('button');
@@ -1878,10 +1887,13 @@ function addJournalButtonsToRows() {
             btn.onclick = (e) => {
                 e.stopPropagation();
                 const projectId = btoa(encodeURIComponent(client + '|' + project));
-                if (typeof window.openJournalModal === 'function') {
-                    window.openJournalModal(projectId, { client, project });
+                
+                // Вызываем openJournal из основного скрипта
+                if (typeof openJournal === 'function') {
+                    openJournal(projectId, fakeRow);
                 } else {
-                    console.log('Журнал:', client, project);
+                    console.error('Функция openJournal не найдена!');
+                    alert('Журнал: ' + client + ' — ' + project);
                 }
             };
             
@@ -1921,21 +1933,25 @@ journalBtnStyle.textContent = `
 `;
 document.head.appendChild(journalBtnStyle);
 
-// Запуск
-setTimeout(addJournalButtonsToRows, 500);
+// Запуск с задержкой, чтобы данные успели загрузиться
+setTimeout(addJournalButtonsToRows, 800);
+setTimeout(addJournalButtonsToRows, 1500);
+setTimeout(addJournalButtonsToRows, 3000);
 
 // Перехват переключения вкладок
 const origSwitchTab = window.switchTab;
 if (typeof origSwitchTab === 'function') {
     window.switchTab = function(tabId) {
         origSwitchTab(tabId);
-        setTimeout(addJournalButtonsToRows, 200);
+        setTimeout(addJournalButtonsToRows, 300);
+        setTimeout(addJournalButtonsToRows, 800);
     };
 }
 
-// Наблюдатель
+// Наблюдатель за DOM
 new MutationObserver(() => addJournalButtonsToRows()).observe(document.body, { childList: true, subtree: true });
+
+// Периодическая проверка
 setInterval(addJournalButtonsToRows, 2000);
 
-console.log('✅ Кнопки журнала в стиле DesignFlow активированы');
-
+console.log('✅ Кнопки журнала активированы');
