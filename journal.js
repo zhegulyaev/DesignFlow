@@ -7,7 +7,7 @@
 
     const VISIBILITY_CLASS = 'journal-visible';
     const MODAL_OVERLAY_CLASS = 'df-modal-overlay';
-    const HOTKEY_CODE = 'KeyQ';
+    const HOTKEY_CODE = 'KeyK';
 
     const style = document.createElement('style');
     style.textContent = `
