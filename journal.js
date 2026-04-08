@@ -988,7 +988,11 @@ ${tasks.map(t => `<div class="task ${t.done ? 'done' : ''}">
             if (!aiText.trim() && !aiImageBase64) {
                 showToast('Введите текст или загрузите скриншот', 'error');
                 return;
+
+                window.openJournal = openJournal;
             }
+
+            
             setLoading(true);
             try {
                 let newTasks = aiImageBase64 ? await analyzeImageWithAI(aiImageBase64) : await analyzeTextWithAI(aiText, projectContext);
@@ -1831,7 +1835,7 @@ ${tasks.map(t => `<div class="task ${t.done ? 'done' : ''}">
 
 // ========== ДОБАВЛЕНИЕ КНОПОК ЖУРНАЛА В ТАБЛИЦУ ==========
 function addJournalButtonsToRows() {
-    const tables = ['t-active', 't-waiting', 't-potential', 't-paused', 't-archive', 't-requests', 't-all', 't-trash'];
+    const tables = ['t-active', 't-waiting', 't-potential', 't-paused', 't-archive', 't-requests'];
     
     tables.forEach(tableId => {
         const table = document.getElementById(tableId);
@@ -1843,7 +1847,8 @@ function addJournalButtonsToRows() {
         const rows = tbody.querySelectorAll('tr');
         
         rows.forEach(row => {
-            if (row.querySelector('.tm-journal-row-btn')) return;
+            // Проверяем, есть ли уже кнопка
+            if (row.querySelector('.journal-task-btn')) return;
             
             const cells = row.querySelectorAll('td');
             if (cells.length < 3) return;
@@ -1853,28 +1858,17 @@ function addJournalButtonsToRows() {
             if (tableId === 't-requests') {
                 client = cells[1]?.textContent?.trim() || '';
                 project = cells[3]?.textContent?.trim() || 'Заявка';
-            } else if (tableId === 't-all') {
-                client = cells[2]?.textContent?.trim() || '';
-                project = cells[3]?.textContent?.trim() || '';
             } else {
                 client = cells[1]?.textContent?.trim() || '';
                 project = cells[2]?.textContent?.trim() || '';
             }
             
-            // Создаём фейковую строку (row) для передачи в openJournal
-            const fakeRow = document.createElement('tr');
-            fakeRow.innerHTML = `
-                <td></td>
-                <td data-key="c">${client}</td>
-                <td data-key="n">${project}</td>
-                <td data-key="p"></td>
-                <td data-key="dl"></td>
-            `;
+            if (!client || !project) return;
             
             const actionCell = cells[cells.length - 1];
             
             const btn = document.createElement('button');
-            btn.className = 'tm-journal-row-btn';
+            btn.className = 'journal-task-btn';
             btn.innerHTML = `
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
@@ -1883,16 +1877,55 @@ function addJournalButtonsToRows() {
                 <span>Журнал</span>
             `;
             btn.title = `${client} — ${project}`;
+            btn.style.cssText = `
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 6px 12px;
+                background: #0f141b;
+                border: 1px solid #30363d;
+                border-radius: 8px;
+                color: #c9d1d9;
+                font-size: 12px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s;
+                margin-left: 6px;
+                white-space: nowrap;
+            `;
+            
+            btn.onmouseenter = () => {
+                btn.style.borderColor = '#58a6ff';
+                btn.style.color = '#58a6ff';
+                btn.style.background = 'rgba(88, 166, 255, 0.1)';
+            };
+            btn.onmouseleave = () => {
+                btn.style.borderColor = '#30363d';
+                btn.style.color = '#c9d1d9';
+                btn.style.background = '#0f141b';
+            };
             
             btn.onclick = (e) => {
                 e.stopPropagation();
                 const projectId = btoa(encodeURIComponent(client + '|' + project));
                 
-                // Вызываем openJournal из основного скрипта
-                if (typeof openJournal === 'function') {
-                    openJournal(projectId, fakeRow);
+                // Создаём строку с данными для openJournal
+                const fakeRow = document.createElement('tr');
+                fakeRow.innerHTML = `
+                    <td></td>
+                    <td data-key="c">${client}</td>
+                    <td data-key="n">${project}</td>
+                    <td data-key="p"></td>
+                    <td data-key="dl"></td>
+                `;
+                
+                // Ищем openJournal в глобальной области
+                const openJournalFn = window.openJournal || (typeof openJournal !== 'undefined' ? openJournal : null);
+                
+                if (openJournalFn) {
+                    openJournalFn(projectId, fakeRow);
                 } else {
-                    console.error('Функция openJournal не найдена!');
+                    console.error('openJournal не найдена');
                     alert('Журнал: ' + client + ' — ' + project);
                 }
             };
@@ -1900,58 +1933,28 @@ function addJournalButtonsToRows() {
             actionCell.appendChild(btn);
         });
     });
+    
 }
 
-// Стили для кнопки
-const journalBtnStyle = document.createElement('style');
-journalBtnStyle.textContent = `
-    .tm-journal-row-btn {
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 6px !important;
-        padding: 6px 12px !important;
-        background: #0f141b !important;
-        border: 1px solid #30363d !important;
-        border-radius: 8px !important;
-        color: #c9d1d9 !important;
-        font-size: 12px !important;
-        font-weight: 600 !important;
-        cursor: pointer !important;
-        transition: all 0.2s !important;
-        margin-left: 6px !important;
-        white-space: nowrap !important;
-    }
-    .tm-journal-row-btn:hover {
-        border-color: #58a6ff !important;
-        color: #58a6ff !important;
-        background: rgba(88, 166, 255, 0.1) !important;
-    }
-    .tm-journal-row-btn svg {
-        width: 14px;
-        height: 14px;
-    }
-`;
-document.head.appendChild(journalBtnStyle);
+// Запускаем несколько раз с задержкой
+setTimeout(addJournalButtonsToRows, 500);
+setTimeout(addJournalButtonsToRows, 1000);
+setTimeout(addJournalButtonsToRows, 2000);
 
-// Запуск с задержкой, чтобы данные успели загрузиться
-setTimeout(addJournalButtonsToRows, 800);
-setTimeout(addJournalButtonsToRows, 1500);
-setTimeout(addJournalButtonsToRows, 3000);
-
-// Перехват переключения вкладок
-const origSwitchTab = window.switchTab;
-if (typeof origSwitchTab === 'function') {
-    window.switchTab = function(tabId) {
-        origSwitchTab(tabId);
+// Перехват switchTab
+const originalSwitch = window.switchTab;
+if (originalSwitch) {
+    window.switchTab = function(tab) {
+        originalSwitch(tab);
         setTimeout(addJournalButtonsToRows, 300);
         setTimeout(addJournalButtonsToRows, 800);
     };
 }
 
-// Наблюдатель за DOM
-new MutationObserver(() => addJournalButtonsToRows()).observe(document.body, { childList: true, subtree: true });
+// Наблюдатель
+new MutationObserver(addJournalButtonsToRows).observe(document.body, { childList: true, subtree: true });
 
-// Периодическая проверка
-setInterval(addJournalButtonsToRows, 2000);
+// Интервал
+setInterval(addJournalButtonsToRows, 3000);
 
-console.log('✅ Кнопки журнала активированы');
+console.log('✅ Кнопки журнала готовы');
