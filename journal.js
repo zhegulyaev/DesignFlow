@@ -1827,3 +1827,114 @@ ${tasks.map(t => `<div class="task ${t.done ? 'done' : ''}">
 
     console.log('✅ DesignFlow Journal PRO v5.2 загружен!');
 })();
+
+
+// ========== ДОБАВЛЕНИЕ КНОПОК ЖУРНАЛА В ТАБЛИЦУ ==========
+function addJournalButtonsToRows() {
+    // Все таблицы проектов
+    const tables = ['t-active', 't-waiting', 't-potential', 't-paused', 't-archive', 't-requests', 't-all', 't-trash'];
+    
+    tables.forEach(tableId => {
+        const table = document.getElementById(tableId);
+        if (!table) return;
+        
+        const tbody = table.querySelector('tbody');
+        if (!tbody) return;
+        
+        const rows = tbody.querySelectorAll('tr');
+        
+        rows.forEach(row => {
+            // Пропускаем служебные строки
+            if (row.querySelector('.journal-btn')) return;
+            
+            const cells = row.querySelectorAll('td');
+            if (cells.length < 3) return;
+            
+            // Получаем данные проекта
+            let client = '', project = '';
+            
+            // Определяем колонки в зависимости от таблицы
+            if (tableId === 't-requests') {
+                client = cells[1]?.textContent?.trim() || '';
+                project = cells[3]?.textContent?.trim() || 'Заявка';
+            } else if (tableId === 't-all') {
+                client = cells[2]?.textContent?.trim() || '';
+                project = cells[3]?.textContent?.trim() || '';
+            } else {
+                client = cells[1]?.textContent?.trim() || '';
+                project = cells[2]?.textContent?.trim() || '';
+            }
+            
+            // Ячейка для кнопки (последняя)
+            const actionCell = cells[cells.length - 1];
+            
+            // Создаём кнопку
+            const btn = document.createElement('button');
+            btn.className = 'journal-btn';
+            btn.innerHTML = '📓';
+            btn.title = `Журнал: ${client} — ${project}`;
+            btn.style.cssText = `
+                background: linear-gradient(135deg, #58a6ff, #a371f7);
+                color: white;
+                border: none;
+                border-radius: 6px;
+                padding: 5px 10px;
+                font-size: 13px;
+                font-weight: 600;
+                cursor: pointer;
+                margin-left: 5px;
+                transition: all 0.2s;
+                white-space: nowrap;
+            `;
+            
+            btn.onmouseenter = () => {
+                btn.style.opacity = '0.85';
+                btn.style.transform = 'translateY(-1px)';
+            };
+            btn.onmouseleave = () => {
+                btn.style.opacity = '1';
+                btn.style.transform = 'translateY(0)';
+            };
+            
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                const projectId = btoa(encodeURIComponent(client + '|' + project));
+                
+                // Вызов вашей функции открытия журнала
+                if (typeof window.openJournalModal === 'function') {
+                    window.openJournalModal(projectId, { client, project });
+                } else {
+                    console.log('Журнал:', client, project);
+                    alert(`📓 Журнал задач\n${client}\n${project}`);
+                }
+            };
+            
+            actionCell.appendChild(btn);
+        });
+    });
+}
+
+// Запуск при загрузке и при изменениях
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(addJournalButtonsToRows, 300));
+} else {
+    setTimeout(addJournalButtonsToRows, 300);
+}
+
+// Перехватываем переключение вкладок
+const originalSwitchTab = window.switchTab;
+if (typeof originalSwitchTab === 'function') {
+    window.switchTab = function(tabId) {
+        originalSwitchTab(tabId);
+        setTimeout(addJournalButtonsToRows, 200);
+    };
+}
+
+// Наблюдатель за DOM
+const observer = new MutationObserver(() => addJournalButtonsToRows());
+observer.observe(document.body, { childList: true, subtree: true });
+
+// Периодическая проверка
+setInterval(addJournalButtonsToRows, 2000);
+
+console.log('✅ Кнопки журнала активированы');
