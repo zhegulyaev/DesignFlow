@@ -1938,3 +1938,101 @@ observer.observe(document.body, { childList: true, subtree: true });
 setInterval(addJournalButtonsToRows, 2000);
 
 console.log('✅ Кнопки журнала активированы');
+
+
+// ... весь ваш существующий код journal.js ...
+
+// ========== В САМЫЙ КОНЕЦ ФАЙЛА ДОБАВЬТЕ ЭТО ==========
+function addJournalButtonsToRows() {
+    const tables = ['t-active', 't-waiting', 't-potential', 't-paused', 't-archive', 't-requests', 't-all', 't-trash'];
+    
+    tables.forEach(tableId => {
+        const table = document.getElementById(tableId);
+        if (!table) return;
+        
+        const tbody = table.querySelector('tbody');
+        if (!tbody) return;
+        
+        const rows = tbody.querySelectorAll('tr');
+        
+        rows.forEach(row => {
+            if (row.querySelector('.tm-journal-row-btn')) return;
+            
+            const cells = row.querySelectorAll('td');
+            if (cells.length < 3) return;
+            
+            let client = '', project = '';
+            
+            if (tableId === 't-requests') {
+                client = cells[1]?.textContent?.trim() || '';
+                project = cells[3]?.textContent?.trim() || 'Заявка';
+            } else if (tableId === 't-all') {
+                client = cells[2]?.textContent?.trim() || '';
+                project = cells[3]?.textContent?.trim() || '';
+            } else {
+                client = cells[1]?.textContent?.trim() || '';
+                project = cells[2]?.textContent?.trim() || '';
+            }
+            
+            const actionCell = cells[cells.length - 1];
+            
+            const btn = document.createElement('button');
+            btn.className = 'tm-journal-row-btn';
+            btn.innerHTML = `
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+                <span>Журнал</span>
+            `;
+            btn.title = `${client} — ${project}`;
+            
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                const projectId = btoa(encodeURIComponent(client + '|' + project));
+                if (typeof window.openJournalModal === 'function') {
+                    window.openJournalModal(projectId, { client, project });
+                }
+            };
+            
+            actionCell.appendChild(btn);
+        });
+    });
+}
+
+const style = document.createElement('style');
+style.textContent = `
+    .tm-journal-row-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        padding: 8px 14px !important;
+        background: #0f141b !important;
+        border: 1px solid #30363d !important;
+        border-radius: 10px !important;
+        color: #c9d1d9 !important;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        transition: all 0.2s !important;
+        margin-left: 6px !important;
+    }
+    .tm-journal-row-btn:hover {
+        border-color: #58a6ff !important;
+        color: #58a6ff !important;
+    }
+`;
+document.head.appendChild(style);
+
+setTimeout(addJournalButtonsToRows, 300);
+
+const originalSwitchTab = window.switchTab;
+if (typeof originalSwitchTab === 'function') {
+    window.switchTab = function(tabId) {
+        originalSwitchTab(tabId);
+        setTimeout(addJournalButtonsToRows, 200);
+    };
+}
+
+new MutationObserver(() => addJournalButtonsToRows()).observe(document.body, { childList: true, subtree: true });
+setInterval(addJournalButtonsToRows, 2000);
