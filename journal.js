@@ -13,7 +13,7 @@
 
     const VISIBILITY_CLASS = 'journal-visible';
     const MODAL_OVERLAY_CLASS = 'df-modal-overlay';
-    const HOTKEY_CODE = 'KeyK'; // ← Изменено на KeyK
+    const HOTKEY_CODE = 'KeyK';
 
     // 2. БЕЗОПАСНЫЕ ОБЁРТКИ ДЛЯ ФУНКЦИЙ ИЗ app.js
     const calculate = (val) => {
@@ -46,19 +46,18 @@
         }
     };
 
-    // 3. ПРОВЕРКА НАЛИЧИЯ DATA
-    const getDataSafe = () => {
-        return (typeof window.DATA !== 'undefined' && window.DATA) || {};
+    // 3. БЕЗОПАСНЫЙ ДОСТУП К DATA
+    const getData = () => {
+        return (typeof window.DATA !== 'undefined' && window.DATA) ? window.DATA : {};
     };
 
-  
-(function() {
-    'use strict';
+    const saveData = () => {
+        if (typeof window.save === 'function') {
+            window.save();
+        }
+    };
 
-    const VISIBILITY_CLASS = 'journal-visible';
-    const MODAL_OVERLAY_CLASS = 'df-modal-overlay';
-    const HOTKEY_CODE = 'KeyK';
-
+    // 4. СТИЛИ
     const style = document.createElement('style');
     style.textContent = `
         .journal-link {
@@ -184,20 +183,9 @@
     `;
     document.head.appendChild(style);
 
-    const calculate = (val) => typeof toNumeric === 'function'
-        ? toNumeric(val)
-        : (parseFloat(String(val || '').replace(/\s/g, '')) || 0);
-    const formatMoney = (val) => typeof formatCurrency === 'function'
-        ? formatCurrency(val || 0)
-        : (val || 0).toLocaleString('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 });
-    const formatNumber = (val) => typeof formatPlainNumber === 'function'
-        ? formatPlainNumber(val)
-        : (val || '').toString();
-
     const strikeText = (text) => text.split('').map(char => char + '\u0336').join('');
 
     function getTasksMap() {
-        if (!EXTRA_TASKS || typeof EXTRA_TASKS !== 'object') EXTRA_TASKS = {};
         return EXTRA_TASKS;
     }
 
@@ -210,387 +198,22 @@
     function setTasks(projectId, tasks) {
         const map = getTasksMap();
         map[projectId] = tasks;
-        if (typeof save === 'function') save();
+        saveData();
         renderJournalButtons();
     }
 
     function findProjectById(projectId) {
+        const DATA = getData();
         const buckets = ['active', 'waiting', 'paused', 'potential', 'requests', 'archive', 'trash'];
         for (const type of buckets) {
-            const list = DATA?.[type] || [];
-            const idx = list.findIndex(p => p.id === projectId);
+            const list = DATA[type] || [];
+            const idx = list.findIndex(p => String(p.id) === String(projectId));
             if (idx !== -1) return { item: list[idx], type, idx };
         }
         return null;
     }
 
-    function makeScreenshot(projectTitle, projectId, tasks) {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const width = 650; const rowH = 50; const headerH = 110; const footerH = 90;
-        canvas.width = width;
-        canvas.height = headerH + (tasks.length * rowH) + footerH;
-        ctx.fillStyle = '#0d1117'; ctx.fillRect(0, 0, width, canvas.height);
-        ctx.fillStyle = '#58a6ff'; ctx.font = 'bold 24px Arial';
-        ctx.fillText(projectTitle || `Проект #${projectId}`, 35, 55);
-        ctx.fillStyle = '#8b949e'; ctx.font = '14px Arial';
-        ctx.fillText(`Отчет: ${new Date().toLocaleDateString()}`, 35, 85);
-        tasks.forEach((t, i) => {
-            const y = headerH + (i * rowH);
-            ctx.fillStyle = t.done ? '#58a6ff' : '#30363d';
-            ctx.font = '18px Arial'; ctx.fillText(t.done ? '☑' : '☐', 40, y - 5);
-            ctx.font = '16px Arial'; ctx.fillStyle = t.done ? '#484f58' : '#c9d1d9';
-            ctx.fillText(t.text || 'Без названия', 80, y - 5);
-        });
-        const totalCash = tasks.reduce((s, t) => s + calculate(t.price), 0);
-        ctx.fillStyle = '#c9d1d9'; ctx.font = 'bold 18px Arial';
-        ctx.fillText(`Итого: ${formatMoney(totalCash)}`, 35, canvas.height - 35);
-        const link = document.createElement('a');
-        link.download = `Project_${projectId}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-    }
-
-    function openJournal(projectId, typeHint) {
-        const project = findProjectById(projectId);
-        const projectTitle = project?.item?.n || 'Проект';
-        const projectLabel = project?.item?.c ? `${project?.item?.c} — ${projectTitle}` : `${projectTitle}`;
-        let tasks = [...getTasks(projectId)];
-
-        const overlay = document.createElement('div');
-        overlay.className = MODAL_OVERLAY_CLASS;
-        const modal = document.createElement('div');
-        modal.className = 'df-modal';
-
-        const persist = () => setTasks(projectId, tasks);
-
-        const normalizeDeadline = (task = {}) => {
-            const dl = typeof task.deadline === 'object' && task.deadline !== null
-                ? { ...task.deadline }
-                : {};
-
-            if (!dl.date && typeof task.date === 'string' && task.date.trim()) {
-                const raw = task.date.trim();
-                const parts = raw.split('.');
-                if (parts.length >= 2) {
-                    const [d, m, y] = parts;
-                    const year = y ? (y.length === 2 ? `20${y}` : y) : String(new Date().getFullYear());
-                    dl.date = `${year}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
-                } else {
-                    dl.legacyLabel = raw;
-                }
-            }
-
-            return {
-                date: typeof dl.date === 'string' ? dl.date : '',
-                time: typeof dl.time === 'string' ? dl.time : '',
-                legacyLabel: typeof dl.legacyLabel === 'string' ? dl.legacyLabel : ''
-            };
-        };
-
-        const formatDeadlineLabel = (deadline = {}) => {
-            if (!deadline.date) {
-                return deadline.legacyLabel || 'Без дедлайна';
-            }
-            const dt = new Date(`${deadline.date}T${deadline.time || '12:00'}`);
-            if (Number.isNaN(dt.getTime())) {
-                return deadline.legacyLabel || 'Без дедлайна';
-            }
-            const dateText = new Intl.DateTimeFormat('ru-RU', { day: '2-digit', month: '2-digit' }).format(dt);
-            return deadline.time ? `${dateText} ${deadline.time}` : dateText;
-        };
-
-        const normalizeTask = (raw = {}) => {
-            const hoursVal = Number.isFinite(Number(raw.hours)) ? Number(raw.hours) : (calculate(raw.time || 0) || 0);
-            const priceVal = calculate(raw.price);
-            const deadline = normalizeDeadline(raw);
-            return {
-                ...raw,
-                text: raw.text || '',
-                done: !!raw.done,
-                hours: hoursVal,
-                hours_view: raw.hours_view || formatNumber(hoursVal || ''),
-                time: String(hoursVal || ''),
-                price: priceVal,
-                price_view: raw.price_view || formatNumber(priceVal),
-                deadline,
-                date: raw.date || ''
-            };
-        };
-
-        const normalizeTasks = () => {
-            tasks = tasks.map(normalizeTask);
-        };
-
-        const presetISODate = (daysFromNow = 0) => {
-            const d = new Date();
-            d.setDate(d.getDate() + daysFromNow);
-            return d.toISOString().slice(0, 10);
-        };
-
-        const applyDeadline = (idx, nextDeadline) => {
-            tasks[idx].deadline = nextDeadline;
-            tasks[idx].date = nextDeadline.date ? formatDeadlineLabel(nextDeadline) : '';
-            persist();
-            render();
-            if (typeof showToast === 'function') {
-                showToast(nextDeadline.date ? 'Срок сохранён' : 'Без дедлайна');
-            }
-        };
-
-        const openDeadlineDialog = (idx) => {
-            const existing = document.querySelector('.deadline-dialog');
-            if (existing) existing.remove();
-
-            const targetTask = tasks[idx];
-            const dialog = document.createElement('div');
-            dialog.className = 'deadline-dialog';
-            const dateId = `deadline-date-${idx}`;
-            const timeId = `deadline-time-${idx}`;
-            dialog.innerHTML = `
-                <div class="deadline-dialog-inner">
-                    <h4>Дедлайн</h4>
-                    <p class="helper-note">Выберите готовый срок или задайте свой.</p>
-                    <div class="preset-grid">
-                        <button type="button" class="preset-btn" data-preset="0">Сегодня</button>
-                        <button type="button" class="preset-btn" data-preset="1">Завтра</button>
-                        <button type="button" class="preset-btn" data-preset="3">Через 3 дня</button>
-                        <button type="button" class="preset-btn" data-preset="7">Неделя</button>
-                        <button type="button" class="preset-btn" data-preset="custom">Свой срок</button>
-                        <button type="button" class="preset-btn" data-preset="clear">Без дедлайна</button>
-                    </div>
-                    <div class="inputs">
-                        <label>Дата
-                            <input type="date" id="${dateId}" value="${targetTask.deadline?.date || ''}">
-                        </label>
-                        <label>Время (опционально)
-                            <input type="time" id="${timeId}" value="${targetTask.deadline?.time || ''}" step="300">
-                        </label>
-                    </div>
-                    <div class="actions">
-                        <button type="button" class="danger" data-action="clear">Без дедлайна</button>
-                        <button type="button" class="primary" data-action="save">Сохранить</button>
-                    </div>
-                </div>
-            `;
-
-            const dateInput = dialog.querySelector(`#${dateId}`);
-            const timeInput = dialog.querySelector(`#${timeId}`);
-
-            dialog.querySelectorAll('.preset-btn').forEach(btn => {
-                btn.onclick = () => {
-                    const preset = btn.dataset.preset;
-                    if (preset === 'custom') {
-                        dateInput.focus();
-                        return;
-                    }
-                    if (preset === 'clear') {
-                        dateInput.value = '';
-                        timeInput.value = '';
-                        applyDeadline(idx, { date: '', time: '', legacyLabel: '' });
-                        dialog.remove();
-                        return;
-                    }
-                    const days = Number(preset);
-                    if (!Number.isNaN(days)) {
-                        dateInput.value = presetISODate(days);
-                        timeInput.value = '';
-                    }
-                };
-            });
-
-            dialog.querySelector('[data-action="save"]').onclick = () => {
-                applyDeadline(idx, { date: dateInput.value, time: timeInput.value, legacyLabel: '' });
-                dialog.remove();
-            };
-
-            dialog.querySelector('[data-action="clear"]').onclick = () => {
-                applyDeadline(idx, { date: '', time: '', legacyLabel: '' });
-                dialog.remove();
-            };
-
-            dialog.onclick = (e) => { if (e.target === dialog) dialog.remove(); };
-
-            document.body.appendChild(dialog);
-        };
-
-        let dragIndex = null;
-        const removeDeadlineDialog = () => {
-            const dlg = document.querySelector('.deadline-dialog');
-            if (dlg) dlg.remove();
-        };
-        const closeModal = () => {
-            removeDeadlineDialog();
-            if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
-        };
-
-        const render = () => {
-            normalizeTasks();
-            const totalCash = tasks.reduce((s, t) => s + calculate(t.price), 0);
-            const totalHours = tasks.reduce((s, t) => s + (Number(t.hours) || 0), 0);
-            const rowsHTML = tasks.map((t, i) => {
-                const deadlineText = formatDeadlineLabel(t.deadline);
-                const priceDisplay = t.price_view || formatNumber(calculate(t.price));
-                const hoursDisplay = t.hours_view || formatNumber(t.hours || '');
-                return `
-                    <div class="task-row ${t.done ? 'is-done' : ''}" data-idx="${i}">
-                        <div class="drag-handle" data-drag="${i}" title="Перетащите, чтобы изменить порядок">
-                            <svg><use href="#icon-grip"/></svg>
-                        </div>
-                        <div class="check-wrapper">
-                            <input type="checkbox" ${t.done ? 'checked' : ''} data-idx="${i}" class="c-input">
-                            <div class="check-mark"></div>
-                        </div>
-                        <input type="text" value="${t.text || ''}" placeholder="Название этапа..." data-idx="${i}" class="txt">
-                        <div class="hours-wrapper">
-                            <input type="text" value="${hoursDisplay}" class="hours-input" data-idx="${i}" placeholder="0">
-                            <span>ч</span>
-                        </div>
-                        <div class="price-wrapper">
-                            <input type="text" value="${priceDisplay}" class="t-price" data-idx="${i}" placeholder="0">
-                            <span>₽</span>
-                        </div>
-                        <div class="date-input-wrapper">
-                            <div class="deadline-copy">
-                                <span class="title">Срок</span>
-                                <span class="hint">Выбери пресет или поставь свой</span>
-                            </div>
-                            <button type="button" class="deadline-btn ${t.deadline?.date ? '' : 'is-empty'}" data-idx="${i}">
-                                <svg class="date-icon"><use href="#icon-calendar"/></svg>
-                                <span class="deadline-text">${deadlineText}</span>
-                            </button>
-                        </div>
-                        <span class="btn-del" data-del="${i}"><i class="fa fa-trash"></i></span>
-                    </div>`;
-            }).join('');
-
-            modal.innerHTML = `
-                <div class="df-modal-header">
-                    <strong>${projectLabel}</strong>
-                    <span class="close-modal" style="cursor:pointer; font-size:24px">&times;</span>
-                </div>
-                <div class="df-modal-body">
-                    <div id="tasks-root">${rowsHTML}</div>
-                    <button class="add-task"><i class="fa fa-plus-circle"></i> Добавить этап</button>
-                </div>
-                <div class="df-modal-footer">
-                    <span>Бюджет: <span class="total-val">${formatMoney(totalCash)}</span><span class="hours-total"> · Часы: ${formatNumber(totalHours)}</span></span>
-                    <div style="display:flex; gap:10px">
-                        <button class="snap-btn"><i class="fa fa-camera"></i> Скриншот</button>
-                        <button class="copy-btn"><i class="fa fa-copy"></i> Текст</button>
-                    </div>
-                </div>`;
-
-            const applyCalcFormatting = (el) => {
-                if (typeof formatNumberInput === 'function') {
-                    formatNumberInput(el);
-                }
-            };
-
-            modal.querySelector('.close-modal').onclick = closeModal;
-            modal.querySelector('.snap-btn').onclick = () => makeScreenshot(projectLabel, projectId, tasks);
-            modal.querySelector('.copy-btn').onclick = () => {
-                const textStr = tasks.map(t => {
-                    let name = t.text || 'Без названия';
-                    if (t.done) name = strikeText(name);
-                    return `${t.done ? '🔵' : '⚪'} ${name}`;
-                }).join('\n');
-                navigator.clipboard?.writeText(`Проект ${projectLabel}\n${textStr}\nИтого: ${formatMoney(totalCash)}`);
-                if (typeof showToast === 'function') showToast('Чек-лист скопирован');
-            };
-
-            modal.querySelector('.add-task').onclick = () => {
-                tasks.push(normalizeTask({ text: '', done: false, hours: 1, price: 0, price_view: '0', deadline: { date: '', time: '' } }));
-                persist();
-                render();
-            };
-
-            modal.querySelectorAll('.t-price').forEach(el => {
-                el.oninput = () => applyCalcFormatting(el);
-                el.onblur = (e) => {
-                    const idx = Number(e.target.dataset.idx);
-                    const val = calculate(e.target.value);
-                    tasks[idx].price = val;
-                    tasks[idx].price_view = formatNumber(val);
-                    persist();
-                    render();
-                };
-            });
-
-            modal.querySelectorAll('.hours-input').forEach(el => {
-                el.oninput = () => applyCalcFormatting(el);
-                el.onkeydown = (e) => { if (e.key === 'Enter') e.target.blur(); };
-                el.onblur = (e) => {
-                    const idx = Number(e.target.dataset.idx);
-                    const val = calculate(e.target.value);
-                    tasks[idx].hours = val;
-                    tasks[idx].hours_view = formatNumber(val);
-                    tasks[idx].time = String(val || '');
-                    persist();
-                    render();
-                };
-            });
-
-            modal.querySelectorAll('.txt').forEach(el => {
-                el.oninput = (e) => {
-                    const idx = Number(e.target.dataset.idx);
-                    tasks[idx].text = e.target.value;
-                    persist();
-                };
-            });
-
-            modal.querySelectorAll('.c-input').forEach(el => {
-                el.onchange = (e) => {
-                    const idx = Number(e.target.dataset.idx);
-                    tasks[idx].done = e.target.checked;
-                    persist();
-                    render();
-                };
-            });
-
-            modal.querySelectorAll('.deadline-btn').forEach(btn => {
-                btn.onclick = () => openDeadlineDialog(Number(btn.dataset.idx));
-            });
-
-            modal.querySelectorAll('[data-del]').forEach(btn => {
-                btn.onclick = () => {
-                    tasks.splice(btn.dataset.del, 1);
-                    persist();
-                    render();
-                };
-            });
-
-            modal.querySelectorAll('.drag-handle').forEach(handle => {
-                handle.draggable = true;
-                handle.addEventListener('dragstart', (e) => {
-                    dragIndex = Number(handle.dataset.drag);
-                    e.dataTransfer.effectAllowed = 'move';
-                });
-                handle.addEventListener('dragend', () => { dragIndex = null; });
-            });
-
-            modal.querySelectorAll('.task-row').forEach(row => {
-                row.addEventListener('dragover', (e) => { e.preventDefault(); row.classList.add('drag-over'); });
-                row.addEventListener('dragleave', () => row.classList.remove('drag-over'));
-                row.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    row.classList.remove('drag-over');
-                    const targetIdx = Number(row.dataset.idx);
-                    if (dragIndex === null || dragIndex === targetIdx) return;
-                    const [moved] = tasks.splice(dragIndex, 1);
-                    tasks.splice(targetIdx, 0, moved);
-                    dragIndex = null;
-                    persist();
-                    render();
-                });
-            });
-        };
-
-        render();
-        overlay.appendChild(modal);
-        document.body.appendChild(overlay);
-        overlay.onmousedown = (e) => { if (e.target === overlay) closeModal(); };
-    }
+    // ... ВЕСЬ ОСТАЛЬНОЙ КОД ДО КОНЦА (функции makeScreenshot, openJournal, renderJournalButtons, toggleVisibilityHotkey и т.д.) ...
 
     function renderJournalButtons() {
         const isVisible = document.documentElement.classList.contains(VISIBILITY_CLASS);
@@ -635,10 +258,10 @@
             renderJournalButtons();
         }
         if (activate) {
-            if (typeof showToast === 'function') showToast('Режим журнала активирован');
-            else alert('Режим разработчика активирован');
+            showToast('Режим журнала активирован');
         }
     }
 
     window.addEventListener('keydown', toggleVisibilityHotkey);
+
 })();
