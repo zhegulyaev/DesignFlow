@@ -1,7 +1,57 @@
 /**
  * DesignFlow Journal: скрытые чек-листы по проектам
- * Комбинация: Ctrl + Shift + J
+ * Комбинация: Ctrl + Shift + K
  */
+(function() {
+    'use strict';
+
+    // 1. ОБЪЯВЛЯЕМ ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ
+    if (typeof window.EXTRA_TASKS === 'undefined') {
+        window.EXTRA_TASKS = {};
+    }
+    const EXTRA_TASKS = window.EXTRA_TASKS;
+
+    const VISIBILITY_CLASS = 'journal-visible';
+    const MODAL_OVERLAY_CLASS = 'df-modal-overlay';
+    const HOTKEY_CODE = 'KeyK'; // ← Изменено на KeyK
+
+    // 2. БЕЗОПАСНЫЕ ОБЁРТКИ ДЛЯ ФУНКЦИЙ ИЗ app.js
+    const calculate = (val) => {
+        if (typeof window.toNumeric === 'function') {
+            return window.toNumeric(val);
+        }
+        const num = parseFloat(String(val || '').replace(/\s/g, '').replace(',', '.'));
+        return isNaN(num) ? 0 : num;
+    };
+
+    const formatMoney = (val) => {
+        if (typeof window.formatCurrency === 'function') {
+            return window.formatCurrency(val || 0);
+        }
+        return (val || 0).toLocaleString('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 });
+    };
+
+    const formatNumber = (val) => {
+        if (typeof window.formatPlainNumber === 'function') {
+            return window.formatPlainNumber(val);
+        }
+        return (val || '').toString();
+    };
+
+    const showToast = (msg) => {
+        if (typeof window.showToast === 'function') {
+            window.showToast(msg);
+        } else {
+            console.log('[Journal]', msg);
+        }
+    };
+
+    // 3. ПРОВЕРКА НАЛИЧИЯ DATA
+    const getDataSafe = () => {
+        return (typeof window.DATA !== 'undefined' && window.DATA) || {};
+    };
+
+  
 (function() {
     'use strict';
 
