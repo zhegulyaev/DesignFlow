@@ -188,13 +188,14 @@ body:not([data-theme="dark"]) .header-new-badge {
         <div class="tab tab-trash" id="tab-trash" onclick="switchTab('trash')"><svg><use href="#icon-trash"/></svg> Корзина <span class="tab-count" id="count-trash">0</span></div>
     </div>
     <div class="tabs-actions">
-        <button id="open-journal-global" class="journal-nav-btn" title="Журнал задач">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-            </svg>
-            Журнал
-        </button>
+     <button id="open-journal-global" class="journal-nav-btn" title="Журнал задач" 
+    style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; background: linear-gradient(135deg, rgba(88, 166, 255, 0.15), rgba(163, 113, 247, 0.1)); border: 1px solid rgba(88, 166, 255, 0.3); border-radius: 10px; color: #58a6ff; font-size: 13px; font-weight: 600; cursor: pointer;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="stroke: #58a6ff;">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+    </svg>
+    Журнал
+</button>
         <button id="newProjectButton" onclick="openAddModal()">＋ Новый проект</button>
     </div>
 </div>
