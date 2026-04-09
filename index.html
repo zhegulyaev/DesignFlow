@@ -188,12 +188,12 @@ body:not([data-theme="dark"]) .header-new-badge {
         <div class="tab" id="tab-paused" onclick="switchTab('paused')"><svg><use href="#icon-paused"/></svg> На паузе <span class="tab-count" id="count-paused">0</span></div>
         <div class="tab" id="tab-archive" onclick="switchTab('archive')"><svg><use href="#icon-archive"/></svg> Выполнено <span class="tab-count" id="count-archive">0</span></div>
         <div class="tab tab-trash" id="tab-trash" onclick="switchTab('trash')"><svg><use href="#icon-trash"/></svg> Корзина <span class="tab-count" id="count-trash">0</span></div>
-          <button class="journal-global-btn" onclick="openGlobalJournal()" title="Открыть журнал задач">
+          <button class="tm-journal-btn" id="global-journal-btn" onclick="openGlobalJournal()" title="Открыть журнал задач">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
         <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
     </svg>
-    <span>Журнал</span>
+    <span id="global-journal-count">0/0</span>
 </button>
     </div>
     <button id="newProjectButton" onclick="openAddModal()">＋ Новый проект</button>
