@@ -322,6 +322,63 @@ tr.drag-over{outline:2px solid var(--accent);outline-offset:-2px}
 body.is-onboarding .modal-back.open{display:none!important}
 body.is-onboarding .tour-card,body.is-onboarding .tour-card *{filter:none!important;opacity:1!important}
 
+
+/* ===== Project Telegram checkbox: compact and aligned ===== */
+.project-link-options{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  min-height:18px !important;
+}
+.check-inline{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:7px !important;
+  min-height:18px !important;
+  line-height:18px !important;
+  font-size:12px !important;
+  white-space:nowrap !important;
+  cursor:pointer !important;
+}
+.check-inline input[type="checkbox"]{
+  appearance:none !important;
+  -webkit-appearance:none !important;
+  width:15px !important;
+  height:15px !important;
+  min-width:15px !important;
+  max-width:15px !important;
+  min-height:15px !important;
+  max-height:15px !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:1.5px solid var(--border-strong, #cbd2df) !important;
+  border-radius:4px !important;
+  background:var(--surface, #fff) !important;
+  display:inline-grid !important;
+  place-content:center !important;
+  vertical-align:middle !important;
+  box-sizing:border-box !important;
+  flex:0 0 15px !important;
+  cursor:pointer !important;
+}
+.check-inline input[type="checkbox"]::after{
+  content:"" !important;
+  width:7px !important;
+  height:4px !important;
+  border-left:2px solid #fff !important;
+  border-bottom:2px solid #fff !important;
+  transform:rotate(-45deg) scale(0) !important;
+  transform-origin:center !important;
+  transition:transform .12s ease !important;
+}
+.check-inline input[type="checkbox"]:checked{
+  background:var(--accent) !important;
+  border-color:var(--accent) !important;
+}
+.check-inline input[type="checkbox"]:checked::after{
+  transform:rotate(-45deg) scale(1) !important;
+}
+
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -796,6 +853,7 @@ $('#settingsDashboardSave').onclick=()=>{
   save();
   render();
   syncSettings();
+  closeModal('settingsModal');
   toast('Цель и личный рекорд сохранены');
 };
 function applyTheme(){document.documentElement.dataset.theme=state.dark?'dark':'light';$('#themeBtn').textContent=state.dark?'☾':'☼'}
@@ -1087,6 +1145,20 @@ window.addEventListener('scroll',()=>{
     attributeFilter:['style','class']
   });
 })();
+
+
+/* Settings: after saving goals/record, close the settings window. */
+document.addEventListener('DOMContentLoaded',()=>{
+  const saveBtn=document.getElementById('settingsDashboardSave');
+  if(saveBtn){
+    saveBtn.addEventListener('click',()=>{
+      setTimeout(()=>{
+        const modal=document.getElementById('settingsModal');
+        if(modal) modal.classList.remove('open');
+      },0);
+    });
+  }
+});
 
 </script>
 </body>
