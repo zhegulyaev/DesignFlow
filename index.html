@@ -444,12 +444,250 @@ body:not(.is-onboarding) #tourShadeLeft{
   height:0!important;
   background:transparent!important;
 }
+
+/* Collapsible sidebar */
+.sidebar{position:sticky}
+.sidebar-collapse-btn{
+  position:absolute;top:18px;right:-12px;width:26px;height:26px;border:1px solid var(--line);
+  border-radius:9px;background:var(--surface);color:var(--muted);display:grid;place-items:center;
+  box-shadow:0 5px 16px rgba(16,20,30,.10);z-index:25;transition:.18s ease;font-size:12px;line-height:1;
+}
+.sidebar-collapse-btn:hover{color:var(--text);border-color:var(--accent);transform:translateY(-1px)}
+.sidebar-collapse-btn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .22s ease}
+.app.sidebar-collapsed{grid-template-columns:78px 1fr}
+.app.sidebar-collapsed .sidebar{padding-left:9px;padding-right:9px}
+.app.sidebar-collapsed .brand{justify-content:center;padding-left:0;padding-right:0}
+.app.sidebar-collapsed .brand>div:not(.logo),
+.app.sidebar-collapsed .nav button span,
+.app.sidebar-collapsed .side-label,
+.app.sidebar-collapsed .profile>div:nth-child(2),
+.app.sidebar-collapsed .profile-edit-hint{display:none}
+.app.sidebar-collapsed .nav button{justify-content:center;padding:0;gap:0}
+.app.sidebar-collapsed .nav .ico{flex:0 0 30px}
+.app.sidebar-collapsed .profile{justify-content:center;padding:9px}
+.app.sidebar-collapsed .sidebar-collapse-btn svg{transform:rotate(180deg)}
+.app.sidebar-collapsed .sidebar-collapse-btn{right:-12px}
+@media(max-width:900px){
+  .sidebar-collapse-btn{display:none}
+  .app.sidebar-collapsed{grid-template-columns:76px 1fr}
+}
+@media(max-width:650px){.app.sidebar-collapsed{display:block}.sidebar-collapse-btn{display:none}}
+
 </style>
 
+
+<style id="designflow-final-visual-fix">
+/* Final visual cleanup */
+.top-actions{align-items:center}
+#themeBtn{width:42px!important;height:42px!important;min-width:42px!important;padding:0!important;border-radius:12px!important;display:grid!important;place-items:center!important}
+#themeBtn .theme-svg{width:20px!important;height:20px!important}
+.settings-top-btn{height:42px!important;border-radius:12px!important;display:inline-flex!important;align-items:center!important;gap:8px!important}
+.settings-top-icon{width:17px!important;height:17px!important;display:block!important;flex:0 0 17px}
+.sidebar .nav button#settingsSide .ico{color:var(--accent)!important}
+.sidebar .nav button#settingsSide .ico svg{width:16px;height:16px;display:block}
+.dashboard{align-items:start!important}
+.dashboard>.side-stack{align-self:start!important;margin-top:0!important;padding-top:0!important}
+.dashboard>.side-stack>.top-client-card{margin-top:0!important;transform:none!important;align-self:start!important}
+.table-tools{position:relative}
+#sortMenu{display:none;position:absolute;right:0;top:calc(100% + 7px);z-index:1000;min-width:220px;padding:6px;border:1px solid var(--line);border-radius:14px;background:var(--surface);box-shadow:0 18px 50px rgba(0,0,0,.16)}
+#sortMenu.open{display:block}
+#sortMenu button{width:100%;border:0;background:transparent;color:var(--text);padding:10px 11px;border-radius:9px;text-align:left;font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:14px}
+#sortMenu button:hover,#sortMenu button.active{background:var(--surface-3)}
+#sortMenu .dir{color:var(--muted);font-size:11px;white-space:nowrap}
+</style>
+
+<style id="designflow-2026-upgrade">
+/* DesignFlow 2026 full upgrade */
+:root{
+  --df-green:#19a974;
+  --df-red:#ef5b68;
+  --df-blue:#5b8cff;
+  --df-gold:#f0a93a;
+}
+html[data-theme="light"] .record{
+  background:var(--surface)!important;
+  color:var(--text)!important;
+  border-color:var(--line)!important;
+}
+html[data-theme="light"] .record .muted{color:var(--muted)!important}
+html[data-theme="dark"] .record{
+  background:linear-gradient(145deg,#171a22,#11141b)!important;
+}
+#goalCard{
+  cursor:pointer!important;
+  transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease!important;
+}
+#goalCard:hover{
+  transform:translateY(-2px)!important;
+  border-color:var(--accent)!important;
+  box-shadow:0 10px 28px rgba(91,92,246,.13)!important;
+  background:var(--surface-2)!important;
+}
+#goalCard:after{
+  content:"✎";
+  opacity:0;
+  margin-left:7px;
+  font-size:11px;
+  color:var(--accent);
+  transition:opacity .18s ease;
+}
+#goalCard:hover:after{opacity:1}
+#themeBtn{
+  width:42px!important;height:42px!important;min-width:42px!important;
+  border-radius:12px!important;padding:0!important;
+}
+#themeBtn .theme-svg{width:19px!important;height:19px!important}
+.settings-top-icon,.sidebar #settingsSide svg{
+  width:17px!important;height:17px!important;
+}
+.settings-top-icon path{stroke-width:1.9!important}
+#sortMenu{
+  display:none!important;
+  position:absolute!important;
+  right:0!important;
+  top:calc(100% + 8px)!important;
+  min-width:230px!important;
+  z-index:10050!important;
+  padding:7px!important;
+  border:1px solid var(--line)!important;
+  border-radius:14px!important;
+  background:var(--surface)!important;
+  box-shadow:0 18px 50px rgba(0,0,0,.18)!important;
+}
+#sortMenu.open{display:block!important}
+#sortMenu button{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  width:100%!important;
+  border:0!important;
+  background:transparent!important;
+  color:var(--text)!important;
+  padding:10px 11px!important;
+  border-radius:9px!important;
+  cursor:pointer!important;
+}
+#sortMenu button:hover,#sortMenu button.active{background:var(--surface-3)!important}
+.sort-state{font-size:11px;color:var(--muted)}
+.sort-active-label{font-size:11px;color:var(--accent);margin-left:7px}
+#studioToday{
+  margin:0 0 18px;
+  display:grid;
+  grid-template-columns:minmax(0,1.5fr) minmax(280px,.8fr);
+  gap:16px;
+}
+.df-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:0 10px 30px rgba(15,20,35,.05);
+}
+.df-card-head{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:15px;
+  padding:18px 20px 10px;
+}
+.df-card-title{font-size:18px;font-weight:800;letter-spacing:-.35px}
+.df-card-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.df-today-list{padding:4px 20px 18px}
+.df-task{
+  display:grid;grid-template-columns:28px 1fr auto;gap:11px;align-items:center;
+  padding:12px 0;border-top:1px solid var(--line);
+}
+.df-task:first-child{border-top:0}
+.df-task-icon{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:var(--surface-3);font-size:12px}
+.df-task-icon.red{color:var(--red);background:rgba(239,91,104,.10)}
+.df-task-icon.gold{color:#c17a00;background:rgba(240,169,58,.12)}
+.df-task-icon.green{color:var(--df-green);background:rgba(25,169,116,.10)}
+.df-task b{display:block;font-size:13px}
+.df-task span{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+.df-task button{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:9px;padding:7px 9px;font-size:11px;cursor:pointer}
+.df-task button:hover{border-color:var(--accent)}
+.df-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 20px 20px}
+.df-metric{padding:13px;border:1px solid var(--line);border-radius:13px;background:var(--surface-2)}
+.df-metric span{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.df-metric b{display:block;font-size:18px;margin-top:5px}
+.timer-strip{
+  position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(120px);
+  opacity:0;pointer-events:none;z-index:5000;
+  display:flex;align-items:center;gap:12px;padding:10px 12px 10px 14px;
+  background:var(--surface);border:1px solid var(--line);border-radius:15px;
+  box-shadow:0 18px 55px rgba(0,0,0,.18);transition:.2s ease;
+}
+.timer-strip.show{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
+.timer-dot{width:8px;height:8px;border-radius:50%;background:#ff5d67;box-shadow:0 0 0 5px rgba(255,93,103,.12)}
+.timer-strip strong{font-size:13px}.timer-strip small{display:block;color:var(--muted);font-size:10px;margin-top:1px}
+.timer-strip button{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:9px;padding:7px 10px;cursor:pointer}
+.timer-strip button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.timer-row-btn{font-size:11px!important}
+.payment-stage-editor{display:grid;gap:8px}
+.payment-stage-row{display:grid;grid-template-columns:1.2fr .7fr auto;gap:8px;align-items:center}
+.payment-stage-row input[type=text],.payment-stage-row input:not([type]){min-width:0}
+.payment-stage-row label{font-size:11px;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.client-analytics-list{display:grid;gap:9px;margin-top:10px}
+.client-analytics-item{display:flex;justify-content:space-between;gap:14px;padding:12px 13px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2)}
+.client-analytics-item span{color:var(--muted);font-size:11px}
+.client-analytics-item b{font-size:13px}
+.df-stars{letter-spacing:1px;color:#f0a93a}
+.df-template-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.df-template{padding:13px;border:1px solid var(--line);border-radius:13px;background:var(--surface-2)}
+.df-template b{font-size:13px}.df-template p{font-size:11px;color:var(--muted);margin:5px 0 10px}
+.df-template button{border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:7px 9px;color:var(--text);cursor:pointer}
+@media(max-width:1000px){#studioToday{grid-template-columns:1fr}.df-template-grid{grid-template-columns:1fr}}
+@media(max-width:700px){
+  .timer-strip{left:10px;right:10px;transform:translateY(120px);width:auto}
+  .timer-strip.show{transform:translateY(0)}
+  .payment-stage-row{grid-template-columns:1fr}
+}
+</style>
+
+
+<link id="df-favicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23635bff'/%3E%3Cpath d='M20 32 32 20l12 12-12 12Z' fill='none' stroke='white' stroke-width='5' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style id="df-final-ui">
+.settings-top-icon{width:18px!important;height:18px!important}
+#settingsBtn,.settings-top-btn{gap:8px!important}
+#settingsSide .ico svg{width:18px!important;height:18px!important}
+#sortMenu{display:none;position:absolute;right:0;top:calc(100% + 8px);z-index:9999;min-width:235px;padding:7px;border:1px solid var(--line);border-radius:14px;background:var(--surface);box-shadow:0 18px 50px rgba(20,24,40,.18)}
+#sortMenu.open{display:block!important}
+#sortMenu button{display:flex;width:100%;align-items:center;justify-content:space-between;gap:15px;border:0;background:transparent;color:var(--text);padding:10px 11px;border-radius:9px;font-weight:700;cursor:pointer;text-align:left}
+#sortMenu button:hover,#sortMenu button.active{background:var(--surface-3)}
+#sortMenu .dir{font-size:10px;color:var(--muted);font-weight:700}
+.goal-pill{cursor:pointer!important;transition:.18s ease}
+.goal-pill:hover{border-color:var(--accent)!important;box-shadow:0 7px 20px rgba(99,91,255,.12)!important;transform:translateY(-1px)}
+.record .progress{height:12px!important;padding:2px!important;border:1px solid var(--line)!important;background:var(--surface-3)!important;box-shadow:inset 0 1px 2px rgba(0,0,0,.06)}
+.record .progress i{height:100%!important;border-radius:7px!important;display:block!important;min-width:3px;background:linear-gradient(90deg,#635bff,#8b7dff)!important;box-shadow:0 0 0 1px rgba(99,91,255,.18)}
+[data-theme="dark"] .record .progress{border-color:#363b49!important;background:#242936!important}
+.payment-guide{padding:12px 13px;border:1px solid var(--line);border-radius:13px;background:var(--surface-2);margin-bottom:10px}
+.payment-guide strong{display:block;font-size:12px}
+.payment-guide span{display:block;font-size:11px;color:var(--muted);line-height:1.45;margin-top:3px}
+.payment-stages{display:grid;gap:8px}
+.payment-stage-card{display:grid;grid-template-columns:30px 1fr 130px auto;gap:10px;align-items:center;padding:11px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.payment-stage-num{width:28px;height:28px;border-radius:9px;background:var(--surface-3);display:grid;place-items:center;font-size:11px;font-weight:900;color:var(--accent)}
+.payment-stage-main b{display:block;font-size:12px}.payment-stage-main small{display:block;color:var(--muted);font-size:10px;margin-top:2px}
+.payment-stage-input{width:130px!important}
+.payment-stage-paid{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);white-space:nowrap}
+.payment-stage-paid input{accent-color:var(--accent)}
+.payment-total-hint{font-size:10px;color:var(--muted);padding:7px 2px 0}
+.template-control-group{display:flex;flex-wrap:wrap;gap:7px;margin-top:7px}
+.tpl-btn-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface-2);color:var(--text);padding:7px 9px;border-radius:9px;font-size:10px;font-weight:800;cursor:pointer;user-select:none}
+.tpl-btn-chip:hover{border-color:var(--accent);background:var(--surface)}
+.tpl-btn-chip svg{width:13px;height:13px}
+.template-helper{font-size:10px;color:var(--muted);width:100%}
+.template-modal-list{display:grid;gap:7px;margin-top:12px;max-height:280px;overflow:auto}
+.template-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 11px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2)}
+.template-row b{font-size:12px}.template-row .muted{font-size:10px}
+.template-row-actions{display:flex;gap:6px}
+.template-row-actions button{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:8px;padding:6px 8px;font-size:10px;cursor:pointer}
+.template-row-actions button:hover{border-color:var(--accent)}
+.template-empty{padding:20px;text-align:center;color:var(--muted);font-size:11px;border:1px dashed var(--line);border-radius:12px}
+@media(max-width:650px){.payment-stage-card{grid-template-columns:28px 1fr}.payment-stage-input{width:100%!important}.payment-stage-paid{grid-column:2}.template-control-group{align-items:stretch}.tpl-btn-chip{flex:1;justify-content:center}}
+</style>
 </head>
 <body>
 <div class="app">
 <aside class="sidebar">
+  <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" type="button" title="Свернуть меню" aria-label="Свернуть боковое меню">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 7-5 5 5 5"/></svg>
+  </button>
   <div class="brand"><div class="logo"></div><div><b>DesignFlow</b><small>Studio OS · 2026</small></div></div>
   <nav class="nav">
     <button class="active" data-tab="active"><i class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h5M8 17h3"/></svg></i><span>В работе</span></button>
@@ -463,7 +701,7 @@ body:not(.is-onboarding) #tourShadeLeft{
   </nav>
   <div class="side-label">Рабочее</div>
   <nav class="nav">
-    <button id="settingsSide"><i class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5v2M12 18.5v2M3.5 12h2M18.5 12h2M6 6l1.4 1.4M16.6 16.6 18 18M18 6l-1.4 1.4M7.4 16.6 6 18"/><circle cx="12" cy="12" r="4.2"/></svg></i><span>Настройки</span></button>
+    <button id="settingsSide" title="Настройки"><i class="ico"><svg class="settings-top-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h6M14 7h6M4 12h3M11 12h9M4 17h8M16 17h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="7" r="2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="12" r="2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="14" cy="17" r="2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></i><span>Настройки</span></button>
     <button id="backupSide"><i class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M8 11l4 4 4-4M5 19h14"/></svg></i><span>Бэкап данных</span></button>
   </nav>
   <div class="side-bottom">
@@ -479,8 +717,8 @@ body:not(.is-onboarding) #tourShadeLeft{
   <header class="top">
     <div><div class="eyebrow">Проекты / 2026</div><h1 class="page-title" id="pageTitle">В работе</h1></div>
     <div class="top-actions">
-      <button class="btn icon-btn" id="themeBtn" title="Тема">☼</button>
-      <button class="btn" id="settingsBtn">☷ <span class="label">Настройки</span></button>
+      <button class="btn icon-btn" id="themeBtn" title="Сменить тему" aria-label="Сменить тему"><svg class="theme-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.64 5.64l1.42 1.42M16.94 16.94l1.42 1.42M18.36 5.64l-1.42 1.42M7.06 16.94l-1.42 1.42" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button>
+      <button class="btn settings-top-btn" id="settingsBtn"><svg class="settings-top-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h6M14 7h6M4 12h3M11 12h9M4 17h8M16 17h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="7" r="2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="12" r="2" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="14" cy="17" r="2" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span class="label">Настройки</span></button>
       <select class="month" id="monthSelect"></select>
       <button class="btn primary" id="newBtn">＋ Новый проект</button>
     </div>
@@ -539,7 +777,7 @@ body:not(.is-onboarding) #tourShadeLeft{
   <section class="card table-card">
     <div class="table-top">
       <div><div class="card-title" id="tableTitle">Проекты в работе</div><div class="muted tiny" id="tableSub"></div></div>
-      <div class="table-tools"><input class="search" id="search" placeholder="Поиск клиента или проекта…"><button class="btn" id="sortBtn">↕ Сортировка</button></div>
+      <div class="table-tools"><input class="search" id="search" placeholder="Поиск клиента или проекта…"><div style="position:relative"><button class="btn" id="sortBtn">↕ Сортировка</button><div class="sort-menu" id="sortMenu"><button data-sort="order">По порядку <span class="dir">по умолчанию</span></button><button data-sort="deadline">По дедлайну <span class="dir">↕</span></button><button data-sort="client">По клиенту <span class="dir">A–Я</span></button><button data-sort="name">По проекту <span class="dir">A–Я</span></button><button data-sort="price">По сумме <span class="dir">₽</span></button><button data-sort="paid">По оплате <span class="dir">₽</span></button><button data-sort="expense">По расходам <span class="dir">₽</span></button></div></div></div>
     </div>
     <div id="tableContainer"></div>
   </section>
@@ -565,7 +803,13 @@ body:not(.is-onboarding) #tourShadeLeft{
       <div class="form-grid">
         <div class="field"><label>Статус</label><select id="fStatus"><option value="active">В работе</option><option value="waiting">Ожидает</option><option value="potential">Потенциал</option><option value="paused">На паузе</option><option value="archive">Выполнено</option></select></div>
         <div class="field"><label>Клиент</label><input id="fClient" required placeholder="Имя или компания"></div>
-        <div class="field full"><label>Проект</label><input id="fName" required placeholder="Например, лендинг для бренда"></div>
+        <div class="field full"><label>Проект</label><input id="fName" required placeholder="Например, лендинг для бренда"></div><div class="field full template-project-tools">
+  <div class="template-control-group">
+    <button type="button" class="tpl-btn-chip create" id="saveNameTemplateBtn">＋ Сохранить как шаблон</button>
+    <button type="button" class="tpl-btn-chip list" id="openNameTemplatesBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H10l2 3h5.5A2.5 2.5 0 0 1 20 8.5V18a2.5 2.5 0 0 1-2 2H6a2.5 2.5 0 0 1-2-2z"/></svg> Мои шаблоны</button>
+    <div class="template-helper" id="template-helper">Сохрани часто повторяющиеся услуги, чтобы не вводить их заново.</div>
+  </div>
+</div>
         <div class="field"><label>Сумма, ₽</label><input id="fPrice" inputmode="numeric" placeholder="50 000"></div>
         <div class="field"><label>Оплачено, ₽</label><input id="fPaid" inputmode="numeric" placeholder="25 000"></div>
         <div class="field"><label>Расходы, ₽</label><input id="fExpense" inputmode="numeric" placeholder="0"></div>
@@ -574,8 +818,37 @@ body:not(.is-onboarding) #tourShadeLeft{
         <div class="field"><label>Дедлайн</label><input id="fDeadline" type="date"></div>
         <div class="field full"><label>Ссылка / чат / материалы</label><input id="fLink" type="text" placeholder="@username или https://..."><div class="project-link-options"><label class="check-inline"><input type="checkbox" id="fTelegram"> Telegram</label><span class="muted tiny">Если включить, @username автоматически станет ссылкой t.me</span></div></div>
         <div class="field full"><label>Заметка</label><textarea id="fNote" placeholder="Ключевые детали проекта…"></textarea></div>
-      </div>
-      <div class="modal-actions"><button type="button" class="btn" data-close="projectModal">Отмена</button><button class="btn primary">Сохранить проект</button></div>
+        <div class="field"><label>Часы работы</label><input id="fHours" inputmode="decimal" placeholder="Например, 12,5"></div>
+        <div class="field"><label>Оценка клиента</label><select id="fRating"><option value="0">Не оценено</option><option value="1">★ 1</option><option value="2">★ 2</option><option value="3">★ 3</option><option value="4">★ 4</option><option value="5">★ 5</option></select></div>
+        <div class="field full">
+  <label>Оплата по этапам</label>
+  <div class="payment-guide">
+    <strong>Раздели оплату проекта на понятные части</strong>
+    <span>Впиши сумму каждого платежа. Когда клиент оплатил этап, поставь галочку. Если у тебя только один платёж, заполни только нужный этап.</span>
+  </div>
+  <div class="payment-stages" id="paymentStagesEditor">
+    <div class="payment-stage-card">
+      <div class="payment-stage-num">1</div>
+      <div class="payment-stage-main"><b>Предоплата</b><small>Деньги до начала работы</small></div>
+      <div><input class="payment-stage-input" data-stage-amount="pre" inputmode="numeric" placeholder="Сумма, ₽"></div>
+      <label class="payment-stage-paid"><input type="checkbox" data-stage-paid="pre"> Уже оплачено</label>
+    </div>
+    <div class="payment-stage-card">
+      <div class="payment-stage-num">2</div>
+      <div class="payment-stage-main"><b>Промежуточный платёж</b><small>Деньги после первого этапа</small></div>
+      <div><input class="payment-stage-input" data-stage-amount="mid" inputmode="numeric" placeholder="Сумма, ₽"></div>
+      <label class="payment-stage-paid"><input type="checkbox" data-stage-paid="mid"> Уже оплачено</label>
+    </div>
+    <div class="payment-stage-card">
+      <div class="payment-stage-num">3</div>
+      <div class="payment-stage-main"><b>Финальный платёж</b><small>Остаток перед сдачей</small></div>
+      <div><input class="payment-stage-input" data-stage-amount="final" inputmode="numeric" placeholder="Сумма, ₽"></div>
+      <label class="payment-stage-paid"><input type="checkbox" data-stage-paid="final"> Уже оплачено</label>
+    </div>
+  </div>
+  <div class="payment-total-hint" id="paymentTotalHint">По этапам: 0 ₽ · Оплачено: 0 ₽ · Сумма проекта: 0 ₽</div>
+</div>
+<div class="modal-actions"><button type="button" class="btn" data-close="projectModal">Отмена</button><button class="btn primary">Сохранить проект</button></div>
     </form>
   </div>
 </div>
@@ -584,9 +857,15 @@ body:not(.is-onboarding) #tourShadeLeft{
   <div class="modal wide">
     <div class="modal-head"><div><h2>Настройки</h2><div class="muted tiny">Интерфейс, цели и данные.</div></div><button class="modal-close" data-close="settingsModal">×</button></div>
     <div class="settings-grid">
-      <div class="settings-nav"><button class="active" data-pane="appearance">Внешний вид</button><button data-pane="dashboardPane">Дашборд</button><button data-pane="dataPane">Данные</button></div>
+      <div class="settings-nav"><button class="active" data-pane="appearance">Внешний вид</button><button data-pane="dashboardPane">Дашборд</button><button data-pane="studioPane">Студия</button><button data-pane="dataPane">Данные</button></div>
       <div>
-        <div class="setting-pane active" id="appearance">
+        <div class="setting-pane active" id="appearance"><div class="setting-pane" id="studioPane">
+  <div class="setting-row"><div><b>Автоподсказки</b><p>Показывать блок «Что делать сегодня» с дедлайнами, оплатами и рисками.</p></div><label class="toggle"><input type="checkbox" id="smartTipsToggle" checked><span class="slider"></span></label></div>
+  <div class="setting-row"><div><b>Уведомления о дедлайнах</b><p>Подсвечивать проекты за 48 часов до срока.</p></div><label class="toggle"><input type="checkbox" id="deadlineTipsToggle" checked><span class="slider"></span></label></div>
+  <div class="setting-row"><div><b>Учёт времени</b><p>Показывать таймер в строках проектов и считать ₽/час.</p></div><label class="toggle"><input type="checkbox" id="timeTrackingToggle" checked><span class="slider"></span></label></div>
+  <div style="margin-top:14px"><b>Шаблоны проектов</b><p class="muted tiny">Сохрани типовые услуги и создавай проект за пару кликов.</p><div id="settingsTemplates" class="df-template-grid"></div></div>
+</div>
+
           <div class="setting-row"><div><b>Тёмная тема</b><p>Комфортный интерфейс для вечерней работы.</p></div><label class="toggle"><input type="checkbox" id="darkToggle"><span class="slider"></span></label></div>
           <div class="setting-row"><div><b>Показывать предупреждение</b><p>Напоминание о локальном хранении данных.</p></div><label class="toggle"><input type="checkbox" id="noticeToggle"><span class="slider"></span></label></div>
         </div>
@@ -671,6 +950,33 @@ body:not(.is-onboarding) #tourShadeLeft{
     </div>
   </div>
 </div>
+
+<div class="modal-back" id="clientAnalyticsModal">
+  <div class="modal wide">
+    <div class="modal-head"><div><h2 id="clientAnalyticsTitle">Клиент</h2><div class="muted tiny">Аналитика по проектам и реальной эффективности.</div></div><button class="modal-close" data-close="clientAnalyticsModal">×</button></div>
+    <div class="stats" id="clientAnalyticsStats"></div>
+    <div class="client-analytics-list" id="clientAnalyticsList"></div>
+  </div>
+</div>
+<div class="modal-back" id="templatesModal">
+  <div class="modal wide">
+    <div class="modal-head"><div><h2>Шаблоны проектов</h2><div class="muted tiny">Типовые услуги, которые можно создавать одним кликом.</div></div><button class="modal-close" data-close="templatesModal">×</button></div>
+    <div class="df-template-grid" id="templatesGrid"></div>
+  </div>
+</div>
+<div class="modal-back" id="nameTemplatesModal">
+  <div class="modal wide">
+    <div class="modal-head"><div><h2>Мои шаблоны проектов</h2><div class="muted tiny">Выбери шаблон, чтобы подставить его в поле «Проект».</div></div><button class="modal-close" data-close="nameTemplatesModal">×</button></div>
+    <div class="template-create-row"><div class="template-create-field"><span>Название шаблона</span><input id="newNameTemplateInput" placeholder="Например: Дизайн сайта"></div><button type="button" class="btn primary" id="createNameTemplateModalBtn">＋ Добавить</button></div><div class="template-edit-hint">Нажми на название шаблона, чтобы изменить его. Можно использовать шаблон или удалить его.</div>
+    <div id="nameTemplatesList" class="template-modal-list"></div>
+  </div>
+</div>
+<div class="timer-strip" id="timerStrip">
+  <span class="timer-dot"></span>
+  <div><strong id="timerProjectName">Проект</strong><small id="timerElapsed">00:00:00</small></div>
+  <button class="primary" id="timerStop">Остановить</button>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -696,7 +1002,7 @@ const seed=[
 {id:'6',status:'paused',client:'Gaming PC',name:'Полная упаковка VK',price:40000,paid:20000,expense:5000,tax:6,start:'2026-07-22',deadline:'2026-08-16',link:'',note:'Пауза по запросу клиента'}
 ];
 let state=load();
-let activeTab=localStorage.getItem('df_tab')||'active', editingId=null, sortKey='deadline', sortDir=1, pendingConfirm=null;
+let activeTab=localStorage.getItem('df_tab')||'active', editingId=null, sortKey='deadline', sortDir=1, pendingConfirm=null, selectedMonth=Number(localStorage.getItem('df_month') ?? new Date().getMonth());
 const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
 function load(){
  try{
@@ -726,12 +1032,16 @@ function net(p){return Math.max(0,num(p.price)-num(p.expense)-num(p.price)*num(p
 function paidNet(p){return Math.max(0,num(p.paid)-num(p.paid)*num(p.tax)/100)}
 function activeProjects(){return state.projects.filter(p=>p.status!=='trash')}
 function counts(){let c={};Object.keys(tabs).forEach(k=>c[k]=0);state.projects.forEach(p=>{if(c[p.status]!=null)c[p.status]++});c.all=activeProjects().length;c.trash=state.projects.filter(p=>p.status==='trash').length;return c}
+function syncNavActive(){
+  $$('.nav button[data-tab],.mobile-bar button[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===activeTab));
+}
 function renderTabs(){
  const c=counts(), box=$('#tabs');box.innerHTML='';
  Object.keys(tabs).forEach(k=>{
   const b=document.createElement('button');b.className='tab '+(activeTab===k?'active':'');b.dataset.tab=k;b.innerHTML=`${tabs[k][0]} <span class="count">${c[k]}</span>`;box.appendChild(b)
  });
  $$('.tab').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+ syncNavActive();
 }
 function switchTab(t){activeTab=t;localStorage.setItem('df_tab',t);render();window.scrollTo({top:0,behavior:'smooth'})}
 function renderMobile(){ /* mobile layout is CSS-driven */ }
@@ -741,17 +1051,26 @@ function render(){
  $('#tableTitle').textContent=activeTab==='all'?'Все проекты':tabs[activeTab][0];$('#tableSub').textContent=`${counts()[activeTab]||0} ${activeTab==='requests'?'заявок':'проектов'}`;
  renderStats();renderTopClients();renderTable();renderMobile();
 }
+function monthProjects(){
+ const m=selectedMonth;
+ return activeProjects().filter(p=>{
+   const dates=[p.start,p.deadline].filter(Boolean);
+   if(!dates.length)return false;
+   return dates.some(v=>{const d=new Date(v+'T00:00:00');return d.getFullYear()===2026 && d.getMonth()===m});
+ });
+}
 function renderTopClients(){
  const box=$('#topClientsList');if(!box)return;
- const sums={};state.projects.filter(p=>p.status!=='trash').forEach(p=>{const k=p.client||'Без клиента';sums[k]=(sums[k]||0)+num(p.price)});
+ const scoped=monthProjects();
+ const sums={};scoped.forEach(p=>{const k=p.client||'Без клиента';sums[k]=(sums[k]||0)+num(p.price)});
  const list=Object.entries(sums).sort((a,b)=>b[1]-a[1]).slice(0,5);
- box.innerHTML=list.length?list.map(([name,sum])=>`<div class="top-client-row"><div class="top-client-avatar">${initials(name)}</div><div class="top-client-info"><b>${esc(name)}</b><span>Проектов: ${state.projects.filter(p=>p.client===name&&p.status!=='trash').length}</span></div><div class="top-client-sum">${money(sum)}</div></div>`).join(''):'<div class="muted tiny">Пока нет клиентов</div>';
+ box.innerHTML=list.length?list.map(([name,sum])=>`<div class="top-client-row"><div class="top-client-avatar">${initials(name)}</div><div class="top-client-info"><b>${esc(name)}</b><span>Проектов: ${scoped.filter(p=>p.client===name).length}</span></div><div class="top-client-sum">${money(sum)}</div></div>`).join(''):'<div class="muted tiny">Нет проектов за выбранный месяц</div>';
 }
 function renderStats(){
- const ps=activeProjects(), current=ps.filter(p=>p.status!=='potential');
+ const ps=monthProjects(), current=ps.filter(p=>p.status!=='potential');
  const fact=current.reduce((s,p)=>s+paidNet(p),0), gross=current.reduce((s,p)=>s+num(p.paid),0), total=ps.reduce((s,p)=>s+num(p.price),0), expenses=ps.reduce((s,p)=>s+num(p.expense),0), taxes=ps.reduce((s,p)=>s+num(p.price)*num(p.tax)/100,0), forecast=current.reduce((s,p)=>s+net(p),0);
  const left=Math.max(0,state.goal-fact), pct=Math.min(100,state.goal?fact/state.goal*100:0), eff=total?Math.min(100,gross/total*100):0;
- $('#monthName').textContent=months[new Date().getMonth()];$('#goalLabel').textContent=money(state.goal);$('#goalProgress').style.width=pct+'%';
+ $('#monthName').textContent=months[selectedMonth]+' 2026';$('#goalLabel').textContent=money(state.goal);$('#goalProgress').style.width=pct+'%';
  const vals=[['Факт',money(fact),`${Math.round(pct)}% цели`,'green'],['Получено',money(gross),'грязными','green'],['Общая сумма',money(total),'все статусы','purple'],['План',money(left),'до цели',''],['Прогноз',money(forecast),'чистыми','purple'],['Расходы',money(expenses),'все проекты','red'],['Налоги',money(taxes),'по ставкам',''],['Маржа',money(forecast-expenses),'прогноз','green']];
  $('#stats').innerHTML=vals.map(v=>`<div class="stat"><div class="stat-label">${v[0]}</div><div class="stat-val ${v[3]}">${v[1]}</div><div class="stat-sub">${v[2]}</div></div>`).join('');
  $('#effRing').style.setProperty('--pct',eff+'%');$('#effRing').dataset.label=Math.round(eff)+'%';
@@ -778,7 +1097,12 @@ function renderTable(){
   <td><div class="project"><b class="editable-cell" data-field="name">${esc(p.name)}</b><span class="editable-cell" data-field="note">${esc(p.note||'Без заметки')}</span></div></td>
   <td>${p.status==='archive'?date(p.deadline):`<b>${date(p.deadline)}</b>`}<div class="tiny muted">${p.start?date(p.start):''}</div></td>
   <td class="money editable-cell" data-field="price">${money(p.price)}</td><td class="editable-cell" data-field="expense">${money(p.expense)}</td><td class="editable-cell" data-field="tax">${p.tax}%</td><td class="money green">${money(net(p))}</td>
-  <td class="editable-cell" data-field="paid">${money(p.paid)}</td><td><div class="row-actions"><button title="Редактировать" onclick="editProject('${p.id}')">✎</button>${p.status==='trash'?`<button title="Восстановить" onclick="restoreProject('${p.id}')">↶</button>`:`<button title="Удалить" onclick="askDelete('${p.id}')">⌫</button>`}</div></td>
+  <td class="editable-cell" data-field="paid">${money(p.paid)}</td><td><div class="row-actions">
+    <button title="Таймер" class="timer-row-btn" onclick="toggleProjectTimer('${p.id}')">▶</button>
+    <button title="Перенести проект" class="move-project-btn" data-move-id="${p.id}">↗</button>
+    <button title="Редактировать" onclick="editProject('${p.id}')">✎</button>
+    ${p.status==='trash'?`<button title="Восстановить" onclick="restoreProject('${p.id}')">↶</button>`:`<button title="Удалить" onclick="askDelete('${p.id}')">⌫</button>`}
+  </div></td>
   </tr>`).join('');
   const total=arr.reduce((s,p)=>s+num(p.price),0), netTotal=arr.reduce((s,p)=>s+net(p),0);
   c.innerHTML=`<div class="table-scroll"><table><thead><tr><th style="width:55px"></th><th>Статус</th><th>Клиент</th><th>Проект</th><th>Срок</th><th>Сумма</th><th>Расходы</th><th>Налог</th><th>Чистыми</th><th>Оплачено</th><th></th></tr></thead><tbody>${rows}</tbody><tfoot><tr><td colspan="5">Итого</td><td>${money(total)}</td><td>${money(arr.reduce((s,p)=>s+num(p.expense),0))}</td><td></td><td>${money(netTotal)}</td><td>${money(arr.reduce((s,p)=>s+num(p.paid),0))}</td><td></td></tr></tfoot></table></div>`;
@@ -870,6 +1194,7 @@ function openProject(id=null){
  let linkValue=p.link||'';
  if(isTelegram)linkValue=linkValue.replace(/^https?:\/\/t\.me\//i,'@');
  ['Status','Client','Name','Price','Paid','Expense','Tax','Start','Deadline','Link','Note'].forEach(k=>{let el=$('#f'+k);if(!el)return;let key=k[0].toLowerCase()+k.slice(1);el.value=['Price','Paid','Expense'].includes(k)?moneyInput(p[key]):(k==='Link'?linkValue:(p[key]??''))});
+ if(typeof hydrateExtraFields==='function') setTimeout(()=>hydrateExtraFields(p),0);
  setTimeout(()=>$('#fClient').focus(),30);
 }
 
@@ -888,7 +1213,9 @@ function askDelete(id){pendingConfirm=id;$('#confirmTitle').textContent='Уда�
 $('#confirmYes').onclick=()=>{let p=state.projects.find(x=>x.id===pendingConfirm);if(p){p.status='trash';p.deletedAt=Date.now();save();selected.delete(p.id);toast('Проект перемещён в корзину');render()}closeModal('confirmModal')}
 function restoreProject(id){let p=state.projects.find(x=>x.id===id);if(p){p.status='active';delete p.deletedAt;save();toast('Проект восстановлен');render()}}
 $('#search').oninput=()=>renderTable();
-$('#sortBtn').onclick=()=>{let keys=['deadline','client','price','paid','expense'];sortKey=keys[(keys.indexOf(sortKey)+1)%keys.length];sortDir*=-1;toast('Сортировка: '+sortKey);renderTable()}
+$('#sortBtn').onclick=()=>$('#sortMenu').classList.toggle('open');
+$$('#sortMenu button').forEach(b=>b.onclick=()=>{const k=b.dataset.sort;if(k==='order'){sortKey=null;sortDir=1}else{if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1}}$('#sortMenu').classList.remove('open');renderTable();toast('Сортировка: '+(k==='order'?'по порядку':b.textContent.trim()))});
+document.addEventListener('pointerdown',e=>{const m=$('#sortMenu'),btn=$('#sortBtn');if(m&&m.classList.contains('open')&&!m.contains(e.target)&&e.target!==btn)m.classList.remove('open')});
 $$('.nav button[data-tab],.mobile-bar button[data-tab]').forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
 
 ['fPrice','fPaid','fExpense','goalInput','recordInput'].forEach(id=>{
@@ -919,7 +1246,7 @@ $('#settingsDashboardSave').onclick=()=>{
   closeModal('settingsModal');
   toast('Цель и личный рекорд сохранены');
 };
-function applyTheme(){document.documentElement.dataset.theme=state.dark?'dark':'light';$('#themeBtn').textContent=state.dark?'☾':'☼'}
+function applyTheme(){document.documentElement.dataset.theme=state.dark?'dark':'light';const b=$('#themeBtn');if(b){b.title=state.dark?'Включить светлую тему':'Включить тёмную тему';b.setAttribute('aria-label',b.title)}}
 $('#themeBtn').onclick=()=>{state.dark=!state.dark;applyTheme();save()}
 function exportJSON(){let blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='designflow-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();toast('Бэкап скачан')}
 function importJSON(file){if(!file)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.projects)throw Error();state=x;save();applyTheme();switchTab(state.tab || 'active');render();syncAvatar();setTimeout(startTour,700);toast('База восстановлена')}catch(e){toast('Не удалось прочитать JSON')}};r.readAsText(file)}
@@ -929,7 +1256,7 @@ $('#resetBtn').onclick=()=>{if(confirm('Сбросить все проекты �
 $('#bulkClear').onclick=()=>{selected.clear();renderBulk();renderTable()};$('#bulkDuplicate').onclick=()=>{[...selected].forEach(id=>{let p=state.projects.find(x=>x.id===id);if(p)state.projects.push({...p,id:crypto.randomUUID(),name:p.name+' · копия',status:'potential',paid:0,order:state.projects.length})});save();selected.clear();render();toast('Проекты продублированы')};
 $('#bulkDelete').onclick=()=>{[...selected].forEach(id=>{let p=state.projects.find(x=>x.id===id);if(p)p.status='trash'});save();selected.clear();render();toast('Проекты перемещены в корзину')};
 $('#bulkMove').onchange=e=>{if(!e.target.value)return;[...selected].forEach(id=>{let p=state.projects.find(x=>x.id===id);if(p)p.status=e.target.value});save();selected.clear();e.target.value='';render();toast('Статус проектов изменён')};
-$('#monthSelect').innerHTML=months.map((m,i)=>`<option value="${i}">${m} 2026</option>`).join('');$('#monthSelect').value=new Date().getMonth();$('#monthSelect').onchange=()=>toast('Период интерфейса: '+$('#monthSelect').selectedOptions[0].text);
+$('#monthSelect').innerHTML=months.map((m,i)=>`<option value="${i}">${m} 2026</option>`).join('');$('#monthSelect').value=selectedMonth;$('#monthSelect').onchange=()=>{selectedMonth=Number($('#monthSelect').value);localStorage.setItem('df_month',String(selectedMonth));render();toast('Период: '+$('#monthSelect').selectedOptions[0].text)};
 document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('#search').focus()}if(e.key==='Escape')$$('.modal-back.open').forEach(x=>x.classList.remove('open'))});
 document.addEventListener('pointerdown',e=>{
   const input=activeInlineEdit?.input;
@@ -1144,6 +1471,441 @@ window.addEventListener('scroll',()=>{
   syncAvatar();
   render();
   setTimeout(startTour,700);
+  /* ===== DesignFlow 2026 Studio OS upgrade ===== */
+  if(!state.monthGoals) state.monthGoals={};
+  if(!state.monthRecords) state.monthRecords={};
+  if(!state.timeLogs) state.timeLogs={};
+  if(!state.templates) state.templates=[];
+  if(state.smartTips===undefined) state.smartTips=true;
+  if(state.deadlineTips===undefined) state.deadlineTips=true;
+  if(state.timeTracking===undefined) state.timeTracking=true;
+  state.projects.forEach(p=>{
+    if(p.hours==null)p.hours=0;
+    if(p.rating==null)p.rating=0;
+    if(!Array.isArray(p.stages))p.stages=[];
+  });
+  save();
+
+  const baseGoal=()=>Number(state.monthGoals[selectedMonth]??state.goal??0);
+  const baseRecord=()=>Number(state.monthRecords[selectedMonth]??state.record??0);
+  function currentMonthLabel(){return months[selectedMonth]+' 2026'}
+  function setMonthGoal(v){state.monthGoals[selectedMonth]=Number(v)||0;state.goal=Number(v)||0}
+  function setMonthRecord(v){state.monthRecords[selectedMonth]=Number(v)||0;state.record=Number(v)||0}
+
+  /* Money formatting in all new controls. */
+  ['fPrice','fPaid','fExpense','goalInput','recordInput'].forEach(id=>{
+    const el=$('#'+id); if(!el)return;
+    el.addEventListener('input',()=>{
+      const raw=el.value.replace(/[^\d]/g,'');
+      el.value=raw.replace(/\B(?=(\d{3})+(?!\d))/g,' ');
+    });
+  });
+  ['[data-stage-amount="pre"]','[data-stage-amount="mid"]','[data-stage-amount="final"]'].forEach(sel=>{
+    const el=document.querySelector(sel);if(el)el.addEventListener('input',()=>el.value=el.value.replace(/[^\d]/g,'').replace(/\B(?=(\d{3})+(?!\d))/g,' '));
+  });
+
+  function hydrateExtraFields(p){
+    $('#fHours').value=p?.hours??'';
+    $('#fRating').value=String(p?.rating??0);
+    const stages=Array.isArray(p?.stages)?p.stages:[];
+    ['pre','mid','final'].forEach(k=>{
+      const st=stages.find(x=>x.key===k)||{};
+      const name=document.querySelector(`[data-stage="${k}"]`);
+      const amount=document.querySelector(`[data-stage-amount="${k}"]`);
+      const paid=document.querySelector(`[data-stage-paid="${k}"]`);
+      if(name)name.value=st.name||({pre:'Предоплата',mid:'Промежуточный платёж',final:'Финальный платёж'}[k]);
+      if(amount)amount.value=st.amount?moneyInput(st.amount):'';
+      if(paid)paid.checked=!!st.paid;
+    });
+  }
+
+  /* Wrap project opening so extra metrics follow existing project editing. */
+  const oldOpenProject=window.openProject;
+  if(typeof oldOpenProject==='function' && !oldOpenProject.__dfUpgrade){
+    const wrappedOpen=function(id){
+      const r=oldOpenProject.apply(this,arguments);
+      const p=id?state.projects.find(x=>x.id===id):null;
+      setTimeout(()=>hydrateExtraFields(p),0);
+      return r;
+    };
+    wrappedOpen.__dfUpgrade=true;
+    window.openProject=wrappedOpen;
+  }
+  $('#newBtn')?.addEventListener('click',()=>setTimeout(()=>hydrateExtraFields(null),0));
+  $('#mobileNew')?.addEventListener('click',()=>setTimeout(()=>hydrateExtraFields(null),0));
+
+  /* Replace the project form submit with the original logic + extra fields. */
+  const form=$('#projectForm');
+  if(form){
+    form.onsubmit=e=>{
+      e.preventDefault();
+      let link=$('#fLink').value.trim();
+      if($('#fTelegram').checked&&link) link=normalizeTelegramLink(link);
+      const stages=['pre','mid','final'].map(k=>({
+        key:k,
+        name:document.querySelector(`[data-stage="${k}"]`)?.value.trim()||k,
+        amount:num(document.querySelector(`[data-stage-amount="${k}"]`)?.value),
+        paid:!!document.querySelector(`[data-stage-paid="${k}"]`)?.checked
+      })).filter(x=>x.amount||x.paid||x.name);
+      const p={
+        status:$('#fStatus').value,client:$('#fClient').value.trim(),name:$('#fName').value.trim(),
+        price:num($('#fPrice').value),paid:num($('#fPaid').value),expense:num($('#fExpense').value),
+        tax:num($('#fTax').value),start:$('#fStart').value,deadline:$('#fDeadline').value,link,
+        note:$('#fNote').value.trim(),hours:Number(String($('#fHours').value||0).replace(',','.'))||0,
+        rating:Number($('#fRating').value)||0,stages
+      };
+      if(!p.client||!p.name){toast('Заполни клиента и название');return}
+      if(editingId){
+        const target=state.projects.find(x=>x.id===editingId);
+        if(target)Object.assign(target,p);
+        toast('Проект обновлён');
+      }else{
+        p.order=state.projects.length;
+        state.projects.push({id:crypto.randomUUID(),...p});
+        toast('Проект создан');
+      }
+      save();closeModal('projectModal');render();
+    };
+  }
+
+  /* Monthly goals and records. */
+  const originalSyncSettings=syncSettings;
+  syncSettings=function(){
+    originalSyncSettings();
+    const g=baseGoal(),r=baseRecord();
+    $('#goalInput').value=moneyInput(g);
+    $('#recordInput').value=moneyInput(r);
+  };
+  const originalSettingsSave=$('#settingsDashboardSave')?.onclick;
+  if($('#settingsDashboardSave')){
+    $('#settingsDashboardSave').onclick=()=>{
+      setMonthGoal(num($('#goalInput').value));
+      setMonthRecord(num($('#recordInput').value));
+      state.dashboard=$('#dashboardToggle').checked;
+      save();render();syncSettings();closeModal('settingsModal');toast('Настройки месяца сохранены');
+    };
+  }
+  $('#goalCard')?.addEventListener('mouseenter',()=>$('#goalCard').setAttribute('aria-label','Нажмите, чтобы изменить цель'));
+  $('#goalCard')?.addEventListener('click',openGoalEdit);
+
+  /* Month scope is used consistently across all analytics. */
+  const oldRenderStats=renderStats;
+  renderStats=function(){
+    const oldGoal=state.goal,oldRecord=state.record;
+    state.goal=baseGoal();state.record=baseRecord();
+    oldRenderStats();
+    state.goal=oldGoal;state.record=oldRecord;
+    const g=baseGoal(),r=baseRecord();
+    $('#goalLabel').textContent=money(g);
+    const ps=monthProjects().filter(p=>p.status!=='potential');
+    const fact=ps.reduce((s,p)=>s+paidNet(p),0);
+    const pct=Math.min(100,g?fact/g*100:0);
+    $('#goalProgress').style.width=pct+'%';
+    $('#recordTarget').textContent=money(r);
+    const rp=Math.min(100,r?fact/r*100:0);
+    $('#recordProgress').style.width=rp+'%';
+    $('#recordText').textContent=fact>=r?'Рекорд достигнут! 🔥':'До рекорда: '+money(Math.max(0,r-fact));
+  };
+
+  /* Sort dropdown: one reliable handler, no duplicate listeners. */
+  const sortBtn=$('#sortBtn'),sortMenu=$('#sortMenu');
+  if(sortBtn&&sortMenu){
+    sortBtn.type='button';
+    sortBtn.onclick=e=>{
+      e.preventDefault();e.stopPropagation();
+      sortMenu.classList.toggle('open');
+    };
+    sortMenu.onclick=e=>e.stopPropagation();
+    sortMenu.querySelectorAll('[data-sort]').forEach(b=>{
+      b.onclick=e=>{
+        e.preventDefault();e.stopPropagation();
+        const k=b.dataset.sort;
+        if(k==='order'){sortKey=null;sortDir=1}
+        else{
+          if(sortKey===k)sortDir*=-1;else{sortKey=k;sortDir=1}
+        }
+        sortMenu.classList.remove('open');
+        renderTable();
+        const dir=sortDir===1?'↑':'↓';
+        b.querySelector('.sort-state')?.remove();
+        const stateEl=document.createElement('span');stateEl.className='sort-state';stateEl.textContent=k==='order'?'По умолчанию':dir;
+        b.appendChild(stateEl);
+        toast('Сортировка обновлена');
+      };
+    });
+    document.addEventListener('click',e=>{
+      if(!sortMenu.contains(e.target)&&e.target!==sortBtn)sortMenu.classList.remove('open');
+    });
+  }
+
+  /* Today / action center. */
+  function ensureTodayCard(){
+    let host=$('#studioToday');
+    if(host)return host;
+    host=document.createElement('section');
+    host.id='studioToday';
+    const table=document.querySelector('.table-card');
+    const dashboard=document.querySelector('#dashboard');
+    if(table) table.insertAdjacentElement('afterend',host);
+    else if(dashboard) dashboard.insertAdjacentElement('afterend',host);
+    return host;
+  }
+  function daysUntil(v){
+    if(!v)return 9999;
+    return Math.ceil((new Date(v+'T23:59:59')-new Date())/86400000);
+  }
+  function renderToday(){
+    if(!state.smartTips){const h=$('#studioToday');if(h)h.style.display='none';return}
+    const host=ensureTodayCard();host.style.display='grid';
+    const ps=monthProjects().filter(p=>p.status!=='trash');
+    const tasks=[];
+    ps.forEach(p=>{
+      const d=daysUntil(p.deadline);
+      if(d<0)tasks.push({type:'red',icon:'!',title:p.name,sub:`${p.client} · просрочка ${Math.abs(d)} дн.`,id:p.id,action:'Открыть'});
+      else if(d<=2)tasks.push({type:'gold',icon:'!',title:p.name,sub:`${p.client} · дедлайн ${date(p.deadline)}`,id:p.id,action:'Открыть'});
+      if(num(p.paid)<num(p.price)&&d<=7)tasks.push({type:'green',icon:'₽',title:`Получить оплату · ${p.client}`,sub:`Осталось ${money(num(p.price)-num(p.paid))}`,id:p.id,action:'Открыть'});
+    });
+    tasks.sort((a,b)=>({red:0,gold:1,green:2}[a.type]-({red:0,gold:1,green:2}[b.type]))).splice(6);
+    const hours=ps.reduce((s,p)=>s+Number(p.hours||0),0);
+    const gross=ps.reduce((s,p)=>s+num(p.paid),0);
+    const netTotal=ps.reduce((s,p)=>s+net(p),0);
+    const hourly=hours?netTotal/hours:0;
+    host.innerHTML=`
+      <div class="df-card">
+        <div class="df-card-head"><div><div class="df-card-title">Что делать сегодня</div><div class="df-card-sub">${currentMonthLabel()} · приоритеты по дедлайнам и деньгам</div></div><span class="status ${tasks.some(x=>x.type==='red')?'waiting':'active'}">${tasks.length?'Есть задачи':'Всё спокойно'}</span></div>
+        <div class="df-today-list">${tasks.length?tasks.map(t=>`<div class="df-task"><div class="df-task-icon ${t.type}">${t.icon}</div><div><b>${esc(t.title)}</b><span>${esc(t.sub)}</span></div><button onclick="openProject('${t.id}')">${t.action}</button></div>`).join(''):`<div class="df-task"><div class="df-task-icon green">✓</div><div><b>Критичных задач нет</b><span>Можно спокойно двигать проекты или брать новый заказ.</span></div></div>`}</div>
+      </div>
+      <div class="df-card">
+        <div class="df-card-head"><div><div class="df-card-title">Рабочая экономика</div><div class="df-card-sub">Реальная эффективность за выбранный месяц</div></div></div>
+        <div class="df-metrics">
+          <div class="df-metric"><span>Часы</span><b>${hours.toLocaleString('ru-RU',{maximumFractionDigits:1})}</b></div>
+          <div class="df-metric"><span>₽ / час</span><b>${hours?money(hourly):'—'}</b></div>
+          <div class="df-metric"><span>Получено</span><b>${money(gross)}</b></div>
+          <div class="df-metric"><span>Проектов</span><b>${ps.length}</b></div>
+          <div class="df-metric"><span>Серия</span><b>${ps.filter(p=>p.status==='archive').length} ✓</b></div>
+        </div>
+      </div>`;
+  }
+
+  /* Time tracking. */
+  let timerTick=null;
+  function timerSeconds(id){
+    const t=state.timeLogs[id]||{seconds:0,runningSince:null};
+    return Number(t.seconds||0)+(t.runningSince?Math.max(0,Date.now()-t.runningSince)/1000:0);
+  }
+  function fmtTimer(sec){
+    sec=Math.max(0,Math.floor(sec));
+    const h=String(Math.floor(sec/3600)).padStart(2,'0');
+    const m=String(Math.floor(sec%3600/60)).padStart(2,'0');
+    const s=String(sec%60).padStart(2,'0');
+    return `${h}:${m}:${s}`;
+  }
+  function activeTimerId(){
+    return Object.keys(state.timeLogs).find(id=>state.timeLogs[id]?.runningSince)||null;
+  }
+  function syncTimerStrip(){
+    const strip=$('#timerStrip'),id=activeTimerId();
+    if(!strip)return;
+    if(!id){strip.classList.remove('show');return}
+    const p=state.projects.find(x=>x.id===id);
+    if(!p){return}
+    strip.classList.add('show');
+    $('#timerProjectName').textContent=p.name;
+    $('#timerElapsed').textContent=fmtTimer(timerSeconds(id));
+  }
+  window.toggleProjectTimer=id=>{
+    if(!state.timeTracking){toast('Учёт времени выключен в настройках');return}
+    const current=activeTimerId();
+    if(current&&current!==id){
+      const t=state.timeLogs[current];t.seconds=timerSeconds(current);t.runningSince=null;
+    }
+    const t=state.timeLogs[id]||{seconds:0,runningSince:null};
+    t.runningSince=t.runningSince?null:Date.now();
+    state.timeLogs[id]=t;
+    save();syncTimerStrip();renderToday();
+    toast(t.runningSince?'Таймер запущен':'Таймер остановлен');
+    clearInterval(timerTick);
+    if(activeTimerId())timerTick=setInterval(syncTimerStrip,1000);
+  };
+  $('#timerStop')?.addEventListener('click',()=>{
+    const id=activeTimerId();if(!id)return;
+    const t=state.timeLogs[id];t.seconds=timerSeconds(id);t.runningSince=null;
+    const p=state.projects.find(x=>x.id===id);
+    if(p){p.hours=(Number(p.hours)||0)+t.seconds/3600;t.seconds=0;}
+    save();syncTimerStrip();renderToday();clearInterval(timerTick);toast('Время сохранено');
+  });
+
+  /* Apply timer seconds to project hours when stopping, so ₽/hour becomes useful. */
+  const oldToggle=window.toggleProjectTimer;
+  window.toggleProjectTimer=id=>{
+    const before=activeTimerId();
+    if(before&&before!==id){
+      const t=state.timeLogs[before];t.seconds=timerSeconds(before);t.runningSince=null;
+      const p=state.projects.find(x=>x.id===before);if(p)p.hours=(Number(p.hours)||0)+t.seconds/3600;
+    }
+    const t=state.timeLogs[id]||{seconds:0,runningSince:null};
+    if(t.runningSince){
+      t.seconds=timerSeconds(id);t.runningSince=null;
+    }else t.runningSince=Date.now();
+    state.timeLogs[id]=t;
+    save();syncTimerStrip();renderToday();
+    clearInterval(timerTick);if(activeTimerId())timerTick=setInterval(syncTimerStrip,1000);
+  };
+
+  /* Top client analytics. */
+  function openClientAnalytics(name){
+    const ps=state.projects.filter(p=>p.status!=='trash'&&p.client===name);
+    const revenue=ps.reduce((s,p)=>s+num(p.price),0);
+    const received=ps.reduce((s,p)=>s+num(p.paid),0);
+    const expenses=ps.reduce((s,p)=>s+num(p.expense),0);
+    const hours=ps.reduce((s,p)=>s+Number(p.hours||0),0);
+    const profit=ps.reduce((s,p)=>s+net(p),0);
+    const hourly=hours?profit/hours:0;
+    const ratings=ps.filter(p=>p.rating).map(p=>p.rating);
+    const rating=ratings.length?ratings.reduce((a,b)=>a+b,0)/ratings.length:0;
+    $('#clientAnalyticsTitle').textContent=name;
+    $('#clientAnalyticsStats').innerHTML=[
+      ['Проектов',ps.length],['Выручка',money(revenue)],['Получено',money(received)],['Чистыми',money(profit)],
+      ['Часов',hours.toLocaleString('ru-RU',{maximumFractionDigits:1})],['₽ / час',hours?money(hourly):'—']
+    ].map(v=>`<div class="stat"><div class="stat-label">${v[0]}</div><div class="stat-val purple">${v[1]}</div></div>`).join('');
+    $('#clientAnalyticsList').innerHTML=`
+      <div class="client-analytics-item"><span>Средняя оценка</span><b class="df-stars">${rating?('★'.repeat(Math.round(rating))+'☆'.repeat(5-Math.round(rating))):'Не оценено'}</b></div>
+      <div class="client-analytics-item"><span>Расходы</span><b>${money(expenses)}</b></div>
+      <div class="client-analytics-item"><span>Средний чек</span><b>${ps.length?money(revenue/ps.length):'—'}</b></div>
+      <div class="client-analytics-item"><span>Неполучено</span><b>${money(Math.max(0,revenue-received))}</b></div>`;
+    $('#clientAnalyticsModal').classList.add('open');
+  }
+  window.openClientAnalytics=openClientAnalytics;
+  const topList=$('#topClientsList');
+  if(topList)topList.addEventListener('click',e=>{
+    const row=e.target.closest('.top-client-row');if(!row)return;
+    const name=row.dataset.client;
+    if(name)openClientAnalytics(name);
+  });
+  const oldRenderTop=renderTopClients;
+  renderTopClients=function(){
+    oldRenderTop();
+    $$('#topClientsList .top-client-row').forEach(row=>{
+      const info=row.querySelector('.top-client-info b');
+      if(info){row.dataset.client=info.textContent;row.style.cursor='pointer';row.title='Открыть аналитику клиента'}
+    });
+  };
+
+  /* Templates. */
+  function renderTemplates(){
+    const grid=$('#templatesGrid'),settingsGrid=$('#settingsTemplates');
+    const list=state.templates||[];
+    const markup=list.length?list.map((t,i)=>`<div class="df-template"><b>${esc(t.name)}</b><p>${money(t.price)} · ${t.days||'—'} дн.</p><button onclick="useTemplate(${i})">Создать проект</button></div>`).join(''):'<div class="muted tiny">Пока нет шаблонов. Сохрани проект как шаблон из редактора.</div>';
+    if(grid)grid.innerHTML=markup;if(settingsGrid)settingsGrid.innerHTML=markup;
+  }
+  window.useTemplate=i=>{
+    const t=state.templates?.[i];if(!t)return;
+    $('#fStatus').value=t.status||'active';$('#fClient').value='';$('#fName').value=t.name||'';
+    $('#fPrice').value=moneyInput(t.price||0);$('#fPaid').value=moneyInput(t.paid||0);
+    $('#fExpense').value=moneyInput(t.expense||0);$('#fTax').value=String(t.tax||0);
+    $('#fHours').value=t.hours||'';$('#fRating').value='0';$('#fNote').value=t.note||'';
+    editingId=null;$('#modalTitle').textContent='Новый проект';$('#projectModal').classList.add('open');
+    toast('Шаблон загружен');
+  };
+  function saveCurrentAsTemplate(){
+    const name=$('#fName').value.trim()||'Новый шаблон';
+    state.templates.push({name,price:num($('#fPrice').value),paid:num($('#fPaid').value),expense:num($('#fExpense').value),tax:num($('#fTax').value),hours:Number($('#fHours').value||0),note:$('#fNote').value.trim(),status:$('#fStatus').value,days:$('#fDeadline').value&&$('#fStart').value?Math.max(1,Math.round((new Date($('#fDeadline').value)-new Date($('#fStart').value))/86400000)):''});
+    save();renderTemplates();toast('Шаблон сохранён');
+  }
+  const modalActions=document.querySelector('#projectModal .modal-actions');
+  if(modalActions&&!$('#saveTemplateBtn')){
+    const b=document.createElement('button');b.type='button';b.className='btn';b.id='saveTemplateBtn';b.textContent='Сохранить как шаблон';b.onclick=saveCurrentAsTemplate;
+    modalActions.insertBefore(b,modalActions.lastElementChild);
+  }
+
+  /* Settings toggles for new studio functions. */
+  const smart=$('#smartTipsToggle'),deadlineTips=$('#deadlineTipsToggle'),timeToggle=$('#timeTrackingToggle');
+  if(smart)smart.checked=state.smartTips!==false;
+  if(deadlineTips)deadlineTips.checked=state.deadlineTips!==false;
+  if(timeToggle)timeToggle.checked=state.timeTracking!==false;
+  smart?.addEventListener('change',e=>{state.smartTips=e.target.checked;save();renderToday()});
+  deadlineTips?.addEventListener('change',e=>{state.deadlineTips=e.target.checked;save();renderToday()});
+  timeToggle?.addEventListener('change',e=>{state.timeTracking=e.target.checked;save();renderTable();syncTimerStrip()});
+
+  /* Add a template manager button to Studio settings. */
+  const studioPane=$('#studioPane');
+  if(studioPane&&!$('#openTemplatesBtn')){
+    const b=document.createElement('button');b.id='openTemplatesBtn';b.className='btn primary';b.textContent='Открыть шаблоны';b.style.marginTop='12px';
+    b.onclick=()=>{$('#templatesModal').classList.add('open');renderTemplates()};
+    studioPane.appendChild(b);
+  }
+
+  /* Smart dashboard placement. */
+  renderToday();
+  renderTemplates();
+  syncTimerStrip();
+
+  /* Make top clients card sit flush with finance card. */
+  const dash=$('#dashboard');
+  if(dash){
+    dash.style.alignItems='start';
+    const side=dash.querySelector('.side-stack');
+    if(side){side.style.marginTop='0';side.style.paddingTop='0'}
+    const top=side?.querySelector('#topClientsCard');
+    if(top){top.style.marginTop='0';top.style.transform='none';top.style.alignSelf='start'}
+  }
+
+  /* Refresh action center when state changes. */
+  const originalRender=render;
+  render=function(){
+    originalRender();
+    renderToday();
+    renderTemplates();
+    syncTimerStrip();
+    const g=baseGoal(),r=baseRecord();
+    $('#goalLabel').textContent=money(g);
+    $('#recordTarget').textContent=money(r);
+  };
+
+  /* Update month-specific goal/record immediately on month switch. */
+  const monthSelect=$('#monthSelect');
+  if(monthSelect){
+    monthSelect.onchange=()=>{
+      selectedMonth=Number(monthSelect.value);
+      localStorage.setItem('df_month',String(selectedMonth));
+      syncSettings();
+      render();
+      toast('Период: '+monthSelect.selectedOptions[0].text);
+    };
+  }
+
+  /* Cleaner settings icon labels and theme button. */
+  $('#settingsBtn')?.setAttribute('aria-label','Настройки');
+  $('#settingsSide')?.setAttribute('aria-label','Настройки');
+  $('#themeBtn')?.setAttribute('title',state.dark?'Включить светлую тему':'Включить тёмную тему');
+
+  /* Public bridge for the repair layers. These functions live inside the main app scope. */
+  window.__df = {
+    get state(){return state},
+    save:save, render:render, renderTable:renderTable, toast:toast,
+    openProject:openProject, openSettings:openSettings, openGoalEdit:openGoalEdit, openRecordEdit:openRecordEdit,
+    switchTab:switchTab, finishTour:finishTour,
+    setSort:function(k){
+      if(k==='order'){sortKey=null;sortDir=1}
+      else if(sortKey===k){sortDir*=-1}
+      else {sortKey=k;sortDir=1}
+      renderTable();
+    }
+  };
+  window.openProject=openProject;
+  window.openSettings=openSettings;
+  window.openGoalEdit=openGoalEdit;
+  window.openRecordEdit=openRecordEdit;
+  window.render=render;
+  window.renderTable=renderTable;
+  window.save=save;
+
+  /* Final render after upgrades. */
+  render();
+  syncSettings();
+  setTimeout(renderToday,80);
+  setTimeout(renderTemplates,80);
+
 })();
 
 
@@ -1161,6 +1923,546 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 });
 
+
+
+/* Sidebar collapse: state is remembered per browser. */
+(function(){
+  const app=document.querySelector('.app');
+  const btn=document.getElementById('sidebarCollapseBtn');
+  if(!app||!btn)return;
+  const KEY='designflow_sidebar_collapsed';
+  function apply(collapsed){
+    app.classList.toggle('sidebar-collapsed',!!collapsed);
+    btn.title=collapsed?'Развернуть меню':'Свернуть меню';
+    btn.setAttribute('aria-label',btn.title);
+  }
+  let collapsed=false;
+  try{collapsed=localStorage.getItem(KEY)==='1'}catch(e){}
+  apply(collapsed);
+  btn.addEventListener('click',function(){
+    collapsed=!app.classList.contains('sidebar-collapsed');
+    apply(collapsed);
+    try{localStorage.setItem(KEY,collapsed?'1':'0')}catch(e){}
+  });
+})();
+
 </script>
-</body>
+
+<script id="designflow-final-ui-fix">
+(function(){
+  function setupSort(){
+    const btn=document.getElementById('sortBtn'), menu=document.getElementById('sortMenu');
+    if(!btn||!menu||btn.dataset.ready) return;
+    btn.dataset.ready='1';
+    btn.addEventListener('click',function(e){e.stopPropagation();menu.classList.toggle('open')});
+    menu.addEventListener('click',function(e){e.stopPropagation()});
+    document.addEventListener('click',function(){menu.classList.remove('open')});
+    menu.querySelectorAll('[data-sort]').forEach(item=>item.addEventListener('click',function(){
+      menu.querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+      this.classList.add('active');
+      menu.classList.remove('open');
+      const key=this.dataset.sort;
+      if(typeof window.applySort==='function') window.applySort(key);
+      else if(typeof window.sortProjects==='function') window.sortProjects(key);
+      else if(typeof window.setSort==='function') window.setSort(key);
+    }));
+  }
+  function syncNav(){
+    const views=['active','all','requests','waiting','potential','paused','archive','trash'];
+    let current=null;
+    for(const id of views){const v=document.getElementById('view-'+id);if(v&&getComputedStyle(v).display!=='none'){current=id;break}}
+    if(!current){const title=(document.getElementById('pageTitle')||{}).textContent||'';const map={'В работе':'active','Все проекты':'all','Заявки':'requests','Ожидает':'waiting','Потенциал':'potential','На паузе':'paused','Выполнено':'archive','Корзина':'trash'};current=map[title.trim()]||null}
+    if(!current)return;
+    document.querySelectorAll('.nav button[data-tab],.mobile-bar button[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===current));
+  }
+  function init(){setupSort();syncNav();setTimeout(syncNav,150)}
+  document.addEventListener('DOMContentLoaded',init);window.addEventListener('load',init);
+  const old=window.switchTab;
+  if(typeof old==='function'&&!old.__dfWrapped){
+    const wrapped=function(){const r=old.apply(this,arguments);setTimeout(syncNav,0);return r};
+    wrapped.__dfWrapped=true;window.switchTab=wrapped;
+  }
+})();
+</script>
+
+<script id="designflow-final-usable-fixes">
+(function(){
+  function ready(fn){if(document.readyState!=='loading')fn();else document.addEventListener('DOMContentLoaded',fn)}
+  ready(function(){
+    /* ---------- Templates ---------- */
+    window.dfNameTemplates = JSON.parse(localStorage.getItem('df_name_templates')||'null') || [
+      'Дизайн сайта','3 рекламных баннера','Упаковка VK','Инфографика для маркетплейса'
+    ];
+    function saveTpls(){localStorage.setItem('df_name_templates',JSON.stringify(window.dfNameTemplates))}
+    function esc2(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+    function renderTpls(){
+      const box=document.getElementById('nameTemplatesList'), helper=document.getElementById('template-helper');
+      if(!box)return;
+      box.innerHTML=window.dfNameTemplates.length?window.dfNameTemplates.map((n,i)=>`<div class="template-row"><div class="template-row-main"><b>${esc2(n)}</b><div class="muted">Шаблон названия проекта</div></div><div class="template-row-actions"><button type="button" data-edit-tpl="${i}">Редактировать</button><button type="button" data-use-tpl="${i}">Использовать</button><button type="button" data-del-tpl="${i}">Удалить</button></div></div>`).join(''):'<div class="template-empty">Пока нет шаблонов. Добавь первый выше.</div>';
+      if(helper)helper.textContent=`Сохранено шаблонов: ${window.dfNameTemplates.length}`;
+    }
+    document.getElementById('saveNameTemplateBtn')?.addEventListener('click',function(){
+      const input=document.getElementById('fName'),name=(input?.value||'').trim();
+      if(!name){toast('Сначала впиши название проекта');input?.focus();return}
+      if(!window.dfNameTemplates.includes(name))window.dfNameTemplates.push(name);
+      saveTpls();renderTpls();toast('Шаблон сохранён');
+    });
+    document.getElementById('openNameTemplatesBtn')?.addEventListener('click',function(){renderTpls();document.getElementById('nameTemplatesModal')?.classList.add('open')});
+    document.getElementById('createNameTemplateModalBtn')?.addEventListener('click',function(){
+      const i=document.getElementById('newNameTemplateInput'),name=(i?.value||'').trim();
+      if(!name){toast('Напиши название шаблона');return}
+      if(!window.dfNameTemplates.includes(name))window.dfNameTemplates.push(name);
+      saveTpls();i.value='';renderTpls();toast('Шаблон добавлен');
+    });
+    document.getElementById('newNameTemplateInput')?.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();document.getElementById('createNameTemplateModalBtn').click()}});
+    document.getElementById('nameTemplatesList')?.addEventListener('click',function(e){
+      const use=e.target.closest('[data-use-tpl]'),del=e.target.closest('[data-del-tpl]');
+      if(use){document.getElementById('fName').value=window.dfNameTemplates[+use.dataset.useTpl]||'';document.getElementById('nameTemplatesModal').classList.remove('open');toast('Шаблон подставлен')}
+      if(del){window.dfNameTemplates.splice(+del.dataset.delTpl,1);saveTpls();renderTpls();toast('Шаблон удалён')}
+    });
+    renderTpls();
+
+    /* ---------- Payment stages ---------- */
+    function n(v){return Number(String(v||'').replace(/\s/g,''))||0}
+    function money2(v){return new Intl.NumberFormat('ru-RU').format(Math.round(n(v)))+' ₽'}
+    function updateStages(){
+      let total=0,paid=0;
+      ['pre','mid','final'].forEach(k=>{
+        const amount=document.querySelector(`[data-stage-amount="${k}"]`),check=document.querySelector(`[data-stage-paid="${k}"]`);
+        total+=n(amount?.value);if(check?.checked)paid+=n(amount?.value);
+      });
+      const el=document.getElementById('paymentTotalHint'), project=document.getElementById('fPrice');
+      if(el)el.textContent=`По этапам: ${money2(total)} · Оплачено: ${money2(paid)} · Сумма проекта: ${money2(project?.value)}`;
+    }
+    document.querySelectorAll('#paymentStagesEditor input').forEach(x=>x.addEventListener('input',updateStages));
+    document.querySelectorAll('#paymentStagesEditor input[type="checkbox"]').forEach(x=>x.addEventListener('change',updateStages));
+    document.getElementById('fPrice')?.addEventListener('input',updateStages);
+    updateStages();
+
+    /* Sort menu styling is handled above; keep the original internal sorter as the single source of truth. */
+
+    /* ---------- Better icons ---------- */
+    const settingsSvg=document.querySelector('#settingsBtn .settings-top-icon');
+    if(settingsSvg)settingsSvg.setAttribute('aria-label','Настройки');
+    document.querySelector('#settingsBtn')?.setAttribute('title','Настройки');
+
+    /* ---------- Progress contrast ---------- */
+    const style=document.createElement('style');
+    style.textContent='[data-theme="light"] .record .progress{border:1px solid #c5cad6!important;background:#eef0f5!important}[data-theme="light"] #goalCard .progress{border:1px solid #c5cad6!important;background:#eef0f5!important}';
+    document.head.appendChild(style);
+
+    /* Clicking goal should be obvious even if previous handler is absent. */
+    document.getElementById('goalCard')?.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();document.getElementById('goalCard').click()}});
+  });
+})();
+</script>
+
+
+<style id="df-interaction-final-v4">
+/* Interaction stability: the onboarding is visual only and never blocks the app. */
+.tour-back{z-index:10000!important;pointer-events:none!important}
+.tour-shade,.tour-spot{pointer-events:none!important}
+.tour-card,.tour-card *{pointer-events:auto!important}
+.modal-back{z-index:11000!important;overflow:hidden!important}
+.modal-back.open{display:flex!important}
+.modal{scrollbar-gutter:stable both-edges;overscroll-behavior:contain}
+.modal > form{scrollbar-gutter:stable}
+body{cursor:default}
+button,[role="button"],.editable-cell,#goalCard,#recordCard{cursor:pointer}
+.table-tools .btn,.top-actions .btn,.notice .btn{color:var(--text)!important}
+.notice .btn{background:var(--surface)!important}
+#exportBtn,#importBtn{color:var(--text)!important}
+#exportBtn svg,#importBtn svg{width:16px;height:16px;flex:0 0 auto}
+.settings-top-icon{width:18px!important;height:18px!important}
+.move-project-btn{font-size:14px!important;font-weight:800!important}
+.empty-icon{display:grid!important;place-items:center!important;width:42px!important;height:42px!important;border-radius:12px!important;background:var(--surface-3)!important;color:var(--accent)!important;font-size:18px!important}
+.template-create-row{display:flex;gap:10px;align-items:flex-end;margin:4px 0 8px}
+.template-create-field{flex:1;display:grid;gap:6px}
+.template-create-field span{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+.template-create-field input{height:44px!important;border:1px solid var(--line)!important;background:var(--surface-2)!important;border-radius:12px!important;padding:0 13px!important;color:var(--text)!important;outline:0!important;font:inherit!important}
+.template-create-field input:focus{border-color:var(--accent)!important;box-shadow:0 0 0 4px rgba(99,91,255,.12)!important}
+.template-edit-hint{font-size:11px;color:var(--muted);margin:0 0 14px}
+.template-row-main{min-width:0;flex:1}.template-row-main b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.template-row-actions button{cursor:pointer!important}
+[data-theme="light"] .record .progress,[data-theme="light"] #goalCard .progress{border:1px solid #b9bfcc!important;background:#e9ecf2!important;box-shadow:inset 0 1px 2px rgba(20,24,40,.08)!important}
+[data-theme="dark"] .record .progress,[data-theme="dark"] #goalCard .progress{border:1px solid #4a5060!important;background:#262b36!important}
+@media(max-width:650px){.template-create-row{align-items:stretch;flex-direction:column}.template-create-row .btn{width:100%;justify-content:center}}
+</style>
+<script>
+(function(){
+  'use strict';
+  const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+  const closeAllModals=(except)=>$$('.modal-back.open').forEach(m=>{if(m.id!==except)m.classList.remove('open')});
+  const finishTourSafe=()=>{try{if(typeof finishTour==='function')finishTour()}catch(e){const t=$('#tourBack');if(t)t.classList.remove('open')}};
+
+  /* Never let an onboarding shade swallow clicks. */
+  const tour=$('#tourBack');
+  if(tour){tour.style.pointerEvents='none';['#tourShadeTop','#tourShadeRight','#tourShadeBottom','#tourShadeLeft','#tourSpot'].forEach(sel=>{const e=$(sel);if(e)e.style.pointerEvents='none'});}
+
+  /* Opening one modal closes stale modals. This prevents settings sitting above a new project. */
+  const bindExclusive=(sel,id)=>{const el=$(sel);if(!el)return;el.addEventListener('click',()=>{finishTourSafe();closeAllModals(id);},true)};
+  bindExclusive('#newBtn','projectModal');bindExclusive('#mobileNew','projectModal');bindExclusive('#settingsBtn','settingsModal');bindExclusive('#settingsSide','settingsModal');bindExclusive('#mobileSettings','settingsModal');
+  bindExclusive('#openNameTemplatesBtn','nameTemplatesModal');bindExclusive('#openTemplatesBtn','templatesModal');
+
+  /* Make sort reliable even if earlier handlers were duplicated. */
+  const sortBtn=$('#sortBtn'), sortMenu=$('#sortMenu');
+  if(sortBtn&&sortMenu){
+    sortBtn.type='button';
+    sortBtn.onclick=function(e){e.preventDefault();e.stopPropagation();sortMenu.classList.toggle('open')};
+    sortMenu.onclick=function(e){e.stopPropagation()};
+    sortMenu.querySelectorAll('[data-sort]').forEach(item=>item.onclick=function(e){
+      e.preventDefault();e.stopPropagation();
+      const k=item.dataset.sort;
+      sortMenu.classList.remove('open');
+      window.__df?.setSort?.(k);
+    });
+  }
+
+  /* Move project: choose Waiting / Pause / Work / Potential / Done. */
+  document.addEventListener('click',function(e){
+    const b=e.target.closest('.move-project-btn');
+    if(!b)return;
+    e.preventDefault();e.stopPropagation();
+    const id=b.dataset.moveId;
+    const df=window.__df; const p=df?.state?.projects?.find(x=>String(x.id)===String(id));
+    if(!p)return;
+    const choice=prompt('Куда перенести проект?\n\n1 · В работу\n2 · Ожидает\n3 · Потенциал\n4 · На паузу\n5 · Выполнено\n\nВведи номер:');;
+    const map={'1':'active','2':'waiting','3':'potential','4':'paused','5':'archive'};
+    if(!map[choice])return;
+    p.status=map[choice];
+    if(df?.save)df.save();
+    if(df?.render)df.render();
+    if(df?.toast)df.toast('Проект: '+({active:'В работе',waiting:'Ожидает',potential:'Потенциал',paused:'На паузе',archive:'Выполнено'}[p.status]));
+  },true);
+
+
+  /* Goal and record always get a real click target. */
+  const goal=$('#goalCard'),record=$('#recordCard');
+  if(goal){goal.setAttribute('role','button');goal.setAttribute('tabindex','0');goal.title='Нажми, чтобы изменить цель';goal.style.cursor='pointer'}
+  if(record){record.setAttribute('role','button');record.setAttribute('tabindex','0');record.title='Нажми, чтобы изменить личный рекорд';record.style.cursor='pointer'}
+  if(goal)goal.addEventListener('dblclick',()=>window.__df?.openGoalEdit?.());
+  if(record)record.addEventListener('dblclick',()=>window.__df?.openRecordEdit?.());
+
+  /* Settings save always closes the modal and refreshes immediately. */
+  const settingsSave=$('#settingsDashboardSave');
+  if(settingsSave)settingsSave.addEventListener('click',()=>{setTimeout(()=>{closeAllModals();},20)},true);
+
+  /* Project save: close all stale layers and repaint. */
+  const projectForm=$('#projectForm');
+  if(projectForm)projectForm.addEventListener('submit',()=>{setTimeout(()=>{closeAllModals();window.__df?.render?.()},30)},true);
+
+  /* Templates: click a template name to edit it, then save with Enter/blur. */
+  const list=$('#nameTemplatesList');
+  if(list)list.addEventListener('click',function(e){
+    const row=e.target.closest('.template-row');if(!row)return;
+    const b=e.target.closest('[data-edit-tpl]');
+    if(b){
+      const i=Number(b.dataset.editTpl), arr=window.dfNameTemplates||[], current=arr[i];
+      if(current==null)return;
+      const input=document.createElement('input');input.className='template-inline-edit';input.value=current;row.querySelector('b')?.replaceWith(input);input.focus();input.select();
+      const original=current;
+      const restore=()=>{if(input.dataset.done)return;input.dataset.done='1';const b=document.createElement('b');b.textContent=original;input.replaceWith(b)};
+      const done=()=>{if(input.dataset.done)return;input.dataset.done='1';const v=input.value.trim();const b=document.createElement('b');b.textContent=v||original;if(v){arr[i]=v;localStorage.setItem('df_name_templates',JSON.stringify(arr))}input.replaceWith(b)};
+      input.addEventListener('blur',done);input.addEventListener('keydown',ev=>{if(ev.key==='Enter'){ev.preventDefault();done()}if(ev.key==='Escape'){ev.preventDefault();restore()}});
+    }
+  },true);
+
+  /* If the user clicks a modal opener while another modal is open, make the new one the only modal. */
+  document.addEventListener('click',function(e){
+    const target=e.target.closest('[data-close]');
+    if(target){const id=target.dataset.close;const m=$('#'+id);if(m)m.classList.remove('open')}
+  },true);
+
+  /* Backup controls: neutral readable color and unmistakable icons. */
+  const ex=$('#exportBtn'),im=$('#importBtn');
+  if(ex)ex.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M5 20h14"/></svg><span>Скачать базу</span>';
+  if(im)im.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="m7.5 7.5 4.5-4.5 4.5 4.5"/><path d="M5 20h14"/></svg><span>Загрузить базу</span>';
+
+  /* Give empty tabs a friendly, consistent icon. */
+  const empty=document.querySelectorAll('.empty-icon');empty.forEach(x=>{if(x.textContent.trim()==='⌁')x.textContent='✓'});
+})();
+</script>
 </html>
+<style id="df-final-repair-css">
+/* Final interaction repair */
+.modal-back{overflow:hidden!important;overscroll-behavior:contain!important}
+.modal{max-height:calc(100vh - 40px)!important;overflow:hidden!important;display:flex;flex-direction:column}
+.modal > form{min-height:0;overflow-y:auto;overflow-x:hidden;padding:2px 8px 2px 2px;scrollbar-gutter:stable}
+.modal > form::-webkit-scrollbar,.modal::-webkit-scrollbar{width:10px}
+.modal > form::-webkit-scrollbar-thumb,.modal::-webkit-scrollbar-thumb{background:#b8bdc9;border-radius:10px;border:3px solid transparent;background-clip:padding-box}
+.modal > form::-webkit-scrollbar-track,.modal::-webkit-scrollbar-track{background:transparent}
+.editable-cell{cursor:text!important;transition:background .12s,box-shadow .12s}
+.editable-cell.is-editing{background:var(--surface-3)!important;box-shadow:0 0 0 2px var(--accent)!important}
+.inline-edit{display:block!important;box-sizing:border-box!important;min-width:80px!important}
+#sortBtn{position:relative;z-index:5;cursor:pointer!important}
+#sortMenu{z-index:100000!important;pointer-events:auto!important}
+#goalCard,#recordCard{cursor:pointer!important;user-select:none}
+#goalCard:focus-visible,#recordCard:focus-visible{outline:3px solid rgba(99,91,255,.28);outline-offset:3px}
+.goal-pill:hover{transform:translateY(-1px)!important}
+.record{background:var(--surface)!important;color:var(--text)!important;border:1px solid var(--line)!important;box-shadow:0 8px 24px rgba(20,24,40,.06)!important}
+.record:hover{border-color:var(--accent)!important;box-shadow:0 14px 34px rgba(99,91,255,.13)!important}
+.record .progress{border:1px solid #bfc5d1!important;background:#edf0f5!important}
+[data-theme="dark"] .record .progress{border-color:#454b5b!important;background:#252a35!important}
+.settings-top-icon{width:19px!important;height:19px!important}
+#settingsSide .settings-top-icon{width:18px!important;height:18px!important}
+#exportBtn svg,#importBtn svg{width:16px;height:16px}
+.rep-card{cursor:default}
+.rep-meter{height:13px;border:1px solid var(--line);background:var(--surface-3);border-radius:99px;padding:2px;margin-top:13px}
+.rep-meter-fill{height:100%;width:100%;border-radius:99px;background:linear-gradient(90deg,#22a96f,#7bdc91);transition:width .35s ease}
+.rep-copy{font-size:11px;color:var(--muted);line-height:1.45;margin-top:9px}
+.rep-actions{display:flex;gap:7px;align-items:center;margin-top:10px}
+.rep-badge{font-size:10px;font-weight:800;padding:5px 8px;border-radius:8px;background:var(--surface-3);color:var(--text)}
+.rep-badge.good{color:#13865a;background:#e8f8f1}.rep-badge.warn{color:#9b6a13;background:#fff4dd}.rep-badge.bad{color:#c34d5d;background:#ffe9ec}
+.payment-stage-card{min-height:58px}
+@media(max-width:650px){.modal{max-height:calc(100vh - 20px)!important}.modal > form{padding-right:4px}.payment-stage-card{min-height:0}}
+</style>
+
+<script id="df-final-repair-js">
+(function(){
+  'use strict';
+  const q=s=>document.querySelector(s), qa=s=>document.querySelectorAll(s);
+  const safeNum=v=>Number(String(v??'').replace(/\s/g,''))||0;
+  const safeMoney=v=>new Intl.NumberFormat('ru-RU').format(Math.round(safeNum(v)))+' ₽';
+
+  /* 1. Replace the overly complex settings icon with a clean sliders icon everywhere. */
+  const sliderIcon='<svg class="settings-top-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><circle cx="9" cy="7" r="2.1" fill="var(--surface)" stroke="currentColor" stroke-width="1.9"/><circle cx="15" cy="12" r="2.1" fill="var(--surface)" stroke="currentColor" stroke-width="1.9"/><circle cx="10" cy="17" r="2.1" fill="var(--surface)" stroke="currentColor" stroke-width="1.9"/></svg>';
+  ['#settingsBtn .settings-top-icon','#settingsSide .settings-top-icon'].forEach(sel=>{const el=q(sel);if(el)el.outerHTML=sliderIcon});
+
+  /* 2. Make backup buttons visually unambiguous. */
+  const exportBtn=q('#exportBtn'), importBtn=q('#importBtn');
+  if(exportBtn)exportBtn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M5 20h14"/></svg><span>Скачать базу</span>';
+  if(importBtn)importBtn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="m7.5 7.5 4.5-4.5 4.5 4.5"/><path d="M5 20h14"/></svg><span>Загрузить базу</span>';
+
+  /* 3. One and only one sort handler. Previous versions attached several handlers. */
+  const oldSort=q('#sortBtn'), oldMenu=q('#sortMenu');
+  if(oldSort&&oldMenu){
+    const sortBtn=oldSort.cloneNode(true), sortMenu=oldMenu.cloneNode(true);
+    oldSort.replaceWith(sortBtn); oldMenu.replaceWith(sortMenu);
+    sortBtn.type='button';
+    sortBtn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();sortMenu.classList.toggle('open')});
+    sortMenu.addEventListener('click',e=>e.stopPropagation());
+    sortMenu.querySelectorAll('[data-sort]').forEach(item=>item.addEventListener('click',e=>{
+      e.preventDefault();e.stopPropagation();
+      const k=item.dataset.sort;
+      window.__df?.setSort?.(k);
+      sortMenu.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+      item.classList.add('active');
+      const dir=sortDir===1?'↑':'↓';
+      item.querySelector('.dir').textContent=k==='order'?'по умолчанию':dir;
+      sortMenu.classList.remove('open');
+      window.__df?.renderTable?.();
+      toast('Сортировка: '+item.textContent.trim());
+    }));
+    document.addEventListener('pointerdown',e=>{if(sortMenu.classList.contains('open')&&!sortMenu.contains(e.target)&&e.target!==sortBtn)sortMenu.classList.remove('open')},true);
+  }
+
+  /* 4. Reliable project editing. Use event delegation and force the modal to populate. */
+  const table=q('#tableContainer');
+  if(table){
+    table.addEventListener('click',e=>{
+      const btn=e.target.closest('button[title="Редактировать"]');
+      if(!btn)return;
+      e.preventDefault();e.stopPropagation();
+      const tr=btn.closest('tr'),id=tr?.dataset.id;
+      if(id&&window.__df?.openProject)window.__df.openProject(id);
+    },true);
+  }
+  window.editProject=function(id){
+    if(window.__df?.openProject)window.__df.openProject(String(id));
+  };
+  if(table){
+    table.addEventListener('click',e=>{
+      const cell=e.target.closest('.editable-cell');
+      if(!cell || e.target.closest('input')) return;
+      e.preventDefault();e.stopImmediatePropagation();
+      robustInlineEdit(cell);
+    },true);
+  }
+
+  /* 5. Inline editing: save on blur/background click, remove highlight, refresh all figures. */
+  window.commitActiveInlineEdit=function(commit=true){
+    const a=window.__dfActiveInlineEdit;
+    if(!a||!a.input)return;
+    a.finish(!!commit);
+    window.__dfActiveInlineEdit=null;
+  };
+  const oldStart=window.startInlineEdit;
+  function robustInlineEdit(el){
+    if(!el)return;
+    if(typeof window.commitActiveInlineEdit==='function')window.commitActiveInlineEdit(true);
+    const tr=el.closest('tr'),id=tr?.dataset.id,field=el.dataset.field;
+    const p=window.__df?.state?.projects?.find(x=>String(x.id)===String(id));
+    if(!p||!field)return;
+    const numeric=['price','paid','expense','tax'].includes(field);
+    const old=p[field]??'';
+    const input=document.createElement('input');
+    input.type='text'; input.className='inline-edit'; input.value=numeric?safeMoney(old).replace(' ₽',''):String(old);
+    input.inputMode=numeric?'numeric':'text';
+    let done=false;
+    const finish=(commit)=>{
+      if(done)return; done=true;
+      if(commit){
+        p[field]=numeric?safeNum(input.value):input.value.trim();
+        window.__df?.save?.();
+      }
+      el.classList.remove('is-editing');
+      if(numeric)el.textContent=field==='tax'?safeNum(p[field])+'%':safeMoney(p[field]);
+      else el.textContent=p[field]||'Без заметки';
+      if(window.__dfActiveInlineEdit?.input===input)window.__dfActiveInlineEdit=null;
+      if(commit){
+        renderStats();renderTopClients();
+        /* Re-render table after a short tick so the saved value cannot be lost by another event. */
+        setTimeout(()=>{window.__df?.renderTable?.()},0);
+      }
+    };
+    window.__dfActiveInlineEdit={input,finish};
+    el.classList.add('is-editing'); el.replaceChildren(input);
+    input.addEventListener('input',()=>{if(numeric){const raw=input.value.replace(/[^\d]/g,'');input.value=raw.replace(/\B(?=(\d{3})+(?!\d))/g,' ')}});
+    input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();finish(true);input.blur()}if(e.key==='Escape'){e.preventDefault();finish(false);input.blur()}});
+    input.addEventListener('blur',()=>finish(true),{once:true});
+    requestAnimationFrame(()=>{input.focus();input.select()});
+  }
+  qa('.editable-cell').forEach(el=>el.addEventListener('click',e=>{e.stopPropagation();robustInlineEdit(e.currentTarget)}));
+  document.addEventListener('pointerdown',e=>{
+    const a=window.__dfActiveInlineEdit;
+    if(a?.input&&!a.input.contains(e.target)){setTimeout(()=>window.commitActiveInlineEdit?.(true),0)}
+  },true);
+  window.startInlineEdit=robustInlineEdit;
+
+  /* 6. Goal and record are explicitly clickable. */
+  const goal=q('#goalCard'), record=q('#recordCard');
+  if(goal){goal.onclick=null;goal.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();window.__df?.openGoalEdit?.()});goal.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();goal.click()}})}
+  if(record){record.onclick=null;record.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();window.__df?.openRecordEdit?.()});record.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();record.click()}})}
+
+  /* 7. Rewrite reputation block so it explains itself and motivates completion. */
+  const rep=q('#repScore')?.closest('.card');
+  if(rep){
+    rep.classList.add('rep-card');
+    rep.innerHTML='<div class="card-head"><div><div class="card-title">Репутация проекта</div><div class="muted tiny">Насколько спокойно ты ведёшь проекты до сдачи</div></div><span class="rep-badge good" id="repBadge">🔥 Отличный темп</span><span id="repStatus" style="display:none"></span></div><div class="mini-metrics"><div class="mini"><strong id="repScore">100</strong><span>баллов из 100</span></div><div class="mini"><strong id="overdue">0</strong><span>просрочек</span></div></div><div class="rep-meter"><div class="rep-meter-fill" id="repFill"></div></div><div class="rep-copy" id="repCopy">Чем выше балл, тем меньше хвостов. Закрывай проекты и держи дедлайны под контролем.</div><div class="rep-actions"><span class="rep-badge" id="repAction">Можно двигаться дальше 🚀</span></div>';
+    /* Keep old renderStats selectors working through the new IDs. */
+  }
+  const oldRenderStats=window.renderStats;
+  if(typeof oldRenderStats==='function'&&!oldRenderStats.__dfRepFinal){
+    const wrapped=function(){
+      const r=oldRenderStats.apply(this,arguments);
+      const score=Number(q('#repScore')?.textContent||100), overdue=Number(q('#overdue')?.textContent||0);
+      const fill=q('#repFill'),badge=q('#repBadge'),copy=q('#repCopy'),action=q('#repAction');
+      if(fill)fill.style.width=Math.max(0,Math.min(100,score))+'%';
+      if(badge){badge.className='rep-badge '+(score>=85?'good':score>=60?'warn':'bad');badge.textContent=score>=85?'🔥 Отличный темп':score>=60?'⚠️ Есть хвосты':'🚨 Нужно закрыть хвосты'}
+      if(copy)copy.textContent=overdue?`Есть ${overdue} просрочен${overdue===1?'ный проект':'ных проекта'}. Закрой ближайший первым, чтобы вернуть темп.`:'Дедлайны под контролем. Ещё один закрытый проект приблизит тебя к следующей цели.';
+      if(action)action.textContent=overdue?'Закрой просроченное первым':'Так держать. Следующий проект можно закрывать 🚀';
+      return r;
+    };
+    wrapped.__dfRepFinal=true;window.renderStats=wrapped;
+  }
+
+  /* 8. Modal scroll and save: after project save always close and immediately refresh. */
+  const form=q('#projectForm');
+  if(form){
+    form.addEventListener('submit',()=>{
+      setTimeout(()=>{q('#projectModal')?.classList.remove('open');window.__df?.render?.();},0);
+    },true);
+  }
+  qa('.modal-back').forEach(back=>back.addEventListener('click',e=>{if(e.target===back)back.classList.remove('open')}));
+
+  /* 9. Keep stage totals live and save stage data when editing. */
+  qa('#paymentStagesEditor input').forEach(el=>el.addEventListener('input',()=>{
+    const total=[...qa('[data-stage-amount]')].reduce((s,x)=>s+safeNum(x.value),0);
+    const paid=[...qa('[data-stage-amount]')].reduce((s,x)=>{const k=x.dataset.stageAmount;return s+(q(`[data-stage-paid="${k}"]`)?.checked?safeNum(x.value):0)},0);
+    const hint=q('#paymentTotalHint'); if(hint)hint.textContent=`По этапам: ${safeMoney(total)} · Оплачено: ${safeMoney(paid)} · Сумма проекта: ${safeMoney(q('#fPrice')?.value)}`;
+  }));
+
+  /* Final repaint. */
+  setTimeout(()=>{window.__df?.render?.();},20);
+})();
+</script>
+
+</body>
+
+</html>
+
+<style id="designflow-v6-final-stability">
+/* ===== FINAL THEME / INTERACTION PATCH ===== */
+.btn.primary,
+.top-actions .btn.primary,
+#newBtn{color:#fff!important;background:var(--accent)!important;border-color:var(--accent)!important}
+.notice{background:var(--surface)!important;color:var(--text)!important;border-color:var(--line)!important}
+.notice span{color:var(--muted)!important}
+.notice .btn,#exportBtn,#importBtn{background:var(--surface-2)!important;color:var(--text)!important;border-color:var(--line)!important}
+[data-theme="dark"] .notice{background:#171a21!important;border-color:#2a2f39!important}
+[data-theme="dark"] .notice .btn,[data-theme="dark"] #exportBtn,[data-theme="dark"] #importBtn{background:#1e222b!important;color:#eef0f5!important;border-color:#343a46!important}
+[data-theme="dark"] .notice strong{color:#f1f3f6!important}
+[data-theme="dark"] .notice span{color:#aeb5c1!important}
+/* Never let a finished/hidden walkthrough sit above the application. */
+body:not(.is-onboarding) #tourBack,
+body:not(.is-onboarding) #tourSpot,
+body:not(.is-onboarding) #tourCard,
+body:not(.is-onboarding) #tourShadeTop,
+body:not(.is-onboarding) #tourShadeRight,
+body:not(.is-onboarding) #tourShadeBottom,
+body:not(.is-onboarding) #tourShadeLeft{display:none!important;visibility:hidden!important;opacity:0!important;pointer-events:none!important;width:0!important;height:0!important}
+/* Modal scroll is inside the modal, never on a detached rail. */
+.modal-back{overflow:hidden!important}
+.modal{overflow-y:auto!important;overflow-x:hidden!important;max-height:calc(100vh - 40px)!important}
+/* Make interactive controls visibly interactive. */
+#goalCard,#recordCard,#sortBtn,#settingsBtn,#settingsSide,#newBtn,#exportBtn,#importBtn{cursor:pointer!important}
+#goalCard:hover,#recordCard:hover{border-color:var(--accent)!important;box-shadow:0 10px 28px rgba(91,92,246,.13)!important}
+</style>
+<script id="designflow-v6-final-interaction">
+(function(){
+  function byId(id){return document.getElementById(id)}
+  function forceCloseGhostTour(){
+    if(document.body.classList.contains('is-onboarding')) return;
+    ['tourBack','tourSpot','tourCard','tourShadeTop','tourShadeRight','tourShadeBottom','tourShadeLeft'].forEach(id=>{
+      const e=byId(id); if(e){e.classList.remove('open');e.style.setProperty('display','none','important');e.style.setProperty('pointer-events','none','important');}
+    });
+  }
+  function wire(){
+    forceCloseGhostTour();
+    /* Re-bind the important controls directly. Existing handlers are replaced intentionally. */
+    const newBtn=byId('newBtn');
+    if(newBtn) newBtn.onclick=function(e){e.preventDefault();e.stopPropagation(); if(typeof window.__df?.openProject==='function') window.__df.openProject(); else if(typeof window.openProject==='function') window.openProject()};
+    const settings=byId('settingsBtn');
+    if(settings) settings.onclick=function(e){e.preventDefault();e.stopPropagation(); if(typeof window.__df?.openSettings==='function') window.__df.openSettings(); else if(typeof window.openSettings==='function') window.openSettings()};
+    const settingsSide=byId('settingsSide');
+    if(settingsSide) settingsSide.onclick=function(e){e.preventDefault();e.stopPropagation(); if(typeof window.__df?.openSettings==='function') window.__df.openSettings(); else if(typeof window.openSettings==='function') window.openSettings()};
+    const goal=byId('goalCard');
+    if(goal) goal.onclick=function(e){e.preventDefault();e.stopPropagation(); if(typeof window.__df?.openGoalEdit==='function') window.__df.openGoalEdit(); else if(typeof window.openGoalEdit==='function') window.openGoalEdit()};
+    const record=byId('recordCard');
+    if(record) record.onclick=function(e){e.preventDefault();e.stopPropagation(); if(typeof window.__df?.openRecordEdit==='function') window.__df.openRecordEdit(); else if(typeof window.openRecordEdit==='function') window.openRecordEdit()};
+    const sort=byId('sortBtn'), menu=byId('sortMenu');
+    if(sort&&menu){
+      sort.onclick=function(e){e.preventDefault();e.stopPropagation();menu.classList.toggle('open')};
+      menu.querySelectorAll('[data-sort]').forEach(item=>{
+        item.onclick=function(e){e.preventDefault();e.stopPropagation();
+          menu.classList.remove('open');
+          const k=this.dataset.sort;
+          if(typeof window.applySort==='function') window.applySort(k);
+          else if(typeof window.sortProjects==='function') window.sortProjects(k);
+          else if(typeof window.setSort==='function') window.setSort(k);
+          else if(window.__df?.renderTable) window.__df.renderTable();
+        };
+      });
+    }
+  }
+  /* A capture-phase safety net: if a stale transparent onboarding layer receives the click,
+     temporarily disable it and route the click to the actual control underneath. */
+  document.addEventListener('click',function(e){
+    if(document.body.classList.contains('is-onboarding')) return;
+    const target=e.target;
+    if(target && target.closest && target.closest('button,input,select,a,[role="button"],.editable-cell')) return;
+    const blocker=target && target.closest ? target.closest('#tourBack,#tourSpot,#tourCard,#tourShadeTop,#tourShadeRight,#tourShadeBottom,#tourShadeLeft') : null;
+    if(!blocker)return;
+    const controls=['#newBtn','#settingsBtn','#sortBtn','#goalCard','#recordCard','#exportBtn','#importBtn','#settingsSide'];
+    const saved=[];
+    controls.forEach(sel=>{const el=document.querySelector(sel);if(el){saved.push([el,el.style.pointerEvents]);el.style.pointerEvents='auto'}});
+    blocker.style.pointerEvents='none';
+    const under=document.elementFromPoint(e.clientX,e.clientY);
+    blocker.style.pointerEvents='none';
+    saved.forEach(([el,v])=>el.style.pointerEvents=v);
+    if(under && under!==blocker && under.click){under.click()}
+  },true);
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',wire); else wire();
+  window.addEventListener('load',wire);
+  setTimeout(forceCloseGhostTour,0); setTimeout(forceCloseGhostTour,250); setTimeout(forceCloseGhostTour,1000);
+})();
+</script>
