@@ -384,22 +384,51 @@ body.is-onboarding .tour-card,body.is-onboarding .tour-card *{filter:none!import
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
 
-<style id="designflow-tour-stale-fix">
-#tourBack:not(.open){
-  display:none!important;
-  visibility:hidden!important;
-  opacity:0!important;
-  pointer-events:none!important;
-}
-#tourBack:not(.open) .tour-shade,
-#tourBack:not(.open) #tourSpot,
-#tourBack:not(.open) #tourCard{
-  display:none!important;
-  visibility:hidden!important;
+<style id="chrome-onboarding-final">
+/* Chrome/Safari stable onboarding: never blur or wash out the whole app. */
+#tourBack{
+  background:transparent!important;
+  filter:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
 }
 #tourBack.open{
-  visibility:visible!important;
+  display:block!important;
   opacity:1!important;
+  visibility:visible!important;
+}
+#tourBack:not(.open){
+  display:none!important;
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+#tourShadeTop,#tourShadeRight,#tourShadeBottom,#tourShadeLeft{
+  background:rgba(7,10,16,.16)!important;
+  filter:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+#tourSpot{
+  background:transparent!important;
+  opacity:1!important;
+  filter:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  border:2px solid #5b5cf6!important;
+  box-shadow:0 0 0 4px rgba(91,92,246,.16),0 0 20px rgba(91,92,246,.18)!important;
+  z-index:10001!important;
+}
+#tourCard,#tourCard *{
+  opacity:1!important;
+  filter:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+#tourCard{
+  z-index:10002!important;
+  background:var(--surface,#fff)!important;
+  color:var(--text,#111318)!important;
 }
 body:not(.is-onboarding) #tourShadeTop,
 body:not(.is-onboarding) #tourShadeRight,
@@ -965,37 +994,20 @@ function closeTourConflicts(){
 }
 
 function startTour(){
+  const back=$('#tourBack'),spot=$('#tourSpot'),card=$('#tourCard');
+  if(!back||!spot||!card) return;
   if(localStorage.getItem(TOUR_DONE_KEY)==='1'){
-    const back=$('#tourBack');
-    if(back){
-      back.classList.remove('open');
-      back.style.display='none';
-      back.style.pointerEvents='none';
-    }
+    back.classList.remove('open');
+    back.style.cssText='display:none!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;';
+    document.body.classList.remove('is-onboarding');
     return;
   }
   tourIndex=0;
   tourBusy=false;
   closeTourConflicts();
-  const back=$('#tourBack');
-  const spot=$('#tourSpot');
-  const card=$('#tourCard');
-  if(!back||!spot||!card) return;
-
-  back.style.display='block';
-  back.style.pointerEvents='none';
-  back.classList.add('open');
+  back.style.cssText='display:block!important;opacity:1!important;visibility:visible!important;pointer-events:none!important;';
   spot.style.display='block';
   card.style.display='block';
-
-  ['#tourShadeTop','#tourShadeRight','#tourShadeBottom','#tourShadeLeft'].forEach(sel=>{
-    const e=$(sel);
-    if(e){
-      e.style.display='block';
-      e.style.background='rgba(5,8,14,.72)';
-    }
-  });
-
   document.body.classList.add('is-onboarding');
   showTourStep(true);
 }
@@ -1081,22 +1093,18 @@ function finishTour(){
   localStorage.setItem(TOUR_DONE_KEY,'1');
   clearTimeout(showTourStep.retry);
   tourBusy=false;
-  const back=$('#tourBack');
+  const back=$('#tourBack'),spot=$('#tourSpot'),card=$('#tourCard');
   if(back){
     back.classList.remove('open');
-    back.style.display='none';
-    back.style.pointerEvents='none';
+    back.style.cssText='display:none!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important;';
   }
+  if(spot) spot.style.cssText='display:none!important;';
+  if(card) card.style.cssText='display:none!important;';
   document.body.classList.remove('is-onboarding');
   ['#tourShadeTop','#tourShadeRight','#tourShadeBottom','#tourShadeLeft'].forEach(sel=>{
     const e=$(sel);
-    if(e){
-      e.style.cssText='left:0;top:0;width:0;height:0;display:none!important;background:transparent!important;';
-    }
+    if(e) e.style.cssText='display:none!important;width:0!important;height:0!important;background:transparent!important;';
   });
-  const spot=$('#tourSpot'), card=$('#tourCard');
-  if(spot) spot.style.cssText='display:none!important;';
-  if(card) card.style.cssText='display:none!important;';
 }
 
 $('#tourNext').onclick=(e)=>{
@@ -1132,7 +1140,6 @@ window.addEventListener('scroll',()=>{
   render();
   setTimeout(startTour,700);
 })();
-
 
 
 
