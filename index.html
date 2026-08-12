@@ -383,6 +383,35 @@ body.is-onboarding .tour-card,body.is-onboarding .tour-card *{filter:none!import
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+
+<style id="designflow-tour-stale-fix">
+#tourBack:not(.open){
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
+#tourBack:not(.open) .tour-shade,
+#tourBack:not(.open) #tourSpot,
+#tourBack:not(.open) #tourCard{
+  display:none!important;
+  visibility:hidden!important;
+}
+#tourBack.open{
+  visibility:visible!important;
+  opacity:1!important;
+}
+body:not(.is-onboarding) #tourShadeTop,
+body:not(.is-onboarding) #tourShadeRight,
+body:not(.is-onboarding) #tourShadeBottom,
+body:not(.is-onboarding) #tourShadeLeft{
+  display:none!important;
+  width:0!important;
+  height:0!important;
+  background:transparent!important;
+}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -936,12 +965,37 @@ function closeTourConflicts(){
 }
 
 function startTour(){
-  if(localStorage.getItem(TOUR_DONE_KEY)==='1') return;
+  if(localStorage.getItem(TOUR_DONE_KEY)==='1'){
+    const back=$('#tourBack');
+    if(back){
+      back.classList.remove('open');
+      back.style.display='none';
+      back.style.pointerEvents='none';
+    }
+    return;
+  }
   tourIndex=0;
+  tourBusy=false;
   closeTourConflicts();
   const back=$('#tourBack');
-  if(!back) return;
+  const spot=$('#tourSpot');
+  const card=$('#tourCard');
+  if(!back||!spot||!card) return;
+
+  back.style.display='block';
+  back.style.pointerEvents='none';
   back.classList.add('open');
+  spot.style.display='block';
+  card.style.display='block';
+
+  ['#tourShadeTop','#tourShadeRight','#tourShadeBottom','#tourShadeLeft'].forEach(sel=>{
+    const e=$(sel);
+    if(e){
+      e.style.display='block';
+      e.style.background='rgba(5,8,14,.72)';
+    }
+  });
+
   document.body.classList.add('is-onboarding');
   showTourStep(true);
 }
@@ -1026,13 +1080,23 @@ function showTourStep(first=false){
 function finishTour(){
   localStorage.setItem(TOUR_DONE_KEY,'1');
   clearTimeout(showTourStep.retry);
+  tourBusy=false;
   const back=$('#tourBack');
-  if(back) back.classList.remove('open');
+  if(back){
+    back.classList.remove('open');
+    back.style.display='none';
+    back.style.pointerEvents='none';
+  }
   document.body.classList.remove('is-onboarding');
   ['#tourShadeTop','#tourShadeRight','#tourShadeBottom','#tourShadeLeft'].forEach(sel=>{
     const e=$(sel);
-    if(e){e.style.width='0';e.style.height='0';}
+    if(e){
+      e.style.cssText='left:0;top:0;width:0;height:0;display:none!important;background:transparent!important;';
+    }
   });
+  const spot=$('#tourSpot'), card=$('#tourCard');
+  if(spot) spot.style.cssText='display:none!important;';
+  if(card) card.style.cssText='display:none!important;';
 }
 
 $('#tourNext').onclick=(e)=>{
@@ -1070,81 +1134,6 @@ window.addEventListener('scroll',()=>{
 })();
 
 
-
-/* Keep onboarding target crisp while the rest of the UI is dimmed. */
-(function(){
-  function fixTourVisuals(){
-    document.querySelectorAll('.tour-overlay,.onboarding-overlay,.tour-backdrop').forEach(el=>{
-      el.style.background='rgba(7,10,16,.58)';
-      el.style.backdropFilter='none';
-      el.style.webkitBackdropFilter='none';
-    });
-    document.querySelectorAll('.tour-highlight,.onboarding-highlight,.tour-target').forEach(el=>{
-      el.style.opacity='1';
-      el.style.filter='none';
-      el.style.zIndex='10002';
-      el.style.outline='3px solid var(--accent,#4f7cff)';
-      el.style.outlineOffset='7px';
-      el.style.boxShadow='0 0 0 9999px rgba(7,10,16,.58),0 0 0 8px rgba(79,124,255,.16),0 10px 35px rgba(0,0,0,.28)';
-    });
-    document.querySelectorAll('.tour-card,.tour-popover,.onboarding-card').forEach(el=>{
-      el.style.opacity='1';
-      el.style.filter='none';
-      el.style.zIndex='10003';
-    });
-  }
-  const obs=new MutationObserver(fixTourVisuals);
-  obs.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['style','class']});
-  setTimeout(fixTourVisuals,50);
-  setTimeout(fixTourVisuals,300);
-})();
-
-
-/* Final onboarding safeguard: dim, never blur the application. */
-(function(){
-  function removeTourBlur(){
-    document.querySelectorAll('.tour-overlay,.onboarding-overlay,.tour-backdrop').forEach(el=>{
-      el.style.setProperty('backdrop-filter','none','important');
-      el.style.setProperty('-webkit-backdrop-filter','none','important');
-      el.style.setProperty('background','rgba(7,10,16,.68)','important');
-    });
-    document.querySelectorAll('.tour-highlight,.onboarding-highlight,.tour-target').forEach(el=>{
-      el.style.setProperty('filter','none','important');
-      el.style.setProperty('backdrop-filter','none','important');
-      el.style.setProperty('-webkit-backdrop-filter','none','important');
-      el.style.setProperty('opacity','1','important');
-    });
-  }
-  removeTourBlur();
-  new MutationObserver(removeTourBlur).observe(document.body,{
-    subtree:true,childList:true,attributes:true,
-    attributeFilter:['style','class']
-  });
-})();
-
-
-(function(){
-  function crispTour(){
-    document.querySelectorAll('.tour-overlay,.onboarding-overlay,.tour-backdrop').forEach(el=>{
-      el.style.setProperty('filter','none','important');
-      el.style.setProperty('backdrop-filter','none','important');
-      el.style.setProperty('-webkit-backdrop-filter','none','important');
-      el.style.setProperty('background','rgba(7,10,16,.66)','important');
-    });
-    document.querySelectorAll('.tour-highlight,.onboarding-highlight,.tour-target').forEach(el=>{
-      el.style.setProperty('filter','none','important');
-      el.style.setProperty('backdrop-filter','none','important');
-      el.style.setProperty('-webkit-backdrop-filter','none','important');
-      el.style.setProperty('opacity','1','important');
-      el.style.setProperty('z-index','10002','important');
-    });
-  }
-  crispTour();
-  new MutationObserver(crispTour).observe(document.body,{
-    subtree:true,childList:true,attributes:true,
-    attributeFilter:['style','class']
-  });
-})();
 
 
 /* Settings: after saving goals/record, close the settings window. */
